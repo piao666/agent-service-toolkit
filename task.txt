@@ -1,0 +1,312 @@
+企业知识库 Agent + RAG 后端服务升级项目 - task.txt
+====================================================
+
+项目目标
+--------
+基于 upstream `agent-service-toolkit` 进行二次开发，将原有 FastAPI + LangGraph 多 Agent 服务框架升级为可复现、可调试、可评估的企业知识库 Agent + RAG 后端服务。
+
+项目主线是后端工程化升级，不是训练或微调大模型。最终交付应覆盖：
+
+- 企业知识库专用 RAG Agent：`enterprise-rag-agent`
+- 统一业务查询接口：`/enterprise/agent/query`
+- 本地 embedding 默认路线
+- Chroma 向量库与 collection：`enterprise_knowledge_base`
+- source tracing 与 retrieval debug
+- DeepSeek 与 Qwen/OpenAI-compatible provider 接入验证
+- QA 评估、bad case 分析、接口文档、架构图和面试材料
+
+当前状态
+--------
+- [x] 已获取并保留 `agent-service-toolkit` 源码工作区。
+- [x] 已创建并可用 Python 虚拟环境 `.venv`。
+- [x] 已安装项目依赖，后续不需要重建环境。
+- [x] FastAPI 服务已能启动。
+- [x] `/health` 已验证可访问，返回健康检查结果。
+- [x] `.env` 已配置可用的 DeepSeek 与 Qwen/OpenAI-compatible 相关项。
+- [x] 已阅读上游 README、服务入口、Agent registry、RAG 示例、provider 配置和启动方式。
+- [x] 当前 RAG embedding 默认路线已改为本地 embedding。
+- [ ] 当前旧规划、旧 demo 文档和部分示例代码存在非通用命名，需要后续按本 task 分阶段清理。
+
+已完成成果保留清单
+------------------
+- 保留当前项目源码与 upstream 核心结构。
+- 保留 `.venv` 与已安装依赖。
+- 保留 `.env` 中已有 DeepSeek、Qwen/OpenAI-compatible、服务端口、SQLite 等本地配置；不得提交真实 key。
+- 保留已跑通的 FastAPI 启动方式：`python src/run_service.py`。
+- 保留原生接口能力：`/health`、`/info`、`/invoke`、`/{agent_id}/invoke`、`/stream`、`/{agent_id}/stream`、`/history`、`/feedback`。
+- 保留原项目 Agent registry 机制，新增 Agent 必须通过 registry 接入。
+- 保留不违反命名规则的阅读笔记和运行记录。
+- 保留 fork 仓库方向：`https://github.com/piao666/agent-service-toolkit`。
+
+需要纠正的旧规划问题
+--------------------
+- 旧 task 与部分旧文档把项目写成定向项目，需要改成通用企业知识库 Agent + RAG 后端项目。
+- 旧规划中出现特定公司或岗位导向命名，需要从代码、文档、接口、目录、提交信息中清理。
+- 旧规划中的业务接口命名不是 `/enterprise/agent/query`，需要在 Phase 4 统一。
+- 旧 demo 文档目录、脚本名、工具描述中存在非通用命名，后续应归档或重建为通用命名。
+- 旧 RAG 路线把第三方 embedding API 写成默认路线，需要改为本地 embedding 默认，第三方 embedding 只能作为可选实验项。
+- 旧计划中过早强调 HPC 或模型训练，需要纠正为：HPC Qwen 只作为可选推理服务接入，不作为训练成果。
+- 上游示例 RAG assistant 中存在示例公司文案，后续新增 `enterprise-rag-agent` 时不得沿用。
+
+技术路线
+--------
+- 后端框架：保留 FastAPI 服务入口与现有路由模式。
+- Agent 编排：基于 LangGraph，新增企业知识库 RAG Agent。
+- Agent 注册：通过 `src/agents/agents.py` registry 接入 `enterprise-rag-agent`。
+- RAG 模块：新增 `src/rag/`，避免把企业知识库逻辑继续堆到上游示例工具里。
+- Retriever Tool：新增 `src/agents/enterprise_tools.py`，返回 source、score、chunk_id、metadata、content_preview。
+- Agent 文件：新增 `src/agents/enterprise_rag_agent.py`。
+- 向量库：Chroma，本地 persist，collection 使用 `enterprise_knowledge_base`。
+- 文档目录：`docs/enterprise_rag_backend/`。
+- 默认 chunk 参数：`chunk_size=800`、`chunk_overlap=120`、`top_k=5`，后续通过配置调整。
+- 数据流：document -> chunk -> embedding -> vector store -> retrieval -> context -> answer。
+
+本地 embedding 模型状态
+----------------------
+- [x] 本地已发现 `bge-small-zh-v1.5` 模型目录。
+- [x] 已确认存在关键文件：`config.json`、`model.safetensors`、`modules.json`、`sentence_bert_config.json`、`special_tokens_map.json`、`tokenizer.json`、`tokenizer_config.json`、`vocab.txt`、`1_Pooling`。
+- [x] 当前默认 RAG embedding 已改为 local provider。
+- [x] 后续不默认使用 Hugging Face 在线下载。
+- [x] 本地 embedding provider 已支持配置模型路径，当前真实路径为 `E:\Models\bge-small-zh-v1.5`。
+
+模型 provider 策略
+------------------
+- DeepSeek：用于本地开发、Prompt 调试、中文问答验证和 baseline。
+- Qwen/OpenAI-compatible：用于私有化、本地或 HPC 推理服务接入验证。
+- OpenAI-compatible 在本项目中表示接口协议兼容，不代表必须配置国外 API。
+- 不要求配置 OpenAI、Google、Anthropic、Groq 等 provider 作为主线。
+- 保留 upstream 多 provider 支持，但项目文档和验收只围绕 DeepSeek + Qwen/OpenAI-compatible。
+- 本项目不做训练主线；如接入 vLLM Qwen endpoint，只记录为推理服务。
+
+GitHub 管理策略
+---------------
+- fork 仓库：`https://github.com/piao666/agent-service-toolkit`
+- 建议功能分支：`feature/enterprise-rag-backend`
+- 每 3 天做一次 checkpoint commit，提交信息必须使用通用项目表述。
+- 提交前检查：
+  - `git status`
+  - `git diff --stat`
+  - `git diff`
+  - 能运行时执行 `pytest -q`
+- 禁止提交 `.env`、API key、`.venv`、模型权重、Chroma 本地缓存、包含敏感信息的日志、大体积二进制文件。
+
+Phase 0：项目重新校准与 task.txt 重写
+------------------------------------
+目标：统一项目定位、命名规范、阶段计划和验收边界。
+
+任务：
+- [x] 阅读 `AGENTS.md`。
+- [x] 阅读 `Agent + RAG Project.docx`。
+- [x] 阅读当前旧 task 记录。
+- [x] 阅读关键源码结构：服务入口、Agent registry、RAG assistant、tools、LLM provider、settings、Chroma ingest 脚本。
+- [x] 检查本地 embedding 模型文件状态。
+- [x] 重写仓库内 `task.txt`。
+- [x] 用户已确认进入 Phase 1。
+
+验收标准：
+- [x] `task.txt` 使用“企业知识库 Agent + RAG 后端服务升级项目”作为主线。
+- [x] `task.txt` 不包含特定公司名称或定向岗位名称。
+- [x] 明确保留已有可用成果。
+- [x] 明确列出需要纠正的旧规划问题。
+- [x] 明确 10-15 天实施周期与每 3 天 GitHub 提交节奏。
+
+Phase 1：本地 embedding + Chroma 入库与检索
+------------------------------------------
+目标：用本地 embedding 跑通知识库入库和 top-k 检索，避免默认发送私有文档到第三方 embedding API。
+
+任务：
+- [x] 新增 `src/rag/embeddings.py`，默认加载本地 `bge-small-zh-v1.5`。
+- [x] 新增 RAG 配置模块，支持 embedding provider、model path、chunk size、overlap、top_k、collection name。
+- [x] 新增 `scripts/enterprise_ingest.py`。
+- [x] 支持 `.docx`、`.pdf`、`.md`、`.txt` 文档加载。
+- [x] 使用 collection `enterprise_knowledge_base` 写入 Chroma。
+- [x] 新增 `scripts/enterprise_retrieve_test.py`，输出 source、score、chunk_id、metadata、content_preview。
+- [x] 新增 4 篇通用企业知识库 demo 文档到 `data/enterprise_docs/`。
+- [x] 将旧 `src/core/embeddings.py` 默认 embedding helper 改为委托本地 RAG embedding helper，避免旧脚本默认走第三方 embedding API。
+
+验收记录：
+- 本地模型路径：`E:\Models\bge-small-zh-v1.5`。
+- 模型加载验证：`SentenceTransformer(...).encode(["企业知识库检索测试"]).shape` 返回 `(1, 512)`。
+- 入库命令：`python scripts/enterprise_ingest.py --data-dir data/enterprise_docs --persist-dir chroma_enterprise --reset`。
+- 入库结果：`document_count=4`，`chunk_count=6`，`persist_dir=chroma_enterprise`，`collection_name=enterprise_knowledge_base`，`embedding_provider=local`。
+- 检索验证问题 1：`RAG 在企业知识库 Agent 中的作用是什么？`，返回 5 条 top-k chunks，首条命中 `enterprise_agent_overview.md`。
+- 检索验证问题 2：`Prompt 约束如何减少 Agent 幻觉？`，返回 5 条 top-k chunks，首条命中 `enterprise_prompt_guidelines.md`。
+- 检索验证问题 3：`DeepSeek 和 Qwen provider 在系统中分别适合什么用途？`，返回 5 条 top-k chunks，首条命中 `enterprise_model_provider_policy.md`。
+- Chroma 在 Codex 沙箱内会触发 `disk I/O error`，入库和检索已通过外部权限执行；命令只使用本地 embedding 和本地 Chroma。
+
+验收标准：
+- [x] 不联网也能创建 embedding client。
+- [x] Chroma 本地库可生成并加载。
+- [x] 至少 4 篇通用 demo 文档可入库。
+- [x] 3-5 个检索问题能返回 top-k chunks。
+- [x] 每条检索结果包含 source、score、chunk_id、metadata、content_preview。
+
+Phase 2：企业知识库 Retriever Tool 与 source tracing
+---------------------------------------------------
+目标：把可解释检索封装为 Agent 可调用工具。
+
+任务：
+- [ ] 新增 `src/agents/enterprise_tools.py`。
+- [ ] 封装 enterprise retriever tool。
+- [ ] 统一 retrieval result schema。
+- [ ] 增加 source tracing 字段：source、title、page、chunk_id、score、metadata。
+- [ ] 增加 retrieval debug：original_query、top_k、hit_count、embedding_provider、vector_store、collection。
+- [ ] 处理空检索、Chroma 不存在、embedding 配置错误等异常。
+
+验收标准：
+- [ ] 工具函数可独立调用。
+- [ ] 工具返回结构化检索结果。
+- [ ] 空知识库或无命中时有稳定 fallback。
+- [ ] 不破坏原 `Database_Search` 示例工具。
+
+Phase 3：enterprise-rag-agent 接入原项目 Agent registry
+------------------------------------------------------
+目标：新增企业知识库 Agent，并通过原 registry 暴露给现有 `/invoke` 与 `/stream` 能力。
+
+任务：
+- [ ] 新增 `src/agents/enterprise_rag_agent.py`。
+- [ ] 设计 LangGraph workflow：guard_input -> route_need_retrieval -> rewrite_query -> retrieve -> answer_synthesis -> fallback_or_finish。
+- [ ] 分离 query rewrite prompt、answer synthesis prompt、fallback prompt。
+- [ ] 在 `src/agents/agents.py` 注册 `enterprise-rag-agent`。
+- [ ] 使用 DeepSeek 默认模型调试中文问答。
+- [ ] 验证 `/{agent_id}/invoke` 能调用 `enterprise-rag-agent`。
+
+验收标准：
+- [ ] `/info` 能看到 `enterprise-rag-agent`。
+- [ ] `POST /enterprise-rag-agent/invoke` 可返回回答。
+- [ ] Agent 能调用企业知识库 retriever tool。
+- [ ] 回答能引用或说明 source。
+- [ ] 原有 agents 与接口不受影响。
+
+Phase 4：统一查询接口 /enterprise/agent/query
+--------------------------------------------
+目标：新增业务友好的结构化查询接口，同时保留 upstream 通用 Agent 接口。
+
+任务：
+- [ ] 新增请求/响应 schema。
+- [ ] 新增 `POST /enterprise/agent/query`。
+- [ ] 请求字段：query、session_id、top_k、return_sources、model。
+- [ ] 响应字段：answer、sources、retrieval_debug、latency_ms、model_debug。
+- [ ] 增加参数校验：空 query、top_k 范围、非法 model。
+- [ ] 增加异常处理：无检索结果、模型超时、provider 配置错误、向量库未构建。
+
+验收标准：
+- [ ] 接口可通过 OpenAPI docs 查看。
+- [ ] 正常请求返回 answer。
+- [ ] `return_sources=true` 返回 sources。
+- [ ] 返回 retrieval_debug 与 latency_ms。
+- [ ] 错误请求返回清晰 Pydantic 或业务错误。
+
+Phase 5：DeepSeek/Qwen provider 调试与可选 HPC Qwen 推理服务
+-----------------------------------------------------------
+目标：明确 DeepSeek 与 Qwen/OpenAI-compatible 在项目中的分工，完成可复现 provider 调试记录。
+
+任务：
+- [ ] 确认 DeepSeek 作为默认开发模型可用。
+- [ ] 确认 Qwen/OpenAI-compatible provider 可作为可选模型调用。
+- [ ] 整理 `.env.example`，只把 DeepSeek 与 Qwen/OpenAI-compatible 写为主线配置。
+- [ ] 可选：接入本地或 HPC vLLM Qwen endpoint。
+- [ ] 可选：记录 Qwen endpoint 启动命令、模型名、base url、响应延迟和失败原因。
+
+验收标准：
+- [ ] DeepSeek 问答链路可用。
+- [ ] Qwen/OpenAI-compatible 简单 chat 调用可用或记录明确失败原因。
+- [ ] 不要求 OpenAI、Google、Anthropic、Groq 等国外 API。
+- [ ] HPC 仅作为推理服务验证，不写成训练成果。
+
+Phase 6：QA 评估、bad case 分析与接口稳定性测试
+------------------------------------------------
+目标：形成可复现的评估证据，而不是只展示单次 demo。
+
+任务：
+- [ ] 准备至少 15 条 QA case。
+- [ ] 覆盖事实型、解释型、流程型、对比型、无答案型问题。
+- [ ] 记录 expected_points、rewritten_query、top_k、hit_count、matched_source、answer、answer_quality、latency_ms、failure_type、fix_action。
+- [ ] 整理至少 2-3 个 bad case。
+- [ ] 针对 query rewrite、retrieval、prompt、model、data_missing、timeout 分类归因。
+- [ ] 增加接口稳定性测试或脚本化验证。
+
+验收标准：
+- [ ] QA 表可复现。
+- [ ] bad case 有失败现象、定位过程、归因类别和修复动作。
+- [ ] 不写没有评估依据的准确率提升。
+- [ ] 接口稳定性问题有记录和修复优先级。
+
+Phase 7：README、接口文档、架构图、面试材料
+------------------------------------------
+目标：补齐项目交付文档，让读者能复现、能理解、能评估。
+
+任务：
+- [ ] 新建 `docs/enterprise_rag_backend/ARCHITECTURE.md`。
+- [ ] 新建 `docs/enterprise_rag_backend/API.md`。
+- [ ] 新建 `docs/enterprise_rag_backend/RAG_PIPELINE.md`。
+- [ ] 新建 `docs/enterprise_rag_backend/DEPLOYMENT.md`。
+- [ ] 新建 `docs/enterprise_rag_backend/QA_EVALUATION.md`。
+- [ ] 新建 `docs/enterprise_rag_backend/BAD_CASES.md`。
+- [ ] 新建 `docs/enterprise_rag_backend/INTERVIEW_NOTES.md`。
+- [ ] 更新 README demo 说明，区分 upstream 原有能力与新增升级内容。
+- [ ] 准备架构图与请求流图。
+- [ ] 准备 3 分钟项目介绍、核心代码讲解和常见追问。
+
+验收标准：
+- [ ] 新用户能按 README 完成服务启动、入库、检索和接口调用。
+- [ ] 文档能解释 document -> chunk -> embedding -> vector store -> retrieval -> context -> answer。
+- [ ] 文档明确 upstream 能力与新增能力边界。
+- [ ] 面试材料不夸大训练、模型能力或评估结果。
+
+风险记录
+--------
+- 风险：当前旧 embedding 实现依赖第三方 API，不符合默认本地 embedding 要求。
+  - 处理：Phase 1 改为 local provider，第三方 embedding 仅保留为可选。
+- 风险：本地 Chroma 旧目录可能存在锁文件或坏库。
+  - 处理：使用新通用目录重建，必要时记录清理步骤，不提交本地向量库。
+- 风险：旧文档和旧脚本存在非通用命名。
+  - 处理：后续迁移到通用命名，旧文件归档或重建，避免污染 README 和提交记录。
+- 风险：Qwen/OpenAI-compatible endpoint 网络或服务不可用。
+  - 处理：DeepSeek 保持开发 baseline；Qwen 失败时记录错误与复现条件。
+- 风险：检索效果不稳定。
+  - 处理：记录 chunk_size、overlap、top_k、query rewrite、prompt 版本，不声称无依据提升。
+- 风险：改动影响 upstream 原接口。
+  - 处理：新增能力走扩展模块，回归 `/health`、`/info`、`/invoke`、`/stream`。
+
+最终交付清单
+------------
+- [ ] FastAPI 服务启动命令与健康检查记录。
+- [ ] `enterprise-rag-agent` 注册到 Agent registry。
+- [ ] `/enterprise/agent/query` 统一接口。
+- [ ] 本地文档入库脚本。
+- [ ] 检索测试脚本，输出 source、score、chunk_id、metadata、content_preview。
+- [ ] 本地 embedding 默认配置。
+- [ ] DeepSeek 开发配置说明。
+- [ ] Qwen/OpenAI-compatible endpoint 配置说明。
+- [ ] QA 评估表。
+- [ ] bad case 分析。
+- [ ] 架构图与请求流图。
+- [ ] README demo 指南。
+- [ ] 面试材料与核心代码讲解。
+- [ ] 干净的阶段性 GitHub checkpoint commits。
+
+三天一周期 GitHub 提交计划
+--------------------------
+- Day 1-3 checkpoint：项目重新校准、本地 embedding 方案、RAG 模块骨架。
+  - commit message: `phase-1 baseline review and local rag setup`
+- Day 4-6 checkpoint：Chroma 入库、retriever、source tracing、检索脚本。
+  - commit message: `phase-2 local embedding retrieval and source tracing`
+- Day 7-9 checkpoint：`enterprise-rag-agent`、Agent registry、统一查询接口。
+  - commit message: `phase-3 enterprise rag agent and query api`
+- Day 10-12 checkpoint：DeepSeek/Qwen provider 调试、QA 评估、bad case 分析。
+  - commit message: `phase-4 provider integration and qa evaluation`
+- Day 13-15 checkpoint：README、接口文档、架构图、面试材料。
+  - commit message: `phase-5 documentation and interview materials`
+
+禁止事项
+--------
+- 禁止在代码、接口、变量、目录、文档、README、task、提交信息中出现特定公司名称或定向岗位名称。
+- 禁止新增特定公司相关 Agent 名称、接口路径、Chroma collection、环境变量或文档目录。
+- 禁止把项目写成只服务某一家公司的定制项目。
+- 禁止把 RAG 主线写成必须依赖第三方 embedding API。
+- 禁止默认要求 Hugging Face 在线下载模型。
+- 禁止把本项目描述成训练或微调项目。
+- 禁止提交 `.env`、真实 key、`.venv`、模型权重、Chroma 本地库、敏感日志。
+- 禁止删除或破坏 upstream 原生接口、Agent registry、invoke、stream、health、history、feedback 能力。
+- 禁止在没有评估依据时宣称准确率提升或性能提升。

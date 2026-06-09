@@ -60,6 +60,8 @@ htmlcov/
 .coverage
 .coverage.*
 .cache
+.cache/
+.uv-cache/
 nosetests.xml
 coverage.xml
 *.cover
@@ -184,9 +186,20 @@ cython_debug/
 *.pdf
 
 # Chroma db
+chroma_enterprise/
+chroma_db/
+chroma_*_db/
 *.db
 *.sqlite3
+*.sqlite
 *.bin
+pytorch_model.bin
+E:/Models/
+*.safetensors
+*.pt
+*.pth
+*.onnx
+tmp_write_check/
 
 # Private Credentials, ignore everything in the folder but the .gitkeep file
 privatecredentials/*
