@@ -178,19 +178,31 @@ Phase 3：enterprise-rag-agent 接入原项目 Agent registry
 目标：新增企业知识库 Agent，并通过原 registry 暴露给现有 `/invoke` 与 `/stream` 能力。
 
 任务：
-- [ ] 新增 `src/agents/enterprise_rag_agent.py`。
-- [ ] 设计 LangGraph workflow：guard_input -> route_need_retrieval -> rewrite_query -> retrieve -> answer_synthesis -> fallback_or_finish。
-- [ ] 分离 query rewrite prompt、answer synthesis prompt、fallback prompt。
-- [ ] 在 `src/agents/agents.py` 注册 `enterprise-rag-agent`。
-- [ ] 使用 DeepSeek 默认模型调试中文问答。
-- [ ] 验证 `/{agent_id}/invoke` 能调用 `enterprise-rag-agent`。
+- [x] 新增 `src/agents/enterprise_rag_agent.py`。
+- [x] 设计 LangGraph workflow：guard_input -> route_need_retrieval -> rewrite_query -> retrieve -> answer_synthesis -> fallback_or_finish。
+- [x] 分离 query rewrite prompt、answer synthesis prompt、fallback prompt。
+- [x] 在 `src/agents/agents.py` 注册 `enterprise-rag-agent`。
+- [x] 使用原项目 `get_model()` 与默认模型配置进行 answer synthesis；自动验证使用本地测试模型避免外发检索上下文。
+- [x] 验证 `/{agent_id}/invoke` 能调用 `enterprise-rag-agent`。
 
 验收标准：
-- [ ] `/info` 能看到 `enterprise-rag-agent`。
-- [ ] `POST /enterprise-rag-agent/invoke` 可返回回答。
-- [ ] Agent 能调用企业知识库 retriever tool。
-- [ ] 回答能引用或说明 source。
-- [ ] 原有 agents 与接口不受影响。
+- [x] `/info` 能看到 `enterprise-rag-agent`。
+- [x] `POST /enterprise-rag-agent/invoke` 可返回回答。
+- [x] Agent 能调用企业知识库 retriever tool。
+- [x] 回答能引用或说明 source。
+- [x] 原有 agents 与接口不受影响。
+
+验收记录：
+- 新增 Agent 文件：`src/agents/enterprise_rag_agent.py`。
+- 新增测试脚本：`scripts/test_enterprise_rag_agent.py`，支持 graph 直调与 `--via-service` FastAPI TestClient 验证。
+- Agent registry：`src/agents/agents.py` 已注册 `enterprise-rag-agent`，未修改 `DEFAULT_AGENT`。
+- `/health` 验证：FastAPI TestClient 返回 `{"status": "ok"}`。
+- `/info` 验证：FastAPI TestClient 返回 agents 中包含 `enterprise-rag-agent`，并保留 `chatbot`、`research-assistant`、`rag-assistant`。
+- `/enterprise-rag-agent/invoke` 验证：`python scripts/test_enterprise_rag_agent.py --via-service --top-k 5` 返回 `status_code=200`、`source_count=5`、`fallback.triggered=false`、`retrieval_debug.hit_count=5`。
+- source 验证：回答末尾列出 `enterprise_agent_overview.md`、`enterprise_rag_pipeline.md`、`enterprise_prompt_guidelines.md`、`enterprise_model_provider_policy.md` 等来源摘要。
+- fallback 验证：`python scripts/test_enterprise_rag_agent.py --via-service --query --top-k 5` 返回 `fallback.triggered=true`、`reason=empty_query`、`sources=[]`。
+- fallback 验证：`python scripts/test_enterprise_rag_agent.py --via-service --query "RAG 是什么？" --top-k 0` 返回 `fallback.triggered=true`、`reason=invalid_top_k`、`sources=[]`。
+- 本轮未新增 `/enterprise/agent/query`，未修改 `src/service/service.py`、`src/streamlit_app.py`、`src/agents/tools.py`。
 
 Phase 4：统一查询接口 /enterprise/agent/query
 --------------------------------------------
