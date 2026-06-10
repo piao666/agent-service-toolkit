@@ -76,6 +76,64 @@ class StreamInput(UserInput):
     )
 
 
+class EnterpriseAgentQueryInput(BaseModel):
+    """Business-friendly query input for the enterprise RAG agent."""
+
+    query: str = Field(
+        description="User question to answer with the enterprise knowledge-base agent.",
+        examples=["What is the role of RAG in an enterprise knowledge-base agent?"],
+    )
+    session_id: str | None = Field(
+        description="Business session ID. Mapped to the service thread_id.",
+        default=None,
+        examples=["phase4-test-001"],
+    )
+    top_k: int = Field(
+        description="Maximum number of retrieved source chunks to use.",
+        default=5,
+        ge=0,
+        le=20,
+        examples=[5],
+    )
+    return_sources: bool = Field(
+        description="Whether to include source tracing results in the response.",
+        default=True,
+    )
+    model: SerializeAsAny[AllModelEnum] | None = Field(
+        title="Model",
+        description="Optional LLM model selection using the service model registry.",
+        default=None,
+        examples=[OpenAIModelName.GPT_5_NANO, AnthropicModelName.HAIKU_45],
+    )
+
+
+class EnterpriseAgentQueryResponse(BaseModel):
+    """Structured response for business-facing enterprise RAG calls."""
+
+    answer: str = Field(description="Final natural-language answer.")
+    sources: list[dict[str, Any]] = Field(
+        description="Source tracing results. Empty when return_sources is false.",
+        default_factory=list,
+    )
+    retrieval_debug: dict[str, Any] = Field(
+        description="Retrieval diagnostics for observability.",
+        default_factory=dict,
+    )
+    latency_ms: float = Field(description="Endpoint processing latency in milliseconds.")
+    model_debug: dict[str, Any] = Field(
+        description="Model diagnostics for the answer synthesis step.",
+        default_factory=dict,
+    )
+    fallback: dict[str, Any] = Field(
+        description="Fallback status and reason, when triggered.",
+        default_factory=dict,
+    )
+    session_id: str | None = Field(
+        description="Business session ID used for this request.",
+        default=None,
+    )
+
+
 class ToolCall(TypedDict):
     """Represents a request to call a tool."""
 

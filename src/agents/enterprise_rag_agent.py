@@ -23,6 +23,10 @@ Answer the user's question only from the retrieved context below.
 If the context is insufficient, say that the knowledge base does not contain enough evidence.
 Do not invent sources, file names, or facts.
 Keep the answer concise and useful.
+Use the same language as the user's question. If the user question is Chinese, you must answer in Chinese. If the user question is English, answer in English, unless the user explicitly asks for another language. Do not switch to English only because retrieved context contains English titles, file names, or technical terms.
+
+请使用与用户问题相同的语言回答。若用户问题为中文，必须使用中文回答；若用户问题为英文，使用英文回答；除非用户明确要求其他语言。不要因为检索上下文中包含英文标题或英文术语就切换为英文。
+回答必须基于检索到的 context。若 context 不足，请用用户问题相同语言说明知识库中没有足够依据。不要编造来源。
 """
 
 FALLBACK_PROMPT = (
@@ -78,6 +82,38 @@ def _is_smalltalk(query: str) -> bool:
     return normalized in smalltalk_inputs
 
 
+def _contains_cjk(text: str) -> bool:
+    return any("\u4e00" <= char <= "\u9fff" for char in text)
+
+
+def _requests_english(query: str) -> bool:
+    normalized = query.lower()
+    english_requests = {
+        "answer in english",
+        "respond in english",
+        "use english",
+        "in english",
+        "用英文",
+        "使用英文",
+        "英文回答",
+        "英语回答",
+    }
+    return any(request in normalized for request in english_requests)
+
+
+def _should_answer_in_chinese(query: str) -> bool:
+    return _contains_cjk(query) and not _requests_english(query)
+
+
+def _language_instruction(query: str) -> str:
+    if _should_answer_in_chinese(query):
+        return (
+            "The user question is Chinese. You must answer in Chinese. "
+            "Keep file names and source IDs unchanged, but all explanatory text must be Chinese."
+        )
+    return "Use the same language as the user's question unless the user explicitly requested another language."
+
+
 def _get_top_k(config: RunnableConfig) -> int | str | None:
     configurable = config.get("configurable", {})
     return configurable.get("top_k")
@@ -102,13 +138,22 @@ def _format_source_summary(sources: list[dict[str, Any]], limit: int = 5) -> str
     return "\n".join(lines)
 
 
-def _fallback_answer(reason: str | None = None) -> str:
+def _fallback_answer(reason: str | None = None, query: str = "") -> str:
     if reason == "empty_query":
         return "请输入一个需要查询的问题。"
+    if _should_answer_in_chinese(query):
+        if reason == "smalltalk":
+            return "我可以回答企业知识库中的问题。请提供需要查询的具体主题。"
+        if reason:
+            return f"当前知识库没有足够依据可靠回答该问题。fallback 原因：{reason}。"
+        return "当前知识库没有足够依据可靠回答该问题。"
     if reason == "smalltalk":
-        return "我可以回答企业知识库中的问题。请提供需要查询的具体主题。"
+        return (
+            "I can answer questions from the enterprise knowledge base. "
+            "Please provide a specific topic to query."
+        )
     if reason:
-        return f"{FALLBACK_PROMPT} 当前 fallback 原因：{reason}。"
+        return f"{FALLBACK_PROMPT} Fallback reason: {reason}."
     return FALLBACK_PROMPT
 
 
@@ -192,7 +237,7 @@ async def answer_synthesis(
     if fallback.get("triggered") or not sources or not context:
         reason = fallback.get("reason") or state.get("guard_reason")
         return {
-            "draft_answer": _fallback_answer(reason),
+            "draft_answer": _fallback_answer(reason, query=state.get("query", "")),
             "model_debug": {
                 "provider": "fallback",
                 "model": None,
@@ -200,7 +245,6 @@ async def answer_synthesis(
         }
 
     model_name = config.get("configurable", {}).get("model", settings.DEFAULT_MODEL)
-    model = get_model(model_name)
     messages = [
         SystemMessage(content=ANSWER_SYNTHESIS_PROMPT),
         HumanMessage(
@@ -208,15 +252,16 @@ async def answer_synthesis(
                 f"User question:\n{state.get('query', '')}\n\n"
                 f"Retrieval query:\n{state.get('rewritten_query', '')}\n\n"
                 f"Retrieved context:\n{context}\n\n"
-                "Answer in Chinese unless the user asked for another language."
+                f"{_language_instruction(state.get('query', ''))}"
             )
         ),
     ]
     try:
+        model = get_model(model_name)
         response = await model.ainvoke(messages, config)
         answer = _message_text(response).strip()
     except Exception as exc:
-        answer = f"{FALLBACK_PROMPT} 模型调用失败：{type(exc).__name__}。"
+        answer = _fallback_answer(f"model_error:{type(exc).__name__}", query=state.get("query", ""))
         return {
             "draft_answer": answer,
             "model_debug": {
@@ -227,7 +272,7 @@ async def answer_synthesis(
         }
 
     if not answer:
-        answer = FALLBACK_PROMPT
+        answer = _fallback_answer(query=state.get("query", ""))
     return {
         "draft_answer": answer,
         "model_debug": {
@@ -251,6 +296,7 @@ async def fallback_or_finish(
             AIMessage(
                 content=answer_with_sources,
                 response_metadata={
+                    "answer": answer,
                     "sources": sources,
                     "retrieval_debug": retrieval_debug,
                     "fallback": retrieval.get("fallback") or {},

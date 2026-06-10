@@ -336,3 +336,14 @@ Phase 7：README、接口文档、架构图、面试材料
 - 禁止提交 `.env`、真实 key、`.venv`、模型权重、Chroma 本地库、敏感日志。
 - 禁止删除或破坏 upstream 原生接口、Agent registry、invoke、stream、health、history、feedback 能力。
 - 禁止在没有评估依据时宣称准确率提升或性能提升。
+
+Phase 4 status update
+---------------------
+- [x] Added business-friendly endpoint `POST /enterprise/agent/query`.
+- [x] Added request and response schemas for enterprise agent query calls.
+- [x] Mapped `session_id` to the existing `thread_id` flow.
+- [x] Reused `enterprise-rag-agent` instead of duplicating retrieval or LLM logic.
+- [x] Returned `answer`, `sources`, `retrieval_debug`, `latency_ms`, `model_debug`, `fallback`, and `session_id`.
+- [x] Added `scripts/test_enterprise_query_api.py` for local endpoint verification with a local test model by default.
+- [x] Preserved upstream `/health`, `/info`, `/invoke`, `/{agent_id}/invoke`, `/stream`, `/{agent_id}/stream`, `/history`, and `/feedback`.
+- [x] Phase 4 verification commands completed.

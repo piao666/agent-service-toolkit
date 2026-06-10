@@ -4,6 +4,7 @@ import logging
 import warnings
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
+from time import perf_counter
 from typing import Annotated, Any
 from uuid import UUID, uuid4
 
@@ -25,10 +26,13 @@ from langsmith import uuid7
 from agents import DEFAULT_AGENT, AgentGraph, get_agent, get_all_agent_info, load_agent
 from core import settings
 from memory import initialize_database, initialize_store
+from rag.config import rag_settings
 from schema import (
     ChatHistory,
     ChatHistoryInput,
     ChatMessage,
+    EnterpriseAgentQueryInput,
+    EnterpriseAgentQueryResponse,
     Feedback,
     FeedbackResponse,
     ServiceMetadata,
@@ -212,6 +216,71 @@ async def invoke(user_input: UserInput, agent_id: str = DEFAULT_AGENT) -> ChatMe
     except Exception as e:
         logger.error(f"An exception occurred: {e}")
         raise HTTPException(status_code=500, detail="Unexpected error")
+
+
+def _enterprise_retrieval_debug(
+    metadata: dict[str, Any],
+    request: EnterpriseAgentQueryInput,
+    sources: list[dict[str, Any]],
+) -> dict[str, Any]:
+    retrieval_debug = dict(metadata.get("retrieval_debug") or {})
+    retrieval_debug.setdefault("original_query", request.query)
+    retrieval_debug.setdefault("rewritten_query", request.query.strip())
+    retrieval_debug.setdefault("top_k", request.top_k)
+    retrieval_debug.setdefault("hit_count", len(sources))
+    retrieval_debug.setdefault("embedding_provider", rag_settings.EMBEDDING_PROVIDER)
+    retrieval_debug.setdefault("vector_store", "chroma")
+    retrieval_debug.setdefault("collection", rag_settings.CHROMA_COLLECTION_NAME)
+    retrieval_debug.setdefault("persist_dir", rag_settings.CHROMA_PERSIST_DIR)
+    return retrieval_debug
+
+
+def _enterprise_model_debug(
+    metadata: dict[str, Any],
+    request: EnterpriseAgentQueryInput,
+) -> dict[str, Any]:
+    model_debug = dict(metadata.get("model_debug") or {})
+    model_debug.setdefault("model", str(request.model or settings.DEFAULT_MODEL))
+    model_debug.setdefault("provider", "configured" if request.model or settings.DEFAULT_MODEL else "unknown")
+    return model_debug
+
+
+@router.post("/enterprise/agent/query")
+async def enterprise_agent_query(
+    request: EnterpriseAgentQueryInput,
+) -> EnterpriseAgentQueryResponse:
+    """Invoke the enterprise RAG agent through a business-friendly response shape."""
+    start_time = perf_counter()
+    session_id = request.session_id or str(uuid4())
+    user_input = UserInput(
+        message=request.query,
+        model=request.model,
+        thread_id=session_id,
+        agent_config={"top_k": request.top_k},
+    )
+
+    try:
+        output = await invoke(user_input, agent_id="enterprise-rag-agent")
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Enterprise query failed: {e}")
+        raise HTTPException(status_code=500, detail="Enterprise agent query failed")
+
+    metadata = output.response_metadata or {}
+    all_sources = list(metadata.get("sources") or [])
+    sources = all_sources if request.return_sources else []
+    answer = str(metadata.get("answer") or output.content)
+
+    return EnterpriseAgentQueryResponse(
+        answer=answer,
+        sources=sources,
+        retrieval_debug=_enterprise_retrieval_debug(metadata, request, all_sources),
+        latency_ms=round((perf_counter() - start_time) * 1000, 2),
+        model_debug=_enterprise_model_debug(metadata, request),
+        fallback=dict(metadata.get("fallback") or {}),
+        session_id=session_id,
+    )
 
 
 async def message_generator(
