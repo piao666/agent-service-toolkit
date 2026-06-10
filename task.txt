@@ -347,3 +347,14 @@ Phase 4 status update
 - [x] Added `scripts/test_enterprise_query_api.py` for local endpoint verification with a local test model by default.
 - [x] Preserved upstream `/health`, `/info`, `/invoke`, `/{agent_id}/invoke`, `/stream`, `/{agent_id}/stream`, `/history`, and `/feedback`.
 - [x] Phase 4 verification commands completed.
+
+Phase 5 status update
+---------------------
+- [x] Added provider validation script for DeepSeek, OpenAI-compatible direct chat, and enterprise query model routing.
+- [x] Updated `.env.example` to highlight DeepSeek, OpenAI-compatible, and local embedding configuration.
+- [x] Added provider validation notes under `docs/enterprise_rag_backend/PROVIDER_VALIDATION.md`.
+- [x] Verified DeepSeek direct chat.
+- [x] Verified DeepSeek through `POST /enterprise/agent/query`.
+- [x] Verified OpenAI-compatible direct chat with configured endpoint.
+- [x] Recorded why OpenAI-compatible enterprise query was not executed in this environment.
+- [x] Phase 5 verification commands completed.
