@@ -1,8 +1,11 @@
 from pathlib import Path
 
-from langchain_community.document_loaders import Docx2txtLoader, PyPDFLoader, TextLoader
+from langchain_community.document_loaders import (
+    Docx2txtLoader,
+    PyPDFLoader,
+    TextLoader,
+)
 from langchain_core.documents import Document
-
 
 SUPPORTED_EXTENSIONS = {".docx", ".pdf", ".md", ".txt"}
 
@@ -41,4 +44,3 @@ def load_documents(data_dir: str | Path) -> list[Document]:
         if path.is_file() and path.suffix.lower() in SUPPORTED_EXTENSIONS:
             documents.extend(_load_file(path))
     return documents
-

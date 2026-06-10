@@ -8,6 +8,9 @@ class RetrievalResult(BaseModel):
     title: str | None = None
     doc_type: str | None = None
     chunk_id: str
+    chunk_index: int | None = None
+    distance: float
+    relevance_score: float
     score: float
     metadata: dict[str, Any] = Field(default_factory=dict)
     content_preview: str
@@ -21,4 +24,3 @@ class IngestStats(BaseModel):
     collection_name: str
     embedding_provider: str
     model_path: str
-

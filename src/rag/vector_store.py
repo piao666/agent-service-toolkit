@@ -1,6 +1,7 @@
 import shutil
 from pathlib import Path
 
+import chromadb
 from langchain_chroma import Chroma
 from langchain_core.documents import Document
 from langchain_core.embeddings import Embeddings
@@ -33,3 +34,18 @@ def add_documents(vector_store: Chroma, chunks: list[Document]) -> list[str]:
     vector_store.add_documents(chunks, ids=ids)
     return ids
 
+
+def get_collection_count(
+    persist_dir: str | Path | None = None,
+    collection_name: str | None = None,
+) -> int | None:
+    resolved_dir = Path(persist_dir or rag_settings.CHROMA_PERSIST_DIR)
+    if not resolved_dir.exists():
+        return None
+
+    client = chromadb.PersistentClient(path=str(resolved_dir))
+    try:
+        collection = client.get_collection(collection_name or rag_settings.CHROMA_COLLECTION_NAME)
+    except Exception:
+        return None
+    return int(collection.count())

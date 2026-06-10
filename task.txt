@@ -146,18 +146,32 @@ Phase 2：企业知识库 Retriever Tool 与 source tracing
 目标：把可解释检索封装为 Agent 可调用工具。
 
 任务：
-- [ ] 新增 `src/agents/enterprise_tools.py`。
-- [ ] 封装 enterprise retriever tool。
-- [ ] 统一 retrieval result schema。
-- [ ] 增加 source tracing 字段：source、title、page、chunk_id、score、metadata。
-- [ ] 增加 retrieval debug：original_query、top_k、hit_count、embedding_provider、vector_store、collection。
-- [ ] 处理空检索、Chroma 不存在、embedding 配置错误等异常。
+- [x] 新增 `src/agents/enterprise_tools.py`。
+- [x] 封装 enterprise retriever tool。
+- [x] 统一 retrieval result schema。
+- [x] 增加 source tracing 字段：source、title、doc_type、chunk_id、chunk_index、distance、relevance_score、metadata、content_preview。
+- [x] 增加 retrieval debug：original_query、top_k、hit_count、embedding_provider、vector_store、collection、persist_dir、distance_note。
+- [x] 处理空检索、Chroma 不存在、collection 不存在或为空、embedding 配置错误、非法 top_k、检索异常等 fallback。
+- [x] 新增 `scripts/test_enterprise_retriever_tool.py`，用于独立验证工具层输出。
 
 验收标准：
-- [ ] 工具函数可独立调用。
-- [ ] 工具返回结构化检索结果。
-- [ ] 空知识库或无命中时有稳定 fallback。
-- [ ] 不破坏原 `Database_Search` 示例工具。
+- [x] 工具函数可独立调用。
+- [x] 工具返回结构化检索结果。
+- [x] 每条 source 包含 source、title、doc_type、chunk_id、chunk_index、distance、relevance_score、metadata、content_preview。
+- [x] 返回可用于 answer synthesis 的 context，并在 context 中保留 source、title、chunk_id、distance。
+- [x] 空知识库、缺失 Chroma 目录、非法 top_k 或检索异常时有稳定 fallback。
+- [x] 不修改原 `src/agents/tools.py`，不破坏原 `Database_Search` 示例工具。
+- [x] 不新增 Agent，不修改 Agent registry，不新增 `/enterprise/agent/query`。
+
+验收记录：
+- 新增工具对象：`enterprise_knowledge_retriever`。
+- 新增工具函数：`build_enterprise_retrieval_payload()`、`enterprise_knowledge_retriever_func()`。
+- 检索验证命令：`python scripts/test_enterprise_retriever_tool.py --top-k 5 --persist-dir chroma_enterprise`。
+- 检索验证问题 1：`RAG 在企业知识库 Agent 中的作用是什么？`，返回 5 条 sources，首条命中 `enterprise_agent_overview.md`。
+- 检索验证问题 2：`Prompt 约束如何减少 Agent 幻觉？`，返回 5 条 sources，首条命中 `enterprise_prompt_guidelines.md`。
+- 检索验证问题 3：`DeepSeek 和 Qwen provider 在系统中分别适合什么用途？`，返回 5 条 sources，首条命中 `enterprise_model_provider_policy.md`。
+- fallback 验证：空 query 返回 `empty_query`，非法 top_k 返回 `invalid_top_k`，缺失 Chroma 目录返回 `chroma_persist_dir_missing`。
+- Chroma 在 Codex 沙箱内可能返回本地 disk I/O 相关异常；工具层会返回 `retrieval_error` fallback，真实检索已通过外部权限验证。
 
 Phase 3：enterprise-rag-agent 接入原项目 Agent registry
 ------------------------------------------------------

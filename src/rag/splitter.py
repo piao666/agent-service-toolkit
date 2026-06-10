@@ -22,8 +22,7 @@ def split_documents(
     for index, chunk in enumerate(chunks):
         source = chunk.metadata.get("source", "unknown")
         page = chunk.metadata.get("page", "")
-        digest = sha1(f"{source}:{page}:{index}:{chunk.page_content}".encode("utf-8")).hexdigest()
+        digest = sha1(f"{source}:{page}:{index}:{chunk.page_content}".encode()).hexdigest()
         chunk.metadata["chunk_id"] = digest[:16]
         chunk.metadata["chunk_index"] = index
     return chunks
-

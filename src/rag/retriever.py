@@ -15,6 +15,10 @@ def _preview(text: str, limit: int = 240) -> str:
     return normalized[: limit - 3] + "..."
 
 
+def _relevance_score(distance: float) -> float:
+    return 1 / (1 + max(distance, 0.0))
+
+
 def retrieve(
     query: str,
     top_k: int | None = None,
@@ -25,6 +29,10 @@ def retrieve(
     if not query.strip():
         raise ValueError("Query must not be empty.")
 
+    resolved_top_k = rag_settings.RAG_DEFAULT_TOP_K if top_k is None else top_k
+    if resolved_top_k < 1:
+        raise ValueError("top_k must be greater than 0.")
+
     embedding_model = embeddings or get_embedding_model()
     vector_store = get_vector_store(
         embedding_model,
@@ -34,23 +42,26 @@ def retrieve(
     )
     results = vector_store.similarity_search_with_score(
         query,
-        k=top_k or rag_settings.RAG_DEFAULT_TOP_K,
+        k=resolved_top_k,
     )
 
     output: list[RetrievalResult] = []
     for doc, score in results:
         metadata = dict(doc.metadata)
+        distance = float(score)
         output.append(
             RetrievalResult(
                 source=str(metadata.get("source", "unknown")),
                 title=metadata.get("title"),
                 doc_type=metadata.get("doc_type"),
                 chunk_id=str(metadata.get("chunk_id", "")),
-                score=float(score),
+                chunk_index=metadata.get("chunk_index"),
+                distance=distance,
+                relevance_score=_relevance_score(distance),
+                score=distance,
                 metadata=metadata,
                 content_preview=_preview(doc.page_content),
                 page_content=doc.page_content,
             )
         )
     return output
-
