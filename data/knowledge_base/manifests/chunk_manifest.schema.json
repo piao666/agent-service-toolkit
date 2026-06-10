@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Knowledge Base Chunk Manifest Record",
+  "type": "object",
+  "required": [
+    "chunk_id",
+    "doc_id",
+    "source_id",
+    "chunk_index",
+    "content_sha256",
+    "content_preview",
+    "metadata",
+    "embedding_written",
+    "chroma_written"
+  ],
+  "properties": {
+    "chunk_id": { "type": "string" },
+    "doc_id": { "type": "string" },
+    "source_id": { "type": "string" },
+    "chunk_index": { "type": "integer", "minimum": 0 },
+    "chunk_size": { "type": "integer", "minimum": 1 },
+    "chunk_overlap": { "type": "integer", "minimum": 0 },
+    "language": { "type": "string" },
+    "content_sha256": { "type": "string" },
+    "content_preview": { "type": "string" },
+    "metadata": { "type": "object" },
+    "embedding_provider": { "type": ["string", "null"] },
+    "vector_store": { "type": ["string", "null"] },
+    "collection_name": { "type": ["string", "null"] },
+    "embedding_written": { "type": "boolean" },
+    "chroma_written": { "type": "boolean" },
+    "created_at": { "type": "string" }
+  },
+  "additionalProperties": true
+}

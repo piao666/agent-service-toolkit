@@ -67,7 +67,7 @@
 - [x] 已确认存在关键文件：`config.json`、`model.safetensors`、`modules.json`、`sentence_bert_config.json`、`special_tokens_map.json`、`tokenizer.json`、`tokenizer_config.json`、`vocab.txt`、`1_Pooling`。
 - [x] 当前默认 RAG embedding 已改为 local provider。
 - [x] 后续不默认使用 Hugging Face 在线下载。
-- [x] 本地 embedding provider 已支持配置模型路径，当前真实路径为 `E:\Models\bge-small-zh-v1.5`。
+- [x] 本地 embedding provider 已支持配置模型路径，当前本地路径使用 `<LOCAL_EMBEDDING_MODEL_PATH>` 表示。
 
 模型 provider 策略
 ------------------
@@ -125,7 +125,7 @@ Phase 1：本地 embedding + Chroma 入库与检索
 - [x] 将旧 `src/core/embeddings.py` 默认 embedding helper 改为委托本地 RAG embedding helper，避免旧脚本默认走第三方 embedding API。
 
 验收记录：
-- 本地模型路径：`E:\Models\bge-small-zh-v1.5`。
+- 本地模型路径：`<LOCAL_EMBEDDING_MODEL_PATH>`。
 - 模型加载验证：`SentenceTransformer(...).encode(["企业知识库检索测试"]).shape` 返回 `(1, 512)`。
 - 入库命令：`python scripts/enterprise_ingest.py --data-dir data/enterprise_docs --persist-dir chroma_enterprise --reset`。
 - 入库结果：`document_count=4`，`chunk_count=6`，`persist_dir=chroma_enterprise`，`collection_name=enterprise_knowledge_base`，`embedding_provider=local`。
@@ -358,3 +358,15 @@ Phase 5 status update
 - [x] Verified OpenAI-compatible direct chat with configured endpoint.
 - [x] Recorded why OpenAI-compatible enterprise query was not executed in this environment.
 - [x] Phase 5 verification commands completed.
+
+Phase 6A-1 status update
+------------------------
+- [x] Created the controlled knowledge-base directory layout under `data/knowledge_base/`.
+- [x] Added `data/knowledge_base/manifests/source_catalog.yaml` for local course,
+      official documentation, paper metadata, security, and AI risk sources.
+- [x] Added document and chunk manifest schemas for later ingestion and chunk tracking.
+- [x] Added `scripts/inspect_local_course_docs.py` to inspect local DOCX/PDF metadata only.
+- [x] Added `scripts/plan_web_sources.py` to dry-run web and paper source policies only.
+- [x] Added `docs/enterprise_rag_backend/CORPUS_DESIGN.md`.
+- [x] Phase 6A-1 does not download full official documentation, download paper PDFs,
+      write Chroma, create embeddings, or start QA evaluation.

@@ -1,0 +1,438 @@
+local_deep_learning_course_docx:
+  title: Local Deep Learning Course DOCX
+  source_type: local_course
+  domain: deep_learning
+  language: zh
+  format: docx
+  entry_url: ""
+  local_path: "<LOCAL_COURSE_ROOT>/DL/**/*.docx"
+  license_status: local_use_only
+  redistribution: metadata_only
+  priority: high
+  fetch_policy:
+    mode: local_inspect_only
+    max_depth: 0
+    max_pages: 0
+    include_patterns:
+      - "*.docx"
+    exclude_patterns:
+      - ".venv/"
+      - "site-packages/"
+      - "__pycache__/"
+    seed_pages: []
+  notes: "Record file metadata only. Do not copy local files into the repository."
+
+local_nlp_course_docx:
+  title: Local NLP Course DOCX
+  source_type: local_course
+  domain: nlp
+  language: zh
+  format: docx
+  entry_url: ""
+  local_path: "<LOCAL_COURSE_ROOT>/NLP/**/*.docx"
+  license_status: local_use_only
+  redistribution: metadata_only
+  priority: high
+  fetch_policy:
+    mode: local_inspect_only
+    max_depth: 0
+    max_pages: 0
+    include_patterns:
+      - "*.docx"
+    exclude_patterns:
+      - ".venv/"
+      - "site-packages/"
+      - "__pycache__/"
+    seed_pages: []
+  notes: "Record file metadata only. Do not copy local files into the repository."
+
+local_ai_agent_course_pdf:
+  title: Local AI Agent Course PDF
+  source_type: local_course
+  domain: ai_agent
+  language: zh
+  format: pdf
+  entry_url: ""
+  local_path: "<LOCAL_COURSE_ROOT>/Agent/**/*.pdf"
+  license_status: local_use_only
+  redistribution: metadata_only
+  priority: medium
+  fetch_policy:
+    mode: local_inspect_only
+    max_depth: 0
+    max_pages: 0
+    include_patterns:
+      - "*.pdf"
+    exclude_patterns:
+      - ".venv/"
+      - "site-packages/"
+      - "__pycache__/"
+    seed_pages: []
+  notes: "Record file metadata only. Do not copy local files into the repository."
+
+kubernetes_cn_docs:
+  title: Kubernetes Chinese Official Documentation
+  source_type: web_docs
+  domain: orchestration
+  language: zh
+  format: html
+  entry_url: "https://kubernetes.io/zh-cn/docs/"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: medium
+  source_mode: repo_docs_preferred
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 8
+    include_patterns:
+      - "/zh-cn/docs/"
+    exclude_patterns:
+      - "/blog/"
+      - "/community/"
+      - "/events/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://kubernetes.io/zh-cn/docs/concepts/overview/"
+      - "https://kubernetes.io/zh-cn/docs/concepts/workloads/"
+      - "https://kubernetes.io/zh-cn/docs/tasks/"
+  notes: "Use curated representative pages only. Prefer official docs source repository when available."
+
+python_cn_docs:
+  title: Python Chinese Official Documentation
+  source_type: web_docs
+  domain: programming_language
+  language: zh
+  format: html
+  entry_url: "https://docs.python.org/zh-cn/3/"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: medium
+  source_mode: curated_seed_pages
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 8
+    include_patterns:
+      - "/zh-cn/3/"
+    exclude_patterns:
+      - "/whatsnew/"
+      - "/download/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://docs.python.org/zh-cn/3/tutorial/"
+      - "https://docs.python.org/zh-cn/3/library/asyncio.html"
+      - "https://docs.python.org/zh-cn/3/library/typing.html"
+  notes: "Use a small curated sample. Do not mirror the full documentation tree."
+
+pytorch_docs:
+  title: PyTorch Official Documentation
+  source_type: web_docs
+  domain: deep_learning
+  language: en
+  format: html
+  entry_url: "https://docs.pytorch.org/docs/stable/index.html"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: medium
+  source_mode: curated_seed_pages
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 8
+    include_patterns:
+      - "/docs/stable/"
+    exclude_patterns:
+      - "/blog/"
+      - "/community/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://docs.pytorch.org/docs/stable/torch.html"
+      - "https://docs.pytorch.org/docs/stable/nn.html"
+      - "https://docs.pytorch.org/docs/stable/data.html"
+  notes: "Capture representative API and training concepts only in later phases."
+
+fastapi_docs:
+  title: FastAPI Official Documentation
+  source_type: web_docs
+  domain: api_backend
+  language: en
+  format: html
+  entry_url: "https://fastapi.tiangolo.com/"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: high
+  source_mode: repo_docs_preferred
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 6
+    include_patterns:
+      - "/tutorial/"
+      - "/advanced/"
+    exclude_patterns:
+      - "/blog/"
+      - "/newsletter/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://fastapi.tiangolo.com/tutorial/path-params/"
+      - "https://fastapi.tiangolo.com/tutorial/body/"
+      - "https://fastapi.tiangolo.com/advanced/testing-dependencies/"
+  notes: "Prefer official docs source files over HTML crawling when practical."
+
+chroma_docs:
+  title: Chroma Official Documentation
+  source_type: web_docs
+  domain: vector_database
+  language: en
+  format: html
+  entry_url: "https://docs.trychroma.com/"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: high
+  source_mode: repo_docs_preferred
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 6
+    include_patterns:
+      - "/docs/"
+    exclude_patterns:
+      - "/blog/"
+      - "/community/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://docs.trychroma.com/docs/overview/getting-started"
+      - "https://docs.trychroma.com/docs/collections/create-get-delete"
+      - "https://docs.trychroma.com/docs/querying-collections/query-and-get"
+  notes: "Use only a small set of vector-store behavior pages in the next phase."
+
+langgraph_docs:
+  title: LangGraph Official Documentation
+  source_type: web_docs
+  domain: agent_workflow
+  language: en
+  format: html
+  entry_url: "https://langchain-ai.github.io/langgraph/"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: high
+  source_mode: repo_docs_preferred
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 6
+    include_patterns:
+      - "/langgraph/"
+    exclude_patterns:
+      - "/blog/"
+      - "/community/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://langchain-ai.github.io/langgraph/concepts/why-langgraph/"
+      - "https://langchain-ai.github.io/langgraph/concepts/low_level/"
+      - "https://langchain-ai.github.io/langgraph/tutorials/"
+  notes: "Prefer documentation source files if the official repository path is selected later."
+
+vllm_docs:
+  title: vLLM Official Documentation
+  source_type: web_docs
+  domain: model_serving
+  language: en
+  format: html
+  entry_url: "https://docs.vllm.ai/"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: medium
+  source_mode: repo_docs_preferred
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 6
+    include_patterns:
+      - "/en/"
+      - "/serving/"
+    exclude_patterns:
+      - "/blog/"
+      - "/community/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html"
+      - "https://docs.vllm.ai/en/latest/getting_started/quickstart.html"
+      - "https://docs.vllm.ai/en/latest/serving/engine_args.html"
+  notes: "Useful for optional OpenAI-compatible model serving notes."
+
+huggingface_transformers_docs:
+  title: Hugging Face Transformers Official Documentation
+  source_type: web_docs
+  domain: transformer_models
+  language: en
+  format: html
+  entry_url: "https://huggingface.co/docs/transformers/"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: medium
+  source_mode: repo_docs_preferred
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 8
+    include_patterns:
+      - "/docs/transformers/"
+    exclude_patterns:
+      - "/blog/"
+      - "/community/"
+      - "/spaces/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://huggingface.co/docs/transformers/tasks/sequence_classification"
+      - "https://huggingface.co/docs/transformers/model_doc/auto"
+      - "https://huggingface.co/docs/transformers/main_classes/pipelines"
+  notes: "Use curated pages only because the documentation site is large."
+
+rag_arxiv_papers:
+  title: RAG Related arXiv Papers
+  source_type: paper
+  domain: retrieval_augmented_generation
+  language: en
+  format: metadata
+  entry_url: "https://arxiv.org/"
+  local_path: ""
+  license_status: per_paper_check_required
+  redistribution: manifest_only
+  priority: high
+  fetch_policy:
+    mode: metadata_only
+    max_depth: 0
+    max_pages: 0
+    download_pdf: false
+    include_patterns:
+      - "retrieval augmented generation"
+      - "RAG"
+    exclude_patterns:
+      - ".pdf"
+    seed_pages:
+      - "https://arxiv.org/abs/2005.11401"
+  notes: "Do not download PDFs in Phase 6A-1. Register metadata and license checks only."
+
+transformer_arxiv_papers:
+  title: Transformer Related arXiv Papers
+  source_type: paper
+  domain: transformer_models
+  language: en
+  format: metadata
+  entry_url: "https://arxiv.org/"
+  local_path: ""
+  license_status: per_paper_check_required
+  redistribution: manifest_only
+  priority: high
+  fetch_policy:
+    mode: metadata_only
+    max_depth: 0
+    max_pages: 0
+    download_pdf: false
+    include_patterns:
+      - "transformer"
+      - "attention"
+    exclude_patterns:
+      - ".pdf"
+    seed_pages:
+      - "https://arxiv.org/abs/1706.03762"
+  notes: "Do not download PDFs in Phase 6A-1. Register metadata and license checks only."
+
+retrieval_eval_papers:
+  title: BEIR, RAGAS, and Retrieval Evaluation Papers
+  source_type: paper
+  domain: retrieval_evaluation
+  language: en
+  format: metadata
+  entry_url: "https://arxiv.org/"
+  local_path: ""
+  license_status: per_paper_check_required
+  redistribution: manifest_only
+  priority: high
+  fetch_policy:
+    mode: metadata_only
+    max_depth: 0
+    max_pages: 0
+    download_pdf: false
+    include_patterns:
+      - "BEIR"
+      - "RAGAS"
+      - "retrieval evaluation"
+    exclude_patterns:
+      - ".pdf"
+    seed_pages:
+      - "https://arxiv.org/abs/2104.08663"
+      - "https://arxiv.org/abs/2309.15217"
+  notes: "Do not download PDFs in Phase 6A-1. Register metadata and license checks only."
+
+owasp_llm_security_docs:
+  title: OWASP LLM Security Documentation
+  source_type: web_docs
+  domain: llm_security
+  language: en
+  format: html
+  entry_url: "https://genai.owasp.org/llm-top-10/"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: medium
+  source_mode: curated_seed_pages
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 5
+    include_patterns:
+      - "/llm-top-10/"
+    exclude_patterns:
+      - "/events/"
+      - "/blog/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://genai.owasp.org/llm-top-10/"
+  notes: "Security reference source for later prompt-injection and hallucination cases."
+
+nist_ai_rmf_docs:
+  title: NIST AI Risk Management Framework Documentation
+  source_type: web_docs
+  domain: ai_risk_management
+  language: en
+  format: pdf_or_html
+  entry_url: "https://www.nist.gov/itl/ai-risk-management-framework"
+  local_path: ""
+  license_status: official_docs_license_check_required
+  redistribution: link_and_metadata_only
+  priority: medium
+  source_mode: curated_seed_pages
+  fetch_policy:
+    mode: sample_only
+    max_depth: 1
+    max_pages: 5
+    include_patterns:
+      - "/itl/ai-risk-management-framework"
+      - "/artificial-intelligence/"
+    exclude_patterns:
+      - "/news-events/"
+      - "#"
+      - "?"
+    seed_pages:
+      - "https://www.nist.gov/itl/ai-risk-management-framework"
+  notes: "Record links and metadata first. Download decisions require a later license review."
