@@ -394,3 +394,13 @@ Phase 6B-1 status update
 - [x] Generated `data/knowledge_base/manifests/chunk_quality_report.json`.
 - [x] Generated `docs/enterprise_rag_backend/CHUNKING_VALIDATION.md`.
 - [x] Phase 6B-1 does not write Chroma, create embeddings, call an LLM, or start QA evaluation.
+
+Phase 6C status update
+----------------------
+- [x] Added manual QA case design for the reviewed Phase 6 corpus.
+- [x] Completed retrieval-only evaluation on the reviewed Chroma sample.
+- [x] Recorded API/Agent endpoint evaluation as skipped because the local service was unavailable.
+- [x] Added bad-case analysis outputs for retrieval misses and skipped endpoint evaluation.
+- [x] Added Phase 6C system gap analysis and proposed Phase 6D plan without implementation.
+- [x] Phase 6C does not claim end-to-end Agent QA success, create a new Chroma collection,
+      expand ingestion scope, modify production endpoint behavior, or start Phase 7.
