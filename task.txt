@@ -370,3 +370,14 @@ Phase 6A-1 status update
 - [x] Added `docs/enterprise_rag_backend/CORPUS_DESIGN.md`.
 - [x] Phase 6A-1 does not download full official documentation, download paper PDFs,
       write Chroma, create embeddings, or start QA evaluation.
+
+Phase 6A-2 status update
+------------------------
+- [x] Added controlled seed-page fetch planning and execution script for HTML samples.
+- [x] Added parser validation script for DOCX, PDF, HTML, Markdown, JSON, YAML, CSV,
+      PPTX availability, and OCR availability.
+- [x] Generated `data/knowledge_base/manifests/sample_manifest.jsonl`.
+- [x] Generated `data/knowledge_base/manifests/parser_validation.jsonl`.
+- [x] Generated `docs/enterprise_rag_backend/PARSER_VALIDATION.md`.
+- [x] Added ignore rules for raw HTML/document caches, normalized text, and parser cache files.
+- [x] Phase 6A-2 does not write Chroma, create embeddings, call an LLM, or start QA evaluation.

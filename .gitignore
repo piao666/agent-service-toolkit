@@ -184,6 +184,17 @@ cython_debug/
 # Data
 *.docx
 *.pdf
+data/knowledge_base/raw/**/*.html
+data/knowledge_base/raw/**/*.pdf
+data/knowledge_base/raw/**/*.docx
+data/knowledge_base/raw/**/*.pptx
+data/knowledge_base/raw/**/*.zip
+data/knowledge_base/raw/**/*.sqlite
+data/knowledge_base/raw/**/*.db
+data/knowledge_base/normalized/**/*.txt
+data/knowledge_base/normalized/**/*.md
+data/knowledge_base/normalized/**/*.jsonl
+data/knowledge_base/parser_cache/
 
 # Chroma db
 chroma_enterprise/
