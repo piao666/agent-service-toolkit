@@ -1,0 +1,31 @@
+{
+  "generated_at": "2026-06-11T07:38:46.765628+00:00",
+  "execute": true,
+  "dry_run": false,
+  "limit": 80,
+  "chunk_manifest_count": 607,
+  "eligible_candidate_count": 575,
+  "selected_count": 80,
+  "text_recovered_count": 80,
+  "chroma_written_count": 80,
+  "error_count": 0,
+  "persist_dir": "chroma_enterprise_phase6",
+  "collection_name": "enterprise_ai_learning_kb_reviewed",
+  "collection_count_before": 80,
+  "collection_count_after": 80,
+  "cleared_existing_count": 80,
+  "selection_strategy": "round_robin_by_normalized_id",
+  "reset_collection_on_execute": true,
+  "embedding_provider": "local",
+  "model_path_alias": "local_bge_small_zh_v1_5",
+  "banned_sources_present_in_manifest": [
+    "kubernetes_cn_docs"
+  ],
+  "banned_source_written_count": 0,
+  "writes_chroma": true,
+  "calls_embedding": true,
+  "calls_llm": false,
+  "qa_evaluation": false,
+  "manifest_path": "data\\knowledge_base\\manifests\\chroma_ingestion_manifest.jsonl",
+  "report_path": "data\\knowledge_base\\manifests\\chroma_ingestion_report.json"
+}

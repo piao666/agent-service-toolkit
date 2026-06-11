@@ -201,8 +201,10 @@ outputs/corpus_review_private/
 
 # Chroma db
 chroma_enterprise/
+chroma_enterprise_phase6/
 chroma_db/
 chroma_*_db/
+data/knowledge_base/vector_store/
 *.db
 *.sqlite3
 *.sqlite
