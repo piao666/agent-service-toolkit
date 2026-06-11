@@ -194,6 +194,7 @@ data/knowledge_base/raw/**/*.db
 data/knowledge_base/normalized/**/*.txt
 data/knowledge_base/normalized/**/*.md
 data/knowledge_base/normalized/**/*.jsonl
+data/knowledge_base/chunks/**/*.jsonl
 data/knowledge_base/parser_cache/
 
 # Chroma db

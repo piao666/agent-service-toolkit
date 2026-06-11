@@ -381,3 +381,16 @@ Phase 6A-2 status update
 - [x] Generated `docs/enterprise_rag_backend/PARSER_VALIDATION.md`.
 - [x] Added ignore rules for raw HTML/document caches, normalized text, and parser cache files.
 - [x] Phase 6A-2 does not write Chroma, create embeddings, call an LLM, or start QA evaluation.
+
+Phase 6B-1 status update
+------------------------
+- [x] Added normalization script for parser-passed samples.
+- [x] Added chunk manifest builder with source tracing metadata.
+- [x] Added chunk quality inspection script.
+- [x] Included cached HTML samples in normalization and chunk manifests when local ignored
+      seed-page cache is available.
+- [x] Generated `data/knowledge_base/manifests/normalized_manifest.jsonl`.
+- [x] Generated `data/knowledge_base/manifests/chunk_manifest.jsonl`.
+- [x] Generated `data/knowledge_base/manifests/chunk_quality_report.json`.
+- [x] Generated `docs/enterprise_rag_backend/CHUNKING_VALIDATION.md`.
+- [x] Phase 6B-1 does not write Chroma, create embeddings, call an LLM, or start QA evaluation.
