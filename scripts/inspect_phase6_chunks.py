@@ -42,7 +42,12 @@ def _load_jsonl(path: Path) -> list[dict[str, Any]]:
 
 
 def _counter(records: list[dict[str, Any]], key: str) -> dict[str, int]:
-    return dict(Counter(str(record.get(key) or "unknown") for record in records))
+    return dict(
+        Counter(
+            "unknown" if record.get(key) is None else str(record.get(key))
+            for record in records
+        )
+    )
 
 
 def _duplicate_count(values: list[str]) -> int:
@@ -71,6 +76,11 @@ def inspect_chunks(records: list[dict[str, Any]]) -> dict[str, Any]:
         "by_doc_type": _counter(records, "doc_type"),
         "by_source_id": _counter(records, "source_id"),
         "by_domain": _counter(records, "domain"),
+        "by_review_status": _counter(records, "review_status"),
+        "by_ingest_candidate": _counter(records, "ingest_candidate"),
+        "ingest_candidate_chunk_count": sum(
+            1 for record in records if record.get("ingest_candidate") is True
+        ),
         "chunk_chars_min": min(chunk_chars) if chunk_chars else 0,
         "chunk_chars_avg": round(mean(chunk_chars), 2) if chunk_chars else 0,
         "chunk_chars_max": max(chunk_chars) if chunk_chars else 0,
@@ -144,6 +154,7 @@ def _write_doc(report: dict[str, Any], path: Path = CHUNKING_DOC_PATH) -> None:
         f"- Missing metadata: {report.get('missing_metadata_count')}",
         f"- Duplicate chunk hashes: {report.get('duplicate_chunk_hash_count')}",
         f"- Preview max chars: {report.get('preview_max_chars')}",
+        f"- Ingest candidate chunks: {report.get('ingest_candidate_chunk_count')}",
         f"- Quality pass: {report.get('quality_pass')}",
         "",
         "## Distribution By Format",

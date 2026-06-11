@@ -177,6 +177,41 @@ def _fetch_url(url: str, timeout: int) -> bytes:
         return response.read()
 
 
+def _cache_record(
+    *,
+    base_record: dict[str, Any],
+    content: bytes,
+    status: str = "ok",
+    error_type: str | None = None,
+    error_summary: str | None = None,
+) -> dict[str, Any]:
+    return {
+        **base_record,
+        "content_sha256": hashlib.sha256(content).hexdigest(),
+        "size_bytes": len(content),
+        "fetch_status": status,
+        "error_type": error_type,
+        "error_summary": error_summary,
+    }
+
+
+def _existing_cache_record(
+    *,
+    base_record: dict[str, Any],
+    cache_path: Path,
+    reason: str,
+) -> dict[str, Any] | None:
+    if not cache_path.exists() or cache_path.stat().st_size <= 0:
+        return None
+    content = cache_path.read_bytes()
+    return _cache_record(
+        base_record=base_record,
+        content=content,
+        error_type=None,
+        error_summary=reason,
+    )
+
+
 def _record(
     *,
     source_id: str,
@@ -209,13 +244,15 @@ def _record(
         content = _fetch_url(source_url, timeout=timeout)
         cache_path.parent.mkdir(parents=True, exist_ok=True)
         cache_path.write_bytes(content)
-        return {
-            **base_record,
-            "content_sha256": hashlib.sha256(content).hexdigest(),
-            "size_bytes": len(content),
-            "fetch_status": "ok",
-        }
+        return _cache_record(base_record=base_record, content=content)
     except (HTTPError, URLError, TimeoutError, ValueError) as exc:
+        cached = _existing_cache_record(
+            base_record=base_record,
+            cache_path=cache_path,
+            reason="network fetch failed; refreshed metadata from existing local cache",
+        )
+        if cached is not None:
+            return cached
         error_type, summary = _error_summary(exc)
         return {
             **base_record,

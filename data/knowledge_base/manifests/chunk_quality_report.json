@@ -1,13 +1,13 @@
 {
-  "generated_at": "2026-06-11T06:08:55.725306+00:00",
-  "chunk_total": 626,
+  "generated_at": "2026-06-11T07:02:26.678368+00:00",
+  "chunk_total": 607,
   "by_doc_type": {
     "docx": 317,
     "pdf": 182,
     "markdown": 19,
     "json": 2,
     "yaml": 16,
-    "html": 90
+    "html": 71
   },
   "by_source_id": {
     "local_deep_learning_course_docx": 112,
@@ -15,23 +15,27 @@
     "local_ai_agent_course_pdf": 182,
     "repo_project_files": 37,
     "fastapi_docs": 39,
-    "pytorch_docs": 2,
-    "chroma_docs": 16,
-    "langgraph_docs": 1,
     "kubernetes_cn_docs": 32
   },
   "by_domain": {
-    "deep_learning": 114,
+    "deep_learning": 112,
     "nlp": 205,
     "ai_agent": 182,
     "repo_metadata": 37,
     "api_backend": 39,
-    "vector_database": 16,
-    "agent_workflow": 1,
     "orchestration": 32
   },
-  "chunk_chars_min": 14,
-  "chunk_chars_avg": 801.67,
+  "by_review_status": {
+    "approved": 575,
+    "needs_review": 32
+  },
+  "by_ingest_candidate": {
+    "True": 575,
+    "False": 32
+  },
+  "ingest_candidate_chunk_count": 575,
+  "chunk_chars_min": 22,
+  "chunk_chars_avg": 803.65,
   "chunk_chars_max": 966,
   "empty_chunk_count": 0,
   "missing_metadata_count": 0,

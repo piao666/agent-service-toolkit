@@ -26,12 +26,13 @@ Each chunk stores `chunk_id`, `normalized_id`, `source_id`, `sample_id`, `doc_ty
 
 ## Quality Summary
 
-- Total chunks: 626
-- Chunk char min/avg/max: 14 / 801.67 / 966
+- Total chunks: 607
+- Chunk char min/avg/max: 22 / 803.65 / 966
 - Empty chunks: 0
 - Missing metadata: 0
 - Duplicate chunk hashes: 0
 - Preview max chars: 61
+- Ingest candidate chunks: 575
 - Quality pass: True
 
 ## Distribution By Format
@@ -39,7 +40,7 @@ Each chunk stores `chunk_id`, `normalized_id`, `source_id`, `sample_id`, `doc_ty
 | Format | Chunk Count |
 | --- | ---: |
 | docx | 317 |
-| html | 90 |
+| html | 71 |
 | json | 2 |
 | markdown | 19 |
 | pdf | 182 |

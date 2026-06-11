@@ -191,6 +191,10 @@ def build_chunks(args: argparse.Namespace) -> list[dict[str, Any]]:
                     "chunk_sha256": chunk_hash,
                     "content_sha256": chunk_hash,
                     "content_preview": _metadata_preview(doc_type, emitted_index, chunk_hash),
+                    "normalization_status": normalized.get("normalization_status"),
+                    "filter_reason": normalized.get("filter_reason"),
+                    "review_status": normalized.get("review_status"),
+                    "ingest_candidate": bool(normalized.get("ingest_candidate")),
                     "metadata": {
                         "parser": normalized.get("parser"),
                         "normalizer": normalized.get("normalizer"),

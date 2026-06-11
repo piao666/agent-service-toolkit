@@ -327,6 +327,122 @@ def _extract_html(path: Path) -> tuple[str, str, list[str], int, int]:
     return text, parser.title, parser.headings, parser.code_block_count, parser.link_count
 
 
+def _html_filter_reason(title: str | None, text: str) -> str | None:
+    title_text = title or ""
+    lower_text = text.lower()
+    if "redirecting" in title_text.lower() or "redirecting..." in lower_text:
+        return "redirect_or_too_short"
+    if len(text.strip()) < 200:
+        return "redirect_or_too_short"
+    if "404" in text or "not found" in lower_text:
+        return "redirect_or_too_short"
+    return None
+
+
+def _review_fields(
+    *,
+    normalization_status: str,
+    filter_reason: str | None,
+    source_id: str | None,
+    doc_type: str,
+) -> dict[str, Any]:
+    source = source_id or ""
+    approved_sources = {
+        "fastapi_docs",
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "repo_project_files",
+    }
+    if normalization_status == "pass" and source in approved_sources:
+        return {
+            "filter_reason": filter_reason,
+            "review_status": "approved",
+            "ingest_candidate": True,
+        }
+    if normalization_status == "pass" and doc_type == "html" and source == "kubernetes_cn_docs":
+        return {
+            "filter_reason": "navigation_heavy",
+            "review_status": "needs_review",
+            "ingest_candidate": False,
+        }
+    if normalization_status == "pass":
+        return {
+            "filter_reason": filter_reason,
+            "review_status": "needs_review",
+            "ingest_candidate": False,
+        }
+    if filter_reason == "navigation_heavy":
+        return {
+            "filter_reason": filter_reason,
+            "review_status": "needs_review",
+            "ingest_candidate": False,
+        }
+    return {
+        "filter_reason": filter_reason,
+        "review_status": "rejected",
+        "ingest_candidate": False,
+    }
+
+
+def _source_level_filter_reason(source_id: str | None, doc_type: str) -> str | None:
+    if doc_type == "html" and source_id == "chroma_docs":
+        return "navigation_heavy"
+    return None
+
+
+def _filtered_record(
+    *,
+    index: int,
+    validation: dict[str, Any],
+    source_info: dict[str, str | None],
+    sample_id: str | None,
+    doc_id: str | None,
+    source_url: str | None,
+    title: str | None,
+    text: str,
+    headings: list[str],
+    code_block_count: int | None,
+    link_count: int | None,
+    filter_reason: str,
+) -> dict[str, Any]:
+    doc_type = str(validation.get("doc_type"))
+    normalized_id = f"norm_{doc_type}_{index:03d}"
+    paragraphs = [part for part in re.split(r"\n{2,}", text) if part.strip()]
+    review_fields = _review_fields(
+        normalization_status="filtered",
+        filter_reason=filter_reason,
+        source_id=str(source_info["source_id"] or ""),
+        doc_type=doc_type,
+    )
+    return {
+        "normalized_id": normalized_id,
+        "sample_id": sample_id,
+        "doc_id": doc_id,
+        "source_id": source_info["source_id"],
+        "doc_type": doc_type,
+        "language": source_info["language"],
+        "domain": source_info["domain"],
+        "title": title or source_info["title"] or f"{doc_type} filtered sample",
+        "source_url": source_url,
+        "content_cache_alias": None,
+        "content_sha256": _sha256_text(text) if text.strip() else None,
+        "content_chars": len(text),
+        "heading_count": len(headings),
+        "paragraph_count": len(paragraphs),
+        "table_count": validation.get("table_count"),
+        "page_count": validation.get("page_count"),
+        "code_block_count": code_block_count,
+        "link_count": link_count,
+        "parser": validation.get("parser"),
+        "normalizer": "phase6-normalizer-v1",
+        "normalization_status": "filtered",
+        **review_fields,
+        "error_summary": None,
+        "created_at": datetime.now(DATETIME_UTC).isoformat(),
+    }
+
+
 def _repo_text_sample(doc_type: str) -> tuple[Path, str]:
     if doc_type == "markdown":
         path = REPO_ROOT / "README.md"
@@ -363,6 +479,12 @@ def _record(
     normalized_text = _safe_text(text)
     cache_path.write_text(normalized_text + "\n", encoding="utf-8", newline="\n")
     paragraphs = [part for part in re.split(r"\n{2,}", normalized_text) if part.strip()]
+    review_fields = _review_fields(
+        normalization_status="pass",
+        filter_reason=None,
+        source_id=str(source_info["source_id"] or ""),
+        doc_type=doc_type,
+    )
     return {
         "normalized_id": normalized_id,
         "sample_id": sample_id,
@@ -385,6 +507,7 @@ def _record(
         "parser": validation.get("parser"),
         "normalizer": "phase6-normalizer-v1",
         "normalization_status": "pass",
+        **review_fields,
         "error_summary": None,
         "created_at": datetime.now(DATETIME_UTC).isoformat(),
     }
@@ -462,6 +585,29 @@ def normalize(args: argparse.Namespace) -> list[dict[str, Any]]:
                 alias = str(sample_record.get("local_cache_alias") or "")
                 source_path = REPO_ROOT / "data" / "knowledge_base" / "raw" / alias
                 text, title, headings, code_block_count, link_count = _extract_html(source_path)
+                filter_reason = (
+                    _source_level_filter_reason(source_id, doc_type)
+                    or _html_filter_reason(title, text)
+                )
+                if filter_reason:
+                    info = _source_info(str(source_id) if source_id else None, catalog)
+                    normalized.append(
+                        _filtered_record(
+                            index=index,
+                            validation=validation,
+                            source_info=info,
+                            sample_id=sample_id,
+                            doc_id=str(doc_id) if doc_id else None,
+                            source_url=source_url,
+                            title=title,
+                            text=text,
+                            headings=headings,
+                            code_block_count=code_block_count,
+                            link_count=link_count,
+                            filter_reason=filter_reason,
+                        )
+                    )
+                    continue
             elif doc_type in {"markdown", "json", "yaml"}:
                 source_path, text = _repo_text_sample(doc_type)
                 title = f"Repository {doc_type.upper()} sample"
@@ -521,7 +667,13 @@ def normalize(args: argparse.Namespace) -> list[dict[str, Any]]:
                     "link_count": None,
                     "parser": validation.get("parser"),
                     "normalizer": "phase6-normalizer-v1",
-                    "normalization_status": "fail",
+                    "normalization_status": "failed",
+                    **_review_fields(
+                        normalization_status="failed",
+                        filter_reason="parser_failed",
+                        source_id=str(info["source_id"] or ""),
+                        doc_type=doc_type,
+                    ),
                     "error_summary": f"{type(exc).__name__}: {str(exc)[:200]}",
                     "created_at": datetime.now(DATETIME_UTC).isoformat(),
                 }
@@ -536,7 +688,16 @@ def main() -> None:
     summary = {
         "normalized_record_count": len(records),
         "pass_count": sum(1 for record in records if record["normalization_status"] == "pass"),
-        "fail_count": sum(1 for record in records if record["normalization_status"] == "fail"),
+        "failed_count": sum(
+            1 for record in records if record["normalization_status"] == "failed"
+        ),
+        "filtered_count": sum(
+            1 for record in records if record["normalization_status"] == "filtered"
+        ),
+        "approved_count": sum(1 for record in records if record.get("review_status") == "approved"),
+        "ingest_candidate_count": sum(
+            1 for record in records if record.get("ingest_candidate") is True
+        ),
         "manifest_path": str(NORMALIZED_MANIFEST_PATH.relative_to(REPO_ROOT)),
         "cache_root": "data/knowledge_base/normalized",
         "cache_is_gitignored": True,

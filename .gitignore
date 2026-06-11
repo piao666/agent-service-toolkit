@@ -196,6 +196,8 @@ data/knowledge_base/normalized/**/*.md
 data/knowledge_base/normalized/**/*.jsonl
 data/knowledge_base/chunks/**/*.jsonl
 data/knowledge_base/parser_cache/
+outputs/corpus_review/
+outputs/corpus_review_private/
 
 # Chroma db
 chroma_enterprise/
