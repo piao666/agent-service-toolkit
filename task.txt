@@ -596,3 +596,38 @@ Current next step after Phase 6D-3:
 - Wait for manual review of Phase 6D-3 outputs.
 - Checkpoint only after manual review passes and explicit permission is given.
 - Do not start Phase 6D-4 until Phase 6D-3 checkpoint is approved.
+
+Phase 6D-4 status update
+------------------------
+- [x] Added reranker evaluation cases under
+      `data/knowledge_base/evaluation/phase6d_reranker_cases.jsonl`.
+- [x] Added offline reranker evaluation script
+      `scripts/run_phase6d_reranker_eval.py`.
+- [x] Generated reranker evaluation results, summary, and model load report under
+      `data/knowledge_base/evaluation/`.
+- [x] Added Phase 6D-4 notes in
+      `docs/enterprise_rag_backend/PHASE6D_RERANKER_EVALUATION.md`.
+- [x] Built candidate pools from `dense_only`, `sparse_bm25`, and
+      `hybrid_weighted` top candidates.
+- [x] Compared before-rerank hybrid ordering with after-rerank cross-encoder ordering.
+- [x] Used reviewed sample chunks only.
+- [x] Used `bge-small-zh-v1.5` as the dense baseline model.
+- [x] Ran `bge-reranker-base` load-only, smoke test, and local full evaluation.
+- [x] Ran `qwen3-reranker-0.6b` load-only only; rerank smoke/full was not run
+      because local CPU rerank scoring is expensive.
+- [x] Current local result is mixed: source hit improved slightly, but top1 and MRR
+      decreased, so it is not a production reranking decision.
+- [x] Banned source result count remains 0.
+- [x] HPC full benchmark is planned separately and was not executed in this local run.
+- [x] This is an offline reranker evaluation only.
+- [x] It is not wired into production Agent/API routing.
+- [x] No production Chroma collection is written.
+- [x] No generative LLM is called.
+- [x] No production Agent/API behavior is modified.
+- [x] Phase 6D-4 does not complete Chunking Ablation, Phase 6E,
+      Phase 6F, or Phase 7.
+
+Current next step after Phase 6D-4:
+- Wait for manual review of Phase 6D-4 outputs.
+- Checkpoint only after manual review passes and explicit permission is given.
+- Do not start Phase 6D-5 until Phase 6D-4 checkpoint is approved.
