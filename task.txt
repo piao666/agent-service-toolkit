@@ -531,3 +531,34 @@ Current next step after Phase 6D-1:
 - Wait for manual review of Phase 6D-1 outputs.
 - Checkpoint only after manual review passes and explicit permission is given.
 - Do not start Phase 6D-2 until Phase 6D-1 checkpoint is approved.
+
+Phase 6D-2 status update
+------------------------
+- [x] Added embedding benchmark cases under
+      `data/knowledge_base/evaluation/phase6d_embedding_benchmark_cases.jsonl`.
+- [x] Added local-only benchmark script `scripts/run_phase6d_embedding_benchmark.py`.
+- [x] Generated benchmark results, summary, and model load report under
+      `data/knowledge_base/evaluation/`.
+- [x] Added model selection notes in
+      `docs/enterprise_rag_backend/PHASE6D_EMBEDDING_MODEL_SELECTION.md`.
+- [x] Compared `bge-small-zh-v1.5`, `bge-m3`, `multilingual-e5-base`,
+      and `qwen3-embedding-0.6b`.
+- [x] All four model aliases loaded successfully in the completed benchmark run.
+- [x] The benchmark used reviewed sample chunks only.
+- [x] The benchmark used an in-memory index and did not write a production Chroma collection.
+- [x] No production Agent/API behavior was modified.
+- [x] No generative LLM was called.
+- [x] Result and documentation files use model aliases or placeholders instead of local absolute paths.
+- [x] `qwen3-embedding-0.6b` is the strongest current sample-quality candidate.
+- [x] `qwen3-embedding-0.6b` has the highest indexing time and should not be rerun frequently on this machine.
+- [x] `bge-small-zh-v1.5` remains the local fast baseline.
+- [x] `bge-m3` and `multilingual-e5-base` remain comparison models for later experiments.
+- [x] Current conclusion does not represent a production embedding model switch.
+- [x] Current conclusion does not prove any model is absolutely best.
+- [x] Phase 6D-2 does not complete Hybrid Retrieval, Reranker, Chunking Ablation,
+      Phase 6E, Phase 6F, or Phase 7.
+
+Current next step after Phase 6D-2:
+- Wait for manual review of Phase 6D-2 outputs.
+- Checkpoint only after manual review passes and explicit permission is given.
+- Do not start Phase 6D-3 until Phase 6D-2 checkpoint is approved.

@@ -1,0 +1,48 @@
+{
+  "models": [
+    {
+      "embedding_dimension": 512,
+      "error_message_short": null,
+      "error_type": null,
+      "likely_reason": null,
+      "load_success": true,
+      "model_alias": "bge-small-zh-v1.5",
+      "model_load_time_sec": 36.3777,
+      "model_path_alias": "<LOCAL_EMBEDDING_MODEL_ROOT>/bge-small-zh-v1.5",
+      "skipped_benchmark": false
+    },
+    {
+      "embedding_dimension": 1024,
+      "error_message_short": null,
+      "error_type": null,
+      "likely_reason": null,
+      "load_success": true,
+      "model_alias": "bge-m3",
+      "model_load_time_sec": 4.7985,
+      "model_path_alias": "<LOCAL_EMBEDDING_MODEL_ROOT>/bge-m3",
+      "skipped_benchmark": false
+    },
+    {
+      "embedding_dimension": 768,
+      "error_message_short": null,
+      "error_type": null,
+      "likely_reason": null,
+      "load_success": true,
+      "model_alias": "multilingual-e5-base",
+      "model_load_time_sec": 3.9277,
+      "model_path_alias": "<LOCAL_EMBEDDING_MODEL_ROOT>/multilingual-e5-base",
+      "skipped_benchmark": false
+    },
+    {
+      "embedding_dimension": 1024,
+      "error_message_short": null,
+      "error_type": null,
+      "likely_reason": null,
+      "load_success": true,
+      "model_alias": "qwen3-embedding-0.6b",
+      "model_load_time_sec": 31.3254,
+      "model_path_alias": "<LOCAL_EMBEDDING_MODEL_ROOT>/qwen3-embedding-0.6b",
+      "skipped_benchmark": false
+    }
+  ]
+}
