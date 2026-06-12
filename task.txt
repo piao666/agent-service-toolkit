@@ -562,3 +562,37 @@ Current next step after Phase 6D-2:
 - Wait for manual review of Phase 6D-2 outputs.
 - Checkpoint only after manual review passes and explicit permission is given.
 - Do not start Phase 6D-3 until Phase 6D-2 checkpoint is approved.
+
+Phase 6D-3 status update
+------------------------
+- [x] Added hybrid retrieval cases under
+      `data/knowledge_base/evaluation/phase6d_hybrid_retrieval_cases.jsonl`.
+- [x] Added offline hybrid retrieval script
+      `scripts/run_phase6d_hybrid_retrieval_eval.py`.
+- [x] Generated hybrid retrieval results and summary under
+      `data/knowledge_base/evaluation/`.
+- [x] Added Phase 6D-3 notes in
+      `docs/enterprise_rag_backend/PHASE6D_HYBRID_RETRIEVAL.md`.
+- [x] Compared `dense_only`, `sparse_bm25`, `exact_match`, `hybrid_rrf`,
+      and `hybrid_weighted`.
+- [x] Used reviewed sample chunks only.
+- [x] Used `bge-small-zh-v1.5` as the local fast baseline model.
+- [x] Ran a smoke test and full bge-small benchmark.
+- [x] Did not run qwen3 smoke in this pass to avoid overwriting full bge-small outputs
+      and to avoid repeated large-model local indexing.
+- [x] Current result shows sparse/BM25 strongest on overall source hit,
+      exact metadata lookup, code/API/config, and short keyword cases.
+- [x] Hybrid variants improve top1/MRR over dense-only but require further tuning.
+- [x] Banned source result count remains 0.
+- [x] This is an offline hybrid retrieval prototype only.
+- [x] It is not wired into production Agent/API routing.
+- [x] No production Chroma collection is written.
+- [x] No generative LLM is called.
+- [x] No production Agent/API behavior is modified.
+- [x] Phase 6D-3 does not complete Reranker, Chunking Ablation, Phase 6E,
+      Phase 6F, or Phase 7.
+
+Current next step after Phase 6D-3:
+- Wait for manual review of Phase 6D-3 outputs.
+- Checkpoint only after manual review passes and explicit permission is given.
+- Do not start Phase 6D-4 until Phase 6D-3 checkpoint is approved.
