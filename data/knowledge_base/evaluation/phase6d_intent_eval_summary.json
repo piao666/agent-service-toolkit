@@ -1,0 +1,103 @@
+{
+  "accuracy": 1.0,
+  "bad_case_count": 0,
+  "calls_api": false,
+  "calls_llm": false,
+  "case_count": 84,
+  "confusion_matrix": {
+    "business_action": {
+      "business_action": 12
+    },
+    "chit_chat": {
+      "chit_chat": 12
+    },
+    "clarification_needed": {
+      "clarification_needed": 12
+    },
+    "exact_lookup": {
+      "exact_lookup": 12
+    },
+    "knowledge_lookup": {
+      "knowledge_lookup": 12
+    },
+    "summarization_or_rewrite": {
+      "summarization_or_rewrite": 12
+    },
+    "unsupported": {
+      "unsupported": 12
+    }
+  },
+  "high_risk_misroute_count": 0,
+  "intent_distribution": {
+    "business_action": 12,
+    "chit_chat": 12,
+    "clarification_needed": 12,
+    "exact_lookup": 12,
+    "knowledge_lookup": 12,
+    "summarization_or_rewrite": 12,
+    "unsupported": 12
+  },
+  "loads_embedding_model": false,
+  "macro_f1": 1.0,
+  "modifies_agent": false,
+  "per_intent_f1": {
+    "business_action": 1.0,
+    "chit_chat": 1.0,
+    "clarification_needed": 1.0,
+    "exact_lookup": 1.0,
+    "knowledge_lookup": 1.0,
+    "summarization_or_rewrite": 1.0,
+    "unsupported": 1.0
+  },
+  "per_intent_precision": {
+    "business_action": 1.0,
+    "chit_chat": 1.0,
+    "clarification_needed": 1.0,
+    "exact_lookup": 1.0,
+    "knowledge_lookup": 1.0,
+    "summarization_or_rewrite": 1.0,
+    "unsupported": 1.0
+  },
+  "per_intent_recall": {
+    "business_action": 1.0,
+    "chit_chat": 1.0,
+    "clarification_needed": 1.0,
+    "exact_lookup": 1.0,
+    "knowledge_lookup": 1.0,
+    "summarization_or_rewrite": 1.0,
+    "unsupported": 1.0
+  },
+  "predicted_distribution": {
+    "business_action": 12,
+    "chit_chat": 12,
+    "clarification_needed": 12,
+    "exact_lookup": 12,
+    "knowledge_lookup": 12,
+    "summarization_or_rewrite": 12,
+    "unsupported": 12
+  },
+  "rule_reason_distribution": {
+    "business_action": {
+      "matched business action pattern": 12
+    },
+    "chit_chat": {
+      "matched chat pattern": 12
+    },
+    "clarification_needed": {
+      "matched ambiguous reference pattern": 12
+    },
+    "exact_lookup": {
+      "matched exact metadata lookup pattern": 12
+    },
+    "knowledge_lookup": {
+      "matched technical knowledge pattern": 12
+    },
+    "summarization_or_rewrite": {
+      "matched writing or summarization pattern": 12
+    },
+    "unsupported": {
+      "matched safety or unsupported pattern": 12
+    }
+  },
+  "writes_chroma": false
+}

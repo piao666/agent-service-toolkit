@@ -22,7 +22,7 @@
 - [x] 已安装项目依赖，后续不需要重建环境。
 - [x] FastAPI 服务已能启动。
 - [x] `/health` 已验证可访问，返回健康检查结果。
-- [x] `.env` 已配置可用的 DeepSeek 与 Qwen/OpenAI-compatible 相关项。
+- [x] `<ENV_FILE>` 已配置可用的 DeepSeek 与 Qwen/OpenAI-compatible 相关项。
 - [x] 已阅读上游 README、服务入口、Agent registry、RAG 示例、provider 配置和启动方式。
 - [x] 当前 RAG embedding 默认路线已改为本地 embedding。
 - [ ] 当前旧规划、旧 demo 文档和部分示例代码存在非通用命名，需要后续按本 task 分阶段清理。
@@ -31,7 +31,7 @@
 ------------------
 - 保留当前项目源码与 upstream 核心结构。
 - 保留 `.venv` 与已安装依赖。
-- 保留 `.env` 中已有 DeepSeek、Qwen/OpenAI-compatible、服务端口、SQLite 等本地配置；不得提交真实 key。
+- 保留 `<ENV_FILE>` 中已有 DeepSeek、Qwen/OpenAI-compatible、服务端口、SQLite 等本地配置；不得提交真实 key。
 - 保留已跑通的 FastAPI 启动方式：`python src/run_service.py`。
 - 保留原生接口能力：`/health`、`/info`、`/invoke`、`/{agent_id}/invoke`、`/stream`、`/{agent_id}/stream`、`/history`、`/feedback`。
 - 保留原项目 Agent registry 机制，新增 Agent 必须通过 registry 接入。
@@ -88,7 +88,7 @@ GitHub 管理策略
   - `git diff --stat`
   - `git diff`
   - 能运行时执行 `pytest -q`
-- 禁止提交 `.env`、API key、`.venv`、模型权重、Chroma 本地缓存、包含敏感信息的日志、大体积二进制文件。
+- 禁止提交 `<ENV_FILE>`、API key、`.venv`、模型权重、Chroma 本地缓存、包含敏感信息的日志、大体积二进制文件。
 
 Phase 0：项目重新校准与 task.txt 重写
 ------------------------------------
@@ -230,7 +230,7 @@ Phase 5：DeepSeek/Qwen provider 调试与可选 HPC Qwen 推理服务
 任务：
 - [ ] 确认 DeepSeek 作为默认开发模型可用。
 - [ ] 确认 Qwen/OpenAI-compatible provider 可作为可选模型调用。
-- [ ] 整理 `.env.example`，只把 DeepSeek 与 Qwen/OpenAI-compatible 写为主线配置。
+- [ ] 整理 `<ENV_EXAMPLE_TEMPLATE>`，只把 DeepSeek 与 Qwen/OpenAI-compatible 写为主线配置。
 - [ ] 可选：接入本地或 HPC vLLM Qwen endpoint。
 - [ ] 可选：记录 Qwen endpoint 启动命令、模型名、base url、响应延迟和失败原因。
 
@@ -333,7 +333,7 @@ Phase 7：README、接口文档、架构图、面试材料
 - 禁止把 RAG 主线写成必须依赖第三方 embedding API。
 - 禁止默认要求 Hugging Face 在线下载模型。
 - 禁止把本项目描述成训练或微调项目。
-- 禁止提交 `.env`、真实 key、`.venv`、模型权重、Chroma 本地库、敏感日志。
+- 禁止提交 `<ENV_FILE>`、真实 key、`.venv`、模型权重、Chroma 本地库、敏感日志。
 - 禁止删除或破坏 upstream 原生接口、Agent registry、invoke、stream、health、history、feedback 能力。
 - 禁止在没有评估依据时宣称准确率提升或性能提升。
 
@@ -351,7 +351,7 @@ Phase 4 status update
 Phase 5 status update
 ---------------------
 - [x] Added provider validation script for DeepSeek, OpenAI-compatible direct chat, and enterprise query model routing.
-- [x] Updated `.env.example` to highlight DeepSeek, OpenAI-compatible, and local embedding configuration.
+- [x] Updated `<ENV_EXAMPLE_TEMPLATE>` to highlight DeepSeek, OpenAI-compatible, and local embedding configuration.
 - [x] Added provider validation notes under `docs/enterprise_rag_backend/PROVIDER_VALIDATION.md`.
 - [x] Verified DeepSeek direct chat.
 - [x] Verified DeepSeek through `POST /enterprise/agent/query`.
@@ -404,3 +404,130 @@ Phase 6C status update
 - [x] Added Phase 6C system gap analysis and proposed Phase 6D plan without implementation.
 - [x] Phase 6C does not claim end-to-end Agent QA success, create a new Chroma collection,
       expand ingestion scope, modify production endpoint behavior, or start Phase 7.
+
+Phase 6D-6F roadmap update
+--------------------------
+Current confirmed status:
+- [x] Phase 6C has been completed and pushed.
+- [x] Phase 6C conclusion is limited to retrieval-only evaluation completed on the reviewed Chroma sample.
+- [x] API/Agent endpoint evaluation was skipped because the local service was unavailable.
+- [x] The project does not claim production readiness.
+- [x] The project does not claim end-to-end Agent QA has passed.
+
+New stage plan:
+- Phase 6D: Retrieval and Routing Quality Improvement.
+- Phase 6E: Conversation Memory Design and Evaluation.
+- Phase 6F: Enterprise Readiness Design and Prototype.
+
+Phase 6D sub-phases:
+- 6D-1 Intent Routing Evaluation.
+  - Define intent labels and deterministic routing baseline.
+  - Evaluate `knowledge_lookup`, `business_action`, `chit_chat`, `exact_lookup`,
+    `unsupported`, and `clarification_needed`.
+  - Output intent cases, result manifest, confusion matrix, bad cases, and evaluation notes.
+  - Do not modify production Agent/API in this sub-phase.
+- 6D-2 Embedding Model Selection and Benchmark.
+  - Compare embedding candidates against the same approved chunk set and benchmark cases.
+  - Candidate aliases:
+    - `bge-small-zh-v1.5` baseline: `<LOCAL_EMBEDDING_MODEL_ROOT>/bge-small-zh-v1.5`
+    - `bge-m3`: `<LOCAL_EMBEDDING_MODEL_ROOT>/bge-m3`
+    - `multilingual-e5-base`: `<LOCAL_EMBEDDING_MODEL_ROOT>/multilingual-e5-base`
+    - `qwen3-embedding-0.6b`: `<LOCAL_EMBEDDING_MODEL_ROOT>/qwen3-embedding-0.6b`
+  - Evaluate semantic retrieval, exact lookup, mixed-language retrieval, latency,
+    indexing cost, and model load cost.
+  - Do not copy model files into the repository.
+- 6D-3 Hybrid Retrieval Prototype.
+  - Prototype dense vector + sparse keyword + exact match + metadata scoring.
+  - Suggested future scoring formula:
+    `hybrid_score = alpha * dense_score + beta * sparse_score + gamma * metadata_match_score`.
+- 6D-4 Reranker Evaluation.
+  - Evaluate reranking over initial top-k candidates and compare before/after top1 hit,
+    MRR, keyword hit, and latency.
+- 6D-5 Chunking Strategy Ablation.
+  - Compare chunking strategies by document type, including DOCX, PDF, HTML,
+    Markdown, JSON/YAML, table-like data, and code/API documentation.
+- 6D-6 End-to-End Agent/API Evaluation.
+  - Rerun `/enterprise/agent/query` only after the local service and provider are available.
+  - Record skipped, failed, or passed honestly.
+  - Separate retrieval success, model generation success, source citation success,
+    and answer quality.
+
+Phase 6E sub-phases:
+- Memory requirement analysis.
+  - Clarify why full-history prompting is insufficient and risky.
+- Short-term memory.
+  - Keep recent turns for reference resolution and short context follow-up.
+- Summary memory.
+  - Compress older context while tracking summary drift risk.
+- Persistent memory.
+  - Design durable user or task memory with privacy and deletion boundaries.
+- Retrieval memory.
+  - Evaluate retrieving relevant conversation history without cross-session leakage.
+- Memory policy.
+  - Define what to remember, what not to remember, expiration, consent, deletion,
+    and tenant/user/session isolation.
+- Multi-turn memory evaluation.
+  - Evaluate reference resolution, corrections, topic switching, noise filtering,
+    sensitive information handling, and token cost.
+
+Phase 6F sub-phases:
+- Incremental indexing.
+  - Plan document versioning, chunk hash tracking, upsert/delete, and stale chunk cleanup.
+- Multi-tenant and permission control.
+  - Plan tenant, department, role, ACL, metadata filter, permission check, and audit log.
+- Performance and cost control.
+  - Plan query cache, embedding cache, batching, async retrieval, timeout/retry,
+    top-k control, and provider cost budget.
+- Risk control and security.
+  - Plan prompt injection checks, sensitive query handling, source leakage guard,
+    refusal/fallback policy, audit logs, and red-team cases.
+- Provider routing and failover.
+  - Plan provider health checks, timeout policy, retry policy, cost-aware routing,
+    quality-aware routing, local fallback, and vendor failover.
+- Observability and feedback.
+  - Plan trace id, query log, retrieval log, source hit log, latency log,
+    fallback log, user feedback, and bad-case feedback loop.
+
+Checkpoint and safety rules:
+- Complete one sub-phase at a time.
+- Run manual review before each checkpoint.
+- Checkpoint only after manual review passes and explicit permission is given.
+- Do not implement across phase boundaries early.
+- Do not write skipped checks as passed.
+- Do not present experiments as production-grade capability.
+- Do not submit model files, Chroma stores, local caches, raw/normalized/chunk full text,
+  `<ENV_FILE>`, `.venv`, API keys, local absolute paths, logs, or large binary files.
+- Use aliases or placeholders for local model paths and local project paths.
+
+Current next step:
+- Wait for this `task.txt` update to be reviewed and confirmed.
+- After confirmation, start Phase 6D-1 Intent Routing Evaluation.
+- Do not start Phase 6D-1 implementation in this update.
+
+Phase 6D-1 status update
+------------------------
+- [x] Added offline intent routing evaluation cases under
+      `data/knowledge_base/evaluation/phase6d_intent_cases.jsonl`.
+- [x] Added deterministic baseline script `scripts/run_phase6d_intent_eval.py`.
+- [x] Generated intent evaluation results, summary, and bad-case manifest under
+      `data/knowledge_base/evaluation/`.
+- [x] Added Phase 6D-1 evaluation notes in
+      `docs/enterprise_rag_backend/PHASE6D_INTENT_ROUTING_EVAL.md`.
+- [x] Covered `knowledge_lookup`, `exact_lookup`, `business_action`, `chit_chat`,
+      `summarization_or_rewrite`, `unsupported`, and `clarification_needed`.
+- [x] Recorded high-risk misroute definitions and summary metrics.
+- [x] This is a deterministic baseline for evaluation only.
+- [x] It is not wired into production Agent routing yet.
+- [x] No LLM is called.
+- [x] No business system is called.
+- [x] No API endpoint is called.
+- [x] No Chroma write is performed.
+- [x] No embedding model is loaded.
+- [x] Production Agent registry and API behavior remain unchanged.
+- [x] Phase 6D-1 does not start embedding benchmark, hybrid retrieval, reranker,
+      chunking ablation, Phase 6E, Phase 6F, or Phase 7.
+
+Current next step after Phase 6D-1:
+- Wait for manual review of Phase 6D-1 outputs.
+- Checkpoint only after manual review passes and explicit permission is given.
+- Do not start Phase 6D-2 until Phase 6D-1 checkpoint is approved.
