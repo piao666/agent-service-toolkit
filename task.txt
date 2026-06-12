@@ -631,3 +631,39 @@ Current next step after Phase 6D-4:
 - Wait for manual review of Phase 6D-4 outputs.
 - Checkpoint only after manual review passes and explicit permission is given.
 - Do not start Phase 6D-5 until Phase 6D-4 checkpoint is approved.
+
+Phase 6D-5 status update
+------------------------
+- [x] Added chunking ablation cases under
+      `data/knowledge_base/evaluation/phase6d_chunking_ablation_cases.jsonl`.
+- [x] Added offline chunking ablation script
+      `scripts/run_phase6d_chunking_ablation_eval.py`.
+- [x] Generated chunking ablation results and summary under
+      `data/knowledge_base/evaluation/`.
+- [x] Added Phase 6D-5 notes in
+      `docs/enterprise_rag_backend/PHASE6D_CHUNKING_ABLATION.md`.
+- [x] Compared `baseline_existing_chunks`, `small_chunks`, `large_chunks`,
+      `sliding_window_overlap`, `metadata_enriched_chunks`, and
+      `section_aware_chunks`.
+- [x] Used reviewed normalized documents and reviewed chunks only.
+- [x] Generated ablation chunks in memory and did not overwrite `chunk_manifest.jsonl`.
+- [x] Used `bge-small-zh-v1.5` as the local fast baseline model.
+- [x] Ran smoke test and full bge-small chunking ablation evaluation.
+- [x] Current full result keeps `baseline_existing_chunks` as the best overall
+      source hit, top1, and MRR strategy.
+- [x] `metadata_enriched_chunks` improves overall exact-match hit but does not
+      justify a global production chunking switch.
+- [x] Some alternative strategies help code/API/config ordering or Phase 6C
+      regression cases, but none beats the baseline overall.
+- [x] Banned source result count remains 0.
+- [x] This is an offline chunking ablation only.
+- [x] It is not wired into production Agent/API routing.
+- [x] No production Chroma collection is written.
+- [x] No generative LLM is called.
+- [x] No production Agent/API behavior is modified.
+- [x] Phase 6D-5 does not start Phase 6E, Phase 6F, or Phase 7.
+
+Current next step after Phase 6D-5:
+- Wait for manual review of Phase 6D-5 outputs.
+- Checkpoint only after manual review passes and explicit permission is given.
+- Do not start Phase 6E until Phase 6D-5 checkpoint is approved.
