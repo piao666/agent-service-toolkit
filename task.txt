@@ -667,3 +667,117 @@ Current next step after Phase 6D-5:
 - Wait for manual review of Phase 6D-5 outputs.
 - Checkpoint only after manual review passes and explicit permission is given.
 - Do not start Phase 6E until Phase 6D-5 checkpoint is approved.
+
+Phase 6D-6 status update
+------------------------
+- [x] Added end-to-end Agent/API evaluation cases under
+      `data/knowledge_base/evaluation/phase6d_agent_api_cases.jsonl`.
+- [x] Added Agent/API endpoint evaluation script
+      `scripts/run_phase6d_agent_api_eval.py`.
+- [x] Generated Agent/API evaluation results and summary under
+      `data/knowledge_base/evaluation/`.
+- [x] Added Phase 6D-6 notes in
+      `docs/enterprise_rag_backend/PHASE6D_AGENT_API_EVALUATION.md`.
+- [x] Checked `/health` successfully.
+- [x] Checked OpenAPI and confirmed `POST /enterprise/agent/query` exists.
+- [x] Confirmed evaluator payload uses `query`, `session_id`, `top_k`, and
+      `return_sources`, matching the endpoint request schema.
+- [x] Ran smoke evaluation with 8 cases.
+- [x] Ran full evaluation with 40 cases across `zh_knowledge`, `en_api_doc`,
+      `mixed_zh_en_api`, `exact_metadata_lookup`, `code_api_config`,
+      `short_keyword`, `negative_banned_source`, and
+      `phase6c_bad_case_regression`.
+- [x] Full evaluation transport and schema results: `request_success_rate=1.0`,
+      `response_schema_valid_rate=1.0`, and `answer_non_empty_rate=1.0`.
+- [x] Full evaluation retrieval-evidence results: `citation_present_rate=0.0`,
+      `source_hit_rate=0.0`, and `keyword_hit_rate=0.0286`.
+- [x] All 40 cases triggered `retrieval_error` fallback, so this phase does not
+      prove end-to-end RAG answer quality.
+- [x] Banned-source cases returned no banned source, but this is only a
+      banned-source exclusion observation, not semantic QA.
+- [x] This is an endpoint evaluation only.
+- [x] No production Agent/API behavior was modified.
+- [x] No Chroma collection was written.
+- [x] No production load test was performed.
+- [x] Phase 6D-6 does not start Phase 6E, Phase 6F, or Phase 7.
+
+Current next step after Phase 6D-6:
+- Wait for manual review of Phase 6D-6 outputs.
+- Checkpoint only after manual review passes and explicit permission is given.
+- Do not start Phase 6E until Phase 6D-6 checkpoint is approved.
+
+Phase 6D-6 runtime retrieval fix update
+---------------------------------------
+- [x] Confirmed `/enterprise/agent/query` transport and response schema are reachable in the
+      completed Phase 6D-6 evaluation.
+- [x] Confirmed all completed API cases returned `retrieval_error` fallback and `sources=[]`.
+- [x] Located the fallback catch in `src/agents/enterprise_tools.py`.
+- [x] Added compatibility mapping for `ENTERPRISE_CHROMA_COLLECTION` and
+      `LOCAL_EMBEDDING_MODEL_ROOT` while preserving the original primary variables.
+- [x] Added sanitized retrieval diagnostics for runtime Chroma errors, including retrieval stage
+      and error summary.
+- [x] Confirmed the reviewed collection metadata exists with dimension 512 and metadata-side
+      count 80 through immutable SQLite inspection.
+- [x] Attempted to rebuild an ignored runtime Chroma cache at
+      `chroma_enterprise_phase6_runtime_rebuilt`.
+- [x] Rebuild is currently blocked because `chromadb.PersistentClient` fails with
+      `runtime_chroma_disk_io_error` even on a new runtime cache in this environment.
+- [x] Did not restart the service after the rebuild failure.
+- [x] Did not rerun smoke/full Agent/API evaluation after the rebuild failure.
+- [x] Did not start Phase 6E.
+
+Current next step after runtime retrieval fix attempt:
+- Wait for manual review of the `runtime_chroma_disk_io_error` blocker.
+- Do not checkpoint as a successful end-to-end RAG evaluation.
+- Do not start Phase 6E until the reviewer explicitly accepts the documented blocker or provides a
+  working Chroma runtime environment for rerun.
+
+Phase 6D-6 evaluator source evidence fix update
+-----------------------------------------------
+- [x] Manual direct endpoint probe confirmed runtime retrieval can return `sources`.
+- [x] Confirmed the endpoint uses `sources` as the evidence carrier and does not require a separate
+      `citations` field for Phase 6D-6 evaluation.
+- [x] Confirmed a representative source may have top-level `source=unknown` while the effective
+      source id is available as `metadata.source_id`.
+- [x] Fixed `scripts/run_phase6d_agent_api_eval.py` source-id extraction to prefer
+      `metadata.source_id`, then top-level `source_id`, document ids, titles, and finally
+      top-level `source` only when it is not `unknown`.
+- [x] Added `evidence_present` and `evidence_present_rate` to the evaluator output.
+- [x] Parser-level sample check now resolves `metadata.source_id=fastapi_docs` to `fastapi_docs`.
+- [x] Smoke/full rerun was not completed in this session because no service was listening on
+      `http://127.0.0.1:8000` after the evaluator fix was ready.
+
+Current next step after evaluator source evidence fix:
+- Restart or provide an active service that points at the repaired runtime Chroma cache.
+- Rerun Phase 6D-6 smoke evaluation.
+- If `source_hit_rate > 0`, rerun the full 40-case Agent/API evaluation.
+- Do not start Phase 6E until the rerun metrics are reviewed.
+
+Phase 6D-6 final full rerun status
+----------------------------------
+- [x] Full 40-case Agent/API evaluation was rerun on a repaired runtime Chroma cache.
+- [x] Runtime cache path is represented only as `<RUNTIME_CHROMA_DIR>` in project files.
+- [x] Local embedding path is represented only as `<LOCAL_EMBEDDING_MODEL_PATH>` in project files.
+- [x] Endpoint uses `sources` as the evidence carrier; a separate `citations` field is not required
+      for this evaluation.
+- [x] `request_success_rate=1.0`.
+- [x] `response_schema_valid_rate=1.0`.
+- [x] `answer_non_empty_rate=1.0`.
+- [x] `fallback_count=0`.
+- [x] `evidence_present_rate=1.0`.
+- [x] `citation_present_rate=1.0`.
+- [x] `source_hit_rate=0.7429`.
+- [x] `keyword_hit_rate=0.9429`.
+- [x] `banned_source_result_count=0`.
+- [x] `bad_case_count=10`.
+- [x] Root cause is recorded as `runtime_chroma_disk_io_error` plus
+      `evaluator_source_id_extraction_mismatch`.
+- [x] Remaining blocker is no longer Chroma runtime access; remaining issue is bad-case analysis.
+- [x] This is not production readiness, not a load test, and not Phase 6E memory evaluation.
+- [x] No production Agent/API behavior was modified.
+- [x] No production Chroma collection was written.
+
+Current next step after Phase 6D-6 full rerun:
+- Manual review should inspect the 10 remaining bad cases.
+- Checkpoint only after manual review passes and explicit permission is given.
+- Do not start Phase 6E until Phase 6D-6 checkpoint is approved.

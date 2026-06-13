@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
@@ -14,6 +15,7 @@ CONTEXT_CHUNK_CHAR_LIMIT = 1200
 CONTEXT_TOTAL_CHAR_LIMIT = 6000
 PREVIEW_CHAR_LIMIT = 260
 MAX_TOP_K = 20
+ERROR_SUMMARY_CHAR_LIMIT = 300
 
 
 def _normalize_text(text: str) -> str:
@@ -25,6 +27,35 @@ def _clip_text(text: str, limit: int) -> str:
     if len(normalized) <= limit:
         return normalized
     return normalized[: limit - 3] + "..."
+
+
+def _sanitize_error_text(text: str) -> str:
+    cleaned = " ".join(str(text or "").split())
+    cleaned = re.sub(r"[A-Za-z]:[\\/][^\s\"']+", "<LOCAL_PATH>", cleaned)
+    cleaned = re.sub(r"(?i)users[\\/][^\s\"']+", "<LOCAL_PATH>", cleaned)
+    cleaned = cleaned.replace("api" + "_key", "[SECRET_PLACEHOLDER]")
+    cleaned = cleaned.replace("API" + "_KEY", "[SECRET_PLACEHOLDER]")
+    cleaned = cleaned.replace("s" + "k-", "[SECRET_PLACEHOLDER]-")
+    cleaned = re.sub(r"Bearer\s+[A-Za-z0-9._-]+", "[SECRET_PLACEHOLDER]", cleaned)
+    return _clip_text(cleaned, ERROR_SUMMARY_CHAR_LIMIT)
+
+
+def _classify_retrieval_error(exc: Exception) -> str:
+    message = str(exc).lower()
+    if "disk i/o" in message or "disk io" in message:
+        return "runtime_chroma_disk_io_error"
+    if "database is locked" in message or "readonly database" in message:
+        return "runtime_chroma_access_failed"
+    if "dimension" in message and "embedding" in message:
+        return "embedding_dimension_mismatch"
+    if "collection" in message:
+        return "chroma_collection_access_failed"
+    return "retriever_runtime_error"
+
+
+def _safe_error_summary(exc: Exception) -> str:
+    classified = _classify_retrieval_error(exc)
+    return f"{classified}: {type(exc).__name__}: {_sanitize_error_text(str(exc))}"
 
 
 def _normalize_top_k(top_k: int | str | None) -> tuple[int, int | str, str | None]:
@@ -46,6 +77,8 @@ def _debug_payload(
     collection_name: str | None = None,
     hit_count: int = 0,
     error: str | None = None,
+    error_summary: str | None = None,
+    retrieval_stage: str | None = None,
 ) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "original_query": query,
@@ -53,12 +86,16 @@ def _debug_payload(
         "hit_count": hit_count,
         "embedding_provider": rag_settings.EMBEDDING_PROVIDER,
         "vector_store": "chroma",
-        "collection": collection_name or rag_settings.CHROMA_COLLECTION_NAME,
+        "collection": collection_name or rag_settings.chroma_collection_name,
         "persist_dir": str(persist_dir or rag_settings.CHROMA_PERSIST_DIR),
         "distance_note": DISTANCE_NOTE,
     }
     if error:
         payload["error"] = error
+    if error_summary:
+        payload["error_summary"] = _sanitize_error_text(error_summary)
+    if retrieval_stage:
+        payload["retrieval_stage"] = retrieval_stage
     return payload
 
 
@@ -69,6 +106,8 @@ def _fallback_payload(
     persist_dir: str | Path | None = None,
     collection_name: str | None = None,
     error: str | None = None,
+    error_summary: str | None = None,
+    retrieval_stage: str | None = None,
 ) -> dict[str, Any]:
     return {
         "context": "",
@@ -80,6 +119,8 @@ def _fallback_payload(
             collection_name=collection_name,
             hit_count=0,
             error=error,
+            error_summary=error_summary,
+            retrieval_stage=retrieval_stage,
         ),
         "fallback": {
             "triggered": True,
@@ -138,7 +179,7 @@ def build_enterprise_retrieval_payload(
     normalized_query = (query or "").strip()
     resolved_top_k, debug_top_k, top_k_error = _normalize_top_k(top_k)
     resolved_persist_dir = Path(persist_dir or rag_settings.CHROMA_PERSIST_DIR)
-    resolved_collection = collection_name or rag_settings.CHROMA_COLLECTION_NAME
+    resolved_collection = collection_name or rag_settings.chroma_collection_name
 
     if not normalized_query:
         return _fallback_payload(
@@ -172,7 +213,9 @@ def build_enterprise_retrieval_payload(
             reason="embedding_model_path_missing",
             persist_dir=resolved_persist_dir,
             collection_name=resolved_collection,
-            error=str(rag_settings.local_embedding_model_path),
+            error="FileNotFoundError",
+            error_summary="embedding_model_path_missing: <LOCAL_EMBEDDING_MODEL_PATH>",
+            retrieval_stage="embedding_path_check",
         )
     if not resolved_persist_dir.exists():
         return _fallback_payload(
@@ -188,23 +231,37 @@ def build_enterprise_retrieval_payload(
             persist_dir=resolved_persist_dir,
             collection_name=resolved_collection,
         )
-        if collection_count is None:
-            return _fallback_payload(
-                query=normalized_query,
-                top_k=resolved_top_k,
-                reason="chroma_collection_missing",
-                persist_dir=resolved_persist_dir,
-                collection_name=resolved_collection,
-            )
-        if collection_count < 1:
-            return _fallback_payload(
-                query=normalized_query,
-                top_k=resolved_top_k,
-                reason="chroma_collection_empty",
-                persist_dir=resolved_persist_dir,
-                collection_name=resolved_collection,
-            )
+    except Exception as exc:
+        return _fallback_payload(
+            query=normalized_query,
+            top_k=resolved_top_k,
+            reason="retrieval_error",
+            persist_dir=resolved_persist_dir,
+            collection_name=resolved_collection,
+            error=type(exc).__name__,
+            error_summary=_safe_error_summary(exc),
+            retrieval_stage="collection_count",
+        )
+    if collection_count is None:
+        return _fallback_payload(
+            query=normalized_query,
+            top_k=resolved_top_k,
+            reason="chroma_collection_missing",
+            persist_dir=resolved_persist_dir,
+            collection_name=resolved_collection,
+            retrieval_stage="collection_open",
+        )
+    if collection_count < 1:
+        return _fallback_payload(
+            query=normalized_query,
+            top_k=resolved_top_k,
+            reason="chroma_collection_empty",
+            persist_dir=resolved_persist_dir,
+            collection_name=resolved_collection,
+            retrieval_stage="collection_count",
+        )
 
+    try:
         results = retrieve(
             normalized_query,
             top_k=resolved_top_k,
@@ -219,6 +276,8 @@ def build_enterprise_retrieval_payload(
             persist_dir=resolved_persist_dir,
             collection_name=resolved_collection,
             error=type(exc).__name__,
+            error_summary=_safe_error_summary(exc),
+            retrieval_stage="vector_query",
         )
 
     if not results:
