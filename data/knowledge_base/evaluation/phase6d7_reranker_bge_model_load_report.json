@@ -5,21 +5,11 @@
       "alias": "bge-reranker-base",
       "device": "cuda",
       "error_summary": null,
-      "load_latency_ms": 7987.1,
+      "load_latency_ms": 10337.64,
       "load_mode": "cross_encoder",
       "load_success": true,
       "local_resource_limited": false,
       "model_path_alias": "<LOCAL_RERANKER_MODEL_ROOT>/bge-reranker-base"
-    },
-    "qwen3-reranker-0.6b": {
-      "alias": "qwen3-reranker-0.6b",
-      "device": "cuda",
-      "error_summary": null,
-      "load_latency_ms": 5321.73,
-      "load_mode": "cross_encoder",
-      "load_success": true,
-      "local_resource_limited": false,
-      "model_path_alias": "<LOCAL_RERANKER_MODEL_ROOT>/Qwen3-Reranker_0.6B"
     }
   },
   "modifies_agent": false,

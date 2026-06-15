@@ -1,0 +1,37 @@
+{
+  "models": [
+    {
+      "embedding_dimension": 512,
+      "error_message_short": null,
+      "error_type": null,
+      "likely_reason": null,
+      "load_success": true,
+      "model_alias": "bge-small-zh-v1.5",
+      "model_load_time_sec": 21.6093,
+      "model_path_alias": "<LOCAL_EMBEDDING_MODEL_ROOT>/bge-small-zh-v1.5",
+      "skipped_benchmark": false
+    },
+    {
+      "embedding_dimension": 1024,
+      "error_message_short": null,
+      "error_type": null,
+      "likely_reason": null,
+      "load_success": true,
+      "model_alias": "bge-m3",
+      "model_load_time_sec": 5.537,
+      "model_path_alias": "<LOCAL_EMBEDDING_MODEL_ROOT>/bge-m3",
+      "skipped_benchmark": false
+    },
+    {
+      "embedding_dimension": 1024,
+      "error_message_short": null,
+      "error_type": null,
+      "likely_reason": null,
+      "load_success": true,
+      "model_alias": "qwen3-embedding-0.6b",
+      "model_load_time_sec": 26.4043,
+      "model_path_alias": "<LOCAL_EMBEDDING_MODEL_ROOT>/qwen3-embedding-0.6b",
+      "skipped_benchmark": false
+    }
+  ]
+}

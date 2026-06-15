@@ -801,15 +801,23 @@ def summarize(
         and not endpoint_not_found
         and any(row.get("request_success") for row in rows)
     )
-    bad_cases = [
-        row
-        for row in rows
-        if row.get("error_type")
-        or not row.get("response_schema_valid")
-        or (row.get("expected_source_id") and not row.get("source_hit"))
-        or (row.get("expected_source_id") and not row.get("keyword_hit"))
-        or row.get("banned_source_returned")
-    ]
+    # Phase 6D-9 校准: 某些 query_type 不应要求 source_hit
+    _CALIBRATED_SKIP_SOURCE_HIT = {"ambiguous_query", "negative_banned_source"}
+    _CALIBRATED_SKIP_KEYWORD_HIT = {"negative_banned_source"}
+
+    def _is_bad_case(row: dict) -> bool:
+        qt = row.get("query_type", "")
+        skip_source = qt in _CALIBRATED_SKIP_SOURCE_HIT
+        skip_keyword = qt in _CALIBRATED_SKIP_KEYWORD_HIT
+        return bool(
+            row.get("error_type")
+            or not row.get("response_schema_valid")
+            or (row.get("expected_source_id") and not row.get("source_hit") and not skip_source)
+            or (row.get("expected_source_id") and not row.get("keyword_hit") and not skip_keyword)
+            or row.get("banned_source_returned")
+        )
+
+    bad_cases = [row for row in rows if _is_bad_case(row)]
     summary = {
         "generated_at": datetime.now(DATETIME_UTC).isoformat(),
         "phase": "6D-6",
