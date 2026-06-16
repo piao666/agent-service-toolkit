@@ -25,6 +25,7 @@ class RagSettings(BaseSettings):
     CHROMA_PERSIST_DIR: str = "./chroma_enterprise"
     CHROMA_COLLECTION_NAME: str = DEFAULT_CHROMA_COLLECTION_NAME
     ENTERPRISE_CHROMA_COLLECTION: str | None = None
+    ENTERPRISE_RAG_POLICY_MODE: str = "baseline"
     RAG_CHUNK_SIZE: int = 800
     RAG_CHUNK_OVERLAP: int = 120
     RAG_DEFAULT_TOP_K: int = 5

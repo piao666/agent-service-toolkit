@@ -1,0 +1,59 @@
+{
+  "phase": "6E-0_to_6E-3",
+  "total_remaining_bad_cases": 59,
+  "source_artifact_calibrated_bad_count": 84,
+  "source_artifact_calibrated_taxonomy_rows": 84,
+  "final_closure_target_distribution": {
+    "exact_metadata_lookup": 31,
+    "phase6c_bad_case_regression": 10,
+    "code_api_config": 7,
+    "ambiguous_query": 6,
+    "citation_required_query": 5
+  },
+  "by_query_type": {
+    "phase6c_bad_case_regression": 10,
+    "code_api_config": 7,
+    "ambiguous_query": 6,
+    "citation_required_query": 5,
+    "exact_metadata_lookup": 31
+  },
+  "by_original_query_type": {
+    "phase6c_bad_case_regression": 17,
+    "code_api_config": 11,
+    "ambiguous_query": 6,
+    "citation_required_query": 8,
+    "exact_metadata_lookup": 16,
+    "short_keyword": 1
+  },
+  "by_recommended_policy": {
+    "dense_sparse_fusion": 10,
+    "sparse_first_bm25": 7,
+    "clarification_first": 6,
+    "citation_aware_evidence": 5,
+    "metadata_first": 31
+  },
+  "by_simulation_status": {
+    "baseline_reference": 10,
+    "offline_rule_estimate": 36,
+    "design_only": 13
+  },
+  "by_policy_case_derivation": {
+    "original_query_type": 44,
+    "policy_cluster_reassignment": 15
+  },
+  "simulated_improvable_count": 36,
+  "design_only_count": 13,
+  "requires_production_change_count": 59,
+  "recommended_phase6e4_eval": true,
+  "writes_chroma": false,
+  "calls_llm": false,
+  "modifies_agent_api": false,
+  "artifact_consistency_note": "Phase 6D Final Closure records 59 remaining policy cases. Current committed Phase 6D-9 calibrated taxonomy has a different row count, so this simulator records original_query_type and policy_query_type separately.",
+  "input_files": {
+    "agent_results": "phase6d9_deepseek_agent_api_results.jsonl",
+    "calibrated_summary": "phase6d9_deepseek_calibrated_summary.json",
+    "calibrated_taxonomy": "phase6d9_deepseek_calibrated_bad_taxonomy.jsonl",
+    "raw_taxonomy": "phase6d9_deepseek_raw_bad_taxonomy.jsonl",
+    "expanded_cases": "phase6d7_expanded_cases.jsonl"
+  }
+}

@@ -1190,3 +1190,69 @@ Recommended Phase 6E boundary:
   `/enterprise/agent/query`.
 - Do not treat Phase 6E as a continuation of Phase 6D evaluation cleanup.
 - Do not start Phase 6E until this Phase 6D Final Closure status is manually reviewed.
+
+Phase 6E current scope update
+----------------------------
+Phase 6E is now:
+- Query-type-aware Retrieval Policy + Metadata-first Routing.
+
+The previous memory-management-oriented Phase 6E plan is moved later. Memory remains useful, but
+the Phase 6D-9 calibrated failures are concentrated in retrieval policy, metadata lookup,
+code/config lookup, citation evidence, and old regression cases. The next engineering loop should
+therefore improve first-hop evidence selection before adding conversation memory.
+
+Phase 6E-0 to Phase 6E-3 execution scope:
+- Phase 6E-0: update `task.txt` and phase boundary.
+- Phase 6E-1: add Phase 6E design document and offline policy simulator.
+- Phase 6E-2: add minimal retrieval policy helper with feature flag support.
+- Phase 6E-3: run local offline regression simulation on the 59 Phase 6D Final Closure remaining
+  bad cases.
+
+Phase 6E-4 boundary:
+- Phase 6E-4 is reserved for full 240-case re-evaluation after manual review.
+- Do not start Phase 6E-4 in the current local simulator round.
+- Do not use HPC or real DeepSeek/Qwen evaluation in Phase 6E-0 to Phase 6E-3.
+
+Phase 6E-0 to Phase 6E-3 completed locally:
+- Added `docs/enterprise_rag_backend/PHASE6E_RETRIEVAL_POLICY.md`.
+- Added `src/rag/retrieval_policy.py`.
+- Added `ENTERPRISE_RAG_POLICY_MODE=baseline` setting. Default production behavior remains
+  baseline.
+- Added `scripts/run_phase6e_policy_simulator.py`.
+- Generated:
+  - `data/knowledge_base/evaluation/phase6e_remaining_bad_cases.jsonl`
+  - `data/knowledge_base/evaluation/phase6e_policy_simulation_results.jsonl`
+  - `data/knowledge_base/evaluation/phase6e_policy_simulation_summary.json`
+- The simulator reads Phase 6D-9 and Phase 6D-7 artifacts and keeps both `original_query_type`
+  and Phase 6E `query_type`.
+- Artifact consistency note: the committed Phase 6D-9 calibrated taxonomy has 84 rows, while
+  Phase 6D Final Closure records 59 remaining policy cases. The Phase 6E simulator follows the
+  final closure distribution and records policy-cluster reassignment explicitly instead of hiding
+  the mismatch.
+
+Phase 6E local simulator summary:
+- `total_remaining_bad_cases=59`
+- `by_query_type`:
+  - `exact_metadata_lookup=31`
+  - `phase6c_bad_case_regression=10`
+  - `code_api_config=7`
+  - `ambiguous_query=6`
+  - `citation_required_query=5`
+- `by_recommended_policy`:
+  - `metadata_first=31`
+  - `dense_sparse_fusion=10`
+  - `sparse_first_bm25=7`
+  - `clarification_first=6`
+  - `citation_aware_evidence=5`
+- `simulated_improvable_count=36`
+- `design_only_count=13`
+- `requires_production_change_count=59`
+- `recommended_phase6e4_eval=true`
+
+Phase 6E boundaries preserved:
+- No Phase 6E-4 was started.
+- No real LLM was called.
+- No Chroma was written.
+- No production Agent/API default behavior was changed.
+- No bad case was deleted.
+- The simulator does not claim all bad cases are solved.
