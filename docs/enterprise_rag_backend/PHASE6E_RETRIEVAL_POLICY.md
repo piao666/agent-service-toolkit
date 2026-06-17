@@ -113,6 +113,13 @@ Implemented helper functions:
 - `split_multi_hop_query`
 - `citation_evidence_check`
 
+Phase 6E-5 wires the helper into the enterprise retrieval path:
+
+- `src/agents/enterprise_tools.py` reads `ENTERPRISE_RAG_POLICY_MODE`.
+- `baseline` continues to call the existing dense retrieval path.
+- `query_type_aware` calls `retrieve_with_policy()` in `src/rag/retriever.py`.
+- `retrieval_debug` records selected policy fields without changing the response schema.
+
 ## Local Regression Result
 
 Local simulator result:
@@ -135,17 +142,16 @@ Recommended policy distribution:
 
 These are offline policy estimates, not production accuracy gains.
 
-## Phase 6E-4 Plan
+## Phase 6E-6 Plan
 
-Phase 6E-4 should run a full 240-case re-evaluation after manual review, potentially on the
-larger runtime environment. It should compare baseline retrieval against the query-type-aware
-policy with real retrieval outputs.
+Phase 6E-6 should run full API-level re-evaluation after Phase 6E-5 policy wiring, comparing
+baseline vs `query_type_aware` mode.
 
 ## Boundaries
 
 - This is not production launch validation.
 - This does not claim all bad cases are solved.
-- This does not start Phase 6E-4.
+- Default Agent/API behavior remains `baseline`.
 - This does not call DeepSeek, Qwen, or any generation model.
 - This does not write Chroma.
 - This does not change default Agent/API behavior.

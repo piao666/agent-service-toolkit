@@ -7,7 +7,7 @@ from typing import Any
 from langchain_core.tools import BaseTool, tool
 
 from rag.config import rag_settings
-from rag.retriever import retrieve
+from rag.retriever import retrieve, retrieve_with_policy
 from rag.vector_store import get_collection_count
 
 DISTANCE_NOTE = "distance 越小越相关；relevance_score 越大越相关"
@@ -79,6 +79,7 @@ def _debug_payload(
     error: str | None = None,
     error_summary: str | None = None,
     retrieval_stage: str | None = None,
+    policy_debug: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "original_query": query,
@@ -89,7 +90,10 @@ def _debug_payload(
         "collection": collection_name or rag_settings.chroma_collection_name,
         "persist_dir": str(persist_dir or rag_settings.CHROMA_PERSIST_DIR),
         "distance_note": DISTANCE_NOTE,
+        "policy_mode": rag_settings.ENTERPRISE_RAG_POLICY_MODE,
     }
+    if policy_debug:
+        payload.update(policy_debug)
     if error:
         payload["error"] = error
     if error_summary:
@@ -108,6 +112,7 @@ def _fallback_payload(
     error: str | None = None,
     error_summary: str | None = None,
     retrieval_stage: str | None = None,
+    policy_debug: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     return {
         "context": "",
@@ -121,6 +126,7 @@ def _fallback_payload(
             error=error,
             error_summary=error_summary,
             retrieval_stage=retrieval_stage,
+            policy_debug=policy_debug,
         ),
         "fallback": {
             "triggered": True,
@@ -261,13 +267,23 @@ def build_enterprise_retrieval_payload(
             retrieval_stage="collection_count",
         )
 
+    policy_mode = rag_settings.ENTERPRISE_RAG_POLICY_MODE.lower()
+    policy_debug: dict[str, Any] = {"policy_mode": "baseline"}
     try:
-        results = retrieve(
-            normalized_query,
-            top_k=resolved_top_k,
-            persist_dir=resolved_persist_dir,
-            collection_name=resolved_collection,
-        )
+        if policy_mode == "query_type_aware":
+            results, policy_debug = retrieve_with_policy(
+                normalized_query,
+                top_k=resolved_top_k,
+                persist_dir=resolved_persist_dir,
+                collection_name=resolved_collection,
+            )
+        else:
+            results = retrieve(
+                normalized_query,
+                top_k=resolved_top_k,
+                persist_dir=resolved_persist_dir,
+                collection_name=resolved_collection,
+            )
     except Exception as exc:
         return _fallback_payload(
             query=normalized_query,
@@ -278,6 +294,7 @@ def build_enterprise_retrieval_payload(
             error=type(exc).__name__,
             error_summary=_safe_error_summary(exc),
             retrieval_stage="vector_query",
+            policy_debug=policy_debug,
         )
 
     if not results:
@@ -300,6 +317,7 @@ def build_enterprise_retrieval_payload(
             persist_dir=resolved_persist_dir,
             collection_name=resolved_collection,
             hit_count=len(sources),
+            policy_debug=policy_debug,
         ),
         "fallback": {
             "triggered": False,

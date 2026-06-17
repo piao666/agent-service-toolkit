@@ -1256,3 +1256,60 @@ Phase 6E boundaries preserved:
 - No production Agent/API default behavior was changed.
 - No bad case was deleted.
 - The simulator does not claim all bad cases are solved.
+
+Phase 6E-5: Wire Query-type-aware Retrieval Policy into Enterprise Retrieval Path
+--------------------------------------------------------------------------------
+Phase 6E-4 validation found that Phase 6E policy logic was still offline-only:
+- `select_retrieval_policy()` was defined but not called by runtime retrieval.
+- `ENTERPRISE_RAG_POLICY_MODE` existed but was not read by the retrieval entrypoint.
+- API-level baseline versus query-type-aware comparison was therefore not meaningful yet.
+
+Phase 6E-5 local implementation:
+- `src/agents/enterprise_tools.py` now reads `ENTERPRISE_RAG_POLICY_MODE`.
+- `ENTERPRISE_RAG_POLICY_MODE=baseline` preserves the existing dense retrieval path.
+- `ENTERPRISE_RAG_POLICY_MODE=query_type_aware` calls `retrieve_with_policy()` from
+  `src/rag/retriever.py`.
+- `src/rag/retriever.py` now applies policy-specific reranking while keeping dense retrieval as
+  fallback.
+- `retrieval_debug` can now include `policy_mode`, `inferred_query_type`, `selected_policy`,
+  `metadata_first_applied`, `sparse_first_applied`, `dense_sparse_fusion_applied`,
+  `citation_evidence_checked`, `clarification_first_applied`, and `requires_clarification`.
+- Default Agent/API behavior remains baseline unless the feature flag is explicitly set.
+
+Phase 6E-5 policy behavior:
+- `exact_metadata_lookup` -> metadata-first scoring over a bounded read-only Chroma scan.
+- `code_api_config` / `short_keyword` -> sparse-first scoring over text and metadata.
+- ordinary knowledge and `phase6c_bad_case_regression` -> dense plus sparse fusion over dense
+  candidates.
+- `ambiguous_query` -> clarification-first debug while still returning evidence.
+- `citation_required_query` -> citation evidence checks attached to source metadata.
+- `negative_banned_source` -> policy helper remains guard-oriented; full runtime banned-source
+  lists require the full evaluation harness.
+
+Phase 6E-5 local probe outputs:
+- `data/knowledge_base/evaluation/phase6e5_local_policy_probe_results.jsonl`
+- `data/knowledge_base/evaluation/phase6e5_local_policy_probe_summary.json`
+- `docs/enterprise_rag_backend/PHASE6E_POLICY_WIRING.md`
+
+Phase 6E-5 local probe summary:
+- `policy_mode=query_type_aware`
+- `total_cases=59`
+- `metadata_first_count=31`
+- `sparse_first_count=7`
+- `dense_sparse_fusion_count=10`
+- `clarification_first_count=6`
+- `citation_aware_count=5`
+- `baseline_default_unchanged=true`
+- `calls_llm=false`
+- `writes_chroma=false`
+- `starts_service=false`
+- `recommended_hpc_full_eval=true`
+
+Phase 6E-5 boundaries preserved:
+- No Phase 6E-6 was started.
+- No HPC evaluation was run.
+- No real LLM was called.
+- No Chroma was written.
+- No production provider configuration was changed.
+- No Phase 6D original result files were overwritten.
+- This phase does not claim production readiness or that all bad cases are solved.

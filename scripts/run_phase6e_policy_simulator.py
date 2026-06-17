@@ -28,6 +28,10 @@ EVALUATION_DIR = ROOT / "data" / "knowledge_base" / "evaluation"
 DEFAULT_RESULTS_PATH = EVALUATION_DIR / "phase6e_policy_simulation_results.jsonl"
 DEFAULT_CASES_PATH = EVALUATION_DIR / "phase6e_remaining_bad_cases.jsonl"
 DEFAULT_SUMMARY_PATH = EVALUATION_DIR / "phase6e_policy_simulation_summary.json"
+DEFAULT_PHASE6E5_PROBE_RESULTS_PATH = (
+    EVALUATION_DIR / "phase6e5_local_policy_probe_results.jsonl"
+)
+DEFAULT_PHASE6E5_PROBE_SUMMARY_PATH = EVALUATION_DIR / "phase6e5_local_policy_probe_summary.json"
 
 FINAL_POLICY_DISTRIBUTION = {
     QueryType.EXACT_METADATA_LOOKUP.value: 31,
@@ -382,6 +386,54 @@ def build_summary(
     }
 
 
+def build_phase6e5_probe(
+    cases: list[dict[str, Any]],
+    results: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    probe_rows: list[dict[str, Any]] = []
+    for case, result in zip(cases, results):
+        selected_policy = result["recommended_policy"]
+        probe_rows.append(
+            {
+                "case_id": case["case_id"],
+                "query": case["query"],
+                "query_type": case["query_type"],
+                "original_query_type": case.get("original_query_type"),
+                "policy_mode": "query_type_aware",
+                "selected_policy": selected_policy,
+                "metadata_first_applied": selected_policy == "metadata_first",
+                "sparse_first_applied": selected_policy == "sparse_first_bm25",
+                "dense_sparse_fusion_applied": selected_policy == "dense_sparse_fusion",
+                "clarification_first_applied": selected_policy == "clarification_first",
+                "citation_evidence_checked": selected_policy == "citation_aware_evidence",
+                "requires_clarification": selected_policy == "clarification_first",
+                "simulation_status": result["simulation_status"],
+                "requires_production_change": result["requires_production_change"],
+                "notes": result["notes"],
+            }
+        )
+
+    policy_counts = Counter(row["selected_policy"] for row in probe_rows)
+    summary = {
+        "phase": "6E-5_local_policy_probe",
+        "policy_mode": "query_type_aware",
+        "total_cases": len(probe_rows),
+        "by_query_type": dict(Counter(row["query_type"] for row in probe_rows)),
+        "by_selected_policy": dict(policy_counts),
+        "metadata_first_count": policy_counts.get("metadata_first", 0),
+        "sparse_first_count": policy_counts.get("sparse_first_bm25", 0),
+        "dense_sparse_fusion_count": policy_counts.get("dense_sparse_fusion", 0),
+        "clarification_first_count": policy_counts.get("clarification_first", 0),
+        "citation_aware_count": policy_counts.get("citation_aware_evidence", 0),
+        "baseline_default_unchanged": True,
+        "calls_llm": False,
+        "writes_chroma": False,
+        "starts_service": False,
+        "recommended_hpc_full_eval": True,
+    }
+    return probe_rows, summary
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     discovered = discover_inputs(EVALUATION_DIR)
     taxonomy_path = discovered.get("calibrated_taxonomy")
@@ -400,6 +452,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     write_jsonl(args.cases_output, cases)
     write_jsonl(args.results_output, results)
     write_json(args.summary_output, summary)
+    probe_rows, probe_summary = build_phase6e5_probe(cases, results)
+    write_jsonl(args.phase6e5_probe_results_output, probe_rows)
+    write_json(args.phase6e5_probe_summary_output, probe_summary)
     return summary
 
 
@@ -408,6 +463,16 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--cases-output", type=Path, default=DEFAULT_CASES_PATH)
     parser.add_argument("--results-output", type=Path, default=DEFAULT_RESULTS_PATH)
     parser.add_argument("--summary-output", type=Path, default=DEFAULT_SUMMARY_PATH)
+    parser.add_argument(
+        "--phase6e5-probe-results-output",
+        type=Path,
+        default=DEFAULT_PHASE6E5_PROBE_RESULTS_PATH,
+    )
+    parser.add_argument(
+        "--phase6e5-probe-summary-output",
+        type=Path,
+        default=DEFAULT_PHASE6E5_PROBE_SUMMARY_PATH,
+    )
     return parser.parse_args()
 
 

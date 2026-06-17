@@ -1,0 +1,29 @@
+{
+  "phase": "6E-5_local_policy_probe",
+  "policy_mode": "query_type_aware",
+  "total_cases": 59,
+  "by_query_type": {
+    "phase6c_bad_case_regression": 10,
+    "code_api_config": 7,
+    "ambiguous_query": 6,
+    "citation_required_query": 5,
+    "exact_metadata_lookup": 31
+  },
+  "by_selected_policy": {
+    "dense_sparse_fusion": 10,
+    "sparse_first_bm25": 7,
+    "clarification_first": 6,
+    "citation_aware_evidence": 5,
+    "metadata_first": 31
+  },
+  "metadata_first_count": 31,
+  "sparse_first_count": 7,
+  "dense_sparse_fusion_count": 10,
+  "clarification_first_count": 6,
+  "citation_aware_count": 5,
+  "baseline_default_unchanged": true,
+  "calls_llm": false,
+  "writes_chroma": false,
+  "starts_service": false,
+  "recommended_hpc_full_eval": true
+}
