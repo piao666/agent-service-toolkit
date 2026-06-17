@@ -120,6 +120,13 @@ Phase 6E-5 wires the helper into the enterprise retrieval path:
 - `query_type_aware` calls `retrieve_with_policy()` in `src/rag/retriever.py`.
 - `retrieval_debug` records selected policy fields without changing the response schema.
 
+Phase 6E-7 makes `query_type_aware` selective instead of global:
+
+- metadata/code/config/short-keyword/citation query types can use specialized policy.
+- ordinary knowledge, ambiguous, negative, and multi-hop queries fall back to baseline retrieval.
+- `phase6c_bad_case_regression` only uses specialized policy when the query has explicit metadata,
+  code/API, or citation features.
+
 ## Local Regression Result
 
 Local simulator result:
@@ -146,6 +153,9 @@ These are offline policy estimates, not production accuracy gains.
 
 Phase 6E-6 should run full API-level re-evaluation after Phase 6E-5 policy wiring, comparing
 baseline vs `query_type_aware` mode.
+
+Phase 6E-8 should re-run that comparison after Phase 6E-7 gated policy, comparing baseline,
+global query-type-aware, and gated query-type-aware mode.
 
 ## Boundaries
 

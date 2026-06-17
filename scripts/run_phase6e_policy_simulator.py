@@ -17,6 +17,7 @@ from rag.retrieval_policy import (  # noqa: E402
     QueryType,
     RetrievalPolicyName,
     citation_evidence_check,
+    decide_gated_retrieval_policy,
     infer_query_type,
     metadata_first_score,
     select_retrieval_policy,
@@ -32,6 +33,10 @@ DEFAULT_PHASE6E5_PROBE_RESULTS_PATH = (
     EVALUATION_DIR / "phase6e5_local_policy_probe_results.jsonl"
 )
 DEFAULT_PHASE6E5_PROBE_SUMMARY_PATH = EVALUATION_DIR / "phase6e5_local_policy_probe_summary.json"
+DEFAULT_PHASE6E7_PROBE_RESULTS_PATH = (
+    EVALUATION_DIR / "phase6e7_gated_policy_probe_results.jsonl"
+)
+DEFAULT_PHASE6E7_PROBE_SUMMARY_PATH = EVALUATION_DIR / "phase6e7_gated_policy_probe_summary.json"
 
 FINAL_POLICY_DISTRIBUTION = {
     QueryType.EXACT_METADATA_LOOKUP.value: 31,
@@ -434,6 +439,68 @@ def build_phase6e5_probe(
     return probe_rows, summary
 
 
+def build_phase6e7_gated_probe(
+    cases: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    probe_rows: list[dict[str, Any]] = []
+    for case in cases:
+        decision = decide_gated_retrieval_policy(
+            case["query"],
+            {"query_type": case["query_type"]},
+        )
+        selected_policy = decision.policy.name.value
+        probe_rows.append(
+            {
+                "case_id": case["case_id"],
+                "query": case["query"],
+                "query_type": case["query_type"],
+                "original_query_type": case.get("original_query_type"),
+                "policy_mode": "query_type_aware",
+                "selected_policy": selected_policy,
+                "gated_policy_enabled": decision.gated_policy_enabled,
+                "fallback_to_baseline": decision.fallback_to_baseline,
+                "gated_reason": decision.gated_reason,
+                "metadata_first_applied": (
+                    decision.gated_policy_enabled and selected_policy == "metadata_first"
+                ),
+                "sparse_first_applied": (
+                    decision.gated_policy_enabled and selected_policy == "sparse_first_bm25"
+                ),
+                "citation_evidence_checked": (
+                    decision.gated_policy_enabled and selected_policy == "citation_aware_evidence"
+                ),
+                "clarification_debug_only": (
+                    not decision.gated_policy_enabled and selected_policy == "clarification_first"
+                ),
+                "calls_llm": False,
+                "writes_chroma": False,
+            }
+        )
+
+    selected_policy_counts = Counter(row["selected_policy"] for row in probe_rows)
+    summary = {
+        "phase": "6E-7_gated_policy_probe",
+        "policy_mode": "query_type_aware",
+        "total_cases": len(probe_rows),
+        "by_query_type": dict(Counter(row["query_type"] for row in probe_rows)),
+        "by_selected_policy": dict(selected_policy_counts),
+        "gated_enabled_count": sum(1 for row in probe_rows if row["gated_policy_enabled"]),
+        "fallback_to_baseline_count": sum(1 for row in probe_rows if row["fallback_to_baseline"]),
+        "metadata_first_count": sum(1 for row in probe_rows if row["metadata_first_applied"]),
+        "sparse_first_count": sum(1 for row in probe_rows if row["sparse_first_applied"]),
+        "citation_aware_count": sum(1 for row in probe_rows if row["citation_evidence_checked"]),
+        "clarification_debug_only_count": sum(
+            1 for row in probe_rows if row["clarification_debug_only"]
+        ),
+        "baseline_default_unchanged": True,
+        "calls_llm": False,
+        "writes_chroma": False,
+        "starts_service": False,
+        "recommended_hpc_full_eval": True,
+    }
+    return probe_rows, summary
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     discovered = discover_inputs(EVALUATION_DIR)
     taxonomy_path = discovered.get("calibrated_taxonomy")
@@ -455,6 +522,9 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     probe_rows, probe_summary = build_phase6e5_probe(cases, results)
     write_jsonl(args.phase6e5_probe_results_output, probe_rows)
     write_json(args.phase6e5_probe_summary_output, probe_summary)
+    gated_probe_rows, gated_probe_summary = build_phase6e7_gated_probe(cases)
+    write_jsonl(args.phase6e7_probe_results_output, gated_probe_rows)
+    write_json(args.phase6e7_probe_summary_output, gated_probe_summary)
     return summary
 
 
@@ -472,6 +542,16 @@ def parse_args() -> argparse.Namespace:
         "--phase6e5-probe-summary-output",
         type=Path,
         default=DEFAULT_PHASE6E5_PROBE_SUMMARY_PATH,
+    )
+    parser.add_argument(
+        "--phase6e7-probe-results-output",
+        type=Path,
+        default=DEFAULT_PHASE6E7_PROBE_RESULTS_PATH,
+    )
+    parser.add_argument(
+        "--phase6e7-probe-summary-output",
+        type=Path,
+        default=DEFAULT_PHASE6E7_PROBE_SUMMARY_PATH,
     )
     return parser.parse_args()
 

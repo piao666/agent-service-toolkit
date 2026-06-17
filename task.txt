@@ -1313,3 +1313,79 @@ Phase 6E-5 boundaries preserved:
 - No production provider configuration was changed.
 - No Phase 6D original result files were overwritten.
 - This phase does not claim production readiness or that all bad cases are solved.
+
+Phase 6E-7: Selective / Gated Retrieval Policy
+----------------------------------------------
+Phase 6E-6 full API-level re-evaluation showed that global `query_type_aware` is useful on the
+targeted 59-case bad-case set but harmful on the full 240-case set:
+- 59-case set:
+  - baseline `source_hit_rate=0.2321`
+  - global `query_type_aware source_hit_rate=0.3571`
+  - baseline `bad_case_count=40`
+  - global `query_type_aware bad_case_count=33`
+  - baseline `avg_latency_ms=2165`
+  - global `query_type_aware avg_latency_ms=1827`
+- 240-case full set:
+  - baseline `source_hit_rate=0.689`
+  - global `query_type_aware source_hit_rate=0.6411`
+  - baseline `bad_case_count=62`
+  - global `query_type_aware bad_case_count=71`
+  - baseline `keyword_hit_rate=0.9761`
+  - global `query_type_aware keyword_hit_rate=0.9809`
+
+Phase 6E-7 implementation:
+- Added gated policy decision logic in `src/rag/retrieval_policy.py`.
+- Updated `src/rag/retriever.py` so `ENTERPRISE_RAG_POLICY_MODE=query_type_aware` no longer
+  applies specialized retrieval globally.
+- `ENTERPRISE_RAG_POLICY_MODE=baseline` still uses the original dense retrieval path.
+- `query_type_aware` now only enables specialized retrieval for selected query types.
+
+Gated policy rules:
+- Enabled:
+  - `exact_metadata_lookup` -> `metadata_first`
+  - `code_api_config` -> `sparse_first_bm25`
+  - `short_keyword` -> conservative `sparse_first_bm25`
+  - `citation_required_query` -> `citation_aware_evidence`
+- Conditional:
+  - `phase6c_bad_case_regression` falls back to baseline unless the query has explicit metadata,
+    code/API/config, or citation features.
+- Fallback baseline:
+  - `zh_knowledge`
+  - `en_api_doc`
+  - `mixed_zh_en_api`
+  - `agent_rag_concept`
+  - `ambiguous_query` retrieval stays baseline with clarification debug only.
+  - `multi_hop_lookup` stays baseline until full multi-query evaluation.
+  - `negative_banned_source` retrieval stays baseline with guard debug only.
+
+Retrieval debug fields added for gated mode:
+- `gated_policy_enabled`
+- `fallback_to_baseline`
+- `gated_reason`
+
+Phase 6E-7 local probe outputs:
+- `data/knowledge_base/evaluation/phase6e7_gated_policy_probe_results.jsonl`
+- `data/knowledge_base/evaluation/phase6e7_gated_policy_probe_summary.json`
+- `docs/enterprise_rag_backend/PHASE6E7_GATED_POLICY.md`
+
+Phase 6E-7 local probe summary:
+- `total_cases=59`
+- `gated_enabled_count=49`
+- `fallback_to_baseline_count=10`
+- `metadata_first_count=35`
+- `sparse_first_count=8`
+- `citation_aware_count=6`
+- `clarification_debug_only_count=6`
+- `baseline_default_unchanged=true`
+- `calls_llm=false`
+- `writes_chroma=false`
+- `recommended_hpc_full_eval=true`
+
+Phase 6E-7 boundaries preserved:
+- No Phase 6E-8 was started.
+- No HPC evaluation was run.
+- No real LLM was called.
+- No Chroma was written.
+- No long-running service was started.
+- No Phase 6D or Phase 6E-6 original results were overwritten.
+- This phase does not claim production readiness or that all bad cases are solved.

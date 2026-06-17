@@ -8,12 +8,10 @@ from rag.embeddings import get_embedding_model
 from rag.retrieval_policy import (
     RetrievalPolicyName,
     citation_evidence_check,
+    decide_gated_retrieval_policy,
     dense_sparse_fusion_score,
-    infer_query_type,
     metadata_first_score,
-    select_retrieval_policy,
     sparse_first_score,
-    split_multi_hop_query,
 )
 from rag.schemas import RetrievalResult
 from rag.vector_store import get_vector_store
@@ -209,9 +207,9 @@ def retrieve_with_policy(
         for doc, score in dense_pairs
     ]
 
-    inferred_query_type = infer_query_type(query)
-    selected_policy = select_retrieval_policy(inferred_query_type)
-    candidates = _collection_candidates(vector_store)
+    gated_decision = decide_gated_retrieval_policy(query)
+    selected_policy = gated_decision.policy
+    candidates: list[tuple[str, dict[str, Any]]] = []
     policy_results: list[RetrievalResult] = []
     metadata_first_applied = False
     sparse_first_applied = False
@@ -220,45 +218,49 @@ def retrieve_with_policy(
     clarification_first_applied = False
     multi_query_applied = False
 
-    if selected_policy.name is RetrievalPolicyName.METADATA_FIRST:
-        metadata_first_applied = True
-        policy_results = _metadata_first_candidates(query, candidates, resolved_top_k)
-    elif selected_policy.name is RetrievalPolicyName.SPARSE_FIRST_BM25:
-        sparse_first_applied = True
-        policy_results = _sparse_first_candidates(query, candidates, resolved_top_k)
+    if gated_decision.gated_policy_enabled:
+        if selected_policy.name is RetrievalPolicyName.METADATA_FIRST:
+            metadata_first_applied = True
+            candidates = _collection_candidates(vector_store)
+            policy_results = _metadata_first_candidates(query, candidates, resolved_top_k)
+        elif selected_policy.name is RetrievalPolicyName.SPARSE_FIRST_BM25:
+            sparse_first_applied = True
+            candidates = _collection_candidates(vector_store)
+            policy_results = _sparse_first_candidates(query, candidates, resolved_top_k)
+        elif selected_policy.name is RetrievalPolicyName.CITATION_AWARE_EVIDENCE:
+            citation_evidence_checked = True
+            policy_results = dense_results
+            for result in policy_results:
+                result.metadata["citation_evidence"] = citation_evidence_check(
+                    query,
+                    {
+                        "metadata": result.metadata,
+                        "title": result.title,
+                        "source_url": result.metadata.get("source_url"),
+                        "section_path": result.metadata.get("section_path"),
+                        "content_preview": result.content_preview,
+                    },
+                )
+        else:
+            dense_sparse_fusion_applied = True
+            policy_results = _dense_sparse_fusion_results(query, dense_results)
     elif selected_policy.name is RetrievalPolicyName.CLARIFICATION_FIRST:
         clarification_first_applied = True
         policy_results = dense_results
     elif selected_policy.name is RetrievalPolicyName.MULTI_QUERY_RETRIEVAL:
         multi_query_applied = True
-        subqueries = split_multi_hop_query(query)
         policy_results = dense_results
-        for subquery in subqueries[:3]:
-            for doc, score in vector_store.similarity_search_with_score(subquery, k=resolved_top_k):
-                policy_results.append(_result_from_document(doc.page_content, dict(doc.metadata), score))
-    elif selected_policy.name is RetrievalPolicyName.CITATION_AWARE_EVIDENCE:
-        citation_evidence_checked = True
-        policy_results = dense_results
-        for result in policy_results:
-            result.metadata["citation_evidence"] = citation_evidence_check(
-                query,
-                {
-                    "metadata": result.metadata,
-                    "title": result.title,
-                    "source_url": result.metadata.get("source_url"),
-                    "section_path": result.metadata.get("section_path"),
-                    "content_preview": result.content_preview,
-                },
-            )
     else:
-        dense_sparse_fusion_applied = True
-        policy_results = _dense_sparse_fusion_results(query, dense_results)
+        policy_results = dense_results
 
     merged_results = _merge_unique_results(policy_results, dense_results, resolved_top_k)
     policy_debug = {
         "policy_mode": "query_type_aware",
-        "inferred_query_type": inferred_query_type.value,
+        "inferred_query_type": gated_decision.query_type.value,
         "selected_policy": selected_policy.name.value,
+        "gated_policy_enabled": gated_decision.gated_policy_enabled,
+        "fallback_to_baseline": gated_decision.fallback_to_baseline,
+        "gated_reason": gated_decision.gated_reason,
         "metadata_first_applied": metadata_first_applied,
         "sparse_first_applied": sparse_first_applied,
         "dense_sparse_fusion_applied": dense_sparse_fusion_applied,

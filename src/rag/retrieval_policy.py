@@ -70,6 +70,15 @@ class RetrievalPolicy:
     requires_production_change: bool = True
 
 
+@dataclass(frozen=True)
+class GatedPolicyDecision:
+    query_type: QueryType
+    policy: RetrievalPolicy
+    gated_policy_enabled: bool
+    fallback_to_baseline: bool
+    gated_reason: str
+
+
 def _normalize_query_type(value: str | QueryType | None) -> QueryType:
     if isinstance(value, QueryType):
         return value
@@ -149,6 +158,154 @@ def select_retrieval_policy(query_type: str | QueryType) -> RetrievalPolicy:
         name=RetrievalPolicyName.DENSE_SPARSE_FUSION,
         description="Use dense semantic retrieval with sparse keyword coverage.",
         notes=("ordinary knowledge query", "combine semantic and lexical signals"),
+    )
+
+
+def _has_metadata_feature(query: str) -> bool:
+    normalized_query = query.lower()
+    extra_terms = (
+        "collection_name",
+        "review_status",
+        "ingest_candidate",
+        "content_cache_alias",
+        "source_catalog",
+        "manifest",
+        "schema",
+    )
+    return any(field in normalized_query for field in (*METADATA_FIELDS, *extra_terms))
+
+
+def _has_code_api_feature(query: str) -> bool:
+    normalized_query = query.lower()
+    if any(term in normalized_query for term in CODE_API_TERMS):
+        return True
+    return bool(re.search(r"[A-Za-z_][A-Za-z0-9_]*(?:\(|=|:|/|\.)", query))
+
+
+def _has_citation_feature(query: str) -> bool:
+    normalized_query = query.lower()
+    return any(term in normalized_query for term in ("引用", "来源", "出处", "证据", "citation", "source"))
+
+
+def _short_keyword_is_safe(query: str) -> bool:
+    stripped = query.strip()
+    return 2 <= len(stripped) <= 24 and not any(char in stripped for char in "？?。,.，")
+
+
+def decide_gated_retrieval_policy(
+    query: str,
+    case_metadata: dict[str, Any] | None = None,
+) -> GatedPolicyDecision:
+    """Select a policy and decide whether it should replace baseline retrieval."""
+
+    query_type = infer_query_type(query, case_metadata)
+    policy = select_retrieval_policy(query_type)
+    metadata_feature = _has_metadata_feature(query)
+    code_api_feature = _has_code_api_feature(query)
+    citation_feature = _has_citation_feature(query)
+
+    if query_type is QueryType.EXACT_METADATA_LOOKUP:
+        return GatedPolicyDecision(
+            query_type=query_type,
+            policy=select_retrieval_policy(QueryType.EXACT_METADATA_LOOKUP),
+            gated_policy_enabled=True,
+            fallback_to_baseline=False,
+            gated_reason="exact_metadata_lookup enables metadata-first retrieval",
+        )
+    if query_type is QueryType.CODE_API_CONFIG:
+        return GatedPolicyDecision(
+            query_type=query_type,
+            policy=select_retrieval_policy(QueryType.CODE_API_CONFIG),
+            gated_policy_enabled=True,
+            fallback_to_baseline=False,
+            gated_reason="code_api_config enables sparse-first retrieval",
+        )
+    if query_type is QueryType.SHORT_KEYWORD:
+        enabled = _short_keyword_is_safe(query)
+        return GatedPolicyDecision(
+            query_type=query_type,
+            policy=select_retrieval_policy(QueryType.SHORT_KEYWORD),
+            gated_policy_enabled=enabled,
+            fallback_to_baseline=not enabled,
+            gated_reason=(
+                "short_keyword conservatively enables sparse-first retrieval"
+                if enabled
+                else "short_keyword is too ambiguous, fallback to baseline"
+            ),
+        )
+    if query_type is QueryType.CITATION_REQUIRED_QUERY:
+        return GatedPolicyDecision(
+            query_type=query_type,
+            policy=select_retrieval_policy(QueryType.CITATION_REQUIRED_QUERY),
+            gated_policy_enabled=True,
+            fallback_to_baseline=False,
+            gated_reason="citation_required_query enables evidence verification",
+        )
+    if query_type is QueryType.PHASE6C_BAD_CASE_REGRESSION:
+        if metadata_feature:
+            policy = select_retrieval_policy(QueryType.EXACT_METADATA_LOOKUP)
+            return GatedPolicyDecision(
+                query_type=query_type,
+                policy=policy,
+                gated_policy_enabled=True,
+                fallback_to_baseline=False,
+                gated_reason="phase6c case has explicit metadata features",
+            )
+        if code_api_feature:
+            policy = select_retrieval_policy(QueryType.CODE_API_CONFIG)
+            return GatedPolicyDecision(
+                query_type=query_type,
+                policy=policy,
+                gated_policy_enabled=True,
+                fallback_to_baseline=False,
+                gated_reason="phase6c case has explicit code/api features",
+            )
+        if citation_feature:
+            policy = select_retrieval_policy(QueryType.CITATION_REQUIRED_QUERY)
+            return GatedPolicyDecision(
+                query_type=query_type,
+                policy=policy,
+                gated_policy_enabled=True,
+                fallback_to_baseline=False,
+                gated_reason="phase6c case has explicit citation features",
+            )
+        return GatedPolicyDecision(
+            query_type=query_type,
+            policy=select_retrieval_policy(QueryType.ZH_KNOWLEDGE),
+            gated_policy_enabled=False,
+            fallback_to_baseline=True,
+            gated_reason="phase6c case has no explicit gated feature, fallback to baseline",
+        )
+    if query_type is QueryType.AMBIGUOUS_QUERY:
+        return GatedPolicyDecision(
+            query_type=query_type,
+            policy=select_retrieval_policy(QueryType.AMBIGUOUS_QUERY),
+            gated_policy_enabled=False,
+            fallback_to_baseline=True,
+            gated_reason="ambiguous_query uses clarification debug only",
+        )
+    if query_type is QueryType.MULTI_HOP_LOOKUP:
+        return GatedPolicyDecision(
+            query_type=query_type,
+            policy=select_retrieval_policy(QueryType.MULTI_HOP_LOOKUP),
+            gated_policy_enabled=False,
+            fallback_to_baseline=True,
+            gated_reason="multi_hop_lookup remains baseline until full evaluation",
+        )
+    if query_type is QueryType.NEGATIVE_BANNED_SOURCE:
+        return GatedPolicyDecision(
+            query_type=query_type,
+            policy=select_retrieval_policy(QueryType.NEGATIVE_BANNED_SOURCE),
+            gated_policy_enabled=False,
+            fallback_to_baseline=True,
+            gated_reason="negative_banned_source uses guard debug only",
+        )
+    return GatedPolicyDecision(
+        query_type=query_type,
+        policy=select_retrieval_policy(query_type),
+        gated_policy_enabled=False,
+        fallback_to_baseline=True,
+        gated_reason="ordinary knowledge query keeps baseline retrieval",
     )
 
 
