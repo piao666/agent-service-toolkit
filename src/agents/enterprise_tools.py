@@ -7,7 +7,7 @@ from typing import Any
 from langchain_core.tools import BaseTool, tool
 
 from rag.config import rag_settings
-from rag.retriever import retrieve, retrieve_with_policy
+from rag.retriever import retrieve, retrieve_with_overlay, retrieve_with_policy
 from rag.vector_store import get_collection_count
 
 DISTANCE_NOTE = "distance 越小越相关；relevance_score 越大越相关"
@@ -272,6 +272,13 @@ def build_enterprise_retrieval_payload(
     try:
         if policy_mode == "query_type_aware":
             results, policy_debug = retrieve_with_policy(
+                normalized_query,
+                top_k=resolved_top_k,
+                persist_dir=resolved_persist_dir,
+                collection_name=resolved_collection,
+            )
+        elif policy_mode == "targeted_overlay":
+            results, policy_debug = retrieve_with_overlay(
                 normalized_query,
                 top_k=resolved_top_k,
                 persist_dir=resolved_persist_dir,

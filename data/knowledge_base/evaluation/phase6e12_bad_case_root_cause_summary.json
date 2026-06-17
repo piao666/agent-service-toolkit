@@ -1,0 +1,86 @@
+{
+  "phase": "6E-12_bad_case_root_cause_audit",
+  "total_analyzed_cases": 59,
+  "missing_inputs": [],
+  "by_query_type": {
+    "phase6c_bad_case_regression": 10,
+    "code_api_config": 7,
+    "ambiguous_query": 6,
+    "citation_required_query": 5,
+    "exact_metadata_lookup": 31
+  },
+  "by_root_cause": {
+    "expected_source_exists_but_not_retrieved": 43,
+    "unknown": 1,
+    "chunk_too_small_or_context_missing": 7,
+    "needs_code_symbol_index": 4,
+    "evaluator_too_strict_or_misaligned": 6,
+    "needs_query_decomposition": 3,
+    "needs_citation_verifier": 5,
+    "chunk_too_noisy_or_too_broad": 31,
+    "needs_metadata_index": 22
+  },
+  "retrieval_fixable_count": 43,
+  "metadata_index_needed_count": 22,
+  "code_index_needed_count": 4,
+  "citation_verifier_needed_count": 5,
+  "corpus_expansion_needed_count": 0,
+  "evaluator_calibration_needed_count": 6,
+  "query_decomposition_needed_count": 3,
+  "retrieval_policy_only_expected_gain": "high",
+  "recommended_next_phase": "6F_corpus_audit_or_structured_index",
+  "analysis_limitations": [
+    "No results.jsonl available — cannot determine per-case retrieval/answer details",
+    "Best-effort using calibrated taxonomy + chunk manifest + summaries",
+    "Source existence check via chunk_manifest (may miss sources without reviewed chunks)"
+  ],
+  "calls_llm": false,
+  "writes_chroma": false,
+  "starts_service": false,
+  "source_coverage_summary": {
+    "fastapi_docs": {
+      "exists": true,
+      "chunk_count": 39,
+      "doc_types": [
+        "html"
+      ]
+    },
+    "kubernetes_cn_docs": {
+      "exists": true,
+      "chunk_count": 32,
+      "doc_types": [
+        "html"
+      ]
+    },
+    "local_ai_agent_course_pdf": {
+      "exists": true,
+      "chunk_count": 182,
+      "doc_types": [
+        "pdf"
+      ]
+    },
+    "local_deep_learning_course_docx": {
+      "exists": true,
+      "chunk_count": 112,
+      "doc_types": [
+        "docx"
+      ]
+    },
+    "local_nlp_course_docx": {
+      "exists": true,
+      "chunk_count": 205,
+      "doc_types": [
+        "docx"
+      ]
+    },
+    "repo_project_files": {
+      "exists": true,
+      "chunk_count": 37,
+      "doc_types": [
+        "json",
+        "markdown",
+        "yaml"
+      ]
+    }
+  }
+}

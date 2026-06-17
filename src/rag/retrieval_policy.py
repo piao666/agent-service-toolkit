@@ -431,3 +431,83 @@ def citation_evidence_check(
         "keyword_overlap": keyword_overlap,
         "citation_ready": bool(source_id and (source_url or title or section_path)),
     }
+
+
+# ═══════════════════════════════════════════════════════════════
+# Phase 6E-11: Targeted Overlay Policy (overlay, never replace baseline)
+# ═══════════════════════════════════════════════════════════════
+
+@dataclass(frozen=True)
+class OverlayDecision:
+    """Targeted overlay 决策: 永远保留 baseline，仅在强信号时叠加辅助检索。"""
+    overlay_enabled: bool
+    overlay_type: str  # "metadata_overlay" | "sparse_overlay" | "citation_overlay" | "noop"
+    baseline_noop: bool  # True = 完全 baseline passthrough
+    reason: str
+    # 细化标志
+    metadata_overlay: bool = False
+    sparse_overlay: bool = False
+    citation_overlay: bool = False
+
+
+def decide_overlay(query: str) -> OverlayDecision:
+    """判断是否对 query 启用 targeted overlay。
+
+    核心原则：
+    - 默认 baseline noop，不强推任何策略
+    - 只有命中 ≥2 个强信号才启用 overlay
+    - metadata/sparse/citation 独立判断，可叠加
+    """
+    if not query or not query.strip():
+        return OverlayDecision(
+            overlay_enabled=False, overlay_type="noop",
+            baseline_noop=True, reason="empty query, baseline only",
+        )
+
+    q = query.strip()
+    q_lower = q.lower()
+    metadata_count = sum(1 for t in STRONG_METADATA_TERMS if t in q_lower)
+    code_count = sum(1 for t in STRONG_CODE_API_TERMS if t in q_lower)
+    has_code_pattern = _has_code_api_feature(q)
+    has_citation = _has_citation_feature(q)
+    is_short = len(q) <= 12
+
+    # ── Metadata overlay: ≥2 metadata terms ──
+    metadata_overlay = metadata_count >= 2
+
+    # ── Sparse overlay: ≥2 code terms OR (short + has code pattern) ──
+    sparse_overlay = (code_count >= 2 or has_code_pattern) and (
+        code_count >= 2 or is_short
+    )
+
+    # ── Citation overlay: ≥1 citation term ──
+    citation_overlay = has_citation
+
+    # ── If nothing triggers, baseline only ──
+    if not (metadata_overlay or sparse_overlay or citation_overlay):
+        return OverlayDecision(
+            overlay_enabled=False, overlay_type="noop",
+            baseline_noop=True,
+            reason="no strong signal detected, baseline retrieval only",
+        )
+
+    # ── Determine primary overlay type ──
+    if metadata_overlay:
+        otype = "metadata_overlay"
+        reason = f"metadata terms matched ({metadata_count}), applying metadata overlay"
+    elif sparse_overlay:
+        otype = "sparse_overlay"
+        reason = f"code/api terms matched ({code_count}), applying sparse overlay"
+    else:
+        otype = "citation_overlay"
+        reason = "citation terms matched, applying citation overlay"
+
+    return OverlayDecision(
+        overlay_enabled=True,
+        overlay_type=otype,
+        baseline_noop=False,
+        reason=reason,
+        metadata_overlay=metadata_overlay,
+        sparse_overlay=sparse_overlay,
+        citation_overlay=citation_overlay,
+    )

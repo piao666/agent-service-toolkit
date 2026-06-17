@@ -75,12 +75,12 @@ def read_jsonl(path: Path) -> list[dict[str, Any]]:
 
 def write_json(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    path.write_text(json.dumps(payload, ensure_ascii=True, indent=2) + "\n", encoding="utf-8")
 
 
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    content = "\n".join(json.dumps(row, ensure_ascii=False, sort_keys=True) for row in rows)
+    content = "\n".join(json.dumps(row, ensure_ascii=True, sort_keys=True) for row in rows)
     path.write_text(content + ("\n" if content else ""), encoding="utf-8")
 
 
@@ -571,7 +571,7 @@ def build_phase6e9_conservative_probe(
         "starts_service": False,
         "recommended_hpc_full_eval": True,
         "fastapi_request_body_probe": {
-            "query": "FastAPI 里 Request Body 如何定义？",
+            "query": "FastAPI Request Body definition",
             "inferred_query_type": fastapi_probe_decision.query_type.value,
             "selected_policy": fastapi_probe_decision.policy.name.value,
             "conservative_gate_enabled": fastapi_probe_decision.gated_policy_enabled,

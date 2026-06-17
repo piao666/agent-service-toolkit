@@ -1,0 +1,285 @@
+{
+  "phase": "6E-11",
+  "target_overlay_types": [
+    "citation_required_query",
+    "code_api_config",
+    "exact_metadata_lookup",
+    "short_keyword"
+  ],
+  "noop_types": [
+    "agent_rag_concept",
+    "ambiguous_query",
+    "en_api_doc",
+    "mixed_zh_en_api",
+    "multi_hop_lookup",
+    "negative_banned_source",
+    "zh_knowledge"
+  ],
+  "phases": {
+    "6E-6_global": {
+      "label": "Phase 6E-6 global query_type_aware",
+      "59_baseline_bad": 40,
+      "59_policy_bad": 33,
+      "59_bad_delta": -7,
+      "240_baseline_bad": 62,
+      "240_policy_bad": 71,
+      "240_bad_delta": 9,
+      "240_source_hit_delta": -0.0479,
+      "per_type_240": {
+        "agent_rag_concept": {
+          "baseline_source_hit": 0.9,
+          "policy_source_hit": 0.95,
+          "source_hit_delta": 0.05,
+          "direction": "improve"
+        },
+        "ambiguous_query": {
+          "baseline_source_hit": 0.4444,
+          "policy_source_hit": 0.4444,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "citation_required_query": {
+          "baseline_source_hit": 0.6,
+          "policy_source_hit": 0.55,
+          "source_hit_delta": -0.05,
+          "direction": "degrade"
+        },
+        "code_api_config": {
+          "baseline_source_hit": 0.65,
+          "policy_source_hit": 0.55,
+          "source_hit_delta": -0.1,
+          "direction": "degrade"
+        },
+        "en_api_doc": {
+          "baseline_source_hit": 1.0,
+          "policy_source_hit": 1.0,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "exact_metadata_lookup": {
+          "baseline_source_hit": 0.45,
+          "policy_source_hit": 0.75,
+          "source_hit_delta": 0.3,
+          "direction": "improve"
+        },
+        "mixed_zh_en_api": {
+          "baseline_source_hit": 0.85,
+          "policy_source_hit": 0.15,
+          "source_hit_delta": -0.7,
+          "direction": "degrade"
+        },
+        "multi_hop_lookup": {
+          "baseline_source_hit": 0.55,
+          "policy_source_hit": 0.55,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "negative_banned_source": {
+          "baseline_source_hit": 0.0,
+          "policy_source_hit": 0.0,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "phase6c_bad_case_regression": {
+          "baseline_source_hit": 0.3,
+          "policy_source_hit": 0.2,
+          "source_hit_delta": -0.1,
+          "direction": "degrade"
+        },
+        "short_keyword": {
+          "baseline_source_hit": 0.75,
+          "policy_source_hit": 0.85,
+          "source_hit_delta": 0.1,
+          "direction": "improve"
+        },
+        "zh_knowledge": {
+          "baseline_source_hit": 0.95,
+          "policy_source_hit": 0.95,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        }
+      }
+    },
+    "6E-8_gated": {
+      "label": "Phase 6E-8 gated query_type_aware",
+      "59_baseline_bad": 39,
+      "59_policy_bad": 33,
+      "59_bad_delta": -6,
+      "240_baseline_bad": 61,
+      "240_policy_bad": 72,
+      "240_bad_delta": 11,
+      "240_source_hit_delta": -0.0527,
+      "per_type_240": {
+        "agent_rag_concept": {
+          "baseline_source_hit": 0.9,
+          "policy_source_hit": 0.95,
+          "source_hit_delta": 0.05,
+          "direction": "improve"
+        },
+        "ambiguous_query": {
+          "baseline_source_hit": 0.4444,
+          "policy_source_hit": 0.4444,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "citation_required_query": {
+          "baseline_source_hit": 0.65,
+          "policy_source_hit": 0.55,
+          "source_hit_delta": -0.1,
+          "direction": "degrade"
+        },
+        "code_api_config": {
+          "baseline_source_hit": 0.65,
+          "policy_source_hit": 0.55,
+          "source_hit_delta": -0.1,
+          "direction": "degrade"
+        },
+        "en_api_doc": {
+          "baseline_source_hit": 1.0,
+          "policy_source_hit": 1.0,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "exact_metadata_lookup": {
+          "baseline_source_hit": 0.45,
+          "policy_source_hit": 0.75,
+          "source_hit_delta": 0.3,
+          "direction": "improve"
+        },
+        "mixed_zh_en_api": {
+          "baseline_source_hit": 0.85,
+          "policy_source_hit": 0.15,
+          "source_hit_delta": -0.7,
+          "direction": "degrade"
+        },
+        "multi_hop_lookup": {
+          "baseline_source_hit": 0.55,
+          "policy_source_hit": 0.55,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "negative_banned_source": {
+          "baseline_source_hit": 0.0,
+          "policy_source_hit": 0.0,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "phase6c_bad_case_regression": {
+          "baseline_source_hit": 0.3,
+          "policy_source_hit": 0.2,
+          "source_hit_delta": -0.1,
+          "direction": "degrade"
+        },
+        "short_keyword": {
+          "baseline_source_hit": 0.75,
+          "policy_source_hit": 0.85,
+          "source_hit_delta": 0.1,
+          "direction": "improve"
+        },
+        "zh_knowledge": {
+          "baseline_source_hit": 0.95,
+          "policy_source_hit": 0.95,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        }
+      }
+    },
+    "6E-10_conservative": {
+      "label": "Phase 6E-10 conservative gate",
+      "59_baseline_bad": 40,
+      "59_policy_bad": 40,
+      "59_bad_delta": 0,
+      "240_baseline_bad": 59,
+      "240_policy_bad": 75,
+      "240_bad_delta": 16,
+      "240_source_hit_delta": -0.067,
+      "per_type_240": {
+        "agent_rag_concept": {
+          "baseline_source_hit": 0.95,
+          "policy_source_hit": 0.85,
+          "source_hit_delta": -0.1,
+          "direction": "degrade"
+        },
+        "ambiguous_query": {
+          "baseline_source_hit": 0.4444,
+          "policy_source_hit": 0.4444,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "citation_required_query": {
+          "baseline_source_hit": 0.6,
+          "policy_source_hit": 0.4,
+          "source_hit_delta": -0.2,
+          "direction": "degrade"
+        },
+        "code_api_config": {
+          "baseline_source_hit": 0.65,
+          "policy_source_hit": 0.4,
+          "source_hit_delta": -0.25,
+          "direction": "degrade"
+        },
+        "en_api_doc": {
+          "baseline_source_hit": 1.0,
+          "policy_source_hit": 1.0,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "exact_metadata_lookup": {
+          "baseline_source_hit": 0.45,
+          "policy_source_hit": 0.6,
+          "source_hit_delta": 0.15,
+          "direction": "improve"
+        },
+        "mixed_zh_en_api": {
+          "baseline_source_hit": 0.85,
+          "policy_source_hit": 0.5,
+          "source_hit_delta": -0.35,
+          "direction": "degrade"
+        },
+        "multi_hop_lookup": {
+          "baseline_source_hit": 0.55,
+          "policy_source_hit": 0.65,
+          "source_hit_delta": 0.1,
+          "direction": "improve"
+        },
+        "negative_banned_source": {
+          "baseline_source_hit": 0.0,
+          "policy_source_hit": 0.0,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        },
+        "phase6c_bad_case_regression": {
+          "baseline_source_hit": 0.3,
+          "policy_source_hit": 0.2,
+          "source_hit_delta": -0.1,
+          "direction": "degrade"
+        },
+        "short_keyword": {
+          "baseline_source_hit": 0.75,
+          "policy_source_hit": 0.8,
+          "source_hit_delta": 0.05,
+          "direction": "improve"
+        },
+        "zh_knowledge": {
+          "baseline_source_hit": 0.95,
+          "policy_source_hit": 0.95,
+          "source_hit_delta": 0.0,
+          "direction": "stable"
+        }
+      }
+    }
+  },
+  "overall": {
+    "consistent_improvers": [
+      "exact_metadata_lookup",
+      "short_keyword"
+    ],
+    "consistent_degraders": [
+      "citation_required_query",
+      "code_api_config",
+      "mixed_zh_en_api",
+      "phase6c_bad_case_regression"
+    ],
+    "root_cause": "sparse_first_bm25 policy 替换 baseline dense，导致 mixed_zh_en_api 类型崩溃 (source_hit 0.85→0.15)，同时 code_api_config 和 citation_required_query 也未受益。6E-10 conservative gate 过于保守，丢失了 59-case 改善，同时未能阻止 240-case 退化。"
+  }
+}

@@ -9,6 +9,7 @@ from rag.retrieval_policy import (
     RetrievalPolicyName,
     citation_evidence_check,
     decide_gated_retrieval_policy,
+    decide_overlay,
     dense_sparse_fusion_score,
     metadata_first_score,
     sparse_first_score,
@@ -272,3 +273,72 @@ def retrieve_with_policy(
         "policy_result_count": len(merged_results),
     }
     return merged_results, policy_debug
+
+
+# ═══════════════════════════════════════════════════════════════
+# Phase 6E-11: Targeted Overlay — always baseline, overlay only on strong signal
+# ═══════════════════════════════════════════════════════════════
+
+def retrieve_with_overlay(
+    query: str,
+    top_k: int | None = None,
+    persist_dir: str | Path | None = None,
+    collection_name: str | None = None,
+    embeddings: Embeddings | None = None,
+) -> tuple[list[RetrievalResult], dict[str, Any]]:
+    """Targeted overlay retrieval: baseline is always preserved.
+
+    Simplified Phase 6E-11 implementation:
+    - Always runs standard baseline dense retrieval (proven working)
+    - Adds overlay decision metadata for analysis
+    - Non-target queries get pure baseline passthrough
+    - Only strong-signal queries get auxiliary boost (via score adjustment)
+    """
+    resolved_top_k = top_k or rag_settings.RAG_DEFAULT_TOP_K
+
+    # ── Step 1: Always run standard baseline dense retrieval ──
+    baseline_results = retrieve(
+        query,
+        top_k=resolved_top_k,
+        persist_dir=persist_dir,
+        collection_name=collection_name,
+    )
+
+    # ── Step 2: Decide overlay (metadata only, no retrieval change) ──
+    decision = decide_overlay(query)
+    overlay_debug: dict[str, Any] = {
+        "policy_mode": "targeted_overlay",
+        "overlay_enabled": decision.overlay_enabled,
+        "overlay_type": decision.overlay_type,
+        "baseline_noop": decision.baseline_noop,
+        "overlay_reason": decision.reason,
+        "metadata_overlay": decision.metadata_overlay,
+        "sparse_overlay": decision.sparse_overlay,
+        "citation_overlay": decision.citation_overlay,
+        "baseline_result_count": len(baseline_results),
+        "selected_policy": decision.overlay_type if decision.overlay_enabled else "baseline_dense",
+        "fallback_to_baseline": decision.baseline_noop,
+    }
+
+    # ── Step 3: If overlay enabled, boost relevant results ──
+    if decision.overlay_enabled and baseline_results:
+        query_lower = query.lower()
+        for r in baseline_results:
+            chunk_text = (getattr(r, "content_preview", "") or "").lower()
+            metadata = getattr(r, "metadata", {}) or {}
+            meta_text = " ".join(str(v) for v in metadata.values() if isinstance(v, str)).lower()
+            combined = chunk_text + " " + meta_text
+            boost = 0.0
+            if decision.metadata_overlay:
+                hits = sum(1 for t in ["source_id", "chunk_id", "doc_type", "title"] if t in combined)
+                boost = min(hits * 0.08, 0.24)
+            elif decision.sparse_overlay:
+                q_terms = set(query_lower.split())
+                hits = sum(1 for t in q_terms if t in combined)
+                boost = min(hits * 0.06, 0.18)
+            if boost > 0:
+                current = getattr(r, "relevance_score", 0.5) or 0.5
+                r.relevance_score = min(current + boost, 1.0)
+        overlay_debug["boost_applied"] = True
+
+    return baseline_results[:resolved_top_k], overlay_debug

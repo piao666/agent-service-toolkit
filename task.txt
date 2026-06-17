@@ -1463,3 +1463,114 @@ Phase 6E-9 boundaries preserved:
 - No long-running service was started.
 - No Phase 6E-8 original results were overwritten.
 - This phase does not claim production readiness or that all bad cases are solved.
+
+Phase 6E-11: Targeted Overlay Retrieval Policy
+----------------------------------------------
+Status:
+- HPC 59-case quick eval completed.
+- 240-case full eval was not run because the quick eval did not meet the entry threshold.
+
+Baseline 59-case quick eval:
+- `source_hit_rate=0.2321`
+- `keyword_hit_rate=0.9464`
+- `bad_case_count=40`
+- `avg_latency_ms=1893`
+- `error_count=0`
+- `timeout_count=0`
+
+Targeted overlay 59-case quick eval:
+- `source_hit_rate=0.25`
+- `keyword_hit_rate=0.9464`
+- `bad_case_count=39`
+- `avg_latency_ms=1767`
+- `error_count=0`
+- `timeout_count=0`
+
+Phase 6E-11 judgment:
+- `targeted_overlay` reduced `bad_case_count` from 40 to 39, only one fewer bad case.
+- It did not meet the quick-eval threshold of reducing at least five bad cases.
+- It should be recorded as a negative or weak-improvement experiment, not a successful final
+  retrieval optimization strategy.
+- Phase 6E-11 does not claim that retrieval issues are solved.
+- Phase 6E-11 does not claim 240-case improvement because no 240-case full eval was run.
+
+Current retrieval policy status after Phase 6E-11:
+- The strongest historical policy remains Phase 6E-6 global `query_type_aware`, which improved the
+  59-case set but degraded the 240-case full set.
+- Phase 6E-8 gated policy and Phase 6E-10 conservative policy did not solve the 240-case regression.
+- Phase 6E-11 `targeted_overlay` is safer but too weak to justify full adoption.
+
+Next decision:
+- Do not keep blindly tuning retrieval policy in the same direction.
+- Whether to enter Phase 6F or first strengthen the lower-level retrieval structure should be a
+  manual decision.
+
+Phase 6E Final Closure: Retrieval Policy Exploration Summary
+------------------------------------------------------------
+Status:
+- Phase 6E Final Closure completed as a documentation and task-state sync step.
+- No Phase 6F work has started.
+- No new evaluation was run in this closure step.
+- No production Agent/API code was changed in this closure step.
+- No LLM was called and no Chroma data was written in this closure step.
+
+Phase 6E explored several retrieval-policy variants:
+- Phase 6E-6: global `query_type_aware`
+- Phase 6E-8: gated policy
+- Phase 6E-10: conservative gate
+- Phase 6E-11: targeted overlay
+- Phase 6E-12: bad-case root cause audit
+
+Phase 6E-6 result:
+- 59-case: baseline `bad_case_count=40`, global `query_type_aware bad_case_count=33`.
+- 240-case: baseline `bad_case_count=62`, global `query_type_aware bad_case_count=71`.
+- Conclusion: global `query_type_aware` improves the targeted bad-case set, but it cannot replace
+  baseline globally because the 240-case full evaluation regresses.
+
+Phase 6E-8 result:
+- 59-case: baseline `bad_case_count=39`, gated `bad_case_count=33`.
+- 240-case: baseline `bad_case_count=61`, gated `bad_case_count=72`.
+- Conclusion: gated policy reproduced the same tradeoff: targeted improvement, full-set regression.
+
+Phase 6E-10 result:
+- 59-case: baseline `bad_case_count=40`, conservative `bad_case_count=40`.
+- 240-case: baseline `bad_case_count=59`, conservative `bad_case_count=75`.
+- Conclusion: conservative gate was too conservative for the targeted set and still regressed on the
+  240-case full set.
+
+Phase 6E-11 result:
+- 59-case quick eval: baseline `source_hit_rate=0.2321`, targeted overlay `source_hit_rate=0.25`.
+- 59-case quick eval: baseline `bad_case_count=40`, targeted overlay `bad_case_count=39`.
+- Conclusion: targeted overlay is safer but too weak. It did not meet the threshold for 240-case full
+  evaluation and should be recorded as a negative or weak-improvement experiment.
+
+Phase 6E-12 root cause audit:
+- Total analyzed cases: 59.
+- `expected_source_exists_but_not_retrieved`: 43 cases, 73%.
+- `chunk_too_noisy_or_too_broad`: 31 cases, 53%.
+- `needs_metadata_index`: 22 cases, 37%.
+- `chunk_too_small_or_context_missing`: 7 cases, 12%.
+- `evaluator_too_strict_or_misaligned`: 6 cases, 10%.
+- `needs_citation_verifier`: 5 cases, 8%.
+- `needs_code_symbol_index`: 4 cases, 7%.
+- `needs_query_decomposition`: 3 cases, 5%.
+- `corpus_expansion`: 0 cases.
+
+Final Phase 6E conclusion:
+- The main issue is not that the corpus is completely missing.
+- Most expected sources exist but are not accurately retrieved.
+- Pure retrieval-policy tuning has reached a bottleneck.
+- Policy-only changes are conservatively expected to fix only about 7 to 10 bad cases.
+- Phase 6E does not claim production readiness.
+- Phase 6E does not claim all bad cases are solved.
+- Phase 6E does not claim 240-case improvement.
+- Phase 6E does not claim `bad_case_count` is below 30.
+
+Recommended Phase 6F direction:
+- Structured Retrieval Infrastructure.
+- Candidate work items:
+  - metadata index
+  - code/config symbol index
+  - citation verifier
+  - chunk/evidence cleanup
+  - query decomposition for multi-hop cases
