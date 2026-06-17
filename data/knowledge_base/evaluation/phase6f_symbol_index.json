@@ -1,0 +1,5663 @@
+[
+  {
+    "symbol_type": "api_path",
+    "value": "/agent",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0004",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Overview [Try the app!](https://agent-service-toolkit.streamlit.app/) Quickstart At least one LLM [SECRET_PLACEHOLDER] is required"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "axis=1",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "batch_size:样本数",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0066",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用named_parameters()查看各层参数 使用state_dict()查看各层参数 input_size:特征数，batch_size:样本数 构建模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "embedding_dim:词向量的维度",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0104",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "num_embeddings:词的数量 embedding_dim:词向量的维度 设置随机种子 自定义停用词和标点符号"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "hidden_size:隐藏状态的特征数量",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0106",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "input_size:输入数据的特征数量 hidden_size:隐藏状态的特征数量 num_layers:隐藏层的层数，如果设置多个层，前一个隐藏层的输出作为下一个隐藏层的输入 input:输入数据[seq_len序列长度, batch_size批量大小, input_size]"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "https://agent-service-toolkit.streamlit.app/",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0004",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Overview [Try the app!](https://agent-service-toolkit.streamlit.app/) Quickstart At least one LLM [SECRET_PLACEHOLDER] is required"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "in_channels:输入通道数",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0093",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "in_channels:输入通道数 out_channels:输出通道数 kernel_size:卷积核大小 stride:步幅"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "include_answer=False",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0052",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "使⽤ uv 的环境 1 使⽤ tavily 作为 web 搜索⼯具 初始化⼯具，并设置参数，具体参数设置参考官⽹ # include_answer=False,"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "input:输入数据",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0106",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "input_size:输入数据的特征数量 hidden_size:隐藏状态的特征数量 num_layers:隐藏层的层数，如果设置多个层，前一个隐藏层的输出作为下一个隐藏层的输入 input:输入数据[seq_len序列长度, batch_size批量大小, input_size]"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "input_size:特征数",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0066",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用named_parameters()查看各层参数 使用state_dict()查看各层参数 input_size:特征数，batch_size:样本数 构建模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "input_size:输入数据的特征数量",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0105",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "初始化嵌入层 打印词向量 input_size:输入数据的特征数量",
+    "source_ids": [
+      "local_deep_learning_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "kernel_size:卷积核大小",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0093",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "in_channels:输入通道数 out_channels:输出通道数 kernel_size:卷积核大小 stride:步幅"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "num_embeddings:词的数量",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0104",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "num_embeddings:词的数量 embedding_dim:词向量的维度 设置随机种子 自定义停用词和标点符号"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "num_layers:隐藏层的层数",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0106",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "input_size:输入数据的特征数量 hidden_size:隐藏状态的特征数量 num_layers:隐藏层的层数，如果设置多个层，前一个隐藏层的输出作为下一个隐藏层的输入 input:输入数据[seq_len序列长度, batch_size批量大小, input_size]"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "out_channels:输出通道数",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0093",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "in_channels:输入通道数 out_channels:输出通道数 kernel_size:卷积核大小 stride:步幅"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "preview: docx",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0000",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX",
+    "source_ids": [
+      "local_deep_learning_course_docx",
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "preview: html",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0000",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI",
+    "source_ids": [
+      "fastapi_docs",
+      "kubernetes_cn_docs"
+    ]
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "preview: json",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_json_001_0000",
+    "title": "Repository JSON sample",
+    "section_path": "Repository JSON sample",
+    "source_ids": [
+      "repo_project_files"
+    ]
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "preview: markdown",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0000",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "🧰 AI Agent Service Toolkit",
+    "source_ids": [
+      "repo_project_files"
+    ]
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "preview: pdf",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0000",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF",
+    "source_ids": [
+      "local_ai_agent_course_pdf"
+    ]
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "preview: yaml",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0000",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample",
+    "source_ids": [
+      "repo_project_files"
+    ]
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=001b49c7be8b",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0002",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0090b4c26e13",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0066",
+    "title": "Local NLP Course DOCX",
+    "section_path": "model.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=00aaad49afca",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0138",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0103cc1c3d04",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0001",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0107fed4eef0",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0013",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0251cb16e894",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0132",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0256f5f5ca3f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0150",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0281c59d1a17",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0057",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=02db91a2f507",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0000",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0303a5b41443",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0041",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=03bf8bd37de4",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0034",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载 tokenizer 创建并加载模型 更新历史输入 获取预测结果"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=03cbd50f332b",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0112",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=04cc30318a3c",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0002",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=05a4dac4b757",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0058",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "损失函数和优化器 模型训练 每次训练一个batch大小的数据"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=06084995785a",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0106",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=063a4111494a",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0031",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "阿⾥ OSS 1"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=064b3e53a0bc",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0007",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=069481557728",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0005",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0745aef17013",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0113",
+    "title": "Local NLP Course DOCX",
+    "section_path": "输出维度是 hidden + context 拼接"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=074c35cca86c",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0088",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "构建数据集 返回训练集，测试集，特征数量 搭建模型 损失函数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=08171894f96c",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0012",
+    "title": "Local NLP Course DOCX",
+    "section_path": "DatasetDict({"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=084eceaa97ce",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0011",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=08f9cfbea8b2",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0064",
+    "title": "Local NLP Course DOCX",
+    "section_path": "dataset.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=094135b0635c",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0024",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "5. 创建 Agent"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0a406703c4ad",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0065",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0a9d34cbbb80",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0096",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0aa23788f31d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0128",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0b418411e27f",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0004",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Overview [Try the app!](https://agent-service-toolkit.streamlit.app/) Quickstart At least one LLM [SECRET_PLACEHOLDER] is required"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0b9b0aa0cb1a",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0169",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0d311c27f448",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0003",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0d35c725b8f3",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0070",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0d437ce43e3d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0000",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0d6b7b50d844",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0094",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "初始化卷积核 对输入特征图进行卷积操作 将输出特征图转换为图片 最大池化"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0e578dde8515",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0048",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载 JSONL 数据到内存 构建输入和目标张量 创建数据集实例"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0e8aeed64c0a",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0090",
+    "title": "Local NLP Course DOCX",
+    "section_path": "编码器处理 拼接前向后向隐藏状态 初始化解码器输入和隐藏状态"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0f387649318d",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0001",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=0fe09592f914",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0054",
+    "title": "Local NLP Course DOCX",
+    "section_path": "编码并填充输入文本 转换为张量并移动到设备 获取预测概率 加载 tokenizer"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1095f4c7d2ad",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0018",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "# 其它模型参数 ... 2. 使⽤初始化好的 model 创建智能体 2. 调⽤模型，需要传⼊⼀个消息列表"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=10a77036d361",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0016",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "5. ** 创意搭配：蔬菜鸡⾁卷 **"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1142cd04212f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0002",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=12e4aaf4ef5c",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0048",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "调⽤智能体"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=138b8448cd29",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0089",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1397c960c3cb",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0127",
+    "title": "Local NLP Course DOCX",
+    "section_path": "训练相关超参数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=13b77e94eb2a",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0051",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "使⽤ uv 的环境 1"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=14884296a0e8",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0005",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1493d1672c7c",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0067",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=14b711270acc",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0071",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发 普通梯度下降 动量法 绘制等高线图"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=14d792412be1",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0026",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=153086ab4c17",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0019",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1556165f312e",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0004",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=161d156f281f",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0021",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1685b5f527f2",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0018",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path parameters containing paths OpenAPI support"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=16d8f9f6f8ce",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0009",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=16e23a7432c6",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0014",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=172db85c4f91",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0045",
+    "title": "Local NLP Course DOCX",
+    "section_path": "7. 编码测试集并保存 tokenizer.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1767e3189741",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0003",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=17afce975694",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0084",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发 普通梯度下降 Adam Adam手动实现"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=17e80404b310",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0057",
+    "title": "Local NLP Course DOCX",
+    "section_path": "config.py 项目根目录 项目根目录 数据路径"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=180650298fbe",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0036",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "然后，我们就可以创建智能体并设置结构化输出的格式了。"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=18789ac875d3",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0008",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Data validation"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1886cdde94b5",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0062",
+    "title": "Local NLP Course DOCX",
+    "section_path": "7.构建测试集并保存 tokenizer.py 1.获取词表"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1963c489529a",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0000",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "🧰 AI Agent Service Toolkit"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=19d3da881749",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0002",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1ac914af491c",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0007",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1b8bccd4cb39",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0081",
+    "title": "Local NLP Course DOCX",
+    "section_path": "编码并保存测试集 tokenizer.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1ba2e8dbfd82",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0023",
+    "title": "概述 | Kubernetes",
+    "section_path": "Kubernetes 不是什么"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1bae0d5665b5",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0111",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1bbe8e7c7b54",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0090",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1bf2211bc875",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0149",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1c8eaad46e69",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0125",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1da34206dce7",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1db031f1f40c",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0041",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "# 转换消息格式"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1e92ce3ba17f",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0018",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1f884defe86c",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0102",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=1f8bddbd03c7",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0030",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "# 启动命令： python -m app.main"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=201c9109bb50",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0025",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=202930504fee",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0179",
+    "title": "Local NLP Course DOCX",
+    "section_path": "清除历史梯度 模型前向传播 outputs.shape: (batch_size,) 计算损失"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2039d1e5ef35",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0075",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=20533e72aace",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0001",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "[CONFIG_FILE]"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=21330bfa64ab",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0013",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=217e1cbfb4b4",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0015",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "2. ** 鸡胸⾁西兰花炒饭 ** 3. ** 创意搭配：蘑菇鸡⾁蔬菜炖锅 ** 4. ** 三⽂⻥蘑菇意⾯ **"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=21a4576ca039",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0011",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=225c42687f88",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0050",
+    "title": "Local NLP Course DOCX",
+    "section_path": "LSTM 层：提取序列特征 线性层：映射到单输出，用于二分类 嵌入层处理 LSTM 处理序列"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=22addd46929d",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0096",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=23d688a407f3",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0145",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=23efe1198583",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_009_0003",
+    "title": "工作负载 | Kubernetes",
+    "section_path": "调度工作负载 接下来"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=241f2fd37307",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0148",
+    "title": "Local NLP Course DOCX",
+    "section_path": "tokenizer.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2621f7682262",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0059",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2651e31cd5fe",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0076",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=26c577ea755b",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0008",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Key Files Setup and Usage"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2733f9cbcce7",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0020",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "🎯 ** 为什么推荐这道菜？ **"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=27667b1fcf34",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0095",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=276d85fb40df",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0036",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=27bd63bfb0bb",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_json_001_0000",
+    "title": "Repository JSON sample",
+    "section_path": "Repository JSON sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=27d8fc6abd6b",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0185",
+    "title": "Local NLP Course DOCX",
+    "section_path": "config.py 项目根目录 路径设置 训练超参数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2830c99e961c",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0073",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=28de4ea7034f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0157",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=290558a0325e",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0007",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Repository MARKDOWN sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=291cfaad4940",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0017",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Projects built with or inspired by agent-service-toolkit"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2acfd931c06e",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0063",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2bb3ce7a857b",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0034",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2c80278b0f28",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0019",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "**2. 调味蔬菜 ** **3. 组装烤盘 ** **4. 烘烤 ** **5. 出炉与享⽤ **"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2c938c7ec77c",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0003",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2ca87a5351e3",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0015",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "使⽤ Model 类初始化模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2cdee07f7eec",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0023",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Role Example"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2d17a9029719",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0013",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2d56c97988e1",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0018",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2ddbff8d375b",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0007",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2e1cbede754d",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0003",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2ea7d614b3d2",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0012",
+    "title": "Request Body - FastAPI",
+    "section_path": "Use the model Request body + path parameters"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2edca6e535a2",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0083",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2f83d66dbff6",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0017",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=2ffc9fb8d08e",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0024",
+    "title": "Local NLP Course DOCX",
+    "section_path": "TensorBoard 日志 训练一个 epoch 记录到 TensorBoard 保存最优模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3033d681a38f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0158",
+    "title": "Local NLP Course DOCX",
+    "section_path": "predict.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=30a25c581615",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0146",
+    "title": "Local NLP Course DOCX",
+    "section_path": "process.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=30cef3746012",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0015",
+    "title": "Local NLP Course DOCX",
+    "section_path": "1. 加载预训练的 Word2Vec 模型 2. 构建词表和词向量矩阵"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3194c824715c",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0077",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=324fa5858a3d",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0003",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Overview"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=32c4e67a4c99",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0134",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=32c899cb0593",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0011",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Handling Private Credential files Docker Setup"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=32eac80f6fce",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0133",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3328945c2fc5",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0002",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Repository MARKDOWN sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=336278733bf1",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0013",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "1. ** 三⽂⻥西兰花烤盘料理 **"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=338e43f8d4fd",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0016",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3433b3aeac11",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0008",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=348189ff38fb",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0080",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=353fcd1ce66c",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0004",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=35b9321dcde1",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0078",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=35c735155bae",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0010",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Pydantic Order matters"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=35f8ecc88d6d",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0036",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "加载环境变量 web 搜索⼯具，使⽤ tavily 作为 web 搜索⼯具 多模态模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=36237d83d17d",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0003",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=37a6534f1155",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0025",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=388821b4c8ba",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0073",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=38d89180299c",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0091",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "打印训练损失，验证损失"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3924ae8e670d",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0021",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=39d02cf26e18",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0007",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3a6c61435f69",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0069",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3adc771c2722",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0050",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "sum() 求和 mean() 求均值) max() 求最大值 argmin() 求最小值索引"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3b02c62a1791",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0012",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3b4e94dc6d91",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0097",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "读取数据"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3b982d8389c5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0034",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "6. 创建 Agent"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3bc8e0fad551",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0040",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "流式调⽤ Agent 清空会话 查询会话历史 # 根据 thread_id 查询 checkpoint"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3bd153e0e53e",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0004",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "加载环境变量 web 搜索⼯具，使⽤ tavily 作为 web 搜索⼯具"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3c3250e44d4a",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0110",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "反向传播 累加损失 生成 如果起始token在词典中，添加到结果中"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3c34b46567e7",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0107",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "数据预处理 逐行处理 按字分割并去重 按字保存诗"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3ec0f4af3eb8",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0075",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=3f6647370905",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0014",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=400151dc48f5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0006",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=406d950ccc92",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0117",
+    "title": "Local NLP Course DOCX",
+    "section_path": "decoder_outputs.shape: (batch_size, seq_len-1, vocab_size) decoder_targets.shape: (batch_size, seq_len-1) 设备 数据集"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=40a44105bc57",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0170",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=40b158b90d94",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0025",
+    "title": "Local NLP Course DOCX",
+    "section_path": "调用 jieba 分词 收集所有唯一词 将 <unk> 放在词表首位 保存词表到文件"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=416df64fdd33",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0018",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=41b02c7d36b0",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0084",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=41b0cd8fc052",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0015",
+    "title": "Request Body - FastAPI",
+    "section_path": "Without Pydantic"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=41b2d88cbfef",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0006",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载模型 加载分词器和模型 加载分词器和模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=43054686bdf2",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0033",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=43d587dcf1e4",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0008",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=44941dd0a4f7",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0053",
+    "title": "Local NLP Course DOCX",
+    "section_path": "predict.py 前向传播获取 logits 使用 sigmoid 将 logits 转换为概率"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=44b519b6214b",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0006",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=44e070dced96",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0026",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=45df51f2648b",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0032",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=464208bc88a5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0072",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4644bfd03a27",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0033",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "⾝份 指令 创建智能体 ⾝份"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=464dd58989f3",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0073",
+    "title": "Local NLP Course DOCX",
+    "section_path": "config.py 配置文件，定义项目路径和超参数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=479770c6c69f",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0003",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=47b95baca55e",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0040",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=47eb32fdc308",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0014",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Declare a Check the docs"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=47f42ddd7245",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0130",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=481c80bea22a",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0011",
+    "title": "Local NLP Course DOCX",
+    "section_path": "5. 模型推理（不计算梯度） 6. 查看输出张量结构"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=48636e5a3b01",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0019",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4937d8639a45",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0144",
+    "title": "Local NLP Course DOCX",
+    "section_path": "初始化 Transformer 调用编码器 调用解码器（逐步生成）"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=49f1bbeb1eb1",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0009",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4a11e40d6b80",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0038",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4a4b75fe50db",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0004",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4a8f5310b845",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0180",
+    "title": "Local NLP Course DOCX",
+    "section_path": "初始化模型并移动到设备 使用 Adam 优化器 使用带 sigmoid 的二分类交叉熵损失函数 初始化 TensorBoard 写入器"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4ad5c6c6cb8c",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0010",
+    "title": "Local NLP Course DOCX",
+    "section_path": "1. 加载模型和分词器 2. 准备批量文本 3. 编码文本为模型输入格式 5. 模型推理（不计算梯度）"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4b13be73e479",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0095",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4b90dd5e9753",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0042",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4bb5edf83740",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0013",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Repository MARKDOWN sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4cffbe3c1127",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0027",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4de89e71c05d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0131",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4df37eafba07",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0080",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4df5d06cabef",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0016",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4df6383f1feb",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0046",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用from_numpy()方法将ndarray转换为Tensor，共享内存 使用copy()方法避免共享内存 使用torch.tensor()将ndarray转换为Tensor"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4e3b70c3a9c6",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0071",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4e744f436fb7",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0021",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4e9bea109fd3",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0043",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4f526b08f226",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0036",
+    "title": "Local NLP Course DOCX",
+    "section_path": "执行评估 输出评估结果 config.py 项目根目录"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4f9e8322c912",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0017",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4faa461a48c5",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0078",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发 普通梯度下降"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4fac985160ab",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0135",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=4ff5df96a0f3",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0032",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=500762ff0557",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0002",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "阿⾥百炼 web_search 引擎"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=506749596217",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0067",
+    "title": "Local NLP Course DOCX",
+    "section_path": "train.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=50e22050b389",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0001",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Repository MARKDOWN sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=512dcd5f523e",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0040",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "创建指定形状的张量，默认类型为float32 也可以用来创建指定内容的张量 创建int32类型的张量 元素类型不匹配则会进行类型转换"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=51768c162d9b",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0000",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5220560f2493",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0000",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=524d50afaebe",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0007",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path parameters with types Data"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=526b4b849c7a",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0033",
+    "title": "Local NLP Course DOCX",
+    "section_path": "前向传播获取输出 logits 选取 top-5 概率最高的 token 索引 编码文本为 token 索引 转换为张量并移动到设备"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=52f1a088d401",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0152",
+    "title": "Local NLP Course DOCX",
+    "section_path": "model.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=52f937496cc2",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0074",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=54431987bc56",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0167",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=54749132e562",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0039",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "⾸先，我们定义⼀个类，⽤来封装模型要输出的数据： 然后，我们就可以创建智能体并设置结构化输出的格式了。"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=548eb1ae7cc9",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0056",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "每⽇預報 . ## 太陽和⽉亮 . ## 空氣品質 . ## 過敏展望 . ## 附近地⽅ :.', 创建智能体，使⽤预定义⼯具 tavily 调⽤⼯具"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=54ec30195da0",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0014",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request body + path + query parameters"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=550368bfc93a",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0090",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "反向传播 累加损失 打印进度条 验证过程"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5517049ae04d",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0064",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=55d2d189f4ae",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0165",
+    "title": "Local NLP Course DOCX",
+    "section_path": "训练相关超参数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5608edd2067b",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0022",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=56347755873d",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0010",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5737181a4333",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0031",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=57d70dfe543a",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0000",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5857bccb71e1",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0019",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=59d266c4f444",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0041",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "1. 使⽤ tool 装饰器定义⼯具"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5a898d0105f8",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0045",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用type方法修改张量的类型 使用double方法修改张量的类型 使用long方法修改张量的类型 使用numpy()方法将Tensor转换为ndarray，共享内存"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5abcdae83a75",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0042",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5b5234f1c612",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0092",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5b85d6fa5a66",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0181",
+    "title": "Local NLP Course DOCX",
+    "section_path": "predict.py 对一个 batch 的输入进行预测，返回 sigmoid 概率 input_ids.shape: (batch_size, seq_len) attention_mask.shape: (batch_size, seq_len)"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5c05eb8b20cc",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0087",
+    "title": "Local NLP Course DOCX",
+    "section_path": "双向 GRU 嵌入层 GRU"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5c0f7023aed7",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0017",
+    "title": "Local NLP Course DOCX",
+    "section_path": "csv json 加载 CSV 文件 加载 JSON 文件"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5c7c10c6eb41",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0163",
+    "title": "Local NLP Course DOCX",
+    "section_path": "设备 tokenizer 模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5cc8800d6bfb",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0164",
+    "title": "Local NLP Course DOCX",
+    "section_path": "数据 config.py 获取项目根目录 定义项目中常用路径"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5cc96e616969",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0119",
+    "title": "Local NLP Course DOCX",
+    "section_path": "predict.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5d555d71cdf0",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0024",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5d9a56fedd83",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0009",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5df73448f5d8",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0027",
+    "title": "Local NLP Course DOCX",
+    "section_path": "dataset.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5e68d920d4ae",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0055",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "输入x 目标值y 初始化权重w 初始化偏置b"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5e85bf0aaa2c",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0009",
+    "title": "Request Body - FastAPI",
+    "section_path": "Declare it as a parameter Results"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5ecdc57128d7",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0013",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5f7c0b4b36f9",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0026",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=5f89ed83dc21",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0088",
+    "title": "Local NLP Course DOCX",
+    "section_path": "GRU 线性层：映射到词表概率分布"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6016721d23ee",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0029",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=603e8314589d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0122",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6103aeb22c6a",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0034",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "⽰例 创建智能体 ⾝份 指令"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=612a1ef687fa",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0038",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=626746e85d56",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0005",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=62af42a00949",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0042",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "2. 创建智能体，并绑定⼯具 3. 调⽤ Agent"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=62dcfa9f4615",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0051",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "argmin() 求最小值索引 std() 求标准差 unique() 去重 sort() 排序"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=63dd710fec02",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_json_001_0001",
+    "title": "Repository JSON sample",
+    "section_path": "Repository JSON sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=63fc6f8950e4",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0178",
+    "title": "Local NLP Course DOCX",
+    "section_path": "outputs.last_hidden_state.shape: (batch_size, seq_len, hidden_size) 提取 [CLS] token（第一个位置）的输出向量 通过线性层生成 logits train.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6429d142a56b",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0114",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6458718885cf",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0098",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "⾃动建表 创建 agent"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=64c07578e4a7",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0085",
+    "title": "Local NLP Course DOCX",
+    "section_path": "dataset.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=64ec6cbcadd3",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0176",
+    "title": "Local NLP Course DOCX",
+    "section_path": "dataset.py 设置为 PyTorch 格式，列自动转换为 tensor 数据加载测试入口 model.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6509c7753f99",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0013",
+    "title": "Local NLP Course DOCX",
+    "section_path": "DatasetDict({ train: Dataset(...), test: Dataset(...) })"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=652738eae658",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0012",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6560c85c7f80",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0029",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "初始化⽇志配置 初始化 FastAPI ... 中间代码略 ..."
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=663270a39406",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0016",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=667a91509a2a",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0044",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=668fd015fe7b",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0007",
+    "title": "Request Body - FastAPI",
+    "section_path": "Import Pydantic's Create your data model"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=677c6f563408",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0056",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "分离y来返回一个新变量u 梯度不会向后流经u到x 反向传播函数计算z=u*x关于x的偏导数时将u作为常数处理，而不是z=x*x*x关于x的偏导数 tensor([[True, True],"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=679bbc0c6ae7",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0074",
+    "title": "Local NLP Course DOCX",
+    "section_path": "config.py 配置文件，定义项目路径和超参数 项目根目录 数据路径"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=67ef03aa3108",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0043",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.full(size,fill_value) 创建指定形状的按指定值填充的张量 torch.empty_like(input) 创建与给定张量形状相同的未初始化的张量 torch.eye(n) 创建n*n的单位矩阵 torch.eye(n, m) 按指定的行和列创建"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=68ed0c6e5ddb",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0066",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用named_parameters()查看各层参数 使用state_dict()查看各层参数 input_size:特征数，batch_size:样本数 构建模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=68fb83fe4fa6",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0028",
+    "title": "Local NLP Course DOCX",
+    "section_path": "model.py 嵌入层：将 token 索引映射为稠密向量 RNN：处理序列数据，提取上下文特征"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=693ccfdf24c7",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0037",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6a4d9c3fb499",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0071",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6aac63c32c50",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0079",
+    "title": "Local NLP Course DOCX",
+    "section_path": "process.py 读取原始数据文件 数据清洗：去除空值和空字符串"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6afe674470c5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0101",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "创建 agent 制造⻓会话历史 测试效果"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6b2be2b467ea",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0039",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "创建标量张量 使用列表创建张量 使用numpy创建张量 创建指定形状的张量，默认类型为float32"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6b6b5e9c0c60",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0000",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6bb185bd6779",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0005",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6bf09dfe4125",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0172",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6c11d9979050",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0010",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6c18121802db",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0018",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载 JSON 文件 训练集DataLoader"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6c5b08519d17",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0001",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6caaaa77e049",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0019",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6ccb04f18482",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0110",
+    "title": "Local NLP Course DOCX",
+    "section_path": "model.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6cd5f46006b8",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0011",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6d039e8de0c4",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0109",
+    "title": "Local NLP Course DOCX",
+    "section_path": "dataset.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6d0a26d313b4",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0013",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Declare a"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6d5c10ac450e",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0039",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6d96f9b7dd59",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0093",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "in_channels:输入通道数 out_channels:输出通道数 kernel_size:卷积核大小 stride:步幅"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6db6b8ca78fb",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0098",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "读取数据 将数据转换为张量，原数据形状为n×1×784，转换为n×1×28×28的张量 构建数据集 搭建模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6e135a5d43d4",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0108",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6e3696c191cf",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0012",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "导⼊ Langchain 的初始化模型的函数 加载环境变量 调⽤ init_chat_model 函数初始化模型，参数 model ⽤来指定模型名称， Langchain 会根据模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=6f29b97c7bc1",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0004",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=709b05bac6be",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0005",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "连接 sqlite 初始化 checkpointer ⾃动建表"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=713f2d4c9b1d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0059",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7170eb785d22",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0020",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=71c14016ffe6",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0102",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=71d94db4ea4c",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0021",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=721ad0138874",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0008",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=722f60b282d3",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0008",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7334db0c8b6e",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0052",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "取 第0维第0，第1维第1、2 和 第0维第1，第1维第1、2 取 第2维第0大于5的，返回(dim0,dim1)形状的索引 取 第1维第1大于5的，返回(dim0,dim2)形状的索引 取 第1维第1，第2维第2大于5的，返回(dim0)形状的索引"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7339831d0b7e",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0028",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=73c07ee8ee14",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0046",
+    "title": "Local NLP Course DOCX",
+    "section_path": "收集所有唯一词 将 pad 和 unk 放在词表开头 保存词表到文件"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=73d33f9ce2b8",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0013",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=73f4060b0d90",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0024",
+    "title": "概述 | Kubernetes",
+    "section_path": "Kubernetes 的历史背景"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=740b06575bfb",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0069",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "初始化 调用父类初始化 全连接层 初始化权重"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=746f24e75ddf",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0009",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=74d298c1b1a5",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0043",
+    "title": "Local NLP Course DOCX",
+    "section_path": "process.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=756d42eec5f8",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0137",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7685bf3274d9",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0174",
+    "title": "Local NLP Course DOCX",
+    "section_path": "process.py 加载原始 CSV 数据 过滤空评论和非二分类标签 划分训练集和测试集"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=76ccc88dde70",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0022",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=76d10dba0b0f",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0047",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "add()，不修改原数据 add_()，修改原数据"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=77486c63479d",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0014",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Building other apps on the AgentClient"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7782202874a1",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0076",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=77c11afdc141",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0168",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=790f7765f323",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0100",
+    "title": "Local NLP Course DOCX",
+    "section_path": "获取项目根目录 定义项目中常用路径 模型结构参数 训练相关超参数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7955a6302857",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0154",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=79983b8cb974",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0097",
+    "title": "Local NLP Course DOCX",
+    "section_path": "evaluate.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7a312e1ae2dd",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0039",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "流式对话 # 判断是否有图⽚，封装不同格式的消息"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7a7338c0494c",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0094",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7c746cf81be5",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0001",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7d57ec7133a9",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0108",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "搭建模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7dbf6276c8a1",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0093",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7e88c551dcfe",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0094",
+    "title": "Local NLP Course DOCX",
+    "section_path": "编码器前向传播 拼接双向 GRU 的最后隐藏状态作为上下文向量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7e90cf1d4904",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0028",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7ed671ec8d0a",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0063",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "参数初始化为单位矩阵 参数初始化为按指定均值与标准差正态分布 参数初始化为在区间内均匀分布 Xavier正态分布初始化"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7efc7287029d",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0049",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7f541cd02aa4",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0008",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=7f92c9e24250",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0013",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request body + path parameters Request body + path + query parameters"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=80c6f305f056",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0006",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Repository MARKDOWN sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=813dd5b44a93",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0063",
+    "title": "Local NLP Course DOCX",
+    "section_path": "2.保存词表"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=815711d85ff2",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0011",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=82518d740c73",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0037",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8251d651c44e",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0107",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8299d3a59257",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0124",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=830cf59c1ac4",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0004",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "集成 DeepSeek 集成 OpenAI 集成 Anthropic 1. 加载环境变量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=837562e4baf4",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0020",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=844f820e8ada",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0052",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "使⽤ uv 的环境 1 使⽤ tavily 作为 web 搜索⼯具 初始化⼯具，并设置参数，具体参数设置参考官⽹ # include_answer=False,"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8483c7e2da84",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0083",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=851afe6472f8",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0016",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=855306a5425c",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0044",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.rand(size) 创建在[0,1)上均匀分布的，指定形状的张量 torch.rand_like(input) 创建在[0,1)上均匀分布的，与给定张量形状相同的张量 torch.randn(size) 创建标准正态分布的，指定形状的张量 torch.normal(mean,std,size) 创建自定义正态分布的，指定形状的张量。mean为均值，std为标准差"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=858df4be6ac0",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0048",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=86728ad21e46",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0147",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=86979f5987d2",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0000",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=870f7c493cbe",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0026",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=873ed7f6c88e",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0111",
+    "title": "Local NLP Course DOCX",
+    "section_path": "计算注意力分数 加权求和，得到上下文向量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=874448f605ae",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0004",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=87bd73e2ddd6",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0010",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Additional setup for specific AI providers Building or customizing your own agent Handling Private Credential files"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=87dd8da2c076",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0003",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=880add50d55d",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0067",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "初始化参数 对Linear层进行初始化 真实值 预测值"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=880c9ba6d352",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0017",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=88fed00ef536",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0000",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8954d16c1f7f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0091",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8980f009a933",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0011",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8bb3a31d873a",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0182",
+    "title": "Local NLP Course DOCX",
+    "section_path": "模型预测 交互式预测主程序 设置运行设备 加载分词器和模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8c0495a1a44a",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0002",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8c19c3641275",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0060",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8d23c8ce63e2",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0002",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8da4bf9a7e94",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0092",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8de9b14dd301",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0093",
+    "title": "Local NLP Course DOCX",
+    "section_path": "predict.py 编码器前向传播"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8dfb858f54d9",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0017",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8e220c936b56",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0166",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8e3adc2ef6e0",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0118",
+    "title": "Local NLP Course DOCX",
+    "section_path": "tokenizer 模型 损失函数 优化器"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8e4dafa8515f",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0022",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8ea1eb692c51",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0027",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8f21ae157e08",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0022",
+    "title": "概述 | Kubernetes",
+    "section_path": "为什么需要 Kubernetes，它能做什么？"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8f30656663cb",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0015",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=8faf74f70eb3",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_009_0001",
+    "title": "工作负载 | Kubernetes",
+    "section_path": "工作负载"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9031b0757382",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0010",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=90689eeff32e",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0009",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载分词器和模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=915a7fb7b798",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0001",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=91ae752c52d3",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0021",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 为什么需要 Kubernetes，它能做什么？"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=929266ba3c20",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0102",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=930fe5d74554",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0032",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "1. 加载环境变量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=933133f578a5",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0038",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=935e2dbabe6c",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0051",
+    "title": "Local NLP Course DOCX",
+    "section_path": "打印模型结构信息 train.py 移动数据到设备 前向传播"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=936ad29c8f69",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0020",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=93a368f6a91d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0155",
+    "title": "Local NLP Course DOCX",
+    "section_path": "train.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=93aa509ab7d0",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0025",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=93e87d37c5d8",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0074",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=944bf3aa1b68",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0023",
+    "title": "Local NLP Course DOCX",
+    "section_path": "将数据移到设备 前向传播 计算损失 反向传播"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=953100a6797c",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0089",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "模型训练 对线性层的权重进行初始化 训练过程 训练模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=960e81b6270f",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0045",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "例如⼀个查询天⽓的 tool 定义⼀个查询天⽓的 tool"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=973c0e3a7d91",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0043",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9792550ff714",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0011",
+    "title": "Request Body - FastAPI",
+    "section_path": "Editor support"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9809b963531f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0115",
+    "title": "Local NLP Course DOCX",
+    "section_path": "train.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=984b94d6f1e9",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0017",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=994b089d159b",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0020",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "创建 Agent 调⽤ Agent ，发送消息"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=99cc83d0dfd1",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0015",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9b680ccc9353",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0015",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9c282f109fa3",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0085",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "使⽤ tavily 作为 web 搜索⼯具 Agent 回答内容引⽤的⽹⻚信息 Agent 的回答内容 创建智能体，使⽤预定义⼯具 tavily"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9c42961ca759",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0027",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9e6775119cb3",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0053",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "在0维上增加一个维度 在1维上增加一个维度"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9e8f072a8503",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0098",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9e9a7c31b634",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0012",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9e9f9b8eaa61",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0028",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9ea7e782c70b",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_009_0004",
+    "title": "工作负载 | Kubernetes",
+    "section_path": "反馈"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9eadc8f52870",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0082",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "RMSProp手动实现 绘制等高线图"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9eb7785fa619",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0175",
+    "title": "Local NLP Course DOCX",
+    "section_path": "划分训练集和测试集 加载分词器 编码函数 对训练和测试集分别编码"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9eda73d7c244",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_009_0002",
+    "title": "工作负载 | Kubernetes",
+    "section_path": "工作负载 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9fd33f501b17",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0087",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "调⽤ agent 获取结构化输出"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=9ff3861a2c13",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0015",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Check the docs Working with Python"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a0628a652b56",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0049",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "2维矩阵的矩阵乘法 3维张量的矩阵乘法"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a0bb499bf922",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0171",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a190707e37dd",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0014",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a1b6ce8e496a",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0003",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a28ad7f8f2d1",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0007",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a2c7249278b3",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0010",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a2e08e13a3ac",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0021",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a3177e9fdb91",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0008",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a3391eb0ad9e",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0065",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "初始化 前向传播"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a379f8393362",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0006",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a38dc0138784",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0001",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a397363d30f3",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0056",
+    "title": "Local NLP Course DOCX",
+    "section_path": "数据转移到设备 获取预测概率 统计准确率"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a3bdf03cab1d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0069",
+    "title": "Local NLP Course DOCX",
+    "section_path": "保存最佳模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a46a229c69c0",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0104",
+    "title": "Local NLP Course DOCX",
+    "section_path": "清理空值数据 划分训练集和测试集 构建词表 加载词表"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a4f4148eb543",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0006",
+    "title": "Request Body - FastAPI",
+    "section_path": "Request Body - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a544086c4595",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0002",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a60e29acf35a",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0000",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a657991a1231",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0058",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a6cd2a114dc7",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0014",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "初始化模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a7728a3f15ee",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0105",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "初始化嵌入层 打印词向量 input_size:输入数据的特征数量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a791491c7188",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0070",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "反向传播 优化器 更新参数 清空梯度"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a7d4f84de12e",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0016",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Local development without Docker"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a8342695079a",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0016",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a973ff975b62",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0116",
+    "title": "Local NLP Course DOCX",
+    "section_path": "编码器 上下文向量 解码器"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=a9c02aa7d3a9",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0037",
+    "title": "Local NLP Course DOCX",
+    "section_path": "config.py 项目根目录 数据路径 模型和日志路径"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=aa18a3c48605",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0099",
+    "title": "Local NLP Course DOCX",
+    "section_path": "config.py 获取项目根目录 定义项目中常用路径"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=aa3ae74566f9",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0177",
+    "title": "Local NLP Course DOCX",
+    "section_path": "model.py 加载本地预训练的 BERT 模型 分类器：接收 [CLS] 向量 → 输出二分类的得分 self.classifier 输入: (batch_size, hidden_size)"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=aaa9ad4eb832",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0009",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Additional setup for specific AI providers"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=aaf2e0d511ff",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0003",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ab261c8573fe",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0084",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ac1b72123660",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0012",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ad92be4c3da3",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0005",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载分词"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ada63b31d5ea",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0104",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "num_embeddings:词的数量 embedding_dim:词向量的维度 设置随机种子 自定义停用词和标点符号"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ae64168e73cb",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0126",
+    "title": "Local NLP Course DOCX",
+    "section_path": "config.py 获取项目根目录 定义项目中常用路径 模型结构参数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=aeb9b59a77b7",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0030",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "deepseek 阿⾥云"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=af7ef196e585",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0001",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=afb63023d615",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0007",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载分词器和模型 加载分词器和模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b0c29034e4ab",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0012",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b0c3b247543d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0129",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b0e10f6a550f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0089",
+    "title": "Local NLP Course DOCX",
+    "section_path": "train.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b1a7de203f3f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0140",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b2c19df86c34",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0120",
+    "title": "Local NLP Course DOCX",
+    "section_path": "编码器前向传播 拼接双向 GRU 最后一层隐藏状态作为上下文向量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b30950361346",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0081",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b455f5b29cf7",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0037",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b46aa71a159d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0136",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b4ec3f5022a4",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0087",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "特征预处理 数值型特征先用平均值填充缺失值，再进行标准化 类别型特征先将缺失值替换为字符串\"NaN\"，再进行独热编码 组合特征预处理器"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b5810169ca0d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0184",
+    "title": "Local NLP Course DOCX",
+    "section_path": "预测每个样本的正面情感概率 将概率转换为预测标签（>= 0.5 为正面） 计算准确数量 输出准确率"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b5d2bd4be213",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0005",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "In another shell Architecture Diagram Key Features"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b64be59aafbd",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0092",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "创建智能体时指定 checkpointer ， LangChain 会⾃动帮我们管理历史会话记忆 设定 thread_id ，作为会话标识 第⼀次调⽤，告知 AI 我的信息 第⼆次调⽤，询问我的信息，这次带上 thread_id ，唤起记忆"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b68d4e6ad40e",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0016",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b6ac9686f729",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0018",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b78e5acb51ce",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0075",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b80a63f5eb2e",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0050",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b8329f8643f2",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0006",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b83d1c3ba9b3",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0015",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "================================== Ai Message ================================== A man walked into a library and asked the librarian, \"Do you have any books on Pavlov's dogs and Schrödinger's cat?\" The librarian replied, \"It rings a bell, but I'm not sure if it's here or not.\""
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b8915466c609",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0061",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=b8c80c46368c",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0005",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ba11d090f03b",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0103",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ba212cb27bf6",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0072",
+    "title": "Local NLP Course DOCX",
+    "section_path": "evaluate.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=baa4d383525e",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0025",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bac3886958f5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0046",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bb27ebf49849",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0106",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "input_size:输入数据的特征数量 hidden_size:隐藏状态的特征数量 num_layers:隐藏层的层数，如果设置多个层，前一个隐藏层的输出作为下一个隐藏层的输入 input:输入数据[seq_len序列长度, batch_size批量大小, input_size]"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bba97385f6e7",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0009",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bbd754bd9e11",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0143",
+    "title": "Local NLP Course DOCX",
+    "section_path": "初始化 Transformer 调用编码器"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bbff0ad77ad1",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0030",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Identity"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bd9cac3f05eb",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0006",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bdf271b1ab7f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0121",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=be53c3cce349",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0054",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=be647fbe7213",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0016",
+    "title": "Local NLP Course DOCX",
+    "section_path": "2. 构建词表和词向量矩阵 3. 构建 PyTorch 的嵌入层 4. 示例：将词索引转换为向量 5. 查询嵌入（即词向量查找）"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bea5857eb4fb",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0019",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "OpenAPI support Path convertor"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bf18d4508be9",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0025",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "1. 初始化模型 2. 创建智能体 3.组织多模态消息 4. 调⽤ Agent ，发送多模态消息"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bf564cc327b0",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0141",
+    "title": "Local NLP Course DOCX",
+    "section_path": "初始化 Transformer"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bf7b6d64a1cd",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0031",
+    "title": "Local NLP Course DOCX",
+    "section_path": "前向传播 计算损失 反向传播 更新参数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bf9a99c86c63",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0079",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=bfcf95b134b2",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0156",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c0471c33cdab",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0085",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "绘制等高线图"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c19125674654",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0103",
+    "title": "Local NLP Course DOCX",
+    "section_path": "process.py 读取中英文对齐数据"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c1db452848a8",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0031",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Instructions Examples"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c1eb5b8dff9b",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0082",
+    "title": "Local NLP Course DOCX",
+    "section_path": "收集唯一词汇"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c4276562ec78",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0003",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c44dc3f9dcf4",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0011",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c44fdcd27be2",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0021",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c573ed3b59eb",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0059",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c86419cabb35",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0061",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c8a8321d3ad5",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_002_0010",
+    "title": "Request Body - FastAPI",
+    "section_path": "Automatic docs"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c91085292f4c",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0038",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "初始化 checkpointer ⾃动建表 Agent 系统提⽰词 创建代理"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c924fa99b5a6",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0103",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=c9b3334c1d95",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0030",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=caf8635610b4",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0015",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cb5520acd09c",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0068",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cc26c44b8a67",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0065",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cc6f0f98db60",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0123",
+    "title": "Local NLP Course DOCX",
+    "section_path": "evaluate.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cc84522e9570",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0023",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ccce932b3040",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0005",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "3. 定义 Agent 4. 调⽤模型 5. 打印结果"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cd67706afa6f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0055",
+    "title": "Local NLP Course DOCX",
+    "section_path": "预测结果 evaluate.py 数据转移到设备"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cdc2c81e1c4d",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0082",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cf3e46278180",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0004",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cf7324f99cfa",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0020",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Recap"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=cfc3d242f971",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0031",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "阿⾥云 加载环境变量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d0352ea85591",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0010",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d094603c74e8",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0002",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d0a25a1fe374",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0040",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d0cb721740be",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0072",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d1670d079320",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0005",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d1ac4432d9bd",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0032",
+    "title": "Local NLP Course DOCX",
+    "section_path": "训练一个 epoch 记录到 TensorBoard 保存最优模型 predict.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d2140e6e6059",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_009_0000",
+    "title": "工作负载 | Kubernetes",
+    "section_path": "工作负载"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d2e94f75489d",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0008",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d2f35c5d815c",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0018",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Contributing License"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d3548a2c542f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0183",
+    "title": "Local NLP Course DOCX",
+    "section_path": "显示结果 evaluate.py 预测每个样本的正面情感概率"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d4e828ea9773",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0000",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d569f9763278",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0105",
+    "title": "Local NLP Course DOCX",
+    "section_path": "编码测试集 tokenizer.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d58101859534",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0162",
+    "title": "Local NLP Course DOCX",
+    "section_path": "evaluate.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d6817caf2dc0",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0173",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d8d565e2add5",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0070",
+    "title": "Local NLP Course DOCX",
+    "section_path": "保存最佳模型 predict.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d94fc49a71f6",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0006",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d96445bb68ca",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0068",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "真实值为标签 真实值为概率"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d96cb66196e5",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0058",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=d987e94fc7e4",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0006",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=da452ddf40f8",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0160",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=da4584760aec",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0008",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载分词器和模型 编码文本为模型输入格式"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=daa698741b35",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0029",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=dbe7a892cf2e",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0013",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=dcdb65557a84",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0083",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=de2198df7524",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0005",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=de79d484faec",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0022",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "deepseek aliyun dashscope web_search 引擎 langsmith"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=dea67d0e00af",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0014",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=deaf9e31c144",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0035",
+    "title": "Local NLP Course DOCX",
+    "section_path": "evaluate.py 获取 top-5 预测结果 统计 top-1 和 top-5 正确率"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=df38a774a006",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0015",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=dfae46bd42d8",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0035",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "⽰例："
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e0140ad537ec",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0004",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e0ccfc56ce88",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0052",
+    "title": "Local NLP Course DOCX",
+    "section_path": "计算损失 反向传播 参数更新"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e0e23ff17c81",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0047",
+    "title": "Local NLP Course DOCX",
+    "section_path": "填充或截断 dataset.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e0f9b4acc1cd",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0151",
+    "title": "Local NLP Course DOCX",
+    "section_path": "dataset.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e12782ebb54f",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0019",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e15a2ce724a9",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0010",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e201389b8ead",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0078",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e25abc9da574",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0026",
+    "title": "Local NLP Course DOCX",
+    "section_path": "建立词到索引映射 建立索引到词的映射 获取未知词索引 将 token 转为索引，未知词用 unk 索引替代"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e2751f8b870b",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0029",
+    "title": "Local NLP Course DOCX",
+    "section_path": "RNN：处理序列数据，提取上下文特征 全连接层：将隐藏状态映射到词表大小的概率分布 嵌入层处理输入序列 RNN 处理嵌入向量序列"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e2d4f333b062",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0028",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "例如，有⼀个⽤⼾上传的⽂件，是字节格式 img_bytes ，我们先将其进⾏ base64 编码 组织多模态消息 调⽤ Agent ，发送消息"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e2d80eb7ba28",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0049",
+    "title": "Local NLP Course DOCX",
+    "section_path": "创建数据集实例 返回 DataLoader 简单测试数据加载器 model.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e36ecadbf2c8",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0053",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e3bd24f8eb6d",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0080",
+    "title": "Local NLP Course DOCX",
+    "section_path": "数据清洗：去除空值和空字符串 划分训练集和测试集 构建词表并保存 加载词表"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e3dec2f1d1a2",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0100",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "对线性层和卷积层使用Xavier均匀分布初始化参数 训练过程 前向传播 反向传播"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e44991be739f",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0086",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "读取数据 去除无关特征 划分特征和目标 筛选出数值型特征"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e48822e90732",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0041",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "创建float32类型的张量 创建float64类型的张量 torch.arange(start, end, step) 在区间[start,end)中创建步长为step的张量 torch.arange(end) 创建区间为[0,end)，步长为1的张量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e5130f16e9dd",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0004",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e696b16b7c55",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0007",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "准备多模态消息，图⽚是⽹络上的冰箱⻝物图⽚"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e6cfebfd973b",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0061",
+    "title": "Local NLP Course DOCX",
+    "section_path": "1.读取数据 2.过滤数据 3.划分数据集 4.构建词表"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e6f1e031d7c5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0077",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e75dfd256d57",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0035",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e7b504ccd525",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0100",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "初始化 checkpointer 初始化中间件"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e7bb55a7eb04",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0081",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发 普通梯度下降 RMSProp RMSProp手动实现"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e7e29d93f149",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0101",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "累加正确输出的数量 打印进度条 验证过程 前向传播"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e7e3bfd23a0f",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0064",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Kaiming正态分布初始化 Kaiming均匀分布初始化"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e7ff12c3a25b",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0086",
+    "title": "Local NLP Course DOCX",
+    "section_path": "model.py 嵌入层：将 token 索引映射为稠密向量 双向 GRU"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e808711a0f5f",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0109",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "模型训练 前向传播 反向传播"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e87408075f54",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0044",
+    "title": "Local NLP Course DOCX",
+    "section_path": "1. 读取原始数据文件 2. 数据清洗：去除空值和空字符串 3. 划分训练集和测试集 4. 构建词表并保存"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e93020c171da",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0008",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "友好打印"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e937ad1956b5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0097",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "pip 安装 pip install langgraph-checkpoint-sqlite uv 安装 初始化 checkpointer"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e95f8fa7e7cf",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0024",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=e9f4cc50bb46",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0054",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "在0维上增加一个维度 在1维上增加一个维度 在-1维上增加一个维度"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ea71500026c8",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0076",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=eb281ceed734",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0009",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Documentation Standards-based benefits, alternative documentation"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ec9bfe806bfb",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0014",
+    "title": "概述 | Kubernetes",
+    "section_path": "概述 | Kubernetes"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ecefa66de36c",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0001",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ed5585ddf4a8",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0012",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=eda833e95b9d",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0001",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=edacb7bf76b6",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0086",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "创建智能体，使⽤预定义⼯具 tavily"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ee1f81a5e8ec",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0020",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ee8c81d0de73",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0012",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "# Edit [CONFIG_FILE] to add your [SECRET_PLACEHOLDER]s"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=eea5bf15bd89",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0023",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "1. 加载环境变量 2.web 搜索⼯具，使⽤ tavily 作为 web 搜索⼯具 3. 多模态模型 4.Agent 系统提⽰词"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ef56786d389e",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0101",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ef6ac1878e18",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0011",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters - FastAPI"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=efcfaf088c90",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0062",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "全部参数初始化为0 全部参数初始化为1 全部参数初始化为一个常数 参数初始化为单位矩阵"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=efef1f0e79b8",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0002",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=eff5db9e0269",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0060",
+    "title": "Local NLP Course DOCX",
+    "section_path": "process.py"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f05b8fcb40aa",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0010",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f077f7036b71",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0091",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "langchain 提供的 checkpointer 的默认实现，基于内存存储"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f07ae14d4696",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0017",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "友好打印 🍽 ** 三⽂⻥西兰花烤盘料理（详细版） ** 📌 ** ⻝材清单 **（根据您冰箱⾥的⻝材调整） 🍳 ** 详细制作步骤 **"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f197bd825a02",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0161",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f1b8a99dedc0",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0047",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "调⽤数学⼯具 调⽤查询天⽓⼯具 创建智能体，并添加⼯具"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f26169136f19",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0044",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "定义⼯具"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f261cdb2fbf5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0088",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f399c744eb19",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0060",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f43ba2290100",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0017",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "通过 .stream ⽅法实现流式访问 stream 调⽤返回的结果是⼀个 generator ，⽅便我们循环获取结果 遍历 stream 结果，实时打印 AI 的回复 1. 指定 Model 名称，由 LangChain ⾃动初始化模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f458bacda5d7",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0096",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f5552cfe8496",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0159",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f5c421470982",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0014",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "1. ** 三⽂⻥西兰花烤盘料理 **"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f6189a008ab5",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0099",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f662c7515305",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0079",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "AdaGrad AdaGrad手动实现 绘制等高线图"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f6a79a7c65a2",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0009",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f6d6f459f34a",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0077",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f7090b4f7174",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0023",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f79790eac699",
+    "source_id": "kubernetes_cn_docs",
+    "chunk_id": "chunk_norm_html_008_0026",
+    "title": "概述 | Kubernetes",
+    "section_path": "接下来 反馈"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f7c729f966c9",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0035",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f7f78cca8844",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0066",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f8304fdc3233",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0024",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f8775f12be4d",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0007",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f997bf29de89",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0042",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.linspace(start, end, steps) 在区间按元素数量创建张量 torch.logspace(start, end, steps, base) 在区间[start,end]之间生成steps个数，并以base为底，区间内的数为指数创建张量 torch.zeros(size) 创建指定形状的全0张量 torch.ones_like(input) 创建与给定张量形状相同的全1张量"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=f9e626213e68",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0014",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fa3bfe615d38",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0153",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fa6d45bb482b",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0062",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fa90a43095a9",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0011",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fb143c397859",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0022",
+    "title": "Local NLP Course DOCX",
+    "section_path": "process.py 将数据移到设备"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fb55421a3f30",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0142",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fbb48c3d1f6a",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0006",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Path Parameters"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fbdaaebaf3d1",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0068",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fbe11753e62d",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0099",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "搭建模型 查看各层输出数据的形状 模型训练 对线性层和卷积层使用Xavier均匀分布初始化参数"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fbfc8a558b3e",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0016",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "使⽤ Model 类初始化模型 # 其它模型参数 ... 调⽤ invoke ⽅法 查看响应结果"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fc0aca52dcb4",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0095",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "最大池化 平均池化 读取图片 将图片数据转换为张量并改变形状"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fc0b705a5eb5",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0057",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "tensor([[True, True], [True, True]]) 构建数据集 构造模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fd0f2651a8f1",
+    "source_id": "fastapi_docs",
+    "chunk_id": "chunk_norm_html_001_0012",
+    "title": "Path Parameters - FastAPI",
+    "section_path": "Predefined values Create an"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fd52b8ff922f",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0139",
+    "title": "Local NLP Course DOCX",
+    "section_path": "Local NLP Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fd803ce72e3a",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0029",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "创建智能体"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fdb16887d9cc",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0030",
+    "title": "Local NLP Course DOCX",
+    "section_path": "打印模型摘要 train.py 将数据移到设备 前向传播"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fe77feb76e15",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0033",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "2.web 搜索⼯具，使⽤ tavily 作为 web 搜索⼯具 3. 多模态模型 4. 初始化 checkpointer 连接 sqlite"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fed932ffffd1",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0018",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ff078ad9ca6e",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0027",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=ff0e6b85a3e8",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_002_0055",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "sha256=fff862070c39",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_001_0032",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "Local AI Agent Course PDF"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "stride:步幅",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0093",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "in_channels:输入通道数 out_channels:输出通道数 kernel_size:卷积核大小 stride:步幅"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "test: Dataset",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0013",
+    "title": "Local NLP Course DOCX",
+    "section_path": "DatasetDict({ train: Dataset(...), test: Dataset(...) })"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "test_size=0.3",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "train: Dataset",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0013",
+    "title": "Local NLP Course DOCX",
+    "section_path": "DatasetDict({ train: Dataset(...), test: Dataset(...) })"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "x_test = preprocessor.transform",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "x_train = preprocessor.fit_transform",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "y = data",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "y_test = train_test_split",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "划分训练集和测试集X = data.drop",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "加载数据集data = pd.read_csv",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "反向传播函数计算z=u",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0056",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "分离y来返回一个新变量u 梯度不会向后流经u到x 反向传播函数计算z=u*x关于x的偏导数时将u作为常数处理，而不是z=x*x*x关于x的偏导数 tensor([[True, True],"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "归一化preprocessor = MinMaxScaler",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "config_key",
+    "value": "而不是z=x",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0056",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "分离y来返回一个新变量u 梯度不会向后流经u到x 反向传播函数计算z=u*x关于x的偏导数时将u作为常数处理，而不是z=x*x*x关于x的偏导数 tensor([[True, True],"
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "BERT",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0177",
+    "title": "Local NLP Course DOCX",
+    "section_path": "model.py 加载本地预训练的 BERT 模型 分类器：接收 [CLS] 向量 → 输出二分类的得分 self.classifier 输入: (batch_size, hidden_size)"
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "CONFIG_FILE",
+    "source_id": "local_ai_agent_course_pdf",
+    "chunk_id": "chunk_norm_pdf_003_0001",
+    "title": "Local AI Agent Course PDF",
+    "section_path": "[CONFIG_FILE]",
+    "source_ids": [
+      "local_ai_agent_course_pdf",
+      "repo_project_files"
+    ]
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "DOCX",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0000",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "Local Deep Learning Course DOCX",
+    "source_ids": [
+      "local_deep_learning_course_docx",
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "JSON",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0017",
+    "title": "Local NLP Course DOCX",
+    "section_path": "csv json 加载 CSV 文件 加载 JSON 文件",
+    "source_ids": [
+      "local_nlp_course_docx",
+      "repo_project_files"
+    ]
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "JSONL",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0048",
+    "title": "Local NLP Course DOCX",
+    "section_path": "加载 JSONL 数据到内存 构建输入和目标张量 创建数据集实例"
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "LSTM",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0050",
+    "title": "Local NLP Course DOCX",
+    "section_path": "LSTM 层：提取序列特征 线性层：映射到单输出，用于二分类 嵌入层处理 LSTM 处理序列"
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "MARKDOWN",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0000",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "🧰 AI Agent Service Toolkit",
+    "source_ids": [
+      "repo_project_files"
+    ]
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "SECRET_PLACEHOLDER",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_markdown_001_0004",
+    "title": "Repository MARKDOWN sample",
+    "section_path": "Overview [Try the app!](https://agent-service-toolkit.streamlit.app/) Quickstart At least one LLM [SECRET_PLACEHOLDER] is required",
+    "source_ids": [
+      "repo_project_files"
+    ]
+  },
+  {
+    "symbol_type": "env_var",
+    "value": "YAML",
+    "source_id": "repo_project_files",
+    "chunk_id": "chunk_norm_yaml_001_0000",
+    "title": "Repository YAML sample",
+    "section_path": "Repository YAML sample",
+    "source_ids": [
+      "repo_project_files"
+    ]
+  },
+  {
+    "symbol_type": "filename_py",
+    "value": "config.py",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0036",
+    "title": "Local NLP Course DOCX",
+    "section_path": "执行评估 输出评估结果 config.py 项目根目录",
+    "source_ids": [
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "filename_py",
+    "value": "dataset.py",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0027",
+    "title": "Local NLP Course DOCX",
+    "section_path": "dataset.py",
+    "source_ids": [
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "filename_py",
+    "value": "evaluate.py",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0035",
+    "title": "Local NLP Course DOCX",
+    "section_path": "evaluate.py 获取 top-5 预测结果 统计 top-1 和 top-5 正确率",
+    "source_ids": [
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "filename_py",
+    "value": "model.py",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0028",
+    "title": "Local NLP Course DOCX",
+    "section_path": "model.py 嵌入层：将 token 索引映射为稠密向量 RNN：处理序列数据，提取上下文特征",
+    "source_ids": [
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "filename_py",
+    "value": "predict.py",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0032",
+    "title": "Local NLP Course DOCX",
+    "section_path": "训练一个 epoch 记录到 TensorBoard 保存最优模型 predict.py",
+    "source_ids": [
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "filename_py",
+    "value": "process.py",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0022",
+    "title": "Local NLP Course DOCX",
+    "section_path": "process.py 将数据移到设备",
+    "source_ids": [
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "filename_py",
+    "value": "tokenizer.py",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0045",
+    "title": "Local NLP Course DOCX",
+    "section_path": "7. 编码测试集并保存 tokenizer.py",
+    "source_ids": [
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "filename_py",
+    "value": "train.py",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0030",
+    "title": "Local NLP Course DOCX",
+    "section_path": "打印模型摘要 train.py 将数据移到设备 前向传播",
+    "source_ids": [
+      "local_nlp_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "Dataset",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0013",
+    "title": "Local NLP Course DOCX",
+    "section_path": "DatasetDict({ train: Dataset(...), test: Dataset(...) })"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "DatasetDict",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_002_0013",
+    "title": "Local NLP Course DOCX",
+    "section_path": "DatasetDict({ train: Dataset(...), test: Dataset(...) })"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "MinMaxScaler",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "add",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0047",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "add()，不修改原数据 add_()，修改原数据"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "add_",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0047",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "add()，不修改原数据 add_()，修改原数据"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "arange",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0041",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "创建float32类型的张量 创建float64类型的张量 torch.arange(start, end, step) 在区间[start,end)中创建步长为step的张量 torch.arange(end) 创建区间为[0,end)，步长为1的张量"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "argmin",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0050",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "sum() 求和 mean() 求均值) max() 求最大值 argmin() 求最小值索引",
+    "source_ids": [
+      "local_deep_learning_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "drop",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "empty_like",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0043",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.full(size,fill_value) 创建指定形状的按指定值填充的张量 torch.empty_like(input) 创建与给定张量形状相同的未初始化的张量 torch.eye(n) 创建n*n的单位矩阵 torch.eye(n, m) 按指定的行和列创建"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "eye",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0043",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.full(size,fill_value) 创建指定形状的按指定值填充的张量 torch.empty_like(input) 创建与给定张量形状相同的未初始化的张量 torch.eye(n) 创建n*n的单位矩阵 torch.eye(n, m) 按指定的行和列创建"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "fit_transform",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "full",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0043",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.full(size,fill_value) 创建指定形状的按指定值填充的张量 torch.empty_like(input) 创建与给定张量形状相同的未初始化的张量 torch.eye(n) 创建n*n的单位矩阵 torch.eye(n, m) 按指定的行和列创建"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "init_network",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "linspace",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0042",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.linspace(start, end, steps) 在区间按元素数量创建张量 torch.logspace(start, end, steps, base) 在区间[start,end]之间生成steps个数，并以base为底，区间内的数为指数创建张量 torch.zeros(size) 创建指定形状的全0张量 torch.ones_like(input) 创建与给定张量形状相同的全1张量"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "logspace",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0042",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.linspace(start, end, steps) 在区间按元素数量创建张量 torch.logspace(start, end, steps, base) 在区间[start,end]之间生成steps个数，并以base为底，区间内的数为指数创建张量 torch.zeros(size) 创建指定形状的全0张量 torch.ones_like(input) 创建与给定张量形状相同的全1张量"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "max",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0050",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "sum() 求和 mean() 求均值) max() 求最大值 argmin() 求最小值索引"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "mean",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0050",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "sum() 求和 mean() 求均值) max() 求最大值 argmin() 求最小值索引"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "normal",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0044",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.rand(size) 创建在[0,1)上均匀分布的，指定形状的张量 torch.rand_like(input) 创建在[0,1)上均匀分布的，与给定张量形状相同的张量 torch.randn(size) 创建标准正态分布的，指定形状的张量 torch.normal(mean,std,size) 创建自定义正态分布的，指定形状的张量。mean为均值，std为标准差"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "ones_like",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0042",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.linspace(start, end, steps) 在区间按元素数量创建张量 torch.logspace(start, end, steps, base) 在区间[start,end]之间生成steps个数，并以base为底，区间内的数为指数创建张量 torch.zeros(size) 创建指定形状的全0张量 torch.ones_like(input) 创建与给定张量形状相同的全1张量"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "rand",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0044",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.rand(size) 创建在[0,1)上均匀分布的，指定形状的张量 torch.rand_like(input) 创建在[0,1)上均匀分布的，与给定张量形状相同的张量 torch.randn(size) 创建标准正态分布的，指定形状的张量 torch.normal(mean,std,size) 创建自定义正态分布的，指定形状的张量。mean为均值，std为标准差"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "rand_like",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0044",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.rand(size) 创建在[0,1)上均匀分布的，指定形状的张量 torch.rand_like(input) 创建在[0,1)上均匀分布的，与给定张量形状相同的张量 torch.randn(size) 创建标准正态分布的，指定形状的张量 torch.normal(mean,std,size) 创建自定义正态分布的，指定形状的张量。mean为均值，std为标准差"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "randn",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0044",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.rand(size) 创建在[0,1)上均匀分布的，指定形状的张量 torch.rand_like(input) 创建在[0,1)上均匀分布的，与给定张量形状相同的张量 torch.randn(size) 创建标准正态分布的，指定形状的张量 torch.normal(mean,std,size) 创建自定义正态分布的，指定形状的张量。mean为均值，std为标准差"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "read_csv",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "sort",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0051",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "argmin() 求最小值索引 std() 求标准差 unique() 去重 sort() 排序"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "std",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0051",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "argmin() 求最小值索引 std() 求标准差 unique() 去重 sort() 排序"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "sum",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0050",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "sum() 求和 mean() 求均值) max() 求最大值 argmin() 求最小值索引"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "tensor",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0046",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用from_numpy()方法将ndarray转换为Tensor，共享内存 使用copy()方法避免共享内存 使用torch.tensor()将ndarray转换为Tensor",
+    "source_ids": [
+      "local_deep_learning_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "train_test_split",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "transform",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "unique",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0051",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "argmin() 求最小值索引 std() 求标准差 unique() 去重 sort() 排序"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "zeros",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0042",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "torch.linspace(start, end, steps) 在区间按元素数量创建张量 torch.logspace(start, end, steps, base) 在区间[start,end]之间生成steps个数，并以base为底，区间内的数为指数创建张量 torch.zeros(size) 创建指定形状的全0张量 torch.ones_like(input) 创建与给定张量形状相同的全1张量"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "从",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0071",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "从(-7, 2)出发 普通梯度下降 动量法 绘制等高线图",
+    "source_ids": [
+      "local_deep_learning_course_docx"
+    ]
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "使用copy",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0046",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用from_numpy()方法将ndarray转换为Tensor，共享内存 使用copy()方法避免共享内存 使用torch.tensor()将ndarray转换为Tensor"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "使用from_numpy",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0046",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用from_numpy()方法将ndarray转换为Tensor，共享内存 使用copy()方法避免共享内存 使用torch.tensor()将ndarray转换为Tensor"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "使用named_parameters",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0066",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用named_parameters()查看各层参数 使用state_dict()查看各层参数 input_size:特征数，batch_size:样本数 构建模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "使用numpy",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0045",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用type方法修改张量的类型 使用double方法修改张量的类型 使用long方法修改张量的类型 使用numpy()方法将Tensor转换为ndarray，共享内存"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "使用state_dict",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0066",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "使用named_parameters()查看各层参数 使用state_dict()查看各层参数 input_size:特征数，batch_size:样本数 构建模型"
+  },
+  {
+    "symbol_type": "function_call",
+    "value": "返回",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0052",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "取 第0维第0，第1维第1、2 和 第0维第1，第1维第1、2 取 第2维第0大于5的，返回(dim0,dim1)形状的索引 取 第1维第1大于5的，返回(dim0,dim2)形状的索引 取 第1维第1，第2维第2大于5的，返回(dim0)形状的索引"
+  },
+  {
+    "symbol_type": "number_version",
+    "value": "0.3",
+    "source_id": "local_deep_learning_course_docx",
+    "chunk_id": "chunk_norm_docx_001_0009",
+    "title": "Local Deep Learning Course DOCX",
+    "section_path": "加载数据集data = pd.read_csv(\"../data/train.csv\")# 划分训练集和测试集X = data.drop(\"label\", axis=1)y = data[\"label\"]x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.3)# 归一化preprocessor = MinMaxScaler()x_train = preprocessor.fit_transform(x_train)x_test = preprocessor.transform(x_test)return x_test, t_testdef init_network(): 加载模型"
+  },
+  {
+    "symbol_type": "number_version",
+    "value": "0.5",
+    "source_id": "local_nlp_course_docx",
+    "chunk_id": "chunk_norm_docx_003_0184",
+    "title": "Local NLP Course DOCX",
+    "section_path": "预测每个样本的正面情感概率 将概率转换为预测标签（>= 0.5 为正面） 计算准确数量 输出准确率"
+  }
+]

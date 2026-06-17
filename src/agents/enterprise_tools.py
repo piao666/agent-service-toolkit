@@ -8,6 +8,7 @@ from langchain_core.tools import BaseTool, tool
 
 from rag.config import rag_settings
 from rag.retriever import retrieve, retrieve_with_overlay, retrieve_with_policy
+from rag.structured_retrieval import materialize_structured_candidates, structured_retrieve
 from rag.vector_store import get_collection_count
 
 DISTANCE_NOTE = "distance 越小越相关；relevance_score 越大越相关"
@@ -313,19 +314,74 @@ def build_enterprise_retrieval_payload(
             collection_name=resolved_collection,
         )
 
+    # Phase 6F-7: materialize + inject (wrapped to prevent crash)
+    try:
+        matched_sids, matched_cids, structured_debug = structured_retrieve(
+            normalized_query, query_type=None, top_k=resolved_top_k,
+        )
+        structured_debug["baseline_candidates_count"] = len(results)
+        structured_debug["structured_candidates_found_count"] = len(matched_sids) + len(matched_cids)
+
+        mat_candidates, mat_debug = materialize_structured_candidates(
+            matched_sids, matched_cids, normalized_query, top_k=resolved_top_k,
+        )
+        structured_debug["structured_candidates_materialized_count"] = mat_debug.get("succeeded", 0)
+
+        if mat_candidates:
+            merged_results = list(results)
+            existing_ids = {getattr(r, "chunk_id", "") or "" for r in results}
+            for mc in mat_candidates[:resolved_top_k]:
+                cid = mc.get("chunk_id", "")
+                if cid and cid not in existing_ids:
+                    from rag.schemas import RetrievalResult
+                    rel = mc.get("relevance_score", 0.85) or 0.85
+                    content = mc.get("content", "") or mc.get("content_preview", "") or ""
+                    nr = RetrievalResult(
+                        source=mc.get("source_id", "unknown"),
+                        title=mc.get("title"),
+                        doc_type=mc.get("doc_type"),
+                        chunk_id=cid,
+                        chunk_index=None,
+                        distance=1.0 - rel,
+                        relevance_score=rel,
+                        score=rel,
+                        content_preview=content[:260],
+                        page_content=content,
+                        metadata=mc.get("metadata", {}),
+                    )
+                    merged_results.append(nr)
+                    existing_ids.add(cid)
+            merged_results.sort(key=lambda r: getattr(r, "relevance_score", 0) or 0, reverse=True)
+            structured_debug["structured_candidates_injected_count"] = len(merged_results) - len(results)
+            structured_debug["deduped_count"] = len(results) + len(mat_candidates) - len(merged_results)
+            results = merged_results
+        else:
+            structured_debug["structured_candidates_injected_count"] = 0
+            structured_debug["deduped_count"] = 0
+        structured_debug["final_sources_count_preview"] = len(results)
+    except Exception as mat_exc:
+        structured_debug = {
+            "structured_retrieval_mode": rag_settings.ENTERPRISE_STRUCTURED_RETRIEVAL_MODE,
+            "structured_injection_enabled": False,
+            "materialization_error": str(mat_exc)[:200],
+        }
+
     sources = [_source_payload(result) for result in results]
     context = _format_context(sources, [result.page_content for result in results])
+    retrieval_debug = _debug_payload(
+        query=normalized_query,
+        top_k=resolved_top_k,
+        persist_dir=resolved_persist_dir,
+        collection_name=resolved_collection,
+        hit_count=len(sources),
+        policy_debug=policy_debug,
+    )
+    retrieval_debug.update(structured_debug)
+    retrieval_debug["final_sources_count"] = len(sources)
     return {
         "context": context,
         "sources": sources,
-        "retrieval_debug": _debug_payload(
-            query=normalized_query,
-            top_k=resolved_top_k,
-            persist_dir=resolved_persist_dir,
-            collection_name=resolved_collection,
-            hit_count=len(sources),
-            policy_debug=policy_debug,
-        ),
+        "retrieval_debug": retrieval_debug,
         "fallback": {
             "triggered": False,
             "reason": None,

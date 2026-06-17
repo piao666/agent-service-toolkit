@@ -26,6 +26,7 @@ class RagSettings(BaseSettings):
     CHROMA_COLLECTION_NAME: str = DEFAULT_CHROMA_COLLECTION_NAME
     ENTERPRISE_CHROMA_COLLECTION: str | None = None
     ENTERPRISE_RAG_POLICY_MODE: str = "baseline"
+    ENTERPRISE_STRUCTURED_RETRIEVAL_MODE: str = "off"  # Phase 6F: "off" | "metadata_symbol"
     RAG_CHUNK_SIZE: int = 800
     RAG_CHUNK_OVERLAP: int = 120
     RAG_DEFAULT_TOP_K: int = 5
