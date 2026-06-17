@@ -48,17 +48,21 @@ Phase 6E-7 changes `query_type_aware` from a global replacement into a gated mod
 only metadata, code/config, short-keyword, and citation-required queries use the specialized
 policy. Ordinary knowledge and ambiguous or multi-hop queries fall back to baseline retrieval.
 
+Phase 6E-9 tightens this further into a conservative gate: even eligible query types need strong
+metadata, code/config, or citation signals before specialized retrieval is enabled.
+
 ## Query-Type-Aware Behavior
 
-- `exact_metadata_lookup`: uses bounded read-only Chroma scan plus metadata scoring, then falls
-  back to dense results.
-- `code_api_config` and `short_keyword`: use sparse-first scoring over document text and metadata,
-  then falls back to dense results.
+- `exact_metadata_lookup`: uses bounded read-only Chroma scan plus metadata scoring only when the
+  query has strong metadata signals.
+- `code_api_config` and `short_keyword`: use sparse-first scoring only when the query has strong
+  code/API/config signals.
 - Ordinary knowledge stays baseline.
 - `phase6c_bad_case_regression` stays baseline unless the query has explicit metadata, code/API, or
   citation features.
 - `ambiguous_query`: sets clarification debug fields while still returning evidence.
-- `citation_required_query`: annotates sources with citation evidence checks.
+- `citation_required_query`: annotates sources with citation evidence checks only when the query
+  explicitly requests citation/source evidence.
 - `negative_banned_source`: remains a guard-oriented policy in the helper layer; full runtime
   banned-source lists require the next full evaluation harness.
 
@@ -116,7 +120,7 @@ Outputs:
 
 ## Next Step
 
-After manual review and checkpoint, Phase 6E-8 should run full API-level evaluation comparing
-baseline, global query-type-aware, and gated query-type-aware mode. That step should validate
+After manual review and checkpoint, Phase 6E-10 should run full API-level evaluation comparing
+baseline, Phase 6E-7 gated policy, and Phase 6E-9 conservative gate. That step should validate
 source hit, keyword hit, latency, fallback behavior, and banned-source safety under the real
 retrieval path.

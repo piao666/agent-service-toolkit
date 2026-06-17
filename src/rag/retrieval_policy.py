@@ -45,9 +45,7 @@ METADATA_FIELDS = (
 )
 
 CODE_API_TERMS = (
-    "api",
     "endpoint",
-    "path",
     "route",
     "function",
     "class",
@@ -58,6 +56,46 @@ CODE_API_TERMS = (
     "filename",
     "import",
     "method",
+)
+
+STRONG_METADATA_TERMS = (
+    "source_id",
+    "chunk_id",
+    "doc_type",
+    "domain",
+    "title",
+    "section_path",
+    "heading_path",
+    "source_url",
+    "normalized_id",
+    "metadata",
+    "文档类型",
+    "来源编号",
+    "chunk 编号",
+    "chunk编号",
+    "source id",
+)
+
+STRONG_CODE_API_TERMS = (
+    "config",
+    "env",
+    "环境变量",
+    "参数",
+    "字段",
+    "endpoint",
+    "schema",
+    "错误码",
+    "status code",
+)
+
+STRONG_CITATION_TERMS = (
+    "引用",
+    "出处",
+    "来源",
+    "证据",
+    "citation",
+    "source",
+    "reference",
 )
 
 
@@ -101,13 +139,13 @@ def infer_query_type(query: str, case_metadata: dict[str, Any] | None = None) ->
     normalized_query = query.lower()
     if any(field in normalized_query for field in METADATA_FIELDS):
         return QueryType.EXACT_METADATA_LOOKUP
-    if any(term in normalized_query for term in CODE_API_TERMS) or re.search(
+    if _has_code_api_feature(query) or any(term in normalized_query for term in CODE_API_TERMS) or re.search(
         r"\b[A-Za-z_][A-Za-z0-9_]*\(", query
     ):
         return QueryType.CODE_API_CONFIG
     if any(term in query for term in ("对比", "区别", "同时", "以及", "和", "并且", "分别")):
         return QueryType.MULTI_HOP_LOOKUP
-    if any(term in query for term in ("引用", "来源", "出处", "证据", "citation", "source")):
+    if _has_citation_feature(query):
         return QueryType.CITATION_REQUIRED_QUERY
     if len(query.strip()) <= 12:
         return QueryType.SHORT_KEYWORD
@@ -163,33 +201,35 @@ def select_retrieval_policy(query_type: str | QueryType) -> RetrievalPolicy:
 
 def _has_metadata_feature(query: str) -> bool:
     normalized_query = query.lower()
-    extra_terms = (
-        "collection_name",
-        "review_status",
-        "ingest_candidate",
-        "content_cache_alias",
-        "source_catalog",
-        "manifest",
-        "schema",
-    )
-    return any(field in normalized_query for field in (*METADATA_FIELDS, *extra_terms))
+    return any(term in normalized_query for term in STRONG_METADATA_TERMS)
 
 
 def _has_code_api_feature(query: str) -> bool:
     normalized_query = query.lower()
-    if any(term in normalized_query for term in CODE_API_TERMS):
+    if any(term in normalized_query for term in STRONG_CODE_API_TERMS):
         return True
-    return bool(re.search(r"[A-Za-z_][A-Za-z0-9_]*(?:\(|=|:|/|\.)", query))
+    strong_patterns = (
+        r"/[A-Za-z0-9_./{}:-]+",
+        r"\b\w+\.(?:py|json|ya?ml|toml|md)\b",
+        r"\b[A-Za-z_][A-Za-z0-9_]*\(",
+        r"\bclass\s+[A-Za-z_][A-Za-z0-9_]*\b",
+        r"\b[A-Z][A-Z0-9_]{2,}\b",
+        r"\b[a-z]+_[a-z0-9_]+\b",
+        r"\b[a-z]+[A-Z][A-Za-z0-9]*\b",
+        r"\b(?:GET|POST|PUT|PATCH|DELETE)\b",
+        r"\b[1-5]\d{2}\b",
+    )
+    return any(re.search(pattern, query) for pattern in strong_patterns)
 
 
 def _has_citation_feature(query: str) -> bool:
     normalized_query = query.lower()
-    return any(term in normalized_query for term in ("引用", "来源", "出处", "证据", "citation", "source"))
+    return any(term in normalized_query for term in STRONG_CITATION_TERMS)
 
 
 def _short_keyword_is_safe(query: str) -> bool:
     stripped = query.strip()
-    return 2 <= len(stripped) <= 24 and not any(char in stripped for char in "？?。,.，")
+    return _has_metadata_feature(stripped) or _has_code_api_feature(stripped)
 
 
 def decide_gated_retrieval_policy(
@@ -205,20 +245,30 @@ def decide_gated_retrieval_policy(
     citation_feature = _has_citation_feature(query)
 
     if query_type is QueryType.EXACT_METADATA_LOOKUP:
+        enabled = metadata_feature
         return GatedPolicyDecision(
             query_type=query_type,
             policy=select_retrieval_policy(QueryType.EXACT_METADATA_LOOKUP),
-            gated_policy_enabled=True,
-            fallback_to_baseline=False,
-            gated_reason="exact_metadata_lookup enables metadata-first retrieval",
+            gated_policy_enabled=enabled,
+            fallback_to_baseline=not enabled,
+            gated_reason=(
+                "exact_metadata_lookup has strong metadata signal"
+                if enabled
+                else "exact_metadata_lookup lacks strong metadata signal, fallback to baseline"
+            ),
         )
     if query_type is QueryType.CODE_API_CONFIG:
+        enabled = code_api_feature
         return GatedPolicyDecision(
             query_type=query_type,
             policy=select_retrieval_policy(QueryType.CODE_API_CONFIG),
-            gated_policy_enabled=True,
-            fallback_to_baseline=False,
-            gated_reason="code_api_config enables sparse-first retrieval",
+            gated_policy_enabled=enabled,
+            fallback_to_baseline=not enabled,
+            gated_reason=(
+                "code_api_config has strong code/api/config signal"
+                if enabled
+                else "code_api_config lacks strong signal, fallback to baseline"
+            ),
         )
     if query_type is QueryType.SHORT_KEYWORD:
         enabled = _short_keyword_is_safe(query)
@@ -234,12 +284,17 @@ def decide_gated_retrieval_policy(
             ),
         )
     if query_type is QueryType.CITATION_REQUIRED_QUERY:
+        enabled = citation_feature
         return GatedPolicyDecision(
             query_type=query_type,
             policy=select_retrieval_policy(QueryType.CITATION_REQUIRED_QUERY),
-            gated_policy_enabled=True,
-            fallback_to_baseline=False,
-            gated_reason="citation_required_query enables evidence verification",
+            gated_policy_enabled=enabled,
+            fallback_to_baseline=not enabled,
+            gated_reason=(
+                "citation_required_query has strong citation signal"
+                if enabled
+                else "citation_required_query lacks strong citation signal, fallback to baseline"
+            ),
         )
     if query_type is QueryType.PHASE6C_BAD_CASE_REGRESSION:
         if metadata_feature:

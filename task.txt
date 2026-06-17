@@ -1389,3 +1389,77 @@ Phase 6E-7 boundaries preserved:
 - No long-running service was started.
 - No Phase 6D or Phase 6E-6 original results were overwritten.
 - This phase does not claim production readiness or that all bad cases are solved.
+
+Phase 6E-9: Conservative Gate / Precision-first Retrieval Policy
+----------------------------------------------------------------
+Phase 6E-8 full API-level re-evaluation showed that Phase 6E-7 gated policy still improved the
+targeted 59-case set but continued to degrade the 240-case full set:
+- 59-case set:
+  - baseline `source_hit=0.25`
+  - gated `source_hit=0.3571`
+  - baseline `bad_case=39`
+  - gated `bad_case=33`
+  - baseline latency `1762 ms`
+  - gated latency `1786 ms`
+- 240-case full set:
+  - baseline `source_hit=0.6938`
+  - gated `source_hit=0.6411`
+  - baseline `bad_case=61`
+  - gated `bad_case=72`
+  - baseline latency `2189 ms`
+  - gated latency `2251 ms`
+
+Phase 6E-9 implementation:
+- Tightened `src/rag/retrieval_policy.py` from broad gated policy to conservative,
+  precision-first gate.
+- `exact_metadata_lookup` now requires strong metadata signals before `metadata_first`.
+- `code_api_config` now requires strong code/API/config signals before `sparse_first_bm25`.
+- `short_keyword` defaults to baseline unless it is an explicit metadata or code symbol.
+- `citation_required_query` now requires explicit citation/source terms before
+  `citation_aware_evidence`.
+- `ambiguous_query`, `multi_hop_lookup`, and `negative_banned_source` do not replace retrieval.
+- ordinary knowledge and ordinary API documentation questions fall back to baseline.
+
+Strong metadata signals include:
+- `source_id`, `chunk_id`, `doc_type`, `domain`, `title`, `section_path`, `source_url`,
+  `normalized_id`, `metadata`, `文档类型`, `来源编号`, `chunk 编号`, and `source id`.
+
+Strong code/API/config signals include:
+- explicit API paths, filenames such as `.py`/`.json`/`.yaml`, function calls, class declarations,
+  config/env terms, 环境变量, 参数, 字段, endpoint, schema, 错误码, uppercase config constants,
+  underscore variables, camelCase names, HTTP methods, and status codes.
+
+Phase 6E-9 local probe outputs:
+- `data/knowledge_base/evaluation/phase6e9_conservative_gate_probe_results.jsonl`
+- `data/knowledge_base/evaluation/phase6e9_conservative_gate_probe_summary.json`
+- `docs/enterprise_rag_backend/PHASE6E9_CONSERVATIVE_GATE.md`
+
+Phase 6E-9 local probe summary:
+- `total_cases=59`
+- `conservative_gate_enabled_count=28`
+- `fallback_to_baseline_count=31`
+- `metadata_first_count=13`
+- `sparse_first_count=10`
+- `citation_aware_count=5`
+- `clarification_debug_only_count=6`
+- `strong_signal_required=true`
+- `baseline_default_unchanged=true`
+- `calls_llm=false`
+- `writes_chroma=false`
+- `recommended_hpc_full_eval=true`
+
+Direct probe:
+- `FastAPI 里 Request Body 如何定义？` now falls back to baseline.
+- Inferred type: `zh_knowledge`.
+- Selected policy: `dense_sparse_fusion`.
+- Conservative gate enabled: `false`.
+- Fallback to baseline: `true`.
+
+Phase 6E-9 boundaries preserved:
+- No Phase 6E-10 was started.
+- No HPC evaluation was run.
+- No real LLM was called.
+- No Chroma was written.
+- No long-running service was started.
+- No Phase 6E-8 original results were overwritten.
+- This phase does not claim production readiness or that all bad cases are solved.

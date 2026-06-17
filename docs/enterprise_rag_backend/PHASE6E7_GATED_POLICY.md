@@ -90,6 +90,13 @@ Phase 6E-8 should run full API-level re-evaluation comparing baseline, global
 `query_type_aware`, and gated `query_type_aware`. The expected outcome is to retain the 59-case
 targeted improvement while avoiding the 240-case full regression observed in Phase 6E-6.
 
+## Phase 6E-9 Follow-up
+
+Phase 6E-8 showed that Phase 6E-7 gated policy still improved the 59-case target set but still
+degraded the 240-case full set. Phase 6E-9 therefore tightens the gate into a conservative,
+precision-first policy. Specialized metadata/sparse/citation routing now requires strong signals;
+ordinary knowledge and ordinary API documentation questions fall back to baseline.
+
 ## Boundaries
 
 - This does not claim production launch readiness.

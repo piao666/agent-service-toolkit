@@ -37,6 +37,12 @@ DEFAULT_PHASE6E7_PROBE_RESULTS_PATH = (
     EVALUATION_DIR / "phase6e7_gated_policy_probe_results.jsonl"
 )
 DEFAULT_PHASE6E7_PROBE_SUMMARY_PATH = EVALUATION_DIR / "phase6e7_gated_policy_probe_summary.json"
+DEFAULT_PHASE6E9_PROBE_RESULTS_PATH = (
+    EVALUATION_DIR / "phase6e9_conservative_gate_probe_results.jsonl"
+)
+DEFAULT_PHASE6E9_PROBE_SUMMARY_PATH = (
+    EVALUATION_DIR / "phase6e9_conservative_gate_probe_summary.json"
+)
 
 FINAL_POLICY_DISTRIBUTION = {
     QueryType.EXACT_METADATA_LOOKUP.value: 31,
@@ -501,6 +507,81 @@ def build_phase6e7_gated_probe(
     return probe_rows, summary
 
 
+def build_phase6e9_conservative_probe(
+    cases: list[dict[str, Any]],
+) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    probe_rows: list[dict[str, Any]] = []
+    for case in cases:
+        decision = decide_gated_retrieval_policy(
+            case["query"],
+            {"query_type": case["query_type"]},
+        )
+        selected_policy = decision.policy.name.value
+        probe_rows.append(
+            {
+                "case_id": case["case_id"],
+                "query": case["query"],
+                "query_type": case["query_type"],
+                "original_query_type": case.get("original_query_type"),
+                "policy_mode": "query_type_aware",
+                "selected_policy": selected_policy,
+                "conservative_gate_enabled": decision.gated_policy_enabled,
+                "fallback_to_baseline": decision.fallback_to_baseline,
+                "gated_reason": decision.gated_reason,
+                "metadata_first_applied": (
+                    decision.gated_policy_enabled and selected_policy == "metadata_first"
+                ),
+                "sparse_first_applied": (
+                    decision.gated_policy_enabled and selected_policy == "sparse_first_bm25"
+                ),
+                "citation_evidence_checked": (
+                    decision.gated_policy_enabled and selected_policy == "citation_aware_evidence"
+                ),
+                "clarification_debug_only": (
+                    not decision.gated_policy_enabled and selected_policy == "clarification_first"
+                ),
+                "strong_signal_required": True,
+                "calls_llm": False,
+                "writes_chroma": False,
+            }
+        )
+
+    fastapi_probe_decision = decide_gated_retrieval_policy("FastAPI 里 Request Body 如何定义？")
+    selected_policy_counts = Counter(row["selected_policy"] for row in probe_rows)
+    summary = {
+        "phase": "6E-9_conservative_gate_probe",
+        "policy_mode": "query_type_aware",
+        "total_cases": len(probe_rows),
+        "by_query_type": dict(Counter(row["query_type"] for row in probe_rows)),
+        "by_selected_policy": dict(selected_policy_counts),
+        "conservative_gate_enabled_count": sum(
+            1 for row in probe_rows if row["conservative_gate_enabled"]
+        ),
+        "fallback_to_baseline_count": sum(1 for row in probe_rows if row["fallback_to_baseline"]),
+        "metadata_first_count": sum(1 for row in probe_rows if row["metadata_first_applied"]),
+        "sparse_first_count": sum(1 for row in probe_rows if row["sparse_first_applied"]),
+        "citation_aware_count": sum(1 for row in probe_rows if row["citation_evidence_checked"]),
+        "clarification_debug_only_count": sum(
+            1 for row in probe_rows if row["clarification_debug_only"]
+        ),
+        "strong_signal_required": True,
+        "baseline_default_unchanged": True,
+        "calls_llm": False,
+        "writes_chroma": False,
+        "starts_service": False,
+        "recommended_hpc_full_eval": True,
+        "fastapi_request_body_probe": {
+            "query": "FastAPI 里 Request Body 如何定义？",
+            "inferred_query_type": fastapi_probe_decision.query_type.value,
+            "selected_policy": fastapi_probe_decision.policy.name.value,
+            "conservative_gate_enabled": fastapi_probe_decision.gated_policy_enabled,
+            "fallback_to_baseline": fastapi_probe_decision.fallback_to_baseline,
+            "gated_reason": fastapi_probe_decision.gated_reason,
+        },
+    }
+    return probe_rows, summary
+
+
 def run(args: argparse.Namespace) -> dict[str, Any]:
     discovered = discover_inputs(EVALUATION_DIR)
     taxonomy_path = discovered.get("calibrated_taxonomy")
@@ -522,9 +603,13 @@ def run(args: argparse.Namespace) -> dict[str, Any]:
     probe_rows, probe_summary = build_phase6e5_probe(cases, results)
     write_jsonl(args.phase6e5_probe_results_output, probe_rows)
     write_json(args.phase6e5_probe_summary_output, probe_summary)
-    gated_probe_rows, gated_probe_summary = build_phase6e7_gated_probe(cases)
-    write_jsonl(args.phase6e7_probe_results_output, gated_probe_rows)
-    write_json(args.phase6e7_probe_summary_output, gated_probe_summary)
+    if args.write_phase6e7_probe:
+        gated_probe_rows, gated_probe_summary = build_phase6e7_gated_probe(cases)
+        write_jsonl(args.phase6e7_probe_results_output, gated_probe_rows)
+        write_json(args.phase6e7_probe_summary_output, gated_probe_summary)
+    conservative_rows, conservative_summary = build_phase6e9_conservative_probe(cases)
+    write_jsonl(args.phase6e9_probe_results_output, conservative_rows)
+    write_json(args.phase6e9_probe_summary_output, conservative_summary)
     return summary
 
 
@@ -552,6 +637,21 @@ def parse_args() -> argparse.Namespace:
         "--phase6e7-probe-summary-output",
         type=Path,
         default=DEFAULT_PHASE6E7_PROBE_SUMMARY_PATH,
+    )
+    parser.add_argument(
+        "--write-phase6e7-probe",
+        action="store_true",
+        help="Rewrite Phase 6E-7 probe outputs. Disabled by default to preserve historical output.",
+    )
+    parser.add_argument(
+        "--phase6e9-probe-results-output",
+        type=Path,
+        default=DEFAULT_PHASE6E9_PROBE_RESULTS_PATH,
+    )
+    parser.add_argument(
+        "--phase6e9-probe-summary-output",
+        type=Path,
+        default=DEFAULT_PHASE6E9_PROBE_SUMMARY_PATH,
     )
     return parser.parse_args()
 
