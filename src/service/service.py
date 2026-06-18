@@ -256,7 +256,12 @@ async def enterprise_agent_query(
         message=request.query,
         model=request.model,
         thread_id=session_id,
-        agent_config={"top_k": request.top_k},
+        agent_config={
+            "top_k": request.top_k,
+            # Preserve whether the caller supplied a session. The service-generated thread ID
+            # must not implicitly enable business conversation memory.
+            "memory_session_id": request.session_id,
+        },
     )
 
     try:
@@ -278,6 +283,7 @@ async def enterprise_agent_query(
         retrieval_debug=_enterprise_retrieval_debug(metadata, request, all_sources),
         latency_ms=round((perf_counter() - start_time) * 1000, 2),
         model_debug=_enterprise_model_debug(metadata, request),
+        memory_debug=dict(metadata.get("memory_debug") or {}),
         fallback=dict(metadata.get("fallback") or {}),
         session_id=session_id,
     )

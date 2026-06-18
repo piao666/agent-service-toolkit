@@ -27,6 +27,9 @@ class RagSettings(BaseSettings):
     ENTERPRISE_CHROMA_COLLECTION: str | None = None
     ENTERPRISE_RAG_POLICY_MODE: str = "baseline"
     ENTERPRISE_STRUCTURED_RETRIEVAL_MODE: str = "off"  # Phase 6F: "off" | "metadata_symbol"
+    ENTERPRISE_MEMORY_MODE: str = "off"
+    ENTERPRISE_MEMORY_MAX_TURNS: int = 5
+    ENTERPRISE_MEMORY_MAX_ANSWER_CHARS: int = 1000
     RAG_CHUNK_SIZE: int = 800
     RAG_CHUNK_OVERLAP: int = 120
     RAG_DEFAULT_TOP_K: int = 5
@@ -44,6 +47,11 @@ class RagSettings(BaseSettings):
         if self.CHROMA_COLLECTION_NAME != DEFAULT_CHROMA_COLLECTION_NAME:
             return self.CHROMA_COLLECTION_NAME
         return self.ENTERPRISE_CHROMA_COLLECTION or self.CHROMA_COLLECTION_NAME
+
+    @property
+    def memory_mode(self) -> str:
+        mode = self.ENTERPRISE_MEMORY_MODE.strip().lower()
+        return mode if mode in {"off", "buffer"} else "off"
 
 
 rag_settings = RagSettings()

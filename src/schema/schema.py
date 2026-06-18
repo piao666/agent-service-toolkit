@@ -124,6 +124,10 @@ class EnterpriseAgentQueryResponse(BaseModel):
         description="Model diagnostics for the answer synthesis step.",
         default_factory=dict,
     )
+    memory_debug: dict[str, Any] = Field(
+        description="Session-scoped conversational memory diagnostics.",
+        default_factory=dict,
+    )
     fallback: dict[str, Any] = Field(
         description="Fallback status and reason, when triggered.",
         default_factory=dict,

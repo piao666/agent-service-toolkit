@@ -9,6 +9,8 @@ from langgraph.graph import END, MessagesState, StateGraph
 
 from agents.enterprise_tools import enterprise_knowledge_retriever_func
 from core import get_model, settings
+from rag.config import rag_settings
+from rag.conversation_memory import contextualize_query_with_memory, get_memory_store
 
 INPUT_GUARD_DESCRIPTION = (
     "Check whether the user input is empty or clearly unsuitable for knowledge-base QA."
@@ -42,6 +44,7 @@ class EnterpriseRagState(MessagesState, total=False):
     retrieval: dict[str, Any]
     draft_answer: str
     model_debug: dict[str, Any]
+    memory_debug: dict[str, Any]
 
 
 def _message_text(message: BaseMessage) -> str:
@@ -119,6 +122,13 @@ def _get_top_k(config: RunnableConfig) -> int | str | None:
     return configurable.get("top_k")
 
 
+def _get_memory_session_id(config: RunnableConfig) -> str | None:
+    configurable = config.get("configurable", {})
+    session_id = configurable.get("memory_session_id")
+    normalized = str(session_id or "").strip()
+    return normalized or None
+
+
 def _format_source_summary(sources: list[dict[str, Any]], limit: int = 5) -> str:
     if not sources:
         return ""
@@ -189,10 +199,21 @@ async def route_need_retrieval(
 
 
 async def rewrite_query(state: EnterpriseRagState, config: RunnableConfig) -> EnterpriseRagState:
-    """Keep query rewrite lightweight while preserving a future extension point."""
+    """Normalize the query and optionally contextualize a session-scoped follow-up."""
     query = state.get("query", "")
     rewritten_query = " ".join(query.split())
-    return {"rewritten_query": rewritten_query}
+    session_id = _get_memory_session_id(config)
+    store = get_memory_store(
+        max_turns=rag_settings.ENTERPRISE_MEMORY_MAX_TURNS,
+        max_answer_chars=rag_settings.ENTERPRISE_MEMORY_MAX_ANSWER_CHARS,
+    )
+    contextual_query, memory_debug = contextualize_query_with_memory(
+        query=rewritten_query,
+        session_id=session_id,
+        memory_mode=rag_settings.memory_mode,
+        store=store,
+    )
+    return {"rewritten_query": contextual_query, "memory_debug": memory_debug}
 
 
 async def retrieve(state: EnterpriseRagState, config: RunnableConfig) -> EnterpriseRagState:
@@ -221,6 +242,7 @@ async def retrieve(state: EnterpriseRagState, config: RunnableConfig) -> Enterpr
 
     retrieval = enterprise_knowledge_retriever_func(query=query, top_k=top_k)  # type: ignore[arg-type]
     retrieval_debug = dict(retrieval.get("retrieval_debug") or {})
+    retrieval_debug["original_query"] = state.get("query", "")
     retrieval_debug["rewritten_query"] = query
     retrieval["retrieval_debug"] = retrieval_debug
     return {"retrieval": retrieval}
@@ -290,6 +312,26 @@ async def fallback_or_finish(
     sources = retrieval.get("sources") or []
     retrieval_debug = retrieval.get("retrieval_debug") or {}
     answer = state.get("draft_answer") or FALLBACK_PROMPT
+    memory_debug = dict(state.get("memory_debug") or {})
+    session_id = memory_debug.get("session_id")
+    if memory_debug.get("memory_enabled") and session_id:
+        store = get_memory_store(
+            max_turns=rag_settings.ENTERPRISE_MEMORY_MAX_TURNS,
+            max_answer_chars=rag_settings.ENTERPRISE_MEMORY_MAX_ANSWER_CHARS,
+        )
+        store.append_turn(
+            session_id=session_id,
+            user_query=state.get("query", ""),
+            assistant_answer=answer,
+            sources=sources,
+        )
+        memory_debug["memory_turn_count_after"] = store.get_turn_count(session_id)
+        memory_debug["memory_written"] = True
+    else:
+        memory_debug["memory_turn_count_after"] = memory_debug.get(
+            "memory_turn_count_before", 0
+        )
+        memory_debug["memory_written"] = False
     answer_with_sources = answer + _format_source_summary(sources)
     return {
         "messages": [
@@ -301,6 +343,7 @@ async def fallback_or_finish(
                     "retrieval_debug": retrieval_debug,
                     "fallback": retrieval.get("fallback") or {},
                     "model_debug": state.get("model_debug") or {},
+                    "memory_debug": memory_debug,
                 },
             )
         ]

@@ -1743,3 +1743,28 @@ Current Next Action
 - Decide whether to discard those experimental refinements or preserve them in a separate,
   explicitly reviewed change. They are not prerequisites for Phase 6G or Phase 6H.
 - After the worktree decision and roadmap review, begin Phase 6G-0 only when explicitly requested.
+
+Phase 6G-0 through Phase 6G-3 Implementation Status
+---------------------------------------------------
+- Status: implemented locally and pending manual verification/checkpoint.
+- Phase 6G-0: conversational memory design documented in
+  `docs/enterprise_rag_backend/PHASE6G_CONVERSATIONAL_MEMORY_PLAN.md`.
+- Phase 6G-1: bounded, process-local, session-isolated memory store implemented in
+  `src/rag/conversation_memory.py`.
+- Phase 6G-2: deterministic follow-up detection and last-turn topic contextualization implemented
+  without an LLM.
+- Phase 6G-3: memory is wired into the enterprise RAG Agent and business query response behind
+  `ENTERPRISE_MEMORY_MODE=off|buffer`; the default remains `off`.
+- A request without a caller-provided `session_id` does not read or write memory.
+- Stored sources are metadata summaries only; full retrieved chunk content is not retained.
+- `memory_debug` is additive and does not replace sources, citations, or retrieval debug.
+- Local smoke validation uses `scripts/smoke_phase6g_memory.py` and does not start the service,
+  call an LLM, or write Chroma.
+- Phase 6G-4 formal evaluation cases have not started.
+- Phase 6H has not started.
+- No HPC or real-provider evaluation is included in Phase 6G-0 through Phase 6G-3.
+
+Next action after manual acceptance:
+- Checkpoint Phase 6G-0 through Phase 6G-3 separately.
+- Then design Phase 6G-4 formal memory evaluation with single-turn, multi-turn follow-up,
+  no-context clarification, cross-session isolation, and memory-off baseline cases.
