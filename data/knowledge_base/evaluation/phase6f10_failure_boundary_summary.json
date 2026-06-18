@@ -1,0 +1,63 @@
+{
+  "phase": "6F-10_failure_boundary_analysis",
+  "missing_inputs": [],
+  "total_cases": 240,
+  "baseline_bad_case_count": 95,
+  "phase6f8_bad_case_count": 84,
+  "phase6f9_bad_case_count": 85,
+  "phase6f8_fixed_count": 12,
+  "phase6f8_regressed_count": 1,
+  "phase6f9_fixed_over_6f8_count": 0,
+  "phase6f9_regressed_over_6f8_count": 1,
+  "phase6f8_remaining_bad_count": 83,
+  "by_delta_category": {
+    "baseline_pass_6f8_pass": 144,
+    "sixf8_pass_6f9_pass": 155,
+    "baseline_fail_6f8_pass": 12,
+    "baseline_pass_6f8_fail": 1,
+    "sixf8_fail_6f9_fail": 84,
+    "baseline_fail_6f8_fail": 83,
+    "sixf8_pass_6f9_fail": 1
+  },
+  "by_query_type_remaining_bad": {
+    "en_api_doc": 1,
+    "mixed_zh_en_api": 3,
+    "agent_rag_concept": 1,
+    "exact_metadata_lookup": 3,
+    "code_api_config": 7,
+    "short_keyword": 5,
+    "negative_banned_source": 20,
+    "phase6c_bad_case_regression": 14,
+    "multi_hop_lookup": 7,
+    "ambiguous_query": 15,
+    "citation_required_query": 8
+  },
+  "by_failure_layer": {
+    "retrieval_keyword_miss": 5,
+    "source_hit_but_keyword_failed": 1,
+    "source_hit_but_citation_failed": 1,
+    "retrieval_source_miss": 83,
+    "retrieval_doc_type_miss": 72,
+    "metadata_index_insufficient": 3,
+    "code_symbol_index_insufficient": 7,
+    "multi_hop_query_decomposition_needed": 7,
+    "evaluator_too_strict_or_misaligned": 15,
+    "citation_verifier_needed": 8
+  },
+  "retrieval_still_fixable_count": 10,
+  "generation_or_evaluator_likely_count": 16,
+  "metadata_index_needed_count": 3,
+  "code_index_needed_count": 7,
+  "citation_verifier_needed_count": 8,
+  "chunk_cleanup_needed_count": 0,
+  "query_decomposition_needed_count": 7,
+  "evaluator_calibration_needed_count": 35,
+  "recommended_best_version": "phase6f8_structured_materialization",
+  "should_continue_retrieval_refinement": false,
+  "recommended_next_work": [
+    "phase6f_final_closure"
+  ],
+  "calls_llm": false,
+  "writes_chroma": false,
+  "starts_service": false
+}

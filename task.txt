@@ -1574,3 +1574,28 @@ Recommended Phase 6F direction:
   - citation verifier
   - chunk/evidence cleanup
   - query decomposition for multi-hop cases
+
+---
+
+### Phase 6F Final Closure (2026-06-18)
+
+Phase 6F 完成 structured retrieval infrastructure 全流程：metadata index、
+symbol index、candidate materialization、API-level full eval。
+
+**6F-8 最佳结果 (DeepSeek 240-case)**:
+- calibrated bad_case: 59 -> **49** (-10)
+- source_hit_rate: 0.694 -> **0.751** (+5.7%)
+- error_count: 0, timeout_count: 0
+
+**6F-9 精修**: bad=50 (-1 regression vs 6F-8), 不采用
+**6F-10 分析**:
+- 6F-8 fixed 12 cases, regressed 1
+- retrieval_still_fixable: 10 cases only
+- should_continue_retrieval_refinement: false
+- recommended_best_version: phase6f8
+
+**Phase 6F 结论**:
+- [x] structured candidate materialization 首次把 240 bad 降到 50 以下
+- [x] source_hit 首次超过 0.75
+- [x] 不再继续 retrieval-only refinement
+- [ ] Phase 6G: evidence grounding + citation verifier + evaluator calibration
