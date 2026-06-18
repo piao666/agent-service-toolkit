@@ -1598,4 +1598,148 @@ symbol index、candidate materialization、API-level full eval。
 - [x] structured candidate materialization 首次把 240 bad 降到 50 以下
 - [x] source_hit 首次超过 0.75
 - [x] 不再继续 retrieval-only refinement
-- [ ] Phase 6G: evidence grounding + citation verifier + evaluator calibration
+- [ ] Phase 6G: evidence grounding + citation verifier + evaluator calibration (obsolete early label;
+  superseded by the conversational-memory roadmap below)
+
+Phase 6F Final Checkpoint Status
+--------------------------------
+- Branch: `feature/enterprise-rag-backend`.
+- Latest checkpoint: `8e3c00d phase-6f failure boundary and closure`.
+- The checkpoint is available on `origin/feature/enterprise-rag-backend`.
+- Phase 6F completed metadata index, symbol index, structured retrieval probes, structured
+  candidate materialization, 240-case API-level evaluation, and failure-boundary analysis.
+- Recommended best version: Phase 6F-8 structured materialization.
+- Phase 6F-8: calibrated `bad_case_count` improved from 59 to 49; `source_hit_rate` improved
+  from 0.694 to 0.751; `error_count=0`; `timeout_count=0`.
+- Phase 6F-9 did not exceed Phase 6F-8: calibrated `bad_case_count=50` and
+  `source_hit_rate=0.746`.
+- Phase 6F-10 conclusion: `recommended_best_version=phase6f8` and
+  `should_continue_retrieval_refinement=false`.
+- Do not continue blind retrieval-policy, ranker, or boost tuning.
+- Phase 6F does not claim production readiness or that all bad cases are solved.
+
+Planning Boundary After Phase 6F
+--------------------------------
+- The next planned stages are Phase 6G conversational memory and Phase 6H Streamlit demo UI.
+- This update is planning only. Phase 6G and Phase 6H implementation have not started.
+- Each subphase requires implementation, local verification, and manual review before checkpoint.
+- Do not cross into a later subphase before the current subphase is manually accepted.
+- Keep feature flags disabled by default so the existing Agent/API baseline remains unchanged.
+- Do not commit secrets, local absolute paths, model weights, Chroma databases, raw/normalized/chunk
+  body caches, `.env`, `.venv`, generated logs, or large binary files.
+
+Phase 6G: Conversational Memory for RAG Q&A
+-------------------------------------------
+Goal:
+- Add session-scoped multi-turn memory so follow-up questions can reuse the previous topic while
+  preserving retrieval evidence and strict cross-session isolation.
+
+Phase 6G-0: Memory design document
+- Planned document: `docs/enterprise_rag_backend/PHASE6G_CONVERSATIONAL_MEMORY_PLAN.md`.
+- Explain why memory is needed and how memory differs from knowledge-base retrieval.
+- Define how `session_id` binds conversation context.
+- Define a bounded short-term buffer and assess whether summary memory is necessary.
+- Define cross-user and cross-session isolation requirements.
+- Define follow-up contextualization before retrieval.
+- Define additive `memory_debug` fields without breaking the existing response schema.
+- Default memory feature flag must remain off.
+- Define local and later API-level evaluation boundaries.
+
+Phase 6G-1: Memory store prototype
+- Planned module: `src/rag/conversation_memory.py` or an equivalent focused module.
+- Store the latest N turns by `session_id`.
+- Each turn may contain user query, assistant answer, source summary, and timestamp.
+- Provide `get_recent_context(session_id)`, `append_turn(...)`, and
+  `clear_session(session_id)` operations.
+- Start with an in-memory implementation behind an interface that can later support SQLite,
+  Redis, or a LangGraph store.
+- Do not store API keys, unnecessary source bodies, or sensitive original content.
+- Never read memory across sessions.
+
+Phase 6G-2: Follow-up query contextualization
+- Detect rule-based follow-up signals such as pronouns and requests for limitations, advantages,
+  principles, or usage that depend on the previous topic.
+- Produce a `contextual_query` from recent session context without calling an LLM in the baseline.
+- Keep any later LLM-based rewrite behind a separate feature flag.
+- Planned retrieval debug fields: `memory_enabled`, `session_id`, `memory_turn_count`,
+  `is_follow_up`, `contextual_query`, and `memory_rewrite_strategy`.
+
+Phase 6G-3: Agent/API integration
+- Planned feature flag: `ENTERPRISE_MEMORY_MODE=off|buffer`.
+- Default mode: `off`.
+- `off` must preserve current behavior.
+- `buffer` enables bounded short-term memory only when `session_id` is present.
+- Preserve the existing response schema and source/citation behavior.
+- Add explicit session isolation and clear-session behavior without removing upstream endpoints.
+
+Phase 6G-4: Local evaluation
+- Planned cases: `data/knowledge_base/evaluation/phase6g_memory_cases.jsonl`.
+- Cover single-turn QA, two-turn follow-up, three-turn follow-up, cross-session isolation,
+  clarification without context, and memory-off versus memory-on behavior.
+- Planned runner: `scripts/run_phase6g_memory_eval.py`.
+- Planned outputs: `phase6g_memory_eval_results.jsonl` and
+  `phase6g_memory_eval_summary.json` under the evaluation directory.
+- Metrics: `follow_up_context_hit_rate`, `cross_session_leak_count`,
+  `memory_enabled_success_count`, `memory_disabled_baseline_unchanged`,
+  `answer_non_empty_rate`, `source_present_rate`, and `error_count`.
+- Do not report memory quality as passed unless the cases and metrics are reproducible.
+
+Phase 6G-5: HPC/API-level evaluation
+- Consider real API-level memory evaluation only after local implementation and manual review pass.
+- Do not start on HPC by default.
+- Compare memory off and buffer modes while preserving the same retrieval and provider settings.
+- Treat cross-session leakage as a blocking failure.
+
+Phase 6H: Streamlit RAG Demo UI
+--------------------------------
+Goal:
+- Provide a practical chat demo for the existing RAG Agent, source tracing, retrieval debug, and
+  optional Phase 6G memory behavior.
+
+Phase 6H-0: UI design document
+- Planned document: `docs/enterprise_rag_backend/PHASE6H_STREAMLIT_DEMO_PLAN.md`.
+- Define the demo goals, page structure, API integration, answer display, source/citation display,
+  retrieval debug, memory debug, memory toggle, structured retrieval mode, and secret handling.
+- The UI must call the existing backend rather than duplicate retrieval or Agent logic.
+
+Phase 6H-1: Streamlit chat UI
+- Use the existing upstream Streamlit entry point if extension is compatible; otherwise introduce
+  one clearly scoped app entry point after reviewing current project structure.
+- Sidebar controls: API base URL, `session_id`, `top_k`, memory mode, structured retrieval mode,
+  and example questions.
+- Main area: chat history, answer, source cards, citations, and collapsible debug details.
+- Show actionable messages when the API is unavailable or a request times out.
+- Do not store or display provider API keys in the frontend.
+
+Phase 6H-2: Sources and citations
+- Each source card should support title, `source_id`, `doc_type`, `section_path`, `source_url`,
+  `content_preview`, `relevance_score`, and `chunk_id`.
+- Use expandable source details and preserve the backend response as the source of truth.
+- Do not invent missing citations or source metadata.
+
+Phase 6H-3: Memory demo
+- Display current `session_id`, recent turn count, `contextual_query`, and `memory_debug`.
+- Provide a clear-current-session action without affecting other sessions.
+- Allow memory on/off comparison while keeping the backend default off.
+
+Phase 6H-4: Local demonstration script
+- Planned document: `docs/enterprise_rag_backend/PHASE6H_DEMO_SCRIPT.md`.
+- Include ordinary knowledge-base QA, multi-turn follow-up, source/citation inspection, and
+  structured retrieval examples.
+- Keep expected outcomes factual and reproducible; do not present unmeasured claims.
+
+Phase 6H-5: Final demo acceptance
+- Streamlit starts locally and connects to the local FastAPI service.
+- Ordinary RAG queries return answers and sources.
+- Retrieval and memory debug can be inspected without exposing secrets.
+- Memory on/off can be switched and follow-up context can be demonstrated.
+- API unavailable and timeout states are handled clearly.
+- No API key is stored or exposed by the UI.
+
+Current Next Action
+-------------------
+- Manually review the two existing uncommitted Phase 6F-9 refinement files before any new
+  checkpoint: `src/agents/enterprise_tools.py` and `src/rag/structured_retrieval.py`.
+- Decide whether to discard those experimental refinements or preserve them in a separate,
+  explicitly reviewed change. They are not prerequisites for Phase 6G or Phase 6H.
+- After the worktree decision and roadmap review, begin Phase 6G-0 only when explicitly requested.
