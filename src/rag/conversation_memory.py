@@ -25,6 +25,7 @@ _FOLLOW_UP_PATTERNS = (
     "why",
     "how",
     "it",
+    "its",
     "this",
     "that",
     "limitation",
@@ -191,6 +192,15 @@ def _extract_topic(turn: ConversationTurn) -> str:
     return _clip_text(answer, 100)
 
 
+def _select_topic(recent_turns: list[ConversationTurn]) -> str:
+    for turn in reversed(recent_turns):
+        if not is_follow_up_query(turn.user_query):
+            topic = _extract_topic(turn)
+            if topic:
+                return topic
+    return _extract_topic(recent_turns[-1]) if recent_turns else ""
+
+
 def _rewrite_with_topic(query: str, topic: str) -> str:
     rewritten = _normalize_text(query)
     rewritten = re.sub(r"^(上面|刚才|前面)(提到的)?", "", rewritten).strip()
@@ -223,7 +233,7 @@ def build_contextual_query(
     if not follow_up or not recent_turns:
         return original_query, debug
 
-    topic = _extract_topic(recent_turns[-1])
+    topic = _select_topic(recent_turns)
     if not topic:
         debug["memory_rewrite_strategy"] = "no_topic_available"
         return original_query, debug

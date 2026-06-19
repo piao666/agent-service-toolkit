@@ -1673,16 +1673,19 @@ Phase 6G-3: Agent/API integration
 - Add explicit session isolation and clear-session behavior without removing upstream endpoints.
 
 Phase 6G-4: Local evaluation
-- Planned cases: `data/knowledge_base/evaluation/phase6g_memory_cases.jsonl`.
-- Cover single-turn QA, two-turn follow-up, three-turn follow-up, cross-session isolation,
-  clarification without context, and memory-off versus memory-on behavior.
-- Planned runner: `scripts/run_phase6g_memory_eval.py`.
-- Planned outputs: `phase6g_memory_eval_results.jsonl` and
-  `phase6g_memory_eval_summary.json` under the evaluation directory.
-- Metrics: `follow_up_context_hit_rate`, `cross_session_leak_count`,
-  `memory_enabled_success_count`, `memory_disabled_baseline_unchanged`,
-  `answer_non_empty_rate`, `source_present_rate`, and `error_count`.
-- Do not report memory quality as passed unless the cases and metrics are reproducible.
+- Status: local deterministic evaluation completed; pending manual acceptance and checkpoint.
+- Dataset: 24 cases and 47 turns in
+  `data/knowledge_base/evaluation/phase6g_memory_cases.jsonl`.
+- Coverage: single-turn baseline, two-turn and three-turn follow-up, cross-session isolation,
+  missing session, memory off, no-context follow-up, and source-summary safety.
+- Runner: `scripts/run_phase6g_memory_eval.py`.
+- Outputs: `phase6g_memory_eval_results.jsonl` and `phase6g_memory_eval_summary.json` under the
+  evaluation directory.
+- Result: `follow_up_context_hit_rate=1.0`, `cross_session_leak_count=0`, `error_count=0`,
+  `memory_debug_present_count=47`, and all required no-op and source-safety checks passed.
+- The evaluation does not call an LLM, write Chroma, start a service, or measure answer quality.
+- Three-turn topic inheritance now selects the most recent independent question rather than a
+  preceding pronoun-only follow-up.
 
 Phase 6G-5: HPC/API-level evaluation
 - Consider real API-level memory evaluation only after local implementation and manual review pass.
@@ -1738,15 +1741,13 @@ Phase 6H-5: Final demo acceptance
 
 Current Next Action
 -------------------
-- Manually review the two existing uncommitted Phase 6F-9 refinement files before any new
-  checkpoint: `src/agents/enterprise_tools.py` and `src/rag/structured_retrieval.py`.
-- Decide whether to discard those experimental refinements or preserve them in a separate,
-  explicitly reviewed change. They are not prerequisites for Phase 6G or Phase 6H.
-- After the worktree decision and roadmap review, begin Phase 6G-0 only when explicitly requested.
+- Manually verify the Phase 6G-4 cases, generated metrics, and three-turn topic fix.
+- After acceptance, checkpoint Phase 6G-4 without starting Phase 6H.
+- Then choose either Phase 6G-5 API-level memory evaluation or Phase 6H Streamlit planning.
 
-Phase 6G-0 through Phase 6G-3 Implementation Status
+Phase 6G-0 through Phase 6G-4 Implementation Status
 ---------------------------------------------------
-- Status: implemented locally and pending manual verification/checkpoint.
+- Phase 6G-0 through Phase 6G-3 checkpoint: `92f99e0 phase-6g conversational memory prototype`.
 - Phase 6G-0: conversational memory design documented in
   `docs/enterprise_rag_backend/PHASE6G_CONVERSATIONAL_MEMORY_PLAN.md`.
 - Phase 6G-1: bounded, process-local, session-isolated memory store implemented in
@@ -1760,11 +1761,12 @@ Phase 6G-0 through Phase 6G-3 Implementation Status
 - `memory_debug` is additive and does not replace sources, citations, or retrieval debug.
 - Local smoke validation uses `scripts/smoke_phase6g_memory.py` and does not start the service,
   call an LLM, or write Chroma.
-- Phase 6G-4 formal evaluation cases have not started.
+- Phase 6G-4 formal local evaluation is complete and pending manual acceptance/checkpoint.
+- Evaluation summary: 24 cases, 47 turns, 18/18 eligible follow-ups contextualized with expected
+  topic terms, zero cross-session leaks, and zero evaluation errors.
 - Phase 6H has not started.
-- No HPC or real-provider evaluation is included in Phase 6G-0 through Phase 6G-3.
+- No HPC or real-provider evaluation is included in Phase 6G-0 through Phase 6G-4.
 
 Next action after manual acceptance:
-- Checkpoint Phase 6G-0 through Phase 6G-3 separately.
-- Then design Phase 6G-4 formal memory evaluation with single-turn, multi-turn follow-up,
-  no-context clarification, cross-session isolation, and memory-off baseline cases.
+- Checkpoint Phase 6G-4 separately.
+- Decide whether Phase 6G-5 API-level evaluation is required before beginning Phase 6H planning.
