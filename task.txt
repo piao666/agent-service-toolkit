@@ -1687,11 +1687,19 @@ Phase 6G-4: Local evaluation
 - Three-turn topic inheritance now selects the most recent independent question rather than a
   preceding pronoun-only follow-up.
 
-Phase 6G-5: HPC/API-level evaluation
-- Consider real API-level memory evaluation only after local implementation and manual review pass.
-- Do not start on HPC by default.
-- Compare memory off and buffer modes while preserving the same retrieval and provider settings.
-- Treat cross-session leakage as a blocking failure.
+Phase 6G-5: Local API-level evaluation
+- Status: completed locally and pending manual acceptance/checkpoint.
+- Runner: `scripts/run_phase6g_api_memory_eval.py`.
+- Outputs: `phase6g_api_memory_eval_results.jsonl` and
+  `phase6g_api_memory_eval_summary.json` under the evaluation directory.
+- The runner starts separate short-lived memory-off and buffer service processes and calls the
+  real `/enterprise/agent/query` endpoint with the fake model.
+- Result: 6 scenarios, 12 requests, 12 schema-valid responses, 12 complete `memory_debug`
+  responses, `contextual_query_hit_rate=1.0`, zero cross-session leaks, zero errors, and zero
+  timeouts.
+- Missing-session and no-context no-op behavior passed. The three-turn query retained the original
+  RAG topic through the API lifecycle.
+- No real LLM/provider, Chroma write, HPC, retrieval-quality claim, or production claim is included.
 
 Phase 6H: Streamlit RAG Demo UI
 --------------------------------
@@ -1741,13 +1749,14 @@ Phase 6H-5: Final demo acceptance
 
 Current Next Action
 -------------------
-- Manually verify the Phase 6G-4 cases, generated metrics, and three-turn topic fix.
-- After acceptance, checkpoint Phase 6G-4 without starting Phase 6H.
-- Then choose either Phase 6G-5 API-level memory evaluation or Phase 6H Streamlit planning.
+- Manually verify the Phase 6G-5 API results, fake-model boundary, and managed service cleanup.
+- After acceptance, checkpoint Phase 6G-5 separately.
+- Then begin Phase 6H planning only when explicitly requested.
 
-Phase 6G-0 through Phase 6G-4 Implementation Status
+Phase 6G-0 through Phase 6G-5 Implementation Status
 ---------------------------------------------------
 - Phase 6G-0 through Phase 6G-3 checkpoint: `92f99e0 phase-6g conversational memory prototype`.
+- Phase 6G-4 checkpoint: `e6bab1d phase-6g memory evaluation`.
 - Phase 6G-0: conversational memory design documented in
   `docs/enterprise_rag_backend/PHASE6G_CONVERSATIONAL_MEMORY_PLAN.md`.
 - Phase 6G-1: bounded, process-local, session-isolated memory store implemented in
@@ -1761,12 +1770,16 @@ Phase 6G-0 through Phase 6G-4 Implementation Status
 - `memory_debug` is additive and does not replace sources, citations, or retrieval debug.
 - Local smoke validation uses `scripts/smoke_phase6g_memory.py` and does not start the service,
   call an LLM, or write Chroma.
-- Phase 6G-4 formal local evaluation is complete and pending manual acceptance/checkpoint.
+- Phase 6G-4 formal local evaluation is complete and checkpointed.
 - Evaluation summary: 24 cases, 47 turns, 18/18 eligible follow-ups contextualized with expected
   topic terms, zero cross-session leaks, and zero evaluation errors.
+- Phase 6G-5 local API evaluation is complete and pending manual acceptance/checkpoint.
+- API summary: 6 scenarios, 12 requests, all schemas and memory debug fields valid, five of five
+  eligible contextual queries hit expected topics, and no cross-session leaks, errors, or timeouts.
 - Phase 6H has not started.
-- No HPC or real-provider evaluation is included in Phase 6G-0 through Phase 6G-4.
+- No HPC or real-provider evaluation is included in Phase 6G-0 through Phase 6G-5.
 
 Next action after manual acceptance:
-- Checkpoint Phase 6G-4 separately.
-- Decide whether Phase 6G-5 API-level evaluation is required before beginning Phase 6H planning.
+- Checkpoint Phase 6G-5 separately.
+- Treat Phase 6H Streamlit Demo UI as the next proposed stage, but do not start it without an
+  explicit request.
