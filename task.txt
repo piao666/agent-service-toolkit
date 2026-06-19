@@ -1688,7 +1688,8 @@ Phase 6G-4: Local evaluation
   preceding pronoun-only follow-up.
 
 Phase 6G-5: Local API-level evaluation
-- Status: completed locally and pending manual acceptance/checkpoint.
+- Status: completed, manually accepted, and checkpointed as
+  `2654549 phase-6g api memory evaluation`.
 - Runner: `scripts/run_phase6g_api_memory_eval.py`.
 - Outputs: `phase6g_api_memory_eval_results.jsonl` and
   `phase6g_api_memory_eval_summary.json` under the evaluation directory.
@@ -1708,14 +1709,15 @@ Goal:
   optional Phase 6G memory behavior.
 
 Phase 6H-0: UI design document
-- Planned document: `docs/enterprise_rag_backend/PHASE6H_STREAMLIT_DEMO_PLAN.md`.
+- Status: completed locally and pending visual acceptance/checkpoint.
+- Document: `docs/enterprise_rag_backend/PHASE6H_STREAMLIT_DEMO_PLAN.md`.
 - Define the demo goals, page structure, API integration, answer display, source/citation display,
   retrieval debug, memory debug, memory toggle, structured retrieval mode, and secret handling.
 - The UI must call the existing backend rather than duplicate retrieval or Agent logic.
 
 Phase 6H-1: Streamlit chat UI
-- Use the existing upstream Streamlit entry point if extension is compatible; otherwise introduce
-  one clearly scoped app entry point after reviewing current project structure.
+- Status: completed locally and pending visual acceptance/checkpoint.
+- The existing upstream entry point `src/streamlit_app.py` is reused as the single UI entry point.
 - Sidebar controls: API base URL, `session_id`, `top_k`, memory mode, structured retrieval mode,
   and example questions.
 - Main area: chat history, answer, source cards, citations, and collapsible debug details.
@@ -1723,23 +1725,30 @@ Phase 6H-1: Streamlit chat UI
 - Do not store or display provider API keys in the frontend.
 
 Phase 6H-2: Sources and citations
+- Status: completed locally and pending visual acceptance/checkpoint.
 - Each source card should support title, `source_id`, `doc_type`, `section_path`, `source_url`,
   `content_preview`, `relevance_score`, and `chunk_id`.
 - Use expandable source details and preserve the backend response as the source of truth.
 - Do not invent missing citations or source metadata.
 
 Phase 6H-3: Memory demo
+- Status: completed locally and pending visual acceptance/checkpoint.
 - Display current `session_id`, recent turn count, `contextual_query`, and `memory_debug`.
 - Provide a clear-current-session action without affecting other sessions.
 - Allow memory on/off comparison while keeping the backend default off.
 
 Phase 6H-4: Local demonstration script
-- Planned document: `docs/enterprise_rag_backend/PHASE6H_DEMO_SCRIPT.md`.
+- Status: completed locally and pending visual acceptance/checkpoint.
+- Document: `docs/enterprise_rag_backend/PHASE6H_DEMO_SCRIPT.md`.
 - Include ordinary knowledge-base QA, multi-turn follow-up, source/citation inspection, and
   structured retrieval examples.
 - Keep expected outcomes factual and reproducible; do not present unmeasured claims.
 
 Phase 6H-5: Final demo acceptance
+- Status: implementation and static smoke completed; interactive visual acceptance is pending.
+- Static smoke: `scripts/smoke_phase6h_streamlit.py` confirms the app and required render helpers
+  exist, all example questions are present, no credential value or local absolute path is
+  hard-coded, and the smoke does not call an LLM, write Chroma, or start a service.
 - Streamlit starts locally and connects to the local FastAPI service.
 - Ordinary RAG queries return answers and sources.
 - Retrieval and memory debug can be inspected without exposing secrets.
@@ -1749,14 +1758,17 @@ Phase 6H-5: Final demo acceptance
 
 Current Next Action
 -------------------
-- Manually verify the Phase 6G-5 API results, fake-model boundary, and managed service cleanup.
-- After acceptance, checkpoint Phase 6G-5 separately.
-- Then begin Phase 6H planning only when explicitly requested.
+- Manually start FastAPI and `src/streamlit_app.py` for Phase 6H visual acceptance.
+- Verify standard RAG chat, source cards, memory follow-ups, debug panels, and unavailable-API
+  handling without provider credentials in the frontend.
+- Create a Phase 6H checkpoint only after that visual acceptance. Do not claim production
+  deployment or production readiness.
 
 Phase 6G-0 through Phase 6G-5 Implementation Status
 ---------------------------------------------------
 - Phase 6G-0 through Phase 6G-3 checkpoint: `92f99e0 phase-6g conversational memory prototype`.
 - Phase 6G-4 checkpoint: `e6bab1d phase-6g memory evaluation`.
+- Phase 6G-5 checkpoint: `2654549 phase-6g api memory evaluation`.
 - Phase 6G-0: conversational memory design documented in
   `docs/enterprise_rag_backend/PHASE6G_CONVERSATIONAL_MEMORY_PLAN.md`.
 - Phase 6G-1: bounded, process-local, session-isolated memory store implemented in
@@ -1773,13 +1785,13 @@ Phase 6G-0 through Phase 6G-5 Implementation Status
 - Phase 6G-4 formal local evaluation is complete and checkpointed.
 - Evaluation summary: 24 cases, 47 turns, 18/18 eligible follow-ups contextualized with expected
   topic terms, zero cross-session leaks, and zero evaluation errors.
-- Phase 6G-5 local API evaluation is complete and pending manual acceptance/checkpoint.
+- Phase 6G-5 local API evaluation is complete and checkpointed.
 - API summary: 6 scenarios, 12 requests, all schemas and memory debug fields valid, five of five
   eligible contextual queries hit expected topics, and no cross-session leaks, errors, or timeouts.
-- Phase 6H has not started.
+- Phase 6H-0 through Phase 6H-5 implementation and static smoke are complete locally. Interactive
+  visual acceptance and checkpoint remain pending; no production deployment claim is made.
 - No HPC or real-provider evaluation is included in Phase 6G-0 through Phase 6G-5.
 
 Next action after manual acceptance:
-- Checkpoint Phase 6G-5 separately.
-- Treat Phase 6H Streamlit Demo UI as the next proposed stage, but do not start it without an
-  explicit request.
+- Run the documented Phase 6H local visual demonstration with FastAPI and Streamlit.
+- Checkpoint Phase 6H only after the chat, source, memory, debug, and error states are accepted.
