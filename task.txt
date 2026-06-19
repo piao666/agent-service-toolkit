@@ -1795,3 +1795,149 @@ Phase 6G-0 through Phase 6G-5 Implementation Status
 Next action after manual acceptance:
 - Run the documented Phase 6H local visual demonstration with FastAPI and Streamlit.
 - Checkpoint Phase 6H only after the chat, source, memory, debug, and error states are accepted.
+
+Current Project Progress through Phase 6H
+-----------------------------------------
+- The enterprise knowledge-base RAG pipeline, controlled corpus processing, source tracing, and
+  business query endpoint are implemented.
+- Retrieval quality work includes a 240-case evaluation, embedding and reranker benchmarks,
+  query-type policy experiments, structured retrieval, and structured candidate materialization.
+- Phase 6F-8 remains the best measured structured retrieval version: calibrated 240-case
+  `bad_case_count` improved from 59 to 49, `source_hit_rate` improved from 0.694 to 0.751, and
+  `error_count=0`. These results do not establish production readiness or resolve every bad case.
+- Phase 6G conversational memory includes a session-isolated in-memory buffer, deterministic
+  follow-up rewriting, and API integration behind a default-off feature flag.
+- Phase 6G local memory evaluation covered 24 cases and 47 turns with
+  `follow_up_context_hit_rate=1.0` and `cross_session_leak_count=0`.
+- Phase 6G API evaluation completed 12 requests with 12/12 valid schemas, zero cross-session
+  leaks, and zero errors.
+- Phase 6H Streamlit implementation provides answer, source-card, retrieval-debug, memory-debug,
+  request-payload, raw-response, and unavailable-API views. Static smoke passed; local visual
+  acceptance and a Phase 6H checkpoint remain separate manual gates.
+
+Post-Phase 6H Roadmap
+---------------------
+Execution order:
+1. Phase 6I: Evidence Grounding + Citation Verifier.
+2. Phase 6J: Custom LangGraph Enterprise RAG Graph.
+3. Phase 6K: Final README / Resume / Demo Packaging.
+
+Roadmap details are maintained in
+`docs/enterprise_rag_backend/PHASE6I_6J_6K_ROADMAP.md`.
+
+Phase 6I: Evidence Grounding + Citation Verifier
+------------------------------------------------
+Status: Phase 6I-0 through Phase 6I-5 implemented locally; final quality gates and checkpoint are
+pending.
+
+Goal:
+- Add deterministic evidence checks that estimate whether an answer is supported by returned
+  sources and whether required citations are traceable, without replacing answer generation.
+
+Planned files:
+- `src/rag/evidence_verifier.py`
+- `scripts/run_phase6i_evidence_eval.py`
+- `docs/enterprise_rag_backend/PHASE6I_EVIDENCE_GROUNDING.md`
+- `data/knowledge_base/evaluation/phase6i_evidence_cases.jsonl`
+- `data/knowledge_base/evaluation/phase6i_evidence_eval_results.jsonl`
+- `data/knowledge_base/evaluation/phase6i_evidence_eval_summary.json`
+
+Compatibility and output contract:
+- Feature flag: `ENTERPRISE_EVIDENCE_VERIFIER_MODE=off|rule_based`, default `off`.
+- Additive outputs may include `verifier_debug`, `grounding_score`, `grounding_status`,
+  `citation_coverage`, `unsupported_terms`, and `safe_fallback_triggered`.
+- Existing Agent/API behavior must remain unchanged while the feature flag is off.
+
+Acceptance gate:
+- `error_count=0` and `grounding_debug_present_rate=1.0`.
+- At least one citation-required case is checked and at least one unsupported answer is detected.
+- No LLM call or Chroma write is introduced by the verifier evaluation.
+- Focused pytest, ruff, leakage checks, and manual review pass before checkpoint.
+
+Implementation and local evaluation summary:
+- Added `src/rag/evidence_verifier.py` with bounded term extraction, source summarization,
+  grounding scoring, citation coverage, unsupported-term reporting, and optional safe fallback.
+- Added default-off verifier settings and additive Agent/API `verifier_debug` integration.
+- Added Streamlit evidence rendering with visible low/medium/high status and display-safe debug.
+- Added 24 synthetic evaluation cases and a deterministic local runner.
+- Local result: 14 high, 2 medium, 8 low, `expected_status_match_rate=1.0`, 3/3
+  citation-required cases checked, 2/2 unsupported-answer cases detected, two empty-source cases
+  classified low, one explicitly enabled safe fallback triggered, 24/24 complete verifier debug
+  records, and zero runtime errors.
+- The evaluation does not call an LLM, write Chroma, start a service, use private corpus content,
+  or establish production-grade fact checking.
+- Phase 6J has not started. Its custom graph may reuse this verifier only after Phase 6I is
+  accepted and checkpointed.
+
+Phase 6J: Custom LangGraph Enterprise RAG Graph
+-----------------------------------------------
+Status: planned; implementation has not started.
+
+Goal:
+- Provide an explicit, inspectable LangGraph workflow while preserving the current legacy Agent
+  graph as the default path.
+
+Planned files:
+- `src/agents/enterprise_rag_graph.py`
+- `scripts/smoke_phase6j_langgraph.py`
+- `docs/enterprise_rag_backend/PHASE6J_LANGGRAPH_RAG_GRAPH.md`
+- `docs/enterprise_rag_backend/agent_graph_mermaid.md`
+- `data/knowledge_base/evaluation/phase6j_graph_smoke_results.json`
+
+Compatibility and graph contract:
+- Feature flag: `ENTERPRISE_AGENT_GRAPH_MODE=legacy|custom_graph`, default `legacy`.
+- Main path: `query_classifier -> memory_rewriter -> retriever -> ranker -> answer_generator ->
+  evidence_verifier -> final_response`.
+- Conditional paths: ambiguous queries route to clarification, unsupported queries route to a safe
+  response, and normal queries continue through memory rewriting.
+
+Acceptance gate:
+- The custom graph imports and completes a fake-model smoke run.
+- The Mermaid graph matches the implemented nodes and conditional edges.
+- Legacy mode remains the default and existing tests remain unchanged.
+- No real LLM call or Chroma write is required by the smoke evaluation.
+- Focused pytest, ruff, leakage checks, and manual review pass before checkpoint.
+
+Phase 6K: Final README / Resume / Demo Packaging
+------------------------------------------------
+Status: planned; implementation has not started.
+
+Goal:
+- Produce consistent GitHub, runbook, interview, resume, and demonstration materials after the
+  technical phases are accepted.
+
+Planned files:
+- `README.md`
+- `docs/enterprise_rag_backend/PROJECT_FINAL_SUMMARY.md`
+- `docs/enterprise_rag_backend/PROJECT_RUNBOOK.md`
+- `docs/enterprise_rag_backend/INTERVIEW_NOTES.md`
+- `docs/enterprise_rag_backend/RESUME_PROJECT_DESCRIPTION.md`
+- `docs/enterprise_rag_backend/DEMO_WALKTHROUGH.md`
+
+Required coverage:
+- Project goals and system architecture.
+- RAG pipeline, structured retrieval, measured evaluation results, conversational memory,
+  evidence grounding, custom LangGraph graph, and Streamlit demo.
+- Reproducible startup commands, demo sequences, concise resume language, interview questions,
+  known limitations, and future work.
+- Preserve measured values exactly: Phase 6F-8 59 to 49 calibrated bad cases and 0.694 to 0.751
+  source hit rate; Phase 6G 24-case/47-turn memory evaluation with 1.0 context hit and zero leaks;
+  Phase 6G API evaluation with 12/12 schema-valid responses and zero errors.
+
+Acceptance gate:
+- All documented commands and links are checked against the repository.
+- Upstream capabilities, added capabilities, measured results, and known limitations are clearly
+  separated.
+- No specific organization, directed job title, secret, local absolute path, model weight,
+  Chroma cache, or unmeasured production claim is included.
+- Manual documentation review and leakage checks pass before checkpoint.
+
+Roadmap Checkpoint Rules
+------------------------
+- Finish and manually verify each phase before creating its checkpoint.
+- Do not implement later phases early or combine unverified phase claims.
+- Do not describe skipped checks as passed or local prototypes as production systems.
+- Do not commit `.env`, virtual environments, API keys, model weights, Chroma databases, raw or
+  normalized private content, generated logs, local absolute paths, or large binary files.
+- Current next action is to complete Phase 6I regression gates, leakage review, and checkpoint.
+  Phase 6J and Phase 6K remain blocked on their preceding phases.

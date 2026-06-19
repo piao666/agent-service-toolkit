@@ -284,6 +284,7 @@ async def enterprise_agent_query(
         latency_ms=round((perf_counter() - start_time) * 1000, 2),
         model_debug=_enterprise_model_debug(metadata, request),
         memory_debug=dict(metadata.get("memory_debug") or {}),
+        verifier_debug=dict(metadata.get("verifier_debug") or {}),
         fallback=dict(metadata.get("fallback") or {}),
         session_id=session_id,
     )

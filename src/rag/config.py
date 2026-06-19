@@ -30,6 +30,10 @@ class RagSettings(BaseSettings):
     ENTERPRISE_MEMORY_MODE: str = "off"
     ENTERPRISE_MEMORY_MAX_TURNS: int = 5
     ENTERPRISE_MEMORY_MAX_ANSWER_CHARS: int = 1000
+    ENTERPRISE_EVIDENCE_VERIFIER_MODE: str = "off"
+    ENTERPRISE_EVIDENCE_SAFE_FALLBACK: bool = False
+    ENTERPRISE_EVIDENCE_MIN_SCORE: float = 0.30
+    ENTERPRISE_EVIDENCE_HIGH_SCORE: float = 0.60
     RAG_CHUNK_SIZE: int = 800
     RAG_CHUNK_OVERLAP: int = 120
     RAG_DEFAULT_TOP_K: int = 5
@@ -52,6 +56,11 @@ class RagSettings(BaseSettings):
     def memory_mode(self) -> str:
         mode = self.ENTERPRISE_MEMORY_MODE.strip().lower()
         return mode if mode in {"off", "buffer"} else "off"
+
+    @property
+    def evidence_verifier_mode(self) -> str:
+        mode = self.ENTERPRISE_EVIDENCE_VERIFIER_MODE.strip().lower()
+        return mode if mode in {"off", "rule_based"} else "off"
 
 
 rag_settings = RagSettings()

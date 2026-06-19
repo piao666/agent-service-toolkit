@@ -1,0 +1,23 @@
+{
+  "acceptance_passed": true,
+  "calls_llm": false,
+  "case_count": 24,
+  "citation_required_case_count": 3,
+  "citation_required_checked_count": 3,
+  "empty_sources_low_confidence_count": 2,
+  "error_count": 0,
+  "expected_status_match_count": 24,
+  "expected_status_match_rate": 1.0,
+  "failed_case_ids": [],
+  "high_count": 14,
+  "low_count": 8,
+  "medium_count": 2,
+  "phase": "6I_evidence_grounding_eval",
+  "recommended_checkpoint": true,
+  "safe_fallback_triggered_count": 1,
+  "starts_service": false,
+  "unsupported_answer_case_count": 2,
+  "unsupported_answer_detected_count": 2,
+  "verifier_debug_present_count": 24,
+  "writes_chroma": false
+}

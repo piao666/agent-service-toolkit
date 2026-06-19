@@ -193,6 +193,38 @@ def render_memory_debug(memory_debug: dict[str, Any]) -> None:
     st.dataframe(rows, hide_index=True, use_container_width=True)
 
 
+def render_verifier_debug(verifier_debug: dict[str, Any]) -> None:
+    """Render deterministic evidence-grounding diagnostics."""
+    st.markdown("#### Evidence grounding")
+    if not verifier_debug:
+        st.caption("本轮 response 未返回 verifier_debug。")
+        return
+
+    safe_debug = redact_for_display(verifier_debug)
+    grounding_status = str(safe_debug.get("grounding_status") or "not_checked")
+    grounding_score = safe_debug.get("grounding_score", 0.0)
+    citation_coverage = bool(safe_debug.get("citation_coverage"))
+    safe_fallback_triggered = bool(safe_debug.get("safe_fallback_triggered"))
+
+    if grounding_status == "low":
+        st.error("Evidence grounding: LOW。当前答案缺少充分的来源支持。")
+    elif grounding_status == "medium":
+        st.warning("Evidence grounding: MEDIUM。建议结合来源人工复核。")
+    elif grounding_status == "high":
+        st.success("Evidence grounding: HIGH。答案关键术语与返回来源具有较高覆盖。")
+    else:
+        st.caption("Evidence verifier 未启用或未执行。")
+
+    left, middle, right = st.columns(3)
+    left.metric("Grounding score", grounding_score)
+    middle.metric("Citation coverage", "yes" if citation_coverage else "no")
+    right.metric("Safe fallback", "triggered" if safe_fallback_triggered else "not triggered")
+    st.markdown("**Matched terms**")
+    st.write(safe_debug.get("matched_terms") or [])
+    st.markdown("**Unsupported terms**")
+    st.write(safe_debug.get("unsupported_terms") or [])
+
+
 def render_retrieval_debug(retrieval_debug: dict[str, Any]) -> None:
     """Render retrieval diagnostics in a collapsed section."""
     with st.expander("Retrieval debug", expanded=False):
@@ -288,6 +320,7 @@ def _render_message(message: dict[str, Any]) -> None:
             response = message["response"]
             render_source_cards(response.get("sources") or [])
             render_memory_debug(response.get("memory_debug") or {})
+            render_verifier_debug(response.get("verifier_debug") or {})
             render_debug_panel(message.get("payload") or {}, response)
 
 
@@ -341,6 +374,7 @@ def main() -> None:
             st.write(answer)
             render_source_cards(response.get("sources") or [])
             render_memory_debug(response.get("memory_debug") or {})
+            render_verifier_debug(response.get("verifier_debug") or {})
             render_debug_panel(payload, response)
             st.session_state.messages.append(
                 {"role": "assistant", "content": answer, "payload": payload, "response": response}

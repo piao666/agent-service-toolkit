@@ -128,6 +128,10 @@ class EnterpriseAgentQueryResponse(BaseModel):
         description="Session-scoped conversational memory diagnostics.",
         default_factory=dict,
     )
+    verifier_debug: dict[str, Any] = Field(
+        description="Optional deterministic evidence-grounding diagnostics.",
+        default_factory=dict,
+    )
     fallback: dict[str, Any] = Field(
         description="Fallback status and reason, when triggered.",
         default_factory=dict,

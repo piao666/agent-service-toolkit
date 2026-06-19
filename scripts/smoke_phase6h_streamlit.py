@@ -11,6 +11,7 @@ REQUIRED_FUNCTIONS = {
     "render_source_cards",
     "render_memory_debug",
     "render_retrieval_debug",
+    "render_verifier_debug",
 }
 REQUIRED_EXAMPLES = {
     "RAG 是什么？",
@@ -44,6 +45,8 @@ def main() -> int:
         "source_renderer_exists": "render_source_cards" in functions,
         "memory_debug_renderer_exists": "render_memory_debug" in functions,
         "retrieval_debug_renderer_exists": "render_retrieval_debug" in functions,
+        "verifier_debug_renderer_exists": "render_verifier_debug" in functions,
+        "grounding_status_display_exists": "grounding_status" in string_literals,
         "example_questions_present": REQUIRED_EXAMPLES.issubset(string_literals),
         "no_api_key_literal": not any(pattern.search(source) for pattern in SECRET_VALUE_PATTERNS),
         "no_local_absolute_path": LOCAL_PATH_PATTERN.search(source) is None,
@@ -57,6 +60,8 @@ def main() -> int:
         "source_renderer_exists",
         "memory_debug_renderer_exists",
         "retrieval_debug_renderer_exists",
+        "verifier_debug_renderer_exists",
+        "grounding_status_display_exists",
         "example_questions_present",
         "no_api_key_literal",
         "no_local_absolute_path",

@@ -11,6 +11,7 @@ from agents.enterprise_tools import enterprise_knowledge_retriever_func
 from core import get_model, settings
 from rag.config import rag_settings
 from rag.conversation_memory import contextualize_query_with_memory, get_memory_store
+from rag.evidence_verifier import build_safe_fallback_answer, verify_answer_grounding
 
 INPUT_GUARD_DESCRIPTION = (
     "Check whether the user input is empty or clearly unsuitable for knowledge-base QA."
@@ -45,6 +46,7 @@ class EnterpriseRagState(MessagesState, total=False):
     draft_answer: str
     model_debug: dict[str, Any]
     memory_debug: dict[str, Any]
+    verifier_debug: dict[str, Any]
 
 
 def _message_text(message: BaseMessage) -> str:
@@ -304,6 +306,32 @@ async def answer_synthesis(
     }
 
 
+async def verify_evidence(
+    state: EnterpriseRagState, config: RunnableConfig
+) -> EnterpriseRagState:
+    """Attach optional deterministic evidence-grounding diagnostics."""
+    mode = rag_settings.evidence_verifier_mode
+    if mode == "off":
+        return {"verifier_debug": {}}
+
+    retrieval = state.get("retrieval", {})
+    retrieval_debug = retrieval.get("retrieval_debug") or {}
+    result = verify_answer_grounding(
+        query=state.get("query", ""),
+        answer=state.get("draft_answer", ""),
+        sources=list(retrieval.get("sources") or []),
+        query_type=retrieval_debug.get("inferred_query_type"),
+        mode=mode,
+        safe_fallback_enabled=rag_settings.ENTERPRISE_EVIDENCE_SAFE_FALLBACK,
+        min_score=rag_settings.ENTERPRISE_EVIDENCE_MIN_SCORE,
+        high_score=rag_settings.ENTERPRISE_EVIDENCE_HIGH_SCORE,
+    )
+    update: EnterpriseRagState = {"verifier_debug": result.as_debug()}
+    if result.safe_fallback_triggered:
+        update["draft_answer"] = build_safe_fallback_answer(state.get("query", ""))
+    return update
+
+
 async def fallback_or_finish(
     state: EnterpriseRagState, config: RunnableConfig
 ) -> EnterpriseRagState:
@@ -344,6 +372,7 @@ async def fallback_or_finish(
                     "fallback": retrieval.get("fallback") or {},
                     "model_debug": state.get("model_debug") or {},
                     "memory_debug": memory_debug,
+                    "verifier_debug": state.get("verifier_debug") or {},
                 },
             )
         ]
@@ -356,13 +385,15 @@ agent.add_node("route_need_retrieval", route_need_retrieval)
 agent.add_node("rewrite_query", rewrite_query)
 agent.add_node("retrieve", retrieve)
 agent.add_node("answer_synthesis", answer_synthesis)
+agent.add_node("verify_evidence", verify_evidence)
 agent.add_node("fallback_or_finish", fallback_or_finish)
 agent.set_entry_point("guard_input")
 agent.add_edge("guard_input", "route_need_retrieval")
 agent.add_edge("route_need_retrieval", "rewrite_query")
 agent.add_edge("rewrite_query", "retrieve")
 agent.add_edge("retrieve", "answer_synthesis")
-agent.add_edge("answer_synthesis", "fallback_or_finish")
+agent.add_edge("answer_synthesis", "verify_evidence")
+agent.add_edge("verify_evidence", "fallback_or_finish")
 agent.add_edge("fallback_or_finish", END)
 
 enterprise_rag_agent = agent.compile()
