@@ -1871,7 +1871,7 @@ Implementation and local evaluation summary:
 
 Phase 6J: Custom LangGraph Enterprise RAG Graph
 -----------------------------------------------
-Status: planned; implementation has not started.
+Status: Phase 6J-0 through Phase 6J-5 implemented and locally verified; checkpoint pending.
 
 Goal:
 - Provide an explicit, inspectable LangGraph workflow while preserving the current legacy Agent
@@ -1897,6 +1897,23 @@ Acceptance gate:
 - Legacy mode remains the default and existing tests remain unchanged.
 - No real LLM call or Chroma write is required by the smoke evaluation.
 - Focused pytest, ruff, leakage checks, and manual review pass before checkpoint.
+
+Implementation and smoke summary:
+- Added `src/agents/enterprise_rag_graph.py` with explicit state, nine graph nodes, normal and
+  clarification/safe conditional routes, and a unified final response.
+- The graph reuses Phase 6G memory, the existing enterprise retriever adapter, and the Phase 6I
+  evidence verifier. Smoke uses injected deterministic retrieval and answer generation.
+- Added `ENTERPRISE_AGENT_GRAPH_MODE=legacy|custom_graph`; invalid values and the default resolve
+  to `legacy`. The business API remains on the legacy path in this phase.
+- Added a real LangGraph smoke and static Mermaid documentation. Import, build, Mermaid rendering,
+  semantic route, ambiguous route, unsupported route, memory rewrite, retrieval, deterministic
+  answer generation, evidence verification, and final response schema checks passed.
+- Smoke summary: `error_count=0`, `calls_llm=false`, `writes_chroma=false`, and
+  `recommended_checkpoint=true`.
+- No service was started, no real LLM was called, no Chroma database was read or written, and no
+  240-case evaluation was rerun.
+- Phase 6K has not started. The next action after Phase 6J checkpoint is Phase 6K final documentation
+  and demo packaging.
 
 Phase 6K: Final README / Resume / Demo Packaging
 ------------------------------------------------
