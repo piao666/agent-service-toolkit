@@ -1709,14 +1709,14 @@ Goal:
   optional Phase 6G memory behavior.
 
 Phase 6H-0: UI design document
-- Status: completed locally and pending visual acceptance/checkpoint.
+- Status: completed and included in `fbdf806 phase-6h streamlit rag demo ui`.
 - Document: `docs/enterprise_rag_backend/PHASE6H_STREAMLIT_DEMO_PLAN.md`.
 - Define the demo goals, page structure, API integration, answer display, source/citation display,
   retrieval debug, memory debug, memory toggle, structured retrieval mode, and secret handling.
 - The UI must call the existing backend rather than duplicate retrieval or Agent logic.
 
 Phase 6H-1: Streamlit chat UI
-- Status: completed locally and pending visual acceptance/checkpoint.
+- Status: completed and included in `fbdf806 phase-6h streamlit rag demo ui`.
 - The existing upstream entry point `src/streamlit_app.py` is reused as the single UI entry point.
 - Sidebar controls: API base URL, `session_id`, `top_k`, memory mode, structured retrieval mode,
   and example questions.
@@ -1725,27 +1725,27 @@ Phase 6H-1: Streamlit chat UI
 - Do not store or display provider API keys in the frontend.
 
 Phase 6H-2: Sources and citations
-- Status: completed locally and pending visual acceptance/checkpoint.
+- Status: completed and included in `fbdf806 phase-6h streamlit rag demo ui`.
 - Each source card should support title, `source_id`, `doc_type`, `section_path`, `source_url`,
   `content_preview`, `relevance_score`, and `chunk_id`.
 - Use expandable source details and preserve the backend response as the source of truth.
 - Do not invent missing citations or source metadata.
 
 Phase 6H-3: Memory demo
-- Status: completed locally and pending visual acceptance/checkpoint.
+- Status: completed and included in `fbdf806 phase-6h streamlit rag demo ui`.
 - Display current `session_id`, recent turn count, `contextual_query`, and `memory_debug`.
 - Provide a clear-current-session action without affecting other sessions.
 - Allow memory on/off comparison while keeping the backend default off.
 
 Phase 6H-4: Local demonstration script
-- Status: completed locally and pending visual acceptance/checkpoint.
+- Status: completed and included in `fbdf806 phase-6h streamlit rag demo ui`.
 - Document: `docs/enterprise_rag_backend/PHASE6H_DEMO_SCRIPT.md`.
 - Include ordinary knowledge-base QA, multi-turn follow-up, source/citation inspection, and
   structured retrieval examples.
 - Keep expected outcomes factual and reproducible; do not present unmeasured claims.
 
 Phase 6H-5: Final demo acceptance
-- Status: implementation and static smoke completed; interactive visual acceptance is pending.
+- Status: implementation, static smoke, manual acceptance, and checkpoint completed.
 - Static smoke: `scripts/smoke_phase6h_streamlit.py` confirms the app and required render helpers
   exist, all example questions are present, no credential value or local absolute path is
   hard-coded, and the smoke does not call an LLM, write Chroma, or start a service.
@@ -1756,13 +1756,11 @@ Phase 6H-5: Final demo acceptance
 - API unavailable and timeout states are handled clearly.
 - No API key is stored or exposed by the UI.
 
-Current Next Action
--------------------
-- Manually start FastAPI and `src/streamlit_app.py` for Phase 6H visual acceptance.
-- Verify standard RAG chat, source cards, memory follow-ups, debug panels, and unavailable-API
-  handling without provider credentials in the frontend.
-- Create a Phase 6H checkpoint only after that visual acceptance. Do not claim production
-  deployment or production readiness.
+Phase 6H Closure
+----------------
+- Phase 6H checkpoint: `fbdf806 phase-6h streamlit rag demo ui`.
+- The UI and smoke are complete, while production deployment and production readiness remain out
+  of scope.
 
 Phase 6G-0 through Phase 6G-5 Implementation Status
 ---------------------------------------------------
@@ -1788,13 +1786,13 @@ Phase 6G-0 through Phase 6G-5 Implementation Status
 - Phase 6G-5 local API evaluation is complete and checkpointed.
 - API summary: 6 scenarios, 12 requests, all schemas and memory debug fields valid, five of five
   eligible contextual queries hit expected topics, and no cross-session leaks, errors, or timeouts.
-- Phase 6H-0 through Phase 6H-5 implementation and static smoke are complete locally. Interactive
-  visual acceptance and checkpoint remain pending; no production deployment claim is made.
+- Phase 6H-0 through Phase 6H-5 implementation, smoke, acceptance, and checkpoint are complete; no
+  production deployment claim is made.
 - No HPC or real-provider evaluation is included in Phase 6G-0 through Phase 6G-5.
 
-Next action after manual acceptance:
-- Run the documented Phase 6H local visual demonstration with FastAPI and Streamlit.
-- Checkpoint Phase 6H only after the chat, source, memory, debug, and error states are accepted.
+Phase 6H follow-up:
+- Keep the documented local demonstration as a repeatable project walkthrough; no further Phase 6H
+  feature work is scheduled in this packaging stage.
 
 Current Project Progress through Phase 6H
 -----------------------------------------
@@ -1812,8 +1810,8 @@ Current Project Progress through Phase 6H
 - Phase 6G API evaluation completed 12 requests with 12/12 valid schemas, zero cross-session
   leaks, and zero errors.
 - Phase 6H Streamlit implementation provides answer, source-card, retrieval-debug, memory-debug,
-  request-payload, raw-response, and unavailable-API views. Static smoke passed; local visual
-  acceptance and a Phase 6H checkpoint remain separate manual gates.
+  request-payload, raw-response, and unavailable-API views. Static smoke and the Phase 6H
+  checkpoint are complete.
 
 Post-Phase 6H Roadmap
 ---------------------
@@ -1827,8 +1825,7 @@ Roadmap details are maintained in
 
 Phase 6I: Evidence Grounding + Citation Verifier
 ------------------------------------------------
-Status: Phase 6I-0 through Phase 6I-5 implemented locally; final quality gates and checkpoint are
-pending.
+Status: completed and checkpointed in `cc72ad8 phase-6i evidence grounding verifier`.
 
 Goal:
 - Add deterministic evidence checks that estimate whether an answer is supported by returned
@@ -1866,12 +1863,11 @@ Implementation and local evaluation summary:
   records, and zero runtime errors.
 - The evaluation does not call an LLM, write Chroma, start a service, use private corpus content,
   or establish production-grade fact checking.
-- Phase 6J has not started. Its custom graph may reuse this verifier only after Phase 6I is
-  accepted and checkpointed.
+- Phase 6J subsequently reused this verifier after the Phase 6I checkpoint.
 
 Phase 6J: Custom LangGraph Enterprise RAG Graph
 -----------------------------------------------
-Status: Phase 6J-0 through Phase 6J-5 implemented and locally verified; checkpoint pending.
+Status: completed and checkpointed in `4b2bf1b phase-6j custom langgraph rag graph`.
 
 Goal:
 - Provide an explicit, inspectable LangGraph workflow while preserving the current legacy Agent
@@ -1912,24 +1908,34 @@ Implementation and smoke summary:
   `recommended_checkpoint=true`.
 - No service was started, no real LLM was called, no Chroma database was read or written, and no
   240-case evaluation was rerun.
-- Phase 6K has not started. The next action after Phase 6J checkpoint is Phase 6K final documentation
-  and demo packaging.
+- Phase 6K packaging started only after the Phase 6J checkpoint.
 
-Phase 6K: Final README / Resume / Demo Packaging
-------------------------------------------------
-Status: planned; implementation has not started.
+Phase 6K: Final README Packaging
+--------------------------------
+Status: preflight checkpoint completed; final README packaging completed for manual review and
+checkpoint.
 
 Goal:
-- Produce consistent GitHub, runbook, interview, resume, and demonstration materials after the
-  technical phases are accepted.
+- Produce an accurate GitHub-facing README after the technical phases and controlled preflight are
+  accepted. External project-summary, resume, and interview material remain a separate follow-up.
 
-Planned files:
-- `README.md`
-- `docs/enterprise_rag_backend/PROJECT_FINAL_SUMMARY.md`
-- `docs/enterprise_rag_backend/PROJECT_RUNBOOK.md`
-- `docs/enterprise_rag_backend/INTERVIEW_NOTES.md`
-- `docs/enterprise_rag_backend/RESUME_PROJECT_DESCRIPTION.md`
-- `docs/enterprise_rag_backend/DEMO_WALKTHROUGH.md`
+Phase 6K Preflight HPC Revalidation:
+- Checkpoint: `5d6397e phase-6k preflight hpc revalidation`.
+- The controlled environment reran the Phase 6G memory, Phase 6I evidence, and Phase 6J custom
+  graph smoke paths without a real LLM, Chroma write, 240-case run, or benchmark.
+- Agent tests: 7 passed.
+- Service tests: 11 passed with one `/info` LangGraph compatibility error. This remains a documented
+  environment compatibility note rather than a full cross-environment pass claim.
+
+README packaging:
+- Rewrote root `README.md` as the final GitHub project entry point.
+- Covered project scope, architecture, RAG pipeline, structured retrieval, evaluation, memory,
+  evidence grounding, custom LangGraph graph, Streamlit demo, startup commands, demo walkthrough,
+  contribution boundary, measured results, repository structure, and limitations.
+- Preserved measured values: Phase 6F-8 calibrated bad cases 59 to 49 and source hit rate 0.694 to
+  0.751; Phase 6G 24-case/47-turn context hit 1.0 with zero leaks; Phase 6G API 12/12 schema-valid
+  responses; Phase 6I 24-case status match 1.0; and the Phase 6J smoke result.
+- Did not add feature code, call an LLM, write Chroma, rerun 240 cases, or run a benchmark.
 
 Required coverage:
 - Project goals and system architecture.
@@ -1956,5 +1962,6 @@ Roadmap Checkpoint Rules
 - Do not describe skipped checks as passed or local prototypes as production systems.
 - Do not commit `.env`, virtual environments, API keys, model weights, Chroma databases, raw or
   normalized private content, generated logs, local absolute paths, or large binary files.
-- Current next action is to complete Phase 6I regression gates, leakage review, and checkpoint.
-  Phase 6J and Phase 6K remain blocked on their preceding phases.
+- Current next action is manual review of the final README and its Phase 6K checkpoint. After that,
+  external documentation work may organize project-summary, resume, interview, and demonstration
+  materials. No new feature phase is marked as started.

@@ -1,231 +1,316 @@
-# 🧰 AI Agent Service Toolkit
+# Enterprise Knowledge Base Agent + RAG Backend
 
-[![build status](https://github.com/JoshuaC215/agent-service-toolkit/actions/workflows/test.yml/badge.svg)](https://github.com/JoshuaC215/agent-service-toolkit/actions/workflows/test.yml) [![codecov](https://codecov.io/github/JoshuaC215/agent-service-toolkit/graph/badge.svg?token=5MTJSYWD05)](https://codecov.io/github/JoshuaC215/agent-service-toolkit) [![Python Version](https://img.shields.io/python/required-version-toml?tomlFilePath=https%3A%2F%2Fraw.githubusercontent.com%2FJoshuaC215%2Fagent-service-toolkit%2Frefs%2Fheads%2Fmain%2Fpyproject.toml)](https://github.com/JoshuaC215/agent-service-toolkit/blob/main/pyproject.toml)
-[![GitHub License](https://img.shields.io/github/license/JoshuaC215/agent-service-toolkit)](https://github.com/JoshuaC215/agent-service-toolkit/blob/main/LICENSE) [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_red.svg)](https://agent-service-toolkit.streamlit.app/)
+基于开源 `agent-service-toolkit` 扩展的企业知识库 Agent + RAG 后端项目。项目保留上游 FastAPI、LangGraph、多 Agent registry、流式接口与反馈机制，并补充了可复现的知识库处理、结构化检索、评测体系、多轮会话记忆、证据校验、自定义 LangGraph 编排和 Streamlit 演示界面。
 
-A full toolkit for running an AI agent service built with LangGraph, FastAPI and Streamlit.
+> 本仓库展示的是经过本地与受控环境验证的工程原型，不代表生产部署完成，也不声称消除了全部检索坏例或模型幻觉。
 
-It includes a [LangGraph](https://langchain-ai.github.io/langgraph/) agent, a [FastAPI](https://fastapi.tiangolo.com/) service to serve it, a client to interact with the service, and a [Streamlit](https://streamlit.io/) app that uses the client to provide a chat interface. Data structures and settings are built with [Pydantic](https://github.com/pydantic/pydantic).
+## Project Overview / 项目简介
 
-This project offers a template for you to easily build and run your own agents using the LangGraph framework. It demonstrates a complete setup from agent definition to user interface, making it easier to get started with LangGraph-based projects by providing a full, robust toolkit.
+项目围绕统一业务接口 `POST /enterprise/agent/query` 构建完整问答链路。接口接收问题、会话标识和检索参数，返回 answer、可追踪 sources、检索调试信息、会话记忆信息以及可选证据校验结果。原有 `/health`、`/info`、`/invoke`、`/{agent_id}/invoke`、`/stream`、`/{agent_id}/stream`、`/history` 与 `/feedback` 接口继续保留。
 
-**[🎥 Watch a video walkthrough of the repo and app](https://www.youtube.com/watch?v=pdYVHw_YCNY)**
+## Why This Project / 项目背景
 
-## Overview
+普通 RAG demo 往往只验证“能检索、能生成”，但企业知识库场景还需要回答：
 
-### [Try the app!](https://agent-service-toolkit.streamlit.app/)
+- 文档如何受控采集、解析、规范化和切分？
+- 检索结果能否追踪到 source、section 和 chunk？
+- dense retrieval 对 metadata、API/config symbol 等精确查询是否足够？
+- 多轮追问如何绑定 session，且避免跨 session 污染？
+- 回答是否被返回证据支持，低置信度时如何暴露风险？
+- 评测结果如何复现，失败边界如何诚实记录？
 
-<a href="https://agent-service-toolkit.streamlit.app/"><img src="media/app_screenshot.png" width="600"></a>
+本项目将这些问题拆成独立模块和阶段性评测，而不是只包装一次模型调用。
 
-### Quickstart
+## Key Features / 核心功能
 
-Run directly in python
+- **FastAPI + Agent registry**：保留上游通用 Agent 服务能力，注册 `enterprise-rag-agent`。
+- **统一业务 API**：提供 `/enterprise/agent/query`，返回 answer、sources 和多类 debug 信息。
+- **多格式知识库流程**：覆盖 DOCX、PDF、HTML、Markdown、JSON、YAML 等受控样本。
+- **本地 embedding 默认路线**：避免默认将私有知识库正文发送给第三方 embedding API。
+- **Chroma + source tracing**：返回 source、title、chunk id、score、metadata 和短 preview。
+- **Structured Retrieval**：使用 metadata index、symbol index 和 candidate materialization。
+- **系统化评测**：覆盖 240-case、embedding/reranker/chunking 对比及 bad-case analysis。
+- **Conversational Memory**：按 `session_id` 隔离的短期 buffer 与 follow-up rewrite。
+- **Evidence Grounding**：rule-based verifier 输出 grounding status、coverage 和 unsupported terms。
+- **Custom LangGraph Graph**：显式编排分类、记忆、检索、排序、生成和证据校验。
+- **Streamlit Demo**：展示 answer、source cards 及 retrieval/memory/verifier debug。
 
-```sh
-# At least one LLM API key is required
-echo 'OPENAI_API_KEY=your_openai_api_key' >> .env
+## System Architecture / 系统架构
 
-# uv is the recommended way to install agent-service-toolkit, but "pip install ." also works
-# For uv installation options, see: https://docs.astral.sh/uv/getting-started/installation/
-curl -LsSf https://astral.sh/uv/0.7.19/install.sh | sh
-
-# Install dependencies. "uv sync" creates .venv automatically
-uv sync --frozen
-source .venv/bin/activate
-python src/run_service.py
-
-# In another shell
-source .venv/bin/activate
-streamlit run src/streamlit_app.py
+```mermaid
+flowchart TD
+    U["User Query"] --> API["FastAPI Service"]
+    API --> A["Enterprise Agent / RAG Pipeline"]
+    A --> M["Conversational Memory"]
+    M --> Q["Follow-up Query Rewrite"]
+    Q --> R["Retriever + Structured Retrieval"]
+    R --> G["Answer Generation"]
+    G --> V["Evidence Verifier"]
+    V --> O["Answer + Sources + Debug"]
+    O --> UI["Streamlit Demo"]
 ```
 
-Run with docker
+| Capability | Feature flag | Default |
+| --- | --- | --- |
+| Conversational memory | `ENTERPRISE_MEMORY_MODE=off|buffer` | `off` |
+| Structured retrieval | `ENTERPRISE_STRUCTURED_RETRIEVAL_MODE=off|metadata_symbol` | `off` |
+| Evidence verifier | `ENTERPRISE_EVIDENCE_VERIFIER_MODE=off|rule_based` | `off` |
+| Agent graph | `ENTERPRISE_AGENT_GRAPH_MODE=legacy|custom_graph` | `legacy` |
 
-```sh
-echo 'OPENAI_API_KEY=your_openai_api_key' >> .env
-docker compose watch
+## RAG Pipeline
+
+```text
+source catalog
+  -> controlled sample acquisition
+  -> multi-format parsing
+  -> normalized manifest
+  -> chunk manifest
+  -> local embedding
+  -> Chroma collection
+  -> retrieval payload
+  -> answer synthesis
+  -> source tracing
 ```
 
-### Architecture Diagram
+Manifest 固化来源、hash、解析状态、chunk metadata 和 review 状态。原始正文缓存、normalized/chunk 正文、本地模型与 Chroma 数据库不进入 Git。检索输出只保留短 preview，避免在日志和评测产物中复制完整文档正文。
 
-<img src="media/agent_architecture.png" width="600">
+典型检索记录：
 
-### Key Features
-
-1. **LangGraph Agent and latest features**: A customizable agent built using the LangGraph framework. Implements the latest LangGraph v1.0 features including human in the loop with `interrupt()`, flow control with `Command`, long-term memory with `Store`, and `langgraph-supervisor`.
-1. **FastAPI Service**: Serves the agent with both streaming and non-streaming endpoints.
-1. **Advanced Streaming**: A novel approach to support both token-based and message-based streaming.
-1. **Streamlit Interface**: Provides a user-friendly chat interface for interacting with the agent, including voice input and output.
-1. **Multiple Agent Support**: Run multiple agents in the service and call by URL path. Available agents and models are described in `/info`
-1. **Asynchronous Design**: Utilizes async/await for efficient handling of concurrent requests.
-1. **Content Moderation**: Implements Safeguard for content moderation (requires Groq API key).
-1. **RAG Agent**: A basic RAG agent implementation using ChromaDB - see [docs](docs/RAG_Assistant.md).
-1. **Feedback Mechanism**: Includes a star-based feedback system integrated with LangSmith.
-1. **Docker Support**: Includes Dockerfiles and a docker compose file for easy development and deployment.
-1. **Testing**: Includes robust unit and integration tests for the full repo.
-
-### Key Files
-
-The repository is structured as follows:
-
-- `src/agents/`: Defines several agents with different capabilities
-- `src/schema/`: Defines the protocol schema
-- `src/core/`: Core modules including LLM definition and settings
-- `src/service/service.py`: FastAPI service to serve the agents
-- `src/client/client.py`: Client to interact with the agent service
-- `src/streamlit_app.py`: Streamlit app providing a chat interface
-- `tests/`: Unit and integration tests
-
-## Setup and Usage
-
-1. Clone the repository:
-
-   ```sh
-   git clone https://github.com/JoshuaC215/agent-service-toolkit.git
-   cd agent-service-toolkit
-   ```
-
-2. Set up environment variables:
-   Create a `.env` file in the root directory. At least one LLM API key or configuration is required. See the [`.env.example` file](./.env.example) for a full list of available environment variables, including a variety of model provider API keys, header-based authentication, LangSmith tracing, testing and development modes, and OpenWeatherMap API key.
-
-3. You can now run the agent service and the Streamlit app locally, either with Docker or just using Python. The Docker setup is recommended for simpler environment setup and immediate reloading of the services when you make changes to your code.
-
-### Additional setup for specific AI providers
-
-- [Setting up Ollama](docs/Ollama.md)
-- [Setting up VertexAI](docs/VertexAI.md)
-- [Setting up RAG with ChromaDB](docs/RAG_Assistant.md)
-
-### Building or customizing your own agent
-
-To customize the agent for your own use case:
-
-1. Add your new agent to the `src/agents` directory. You can copy `research_assistant.py` or `chatbot.py` and modify it to change the agent's behavior and tools.
-1. Import and add your new agent to the `agents` dictionary in `src/agents/agents.py`. Your agent can be called by `/<your_agent_name>/invoke` or `/<your_agent_name>/stream`.
-1. Adjust the Streamlit interface in `src/streamlit_app.py` to match your agent's capabilities.
-
-
-### Handling Private Credential files
-
-If your agents or chosen LLM require file-based credential files or certificates, the `privatecredentials/` has been provided for your development convenience. All contents, excluding the `.gitkeep` files, are ignored by git and docker's build process. See [Working with File-based Credentials](docs/File_Based_Credentials.md) for suggested use.
-
-
-### Docker Setup
-
-This project includes a Docker setup for easy development and deployment. The `compose.yaml` file defines three services: `postgres`, `agent_service` and `streamlit_app`. The `Dockerfile` for each service is in their respective directories.
-
-For local development, we recommend using [docker compose watch](https://docs.docker.com/compose/file-watch/). This feature allows for a smoother development experience by automatically updating your containers when changes are detected in your source code.
-
-1. Make sure you have Docker and Docker Compose (>= [v2.23.0](https://docs.docker.com/compose/release-notes/#2230)) installed on your system.
-
-2. Create a `.env` file from the `.env.example`. At minimum, you need to provide an LLM API key (e.g., OPENAI_API_KEY).
-   ```sh
-   cp .env.example .env
-   # Edit .env to add your API keys
-   ```
-
-3. Build and launch the services in watch mode:
-
-   ```sh
-   docker compose watch
-   ```
-
-   This will automatically:
-   - Start a PostgreSQL database service that the agent service connects to
-   - Start the agent service with FastAPI
-   - Start the Streamlit app for the user interface
-
-4. The services will now automatically update when you make changes to your code:
-   - Changes in the relevant python files and directories will trigger updates for the relevant services.
-   - NOTE: If you make changes to the `pyproject.toml` or `uv.lock` files, you will need to rebuild the services by running `docker compose up --build`.
-
-5. Access the Streamlit app by navigating to `http://localhost:8501` in your web browser.
-
-6. The agent service API will be available at `http://0.0.0.0:8080`. You can also use the OpenAPI docs at `http://0.0.0.0:8080/redoc`.
-
-7. Use `docker compose down` to stop the services.
-
-This setup allows you to develop and test your changes in real-time without manually restarting the services.
-
-### Building other apps on the AgentClient
-
-The repo includes a generic `src/client/client.AgentClient` that can be used to interact with the agent service. This client is designed to be flexible and can be used to build other apps on top of the agent. It supports both synchronous and asynchronous invocations, and streaming and non-streaming requests.
-
-See the `src/run_client.py` file for full examples of how to use the `AgentClient`. A quick example:
-
-```python
-from client import AgentClient
-client = AgentClient()
-
-response = client.invoke("Tell me a brief joke?")
-response.pretty_print()
-# ================================== Ai Message ==================================
-#
-# A man walked into a library and asked the librarian, "Do you have any books on Pavlov's dogs and Schrödinger's cat?"
-# The librarian replied, "It rings a bell, but I'm not sure if it's here or not."
-
+```json
+{
+  "source_id": "domain_docs",
+  "title": "Document Title",
+  "doc_type": "html",
+  "section_path": "Guide / Request Body",
+  "source_url": "https://example.invalid/docs/page",
+  "chunk_id": "stable_chunk_id",
+  "content_preview": "Short, display-safe preview",
+  "relevance_score": 0.82,
+  "metadata": {}
+}
 ```
 
-### Development with LangGraph Studio
+## Structured Retrieval
 
-The agent supports [LangGraph Studio](https://langchain-ai.github.io/langgraph/concepts/langgraph_studio/), the IDE for developing agents in LangGraph.
+纯 dense retrieval 对 `source_id`、标题、配置项、API path 和代码 symbol 等精确查询存在边界。Phase 6F 增加 metadata index、code/config symbol index、structured retrieval probe、candidate materialization 以及 API-level failure-boundary analysis。
 
-`langgraph-cli[inmem]` is installed with `uv sync`. You can simply add your `.env` file to the root directory as described above, and then launch LangGraph Studio with `langgraph dev`. Customize `langgraph.json` as needed. See the [local quickstart](https://langchain-ai.github.io/langgraph/cloud/how-tos/studio/quick_start/#local-development-server) to learn more.
+当前最佳测量版本为 **Phase 6F-8 structured materialization**：
 
-### Local development without Docker
+| Metric | Baseline | Phase 6F-8 |
+| --- | ---: | ---: |
+| 240-case calibrated `bad_case_count` | 59 | 49 |
+| `source_hit_rate` | 0.694 | 0.751 |
+| `error_count` | 0 | 0 |
+| `timeout_count` | 0 | 0 |
 
-You can also run the agent service and the Streamlit app locally without Docker, just using a Python virtual environment.
+该结果说明 structured materialization 在固定 240-case 评测中降低了 calibrated bad cases 并提升 source hit；仍有 49 个 calibrated bad cases，不能解释为检索问题已全部解决。
 
-1. Create a virtual environment and install dependencies:
+## Evaluation System
 
-   ```sh
-   uv sync --frozen
-   source .venv/bin/activate
-   ```
+评测体系覆盖 query type、source hit、keyword hit、citation、fallback、latency 和 root cause：
 
-2. Run the FastAPI server:
+- 240-case API/Agent evaluation；
+- embedding model benchmark；
+- hybrid retrieval、reranker 与 chunking ablation；
+- query-type-aware policy 的正向和负向实验；
+- calibrated bad-case taxonomy；
+- structured retrieval materialization 对比；
+- memory、evidence verifier 和 custom graph smoke。
 
-   ```sh
-   python src/run_service.py
-   ```
+评测文件位于 `data/knowledge_base/evaluation/`，阶段结论位于 `docs/enterprise_rag_backend/`。被跳过的检查明确记录为 skipped，不写成 passed。
 
-3. In a separate terminal, run the Streamlit app:
+## Conversational Memory
 
-   ```sh
-   streamlit run src/streamlit_app.py
-   ```
+Phase 6G 提供进程内、按 `session_id` 隔离的短期 memory buffer：保存最近问答与 source metadata 摘要，识别依赖上下文的追问，并通过 deterministic rule 生成 `contextual_query`。无 session、memory off 或无历史时保持 no-op，不保存完整 retrieved chunk 正文。
 
-4. Open your browser and navigate to the URL provided by Streamlit (usually `http://localhost:8501`).
+| Evaluation | Result |
+| --- | --- |
+| Offline memory eval | 24 cases / 47 turns |
+| Follow-up context hit rate | 1.0 |
+| Cross-session leak | 0 |
+| API-level eval | 12 requests |
+| Response schema valid | 12/12 |
+| API errors / timeouts | 0 / 0 |
 
-## Projects built with or inspired by agent-service-toolkit
+`memory_debug` 展示 turn count、`is_follow_up`、`contextual_query` 和 rewrite strategy。
 
-The following are a few of the public projects that drew code or inspiration from this repo.
+## Evidence Grounding / Citation Verifier
 
-- **[PolyRAG](https://github.com/QuentinFuxa/PolyRAG)** - Extends agent-service-toolkit with RAG capabilities over both PostgreSQL databases and PDF documents.
-- **[alexrisch/agent-web-kit](https://github.com/alexrisch/agent-web-kit)** - A Next.JS frontend for agent-service-toolkit
-- **[raushan-in/dapa](https://github.com/raushan-in/dapa)** - Digital Arrest Protection App (DAPA) enables users to report financial scams and frauds efficiently via a user-friendly platform.
+Phase 6I 增加默认关闭的 rule-based evidence verifier。它比较 query、answer 与 source summary 中的重要 term，输出 `grounding_score`、`grounding_status`、`citation_coverage`、`matched_terms`、`unsupported_terms`、`safe_fallback_triggered` 和 `verifier_debug`。
 
-**Please create a pull request editing the README or open a discussion with any new ones to be added!** Would love to include more projects.
+| Metric | Result |
+| --- | ---: |
+| Evidence cases | 24 |
+| Expected status match rate | 1.0 |
+| Citation-required cases checked | 3/3 |
+| Unsupported answers detected | 2/2 |
+| `calls_llm` | false |
+| `writes_chroma` | false |
 
-## Contributing
+该 verifier 是低成本 baseline，只用于暴露证据覆盖风险，不能证明答案中的每个事实都正确。
 
-Contributions are welcome! Please feel free to submit a Pull Request. Currently the tests need to be run using the local development without Docker setup. To run the tests for the agent service:
+## Custom LangGraph Agent Graph
 
-1. Ensure you're in the project root directory and have activated your virtual environment.
+Phase 6J 实现可独立 import 和 smoke 的 custom graph。默认 API 仍使用 `legacy`，避免影响既有行为。
 
-2. Install the development dependencies and pre-commit hooks:
+```mermaid
+flowchart TD
+    A["query_classifier"] --> B{"query_type"}
+    B -->|ambiguous_query| C["clarification_response"]
+    B -->|unsupported_query| D["safe_response"]
+    B -->|normal_query| E["memory_rewriter"]
+    E --> F["retriever"]
+    F --> G["ranker"]
+    G --> H["answer_generator"]
+    H --> I["evidence_verifier"]
+    I --> J["final_response"]
+    C --> J
+    D --> J
+```
 
-   ```sh
-   uv sync --frozen
-   pre-commit install
-   ```
+节点包括 `query_classifier`、`memory_rewriter`、`retriever`、`ranker`、`answer_generator`、`evidence_verifier`、`clarification_response`、`safe_response` 和 `final_response`。详细图见 [`agent_graph_mermaid.md`](docs/enterprise_rag_backend/agent_graph_mermaid.md)。
 
-3. Run the tests using pytest:
+```text
+graph_import_ok=true
+graph_build_ok=true
+semantic_route_ok=true
+ambiguous_route_ok=true
+unsupported_route_ok=true
+calls_llm=false
+writes_chroma=false
+```
 
-   ```sh
-   pytest
-   ```
+## Streamlit Demo
+
+`src/streamlit_app.py` 提供聊天界面，可配置 API base URL、endpoint、session 和 top-k，展示 Agent answer、expandable source cards、`retrieval_debug`、`memory_debug`、`verifier_debug`、request payload 和 raw response。API 不可用或超时时会显示友好错误；前端不读取、保存或展示 provider API key。
+
+前端开关不能修改已启动后端进程的环境变量。实际 memory、structured retrieval、verifier 和 graph mode 由服务启动环境决定。
+
+## HPC Revalidation
+
+Phase 6K preflight 在受控 HPC 环境完成轻量复验：Phase 6G memory、Phase 6I evidence verifier 与 Phase 6J custom graph smoke 均通过；未调用真实 LLM、未写 Chroma、未运行 240-case，也未运行 embedding/reranker benchmark。
+
+兼容性记录：该环境的 agent tests 为 `7 passed`；service tests 为 `11 passed, 1 compatibility error`，错误位于 `/info` 相关 LangGraph compatibility path。因此 preflight 不能表述为所有环境完全无差异。
+
+## How to Run
+
+### 配置与启动 FastAPI
+
+```powershell
+cd <PROJECT_ROOT>
+Copy-Item .env.example .env
+# 按需填写本地开发配置；不要提交 .env。
+$env:PYTHONPATH = "$PWD\src"
+$env:USE_FAKE_MODEL = "true"
+$env:ENTERPRISE_MEMORY_MODE = "buffer"
+$env:ENTERPRISE_STRUCTURED_RETRIEVAL_MODE = "metadata_symbol"
+$env:ENTERPRISE_EVIDENCE_VERIFIER_MODE = "rule_based"
+$env:ENTERPRISE_AGENT_GRAPH_MODE = "legacy"
+.\.venv\Scripts\python.exe -m uvicorn service.service:app --host 127.0.0.1 --port 8000
+```
+
+健康检查：
+
+```powershell
+curl http://127.0.0.1:8000/health
+```
+
+### 启动 Streamlit
+
+```powershell
+cd <PROJECT_ROOT>
+.\.venv\Scripts\python.exe -m streamlit run src\streamlit_app.py
+```
+
+### 核心 smoke/eval
+
+```powershell
+.\.venv\Scripts\python.exe scripts\smoke_phase6g_memory.py
+.\.venv\Scripts\python.exe scripts\run_phase6i_evidence_eval.py
+.\.venv\Scripts\python.exe scripts\smoke_phase6j_langgraph.py
+```
+
+需要本地 embedding 或 Chroma 的命令应使用 `.env.example` 中的通用变量和 `<LOCAL_EMBEDDING_MODEL_PATH>`、`<RUNTIME_CHROMA_DIR>` 等占位配置。
+
+## Demo Walkthrough
+
+### Demo 1：普通 RAG 问答
+
+```text
+问题：RAG 是什么？
+观察：answer、sources、retrieval_debug。
+```
+
+### Demo 2：多轮 memory
+
+```text
+问题 1：RAG 是什么？
+问题 2：它有什么局限？
+问题 3：那它适合什么场景？
+观察：memory_debug 中 original_query -> contextual_query 的改写及 turn count。
+```
+
+### Demo 3：Evidence verifier
+
+设置 `ENTERPRISE_EVIDENCE_VERIFIER_MODE=rule_based`，观察 `verifier_debug` 中的 `grounding_score`、`grounding_status`、`citation_coverage` 和 `unsupported_terms`。
+
+### Demo 4：Custom graph smoke
+
+```powershell
+.\.venv\Scripts\python.exe scripts\smoke_phase6j_langgraph.py
+```
+
+观察 `graph_import_ok`、`graph_build_ok`、`semantic_route_ok`、`ambiguous_route_ok` 和 `unsupported_route_ok` 均为 `true`。
+
+## Key Results
+
+| Area | Measured result |
+| --- | --- |
+| Structured retrieval | 240-case calibrated bad cases 59 -> 49 |
+| Structured retrieval | source hit rate 0.694 -> 0.751 |
+| Structured retrieval runtime | 0 errors, 0 timeouts |
+| Memory offline eval | 24 cases, 47 turns, context hit 1.0, cross-session leak 0 |
+| Memory API eval | 12 requests, schema valid 12/12, 0 errors, 0 timeouts |
+| Evidence eval | 24 cases, expected status match 1.0 |
+| Evidence citation checks | 3/3 checked; unsupported answers 2/2 detected |
+| Custom graph smoke | import/build/semantic/ambiguous/unsupported routes passed |
+
+这些指标对应固定版本、固定样本和明确评测方法，不外推为生产准确率或通用 benchmark 结论。
+
+## Contribution Boundary
+
+本项目在通用 `agent-service-toolkit` Agent service skeleton 基础上进行企业知识库 Agent + RAG 系统扩展。基础框架提供 FastAPI、LangGraph service skeleton、多 Agent 接口、streaming 和通用客户端等能力；本项目重点实现和验证了企业知识库 RAG pipeline、受控多格式 corpus、chunk/source tracing、structured retrieval materialization、240-case 评测体系、conversational memory、evidence grounding verifier、custom LangGraph graph 与 Streamlit demo。
+
+该边界既不把上游框架能力归为本项目原创，也不把本项目简化为仅修改模板配置。
+
+## Limitations and Future Work
+
+1. Evidence verifier 是 rule-based baseline，不是生产级事实核查或 claim-level verification。
+2. Memory 是进程内 buffer，服务重启后清空，且不支持跨进程共享。
+3. `custom_graph` 当前主要用于独立 smoke 与图结构展示；默认 API 仍走 `legacy`。
+4. Streamlit 是 demo UI，不具备生产级认证、权限、审计和部署能力。
+5. HPC preflight 是轻量复验，未运行 240-case 或 benchmark，并保留一项 service compatibility note。
+6. Phase 6F-8 仍有 49 个 calibrated bad cases，metadata lookup、code/config 和 evidence filtering 仍可改进。
+7. 后续可增加 claim-level verifier、persistent memory、graph-mode API 完整接入、query decomposition、多租户权限与系统化性能评测。
+
+## Repository Structure
+
+```text
+src/service/                         FastAPI 服务、通用接口与业务查询 endpoint
+src/schema/                          API 请求/响应 schema
+src/agents/                          Agent registry、enterprise RAG agent 与 custom graph
+src/rag/                             loader、embedding、retrieval、memory、structured retrieval、verifier
+src/streamlit_app.py                 RAG / memory / verifier 演示界面
+scripts/                             ingestion、probe、evaluation 与 smoke 脚本
+data/knowledge_base/evaluation/      可复现评测 case、result 与 summary
+docs/enterprise_rag_backend/         架构、阶段设计、评测结论与已知限制
+tests/                               上游与扩展能力的自动化测试
+.env.example                         安全环境变量示例，不包含真实凭据
+task.txt                             阶段计划、checkpoint 和实测结果记录
+```
+
+更详细的阶段设计与验证记录见 [`docs/enterprise_rag_backend/`](docs/enterprise_rag_backend/)。
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+本项目沿用上游仓库的开源许可证，详见 [LICENSE](LICENSE)。
