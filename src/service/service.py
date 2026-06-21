@@ -278,6 +278,9 @@ async def enterprise_agent_query(
         if graph_model_debug:
             model_debug["answer_generator"] = graph_model_debug.get("answer_generator")
             model_debug["answer_provider"] = graph_model_debug.get("provider")
+        graph_debug = dict(result.get("graph_debug") or {})
+        if graph_debug:
+            graph_debug["nodes_executed"] = list(graph_debug.get("nodes_executed") or [])
 
         return EnterpriseAgentQueryResponse(
             answer=str(result.get("answer") or ""),
@@ -287,7 +290,7 @@ async def enterprise_agent_query(
             model_debug=model_debug,
             memory_debug=dict(result.get("memory_debug") or {}),
             verifier_debug=dict(result.get("verifier_debug") or {}),
-            graph_debug=dict(result.get("graph_debug") or {}),
+            graph_debug=graph_debug,
             fallback=dict(result.get("fallback") or {}),
             session_id=session_id,
         )

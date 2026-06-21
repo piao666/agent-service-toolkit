@@ -1991,6 +1991,34 @@ Local smoke result:
   `starts_long_running_service=false`, and `error_count=0`.
 - No 240-case run, benchmark, HPC execution, real provider call, or Chroma write was performed.
 
+Subsequent phase:
+- Phase 6L-2 was executed after the Phase 6L-1 checkpoint; its baseline and audit are recorded
+  below.
+
+Phase 6L-2: Endpoint Comparison Baseline
+-----------------------------------------
+Status: checkpointed in `d69fbeb phase-6l endpoint comparison baseline`.
+
+- The 24-case baseline recorded successful transport/schema behavior with zero errors and timeouts.
+- The custom label recorded `graph_debug_present_count=0`.
+- Audit found that both labels were sent to one service URL even though graph mode is fixed at
+  process startup, so this artifact is retained as a baseline rather than a valid two-mode quality
+  comparison.
+
+Phase 6L-3: Custom Graph Debug Surfacing Fix
+---------------------------------------------
+Status: implemented locally and pending checkpoint.
+
+- Preserved `graph_debug` defensively from final graph state through `final_response` and the
+  business response schema.
+- Endpoint smoke now requires `graph_mode=custom_graph`, a non-empty `nodes_executed` list, and
+  `nodes_executed_count > 0`; missing debug is a hard failure.
+- Comparison runner now reads top-level `graph_debug` and separately validates graph mode and node
+  execution.
+- Future comparison runs require separate legacy and custom service URLs.
+- Legacy mode may return empty graph debug.
+- No retrieval logic, 240-case artifact, HPC environment, real LLM, or Chroma data was used.
+
 Next decision:
-- Phase 6L-2 is not started. After manual review, it may compare legacy and custom graph behavior
-  on source hit, latency, errors, fallbacks, and calibrated bad cases.
+- Phase 6L-4 may rerun the legacy/custom endpoint comparison with two correctly configured service
+  processes after this fix is reviewed and checkpointed.

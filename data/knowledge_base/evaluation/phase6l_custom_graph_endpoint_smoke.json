@@ -5,6 +5,7 @@
   "graph_debug_present": true,
   "graph_mode_is_custom": true,
   "nodes_executed_present": true,
+  "nodes_executed_count": 7,
   "model_provider_is_custom": true,
   "legacy_mode_still_available": true,
   "model_failure_safe_fallback": true,

@@ -5,21 +5,20 @@ Uses requests against running uvicorn service. Start service before running.
 """
 from __future__ import annotations
 
+import argparse
 import json
-import os
-import sys
 import time
 from collections import Counter
 from pathlib import Path
 from statistics import mean
 from typing import Any
 
+import requests
+
 ROOT = Path(__file__).resolve().parents[1]
 EVAL = ROOT / "data" / "knowledge_base" / "evaluation"
-DOCS = ROOT / "docs" / "enterprise_rag_backend"
-URL = "http://127.0.0.1:8000/enterprise/agent/query"
-
-import requests
+LEGACY_URL = "http://127.0.0.1:8000/enterprise/agent/query"
+CUSTOM_GRAPH_URL = "http://127.0.0.1:8001/enterprise/agent/query"
 
 # ── Default cases ──
 DEFAULT_CASES = [
@@ -53,8 +52,18 @@ DEFAULT_CASES = [
 def load_or_default():
     p = EVAL / "phase6l_endpoint_comparison_cases.jsonl"
     if p.exists():
-        return [json.loads(l) for l in p.read_text("utf-8").splitlines() if l.strip()]
+        return [json.loads(line) for line in p.read_text("utf-8").splitlines() if line.strip()]
     return DEFAULT_CASES
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description="Compare separate legacy and custom_graph service instances."
+    )
+    parser.add_argument("--legacy-url", default=LEGACY_URL)
+    parser.add_argument("--custom-graph-url", default=CUSTOM_GRAPH_URL)
+    parser.add_argument("--timeout", type=float, default=30.0)
+    return parser.parse_args()
 
 
 def check_schema(d: dict) -> bool:
@@ -62,24 +71,38 @@ def check_schema(d: dict) -> bool:
 
 
 def check_src_hit(d: dict, esrc: list[str], nosrc: bool) -> bool:
-    if nosrc: return True
-    if not esrc: return True
+    if nosrc:
+        return True
+    if not esrc:
+        return True
     srcs = [s.get("metadata", {}).get("source_id", "") or s.get("source", "") for s in d.get("sources", [])]
     return any(e in srcs for e in esrc)
 
 
 def check_kw_hit(d: dict, kw: list[str]) -> bool:
-    if not kw: return True
+    if not kw:
+        return True
     text = ((d.get("answer") or "") + " " + " ".join(
         s.get("content_preview", "") or s.get("content", "") for s in d.get("sources", []))).lower()
     return all(k.lower() in text for k in kw)
 
 
+def check_graph_debug(d: dict) -> tuple[bool, bool, bool, int]:
+    debug = d.get("graph_debug")
+    present = isinstance(debug, dict) and bool(debug)
+    mode_ok = bool(present and debug.get("graph_mode") == "custom_graph")
+    nodes = debug.get("nodes_executed") if present else None
+    node_count = len(nodes) if isinstance(nodes, list) else 0
+    return present, mode_ok, node_count > 0, node_count
+
+
 def run():
+    args = parse_args()
     cases = load_or_default()
     results: list[dict[str, Any]] = []
     stats: dict[str, Counter] = {"legacy": Counter(), "custom_graph": Counter()}
     lats: dict[str, list[float]] = {"legacy": [], "custom_graph": []}
+    urls = {"legacy": args.legacy_url, "custom_graph": args.custom_graph_url}
 
     for case in cases:
         body = {"query": case["query"], "session_id": case.get("session_id") or case.get("sid", "default"), "top_k": 5, "return_sources": True}
@@ -89,11 +112,8 @@ def run():
             m = "legacy" if mode == "legacy" else "custom_graph"
             prefix = mode + "_"
             try:
-                # Mode is set by service env; we can't change it per-request.
-                # Use the service as-is (service was started with ENTERPRISE_AGENT_GRAPH_MODE)
-                # For now, both modes go to the same endpoint.
                 start = time.time()
-                r = requests.post(URL, json=body, timeout=30)
+                r = requests.post(urls[mode], json=body, timeout=args.timeout)
                 elapsed = (time.time() - start) * 1000
                 d = r.json()
                 row[prefix + "status"] = r.status_code
@@ -102,7 +122,11 @@ def run():
                 row[prefix + "src_hit"] = check_src_hit(d, case.get("esrc", []), case.get("nosrc", False))
                 row[prefix + "kw_hit"] = check_kw_hit(d, case.get("kw", []))
                 row[prefix + "error"] = None
-                row[prefix + "graph_debug"] = d.get("graph_debug") is not None
+                gd_present, gd_mode, gd_nodes, gd_node_count = check_graph_debug(d)
+                row[prefix + "graph_debug"] = gd_present
+                row[prefix + "graph_mode_is_custom"] = gd_mode
+                row[prefix + "nodes_executed_present"] = gd_nodes
+                row[prefix + "nodes_executed_count"] = gd_node_count
                 row[prefix + "src_count"] = len(d.get("sources", []))
                 row[prefix + "fallback"] = d.get("fallback", {}).get("triggered", False)
                 stats[m]["ok"] += 1 if r.status_code == 200 else 0
@@ -110,13 +134,22 @@ def run():
                 stats[m]["src_hit"] += 1 if row[prefix + "src_hit"] else 0
                 stats[m]["kw_hit"] += 1 if row[prefix + "kw_hit"] else 0
                 stats[m]["gd"] += 1 if row[prefix + "graph_debug"] else 0
+                stats[m]["gd_mode"] += 1 if row[prefix + "graph_mode_is_custom"] else 0
+                stats[m]["nodes"] += 1 if row[prefix + "nodes_executed_present"] else 0
                 if r.status_code == 200:
                     lats[m].append(elapsed)
             except Exception as e:
-                row[prefix + "status"] = 0; row[prefix + "lat_ms"] = 0
-                row[prefix + "schema"] = False; row[prefix + "src_hit"] = False
-                row[prefix + "kw_hit"] = False; row[prefix + "error"] = str(e)[:200]
-                row[prefix + "graph_debug"] = False; row[prefix + "src_count"] = 0
+                row[prefix + "status"] = 0
+                row[prefix + "lat_ms"] = 0
+                row[prefix + "schema"] = False
+                row[prefix + "src_hit"] = False
+                row[prefix + "kw_hit"] = False
+                row[prefix + "error"] = str(e)[:200]
+                row[prefix + "graph_debug"] = False
+                row[prefix + "graph_mode_is_custom"] = False
+                row[prefix + "nodes_executed_present"] = False
+                row[prefix + "nodes_executed_count"] = 0
+                row[prefix + "src_count"] = 0
                 row[prefix + "fallback"] = True
                 stats[m]["err"] += 1
         results.append(row)
@@ -126,18 +159,30 @@ def run():
         prefix = m + "_" if m == "legacy" else "custom_graph_"
         bad = 0
         for r in results:
-            if (r.get(prefix + "status") != 200 or not r.get(prefix + "schema") or
+            failed = (r.get(prefix + "status") != 200 or not r.get(prefix + "schema") or
                 r.get(prefix + "error") or not r.get(prefix + "src_hit") or
-                not r.get(prefix + "kw_hit")):
+                not r.get(prefix + "kw_hit"))
+            if m == "custom_graph":
+                failed = failed or not (
+                    r.get(prefix + "graph_debug")
+                    and r.get(prefix + "graph_mode_is_custom")
+                    and r.get(prefix + "nodes_executed_present")
+                )
+            if failed:
                 bad += 1
         stats[m]["bad"] = bad
 
     l_avg = mean(lats["legacy"]) if lats["legacy"] else 0
     c_avg = mean(lats["custom_graph"]) if lats["custom_graph"] else 0
+    custom_graph_debug_valid = bool(
+        stats["custom_graph"]["gd"] == len(cases)
+        and stats["custom_graph"]["gd_mode"] == len(cases)
+        and stats["custom_graph"]["nodes"] == len(cases)
+    )
 
     summary = {
         "phase": "6L_endpoint_comparison",
-        "case_count": len(cases), "request_count": len(results),
+        "case_count": len(cases), "request_count": len(results) * 2,
         "paired_case_count": sum(1 for r in results if r.get("legacy_status") == 200 and r.get("custom_graph_status") == 200),
         "legacy": {"status_ok_count": stats["legacy"]["ok"], "schema_valid_count": stats["legacy"]["schema"],
                    "source_hit_count": stats["legacy"]["src_hit"], "keyword_hit_count": stats["legacy"]["kw_hit"],
@@ -148,14 +193,16 @@ def run():
                          "bad_case_count": stats["custom_graph"]["bad"], "error_count": stats["custom_graph"]["err"],
                          "timeout_count": 0, "avg_latency_ms": round(c_avg, 1),
                          "graph_debug_present_count": stats["custom_graph"]["gd"],
-                         "nodes_executed_present_count": stats["custom_graph"]["gd"]},
+                         "graph_mode_is_custom_count": stats["custom_graph"]["gd_mode"],
+                         "nodes_executed_present_count": stats["custom_graph"]["nodes"]},
         "delta": {"source_hit_delta": stats["custom_graph"]["src_hit"] - stats["legacy"]["src_hit"],
                   "keyword_hit_delta": stats["custom_graph"]["kw_hit"] - stats["legacy"]["kw_hit"],
                   "bad_case_delta": stats["custom_graph"]["bad"] - stats["legacy"]["bad"],
                   "avg_latency_delta_ms": round(c_avg - l_avg, 1)},
         "calls_real_llm": False, "writes_chroma": False, "runs_240_case": False,
-        "recommended_for_checkpoint": True,
-        "note": "Both modes tested against same service instance; mode switching requires service restart.",
+        "custom_graph_debug_valid": custom_graph_debug_valid,
+        "recommended_for_checkpoint": custom_graph_debug_valid,
+        "note": "Legacy and custom_graph URLs must point to separately configured service instances.",
     }
 
     (EVAL / "phase6l_endpoint_comparison_cases.jsonl").write_text(

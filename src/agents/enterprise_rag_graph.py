@@ -93,11 +93,12 @@ def _append_node(
     debug = dict(state.get("graph_debug") or {})
     nodes = list(debug.get("nodes_executed") or [])
     nodes.append(node_name)
+    current_route = debug.get("route")
     debug.update(
         {
             "graph_mode": "custom_graph",
             "nodes_executed": nodes,
-            "route": route or debug.get("route") or "pending",
+            "route": route if route is not None else current_route,
             "calls_llm": bool(debug.get("calls_llm", False)),
             "calls_real_llm": bool(debug.get("calls_real_llm", False)),
             "writes_chroma": False,
@@ -472,6 +473,10 @@ async def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGr
         memory_debug["memory_turn_count_after"] = memory_debug.get("memory_turn_count_before", 0)
         memory_debug["memory_written"] = False
     response_sources = sources if state.get("return_sources", True) else []
+    final_graph_debug = {
+        **graph_debug,
+        "nodes_executed": list(graph_debug.get("nodes_executed") or []),
+    }
     response = {
         "answer": state.get("answer", ""),
         "sources": response_sources,
@@ -480,14 +485,14 @@ async def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGr
         "memory_debug": memory_debug,
         "retrieval_debug": dict(state.get("retrieval_debug") or {}),
         "verifier_debug": dict(state.get("verifier_debug") or {}),
-        "graph_debug": graph_debug,
+        "graph_debug": final_graph_debug,
         "model_debug": dict(state.get("model_debug") or {}),
         "fallback": dict(state.get("fallback") or {}),
     }
     return {
         "citations": citations,
         "memory_debug": memory_debug,
-        "graph_debug": graph_debug,
+        "graph_debug": final_graph_debug,
         "final_response": response,
     }
 
@@ -584,11 +589,15 @@ async def run_enterprise_rag_graph(
             "graph_debug": {
                 "graph_mode": "custom_graph",
                 "nodes_executed": [],
-                "route": "pending",
+                "route": None,
                 "calls_llm": False,
                 "calls_real_llm": False,
                 "writes_chroma": False,
             },
         }
     )
-    return dict(result.get("final_response") or {})
+    final_response = dict(result.get("final_response") or {})
+    graph_debug = dict(final_response.get("graph_debug") or result.get("graph_debug") or {})
+    graph_debug["nodes_executed"] = list(graph_debug.get("nodes_executed") or [])
+    final_response["graph_debug"] = graph_debug
+    return final_response

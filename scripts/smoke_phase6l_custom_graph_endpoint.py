@@ -152,7 +152,9 @@ async def run_smoke() -> dict[str, object]:
         custom_graph_response_schema_ok = required_fields.issubset(custom_payload)
         graph_debug_present = bool(graph_debug)
         graph_mode_is_custom = graph_debug.get("graph_mode") == "custom_graph"
-        nodes_executed_present = bool(graph_debug.get("nodes_executed"))
+        nodes_executed = graph_debug.get("nodes_executed")
+        nodes_executed_count = len(nodes_executed) if isinstance(nodes_executed, list) else 0
+        nodes_executed_present = nodes_executed_count > 0
         model_provider_is_custom = (
             custom_payload.get("model_debug", {}).get("provider") == "custom_graph"
         )
@@ -177,6 +179,7 @@ async def run_smoke() -> dict[str, object]:
         graph_debug_present = False
         graph_mode_is_custom = False
         nodes_executed_present = False
+        nodes_executed_count = 0
         model_provider_is_custom = False
         calls_real_llm = False
         calls_llm = False
@@ -196,6 +199,7 @@ async def run_smoke() -> dict[str, object]:
         "graph_debug_present": graph_debug_present,
         "graph_mode_is_custom": graph_mode_is_custom,
         "nodes_executed_present": nodes_executed_present,
+        "nodes_executed_count": nodes_executed_count,
         "model_provider_is_custom": model_provider_is_custom,
         "legacy_mode_still_available": legacy_mode_still_available,
         "model_failure_safe_fallback": model_failure_safe_fallback,

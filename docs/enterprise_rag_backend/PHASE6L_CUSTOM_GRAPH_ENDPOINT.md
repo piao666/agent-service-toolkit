@@ -111,3 +111,25 @@ The generated summary is stored at
 After manual review, Phase 6L-2 may compare `legacy` and `custom_graph` on a controlled API-level
 evaluation, including source hit, latency, error, fallback, and calibrated bad-case differences.
 HPC or external-provider evaluation must remain a separate explicit decision.
+
+## Phase 6L-3 graph debug surfacing hardening
+
+The Phase 6L-2 baseline reported zero custom-graph debug records. Static review showed that the
+schema, endpoint mapping, graph final response, and Phase 6L-1 ASGI smoke already carried the field.
+The comparison runner, however, sent both labels to one service instance even though graph mode is
+a process-start setting. It also treated field presence as sufficient instead of validating a
+non-empty custom payload.
+
+Phase 6L-3 hardens both boundaries:
+
+- `run_enterprise_rag_graph()` defensively restores `graph_debug` from final graph state before
+  returning the final response;
+- the service copies the debug mapping and node list into the response model;
+- graph initialization uses `route=null`, and the classifier writes the selected route;
+- endpoint smoke requires non-empty debug, `graph_mode=custom_graph`, and
+  `nodes_executed_count > 0`;
+- the comparison runner uses separate legacy/custom service URLs and validates top-level debug,
+  graph mode, and nodes independently.
+
+Legacy responses may continue to return an empty `graph_debug`. Phase 6L-3 does not rerun the HPC
+comparison; that is a separate Phase 6L-4 decision.
