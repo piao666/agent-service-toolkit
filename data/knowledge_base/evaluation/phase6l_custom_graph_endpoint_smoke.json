@@ -1,0 +1,19 @@
+{
+  "phase": "6L_custom_graph_endpoint_smoke",
+  "custom_graph_status_ok": true,
+  "custom_graph_response_schema_ok": true,
+  "graph_debug_present": true,
+  "graph_mode_is_custom": true,
+  "nodes_executed_present": true,
+  "model_provider_is_custom": true,
+  "legacy_mode_still_available": true,
+  "model_failure_safe_fallback": true,
+  "calls_llm": false,
+  "calls_real_llm": false,
+  "writes_chroma": false,
+  "starts_long_running_service": false,
+  "error_count": 0,
+  "errors": [],
+  "recommended_checkpoint": false,
+  "phase6l1_acceptance_passed": true
+}

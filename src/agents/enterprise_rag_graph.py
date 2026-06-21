@@ -1,17 +1,29 @@
 from __future__ import annotations
 
+import asyncio
+import inspect
 import re
-from collections.abc import Callable
+from collections.abc import Awaitable, Callable
 from typing import Any, TypedDict
 
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 from langgraph.graph import END, StateGraph
 
+from agents.enterprise_rag_agent import ANSWER_SYNTHESIS_PROMPT
+from core import get_model, settings
 from rag.config import rag_settings
 from rag.conversation_memory import contextualize_query_with_memory, get_memory_store
 from rag.evidence_verifier import build_safe_fallback_answer, verify_answer_grounding
+from schema.models import FakeModelName
 
-Retriever = Callable[[str, int | None], dict[str, Any]]
-AnswerGenerator = Callable[[str, list[dict[str, Any]]], str]
+Retriever = Callable[
+    [str, int | None],
+    dict[str, Any] | Awaitable[dict[str, Any]],
+]
+AnswerGenerator = Callable[
+    [str, list[dict[str, Any]]],
+    str | Awaitable[str],
+]
 
 _AMBIGUOUS_QUERIES = {
     "继续",
@@ -51,6 +63,8 @@ class EnterpriseRAGGraphState(TypedDict, total=False):
     query: str
     session_id: str | None
     top_k: int
+    return_sources: bool
+    model: Any | None
     query_type: str | None
     contextual_query: str | None
     memory_debug: dict[str, Any]
@@ -58,6 +72,8 @@ class EnterpriseRAGGraphState(TypedDict, total=False):
     retrieval_debug: dict[str, Any]
     ranked_sources: list[dict[str, Any]]
     answer: str
+    model_debug: dict[str, Any]
+    fallback: dict[str, Any]
     citations: list[dict[str, Any]]
     verifier_debug: dict[str, Any]
     graph_debug: dict[str, Any]
@@ -82,7 +98,8 @@ def _append_node(
             "graph_mode": "custom_graph",
             "nodes_executed": nodes,
             "route": route or debug.get("route") or "pending",
-            "calls_llm": False,
+            "calls_llm": bool(debug.get("calls_llm", False)),
+            "calls_real_llm": bool(debug.get("calls_real_llm", False)),
             "writes_chroma": False,
         }
     )
@@ -119,7 +136,7 @@ def infer_graph_query_type(query: str, session_id: str | None = None) -> str:
     return "semantic_qa"
 
 
-def query_classifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+async def query_classifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     query_type = infer_graph_query_type(_normalized_query(state), state.get("session_id"))
     route = {
         "ambiguous_query": "clarification",
@@ -131,7 +148,7 @@ def query_classifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphS
     }
 
 
-def memory_rewriter_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+async def memory_rewriter_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     store = get_memory_store(
         max_turns=rag_settings.ENTERPRISE_MEMORY_MAX_TURNS,
         max_answer_chars=rag_settings.ENTERPRISE_MEMORY_MAX_ANSWER_CHARS,
@@ -185,10 +202,16 @@ def _default_answer_generator(query: str, sources: list[dict[str, Any]]) -> str:
     return f"According to the knowledge-base source '{title}', {preview or 'relevant evidence was found.'}"
 
 
-def _build_retriever_node(retriever: Retriever) -> Callable[[EnterpriseRAGGraphState], EnterpriseRAGGraphState]:
-    def retriever_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+def _build_retriever_node(
+    retriever: Retriever,
+) -> Callable[[EnterpriseRAGGraphState], Awaitable[EnterpriseRAGGraphState]]:
+    async def retriever_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
         query = state.get("contextual_query") or _normalized_query(state)
-        payload = retriever(query, state.get("top_k", 5))
+        if inspect.iscoroutinefunction(retriever):
+            payload = await retriever(query, state.get("top_k", 5))
+        else:
+            payload_result = await asyncio.to_thread(retriever, query, state.get("top_k", 5))
+            payload = await payload_result if inspect.isawaitable(payload_result) else payload_result
         sources = list(payload.get("sources") or [])
         debug = dict(payload.get("retrieval_debug") or {})
         debug.update(
@@ -202,18 +225,19 @@ def _build_retriever_node(retriever: Retriever) -> Callable[[EnterpriseRAGGraphS
         return {
             "retrieved_sources": sources,
             "retrieval_debug": debug,
+            "fallback": dict(payload.get("fallback") or {}),
             "graph_debug": _append_node(state, "retriever"),
         }
 
     return retriever_node
 
 
-def retriever_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+async def retriever_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     """Run the existing enterprise retriever in the default custom graph."""
-    return _build_retriever_node(_default_retriever)(state)
+    return await _build_retriever_node(_default_retriever)(state)
 
 
-def ranker_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+async def ranker_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     ranked = sorted(state.get("retrieved_sources") or [], key=_source_score, reverse=True)
     return {
         "ranked_sources": ranked,
@@ -223,27 +247,145 @@ def ranker_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
 
 def _build_answer_generator_node(
     answer_generator: AnswerGenerator,
-) -> Callable[[EnterpriseRAGGraphState], EnterpriseRAGGraphState]:
-    def answer_generator_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+) -> Callable[[EnterpriseRAGGraphState], Awaitable[EnterpriseRAGGraphState]]:
+    async def answer_generator_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
         query = state.get("contextual_query") or _normalized_query(state)
-        answer = answer_generator(query, list(state.get("ranked_sources") or []))
+        answer_result = answer_generator(query, list(state.get("ranked_sources") or []))
+        answer = await answer_result if inspect.isawaitable(answer_result) else answer_result
+        graph_debug = _append_node(state, "answer_generator")
+        graph_debug["answer_generator"] = "injected"
         return {
             "answer": str(answer or build_safe_fallback_answer(query)),
-            "graph_debug": _append_node(state, "answer_generator"),
+            "model_debug": {
+                "provider": "injected",
+                "model": None,
+                "answer_generator": "injected",
+            },
+            "graph_debug": graph_debug,
         }
 
     return answer_generator_node
 
 
-def answer_generator_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
-    """Generate a deterministic answer without invoking a model provider."""
-    return _build_answer_generator_node(_default_answer_generator)(state)
+def _message_text(message: BaseMessage) -> str:
+    content = message.content
+    if isinstance(content, str):
+        return content
+    return "".join(
+        str(item.get("text", ""))
+        for item in content
+        if isinstance(item, dict) and item.get("type") == "text"
+    )
+
+
+def _resolve_model(model_name: Any | None) -> Any:
+    selected = model_name or settings.DEFAULT_MODEL
+    if selected is None:
+        raise ValueError("No model is configured")
+    for candidate in settings.AVAILABLE_MODELS:
+        if str(candidate) == str(selected):
+            return candidate
+    return selected
+
+
+def _is_fake_model(model_name: Any) -> bool:
+    return str(model_name) == str(FakeModelName.FAKE)
+
+
+async def _real_answer_generator(
+    query: str,
+    sources: list[dict[str, Any]],
+    *,
+    model_name: Any | None = None,
+) -> tuple[str, dict[str, Any], bool]:
+    selected_model = _resolve_model(model_name)
+    if not sources:
+        return (
+            build_safe_fallback_answer(query),
+            {
+                "provider": "fallback",
+                "model": str(selected_model),
+                "answer_generator": "safe_fallback",
+            },
+            False,
+        )
+
+    context_parts = []
+    for source in sources[:5]:
+        title = _source_value(source, "title") or "source"
+        preview = _source_value(source, "content_preview") or _source_value(source, "preview")
+        context_parts.append(f"[{title}] {preview}")
+    context = "\n\n".join(context_parts)
+    messages = [
+        SystemMessage(content=ANSWER_SYNTHESIS_PROMPT),
+        HumanMessage(content=f"User question:\n{query}\n\nRetrieved context:\n{context}"),
+    ]
+    calls_real_llm = False
+    try:
+        model = get_model(selected_model)
+        calls_real_llm = not _is_fake_model(selected_model)
+        response = await model.ainvoke(messages)
+        answer = _message_text(response).strip()
+        if not answer:
+            answer = build_safe_fallback_answer(query)
+        return (
+            answer,
+            {
+                "provider": "fake" if _is_fake_model(selected_model) else "configured",
+                "model": str(selected_model),
+                "answer_generator": "model_ainvoke",
+            },
+            calls_real_llm,
+        )
+    except Exception as exc:
+        return (
+            build_safe_fallback_answer(query),
+            {
+                "provider": "model_error",
+                "model": str(selected_model),
+                "answer_generator": "safe_fallback",
+                "error": type(exc).__name__,
+            },
+            calls_real_llm,
+        )
+
+
+async def answer_generator_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+    """Generate an answer through the configured model with a stable fallback."""
+    query = state.get("contextual_query") or _normalized_query(state)
+    answer, model_debug, calls_real_llm = await _real_answer_generator(
+        query,
+        list(state.get("ranked_sources") or []),
+        model_name=state.get("model"),
+    )
+    graph_debug = _append_node(state, "answer_generator")
+    graph_debug.update(
+        {
+            "answer_generator": model_debug.get("answer_generator"),
+            "calls_llm": calls_real_llm,
+            "calls_real_llm": calls_real_llm,
+        }
+    )
+    fallback = dict(state.get("fallback") or {})
+    if model_debug.get("provider") in {"fallback", "model_error"}:
+        fallback = {
+            "triggered": True,
+            "reason": "no_sources"
+            if model_debug.get("provider") == "fallback"
+            else "model_error",
+        }
+    return {
+        "answer": answer,
+        "model_debug": model_debug,
+        "fallback": fallback,
+        "graph_debug": graph_debug,
+    }
 
 
 def _build_evidence_verifier_node(
     verifier_mode: str,
-) -> Callable[[EnterpriseRAGGraphState], EnterpriseRAGGraphState]:
-    def evidence_verifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+) -> Callable[[EnterpriseRAGGraphState], Awaitable[EnterpriseRAGGraphState]]:
+    async def evidence_verifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
         result = verify_answer_grounding(
             query=_normalized_query(state),
             answer=state.get("answer", ""),
@@ -265,12 +407,12 @@ def _build_evidence_verifier_node(
     return evidence_verifier_node
 
 
-def evidence_verifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+async def evidence_verifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     """Run the configured Phase 6I verifier for a custom-graph state."""
-    return _build_evidence_verifier_node(rag_settings.evidence_verifier_mode)(state)
+    return await _build_evidence_verifier_node(rag_settings.evidence_verifier_mode)(state)
 
 
-def clarification_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+async def clarification_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     query = _normalized_query(state)
     if any("\u4e00" <= character <= "\u9fff" for character in query):
         answer = "请补充具体主题或指明你希望继续讨论的内容。"
@@ -282,11 +424,12 @@ def clarification_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAG
         "ranked_sources": [],
         "retrieval_debug": {"hit_count": 0, "skipped_reason": "clarification_required"},
         "verifier_debug": {},
+        "fallback": {"triggered": True, "reason": "clarification_required"},
         "graph_debug": _append_node(state, "clarification_response"),
     }
 
 
-def safe_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+async def safe_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     query = _normalized_query(state)
     if any("\u4e00" <= character <= "\u9fff" for character in query):
         answer = "该问题不在当前知识库问答范围内，请提供与知识库相关的问题。"
@@ -298,11 +441,12 @@ def safe_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphStat
         "ranked_sources": [],
         "retrieval_debug": {"hit_count": 0, "skipped_reason": "unsupported_query"},
         "verifier_debug": {},
+        "fallback": {"triggered": True, "reason": "unsupported_query"},
         "graph_debug": _append_node(state, "safe_response"),
     }
 
 
-def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+async def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     sources = list(state.get("ranked_sources") or state.get("retrieved_sources") or [])
     citations = [
         {
@@ -327,15 +471,18 @@ def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphSta
     else:
         memory_debug["memory_turn_count_after"] = memory_debug.get("memory_turn_count_before", 0)
         memory_debug["memory_written"] = False
+    response_sources = sources if state.get("return_sources", True) else []
     response = {
         "answer": state.get("answer", ""),
-        "sources": sources,
+        "sources": response_sources,
         "citations": citations,
         "query_type": state.get("query_type"),
         "memory_debug": memory_debug,
         "retrieval_debug": dict(state.get("retrieval_debug") or {}),
         "verifier_debug": dict(state.get("verifier_debug") or {}),
         "graph_debug": graph_debug,
+        "model_debug": dict(state.get("model_debug") or {}),
+        "fallback": dict(state.get("fallback") or {}),
     }
     return {
         "citations": citations,
@@ -417,24 +564,29 @@ def get_enterprise_rag_graph() -> Any:
     return _enterprise_rag_graph
 
 
-def run_enterprise_rag_graph(
+async def run_enterprise_rag_graph(
     query: str,
     *,
     session_id: str | None = None,
     top_k: int = 5,
+    return_sources: bool = True,
+    model: Any | None = None,
     graph: Any | None = None,
 ) -> dict[str, Any]:
     compiled_graph = graph or get_enterprise_rag_graph()
-    result = compiled_graph.invoke(
+    result = await compiled_graph.ainvoke(
         {
             "query": query,
             "session_id": session_id,
             "top_k": top_k,
+            "return_sources": return_sources,
+            "model": model,
             "graph_debug": {
                 "graph_mode": "custom_graph",
                 "nodes_executed": [],
                 "route": "pending",
                 "calls_llm": False,
+                "calls_real_llm": False,
                 "writes_chroma": False,
             },
         }

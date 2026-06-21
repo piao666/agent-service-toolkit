@@ -5,8 +5,9 @@
 Phase 6J adds an explicit, inspectable LangGraph workflow for demonstrating pluggable Agent
 orchestration. The custom graph does not replace the existing enterprise RAG Agent or service.
 `ENTERPRISE_AGENT_GRAPH_MODE=legacy` remains the default, so the existing API, Streamlit UI, and
-evaluation behavior are unchanged. The graph can be imported and called directly for controlled
-smoke validation; API dispatch is intentionally deferred to avoid changing the stable endpoint.
+evaluation behavior are unchanged. Phase 6L-1 adds optional endpoint-level dispatch for
+`custom_graph` without replacing the registry entry or routing custom state through the generic
+message-based invoke path.
 
 ## State
 
@@ -23,7 +24,7 @@ the executed nodes, selected route, `calls_llm=false`, and `writes_chroma=false`
 | `memory_rewriter` | query, session memory | contextual query, memory debug | Reuses the Phase 6G session-isolated contextualizer. |
 | `retriever` | contextual or original query, top-k | sources, retrieval debug | Adapts the existing enterprise retriever; smoke injects a local stub. |
 | `ranker` | retrieved sources | ranked sources | Stable score ordering without a new reranker model. |
-| `answer_generator` | query, ranked sources | answer | Deterministic smoke-safe answer generation without a provider. |
+| `answer_generator` | query, ranked sources, model | answer, model debug | Uses the configured model asynchronously; smoke can inject a deterministic generator. |
 | `evidence_verifier` | query, answer, sources | verifier debug | Reuses the Phase 6I rule-based grounding verifier. |
 | `clarification_response` | ambiguous query | clarification answer | Avoids retrieval when required context is missing. |
 | `safe_response` | unsupported query | scope-safe answer | Avoids retrieval for clearly out-of-scope requests. |
@@ -49,14 +50,16 @@ also verifies that LangGraph can render Mermaid text from the compiled graph.
 - Phase 6I: deterministic evidence verification and optional safe fallback construction.
 
 The graph builder accepts injected retriever and answer-generator functions. This makes smoke tests
-independent from model providers and vector stores while the default callable still reuses the
-existing runtime retriever.
+independent from model providers and vector stores. The default graph reuses the existing runtime
+retriever and calls `get_model(...).ainvoke(...)`; model failures return a safe fallback instead of
+propagating an endpoint error.
 
 ## Feature flag
 
 `ENTERPRISE_AGENT_GRAPH_MODE=legacy|custom_graph` is parsed by RAG settings. Invalid values fall
-back to `legacy`. The current business endpoint continues to use its legacy implementation; the
-flag documents and validates the optional mode without silently changing API dispatch.
+back to `legacy`. Phase 6L-1 reads this setting only inside `/enterprise/agent/query`: `legacy`
+keeps the existing message-based Agent path, while `custom_graph` directly awaits the custom graph
+runner. The generic Agent registry remains unchanged.
 
 ## Smoke result
 
@@ -74,12 +77,13 @@ Final local summary:
 
 ## Limitations
 
-- The smoke does not call a real LLM and uses an injected retrieval stub.
+- The smoke does not call a real LLM and uses injected retrieval and answer stubs.
 - The smoke does not read or write Chroma.
-- The deterministic answer generator is a graph validation baseline, not a production answer path.
-- The custom graph is disabled by default and is not wired into the production endpoint in this
-  phase.
+- The default answer node now has a model-backed path, but real-provider behavior requires separate
+  validation.
+- The custom graph is disabled by default. Phase 6L-1 endpoint wiring is the first integration step,
+  not a production-readiness claim.
 - This is not a claim of production-grade Agent orchestration or complete query classification.
 
-Phase 6K may package this Mermaid diagram and the verified graph contract into final project,
-runbook, interview, resume, and demo documentation. Phase 6K has not started.
+Phase 6L-2 may compare legacy and custom graph behavior on a controlled evaluation set after the
+Phase 6L-1 implementation is reviewed.

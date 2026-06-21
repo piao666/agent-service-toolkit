@@ -252,6 +252,46 @@ async def enterprise_agent_query(
     """Invoke the enterprise RAG agent through a business-friendly response shape."""
     start_time = perf_counter()
     session_id = request.session_id or str(uuid4())
+
+    if rag_settings.agent_graph_mode == "custom_graph":
+        from agents.enterprise_rag_graph import run_enterprise_rag_graph
+
+        try:
+            result = await run_enterprise_rag_graph(
+                query=request.query,
+                session_id=request.session_id,
+                top_k=request.top_k,
+                return_sources=request.return_sources,
+                model=request.model,
+            )
+        except Exception as e:
+            logger.error(f"Enterprise custom graph query failed: {e}")
+            raise HTTPException(status_code=500, detail="Enterprise custom graph query failed")
+
+        all_sources = list(result.get("sources") or [])
+        graph_model_debug = dict(result.get("model_debug") or {})
+        model_debug = {
+            "provider": "custom_graph",
+            "model": str(request.model or settings.DEFAULT_MODEL),
+            "graph_mode": "custom_graph",
+        }
+        if graph_model_debug:
+            model_debug["answer_generator"] = graph_model_debug.get("answer_generator")
+            model_debug["answer_provider"] = graph_model_debug.get("provider")
+
+        return EnterpriseAgentQueryResponse(
+            answer=str(result.get("answer") or ""),
+            sources=all_sources if request.return_sources else [],
+            retrieval_debug=_enterprise_retrieval_debug(result, request, all_sources),
+            latency_ms=round((perf_counter() - start_time) * 1000, 2),
+            model_debug=model_debug,
+            memory_debug=dict(result.get("memory_debug") or {}),
+            verifier_debug=dict(result.get("verifier_debug") or {}),
+            graph_debug=dict(result.get("graph_debug") or {}),
+            fallback=dict(result.get("fallback") or {}),
+            session_id=session_id,
+        )
+
     user_input = UserInput(
         message=request.query,
         model=request.model,
@@ -285,6 +325,7 @@ async def enterprise_agent_query(
         model_debug=_enterprise_model_debug(metadata, request),
         memory_debug=dict(metadata.get("memory_debug") or {}),
         verifier_debug=dict(metadata.get("verifier_debug") or {}),
+        graph_debug={},
         fallback=dict(metadata.get("fallback") or {}),
         session_id=session_id,
     )

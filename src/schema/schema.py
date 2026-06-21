@@ -132,6 +132,10 @@ class EnterpriseAgentQueryResponse(BaseModel):
         description="Optional deterministic evidence-grounding diagnostics.",
         default_factory=dict,
     )
+    graph_debug: dict[str, Any] = Field(
+        description="Optional custom LangGraph execution diagnostics.",
+        default_factory=dict,
+    )
     fallback: dict[str, Any] = Field(
         description="Fallback status and reason, when triggered.",
         default_factory=dict,

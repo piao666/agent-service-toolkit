@@ -1912,8 +1912,7 @@ Implementation and smoke summary:
 
 Phase 6K: Final README Packaging
 --------------------------------
-Status: preflight checkpoint completed; final README packaging completed for manual review and
-checkpoint.
+Status: completed and checkpointed in `3840054 phase-6k final readme packaging`.
 
 Goal:
 - Produce an accurate GitHub-facing README after the technical phases and controlled preflight are
@@ -1962,6 +1961,36 @@ Roadmap Checkpoint Rules
 - Do not describe skipped checks as passed or local prototypes as production systems.
 - Do not commit `.env`, virtual environments, API keys, model weights, Chroma databases, raw or
   normalized private content, generated logs, local absolute paths, or large binary files.
-- Current next action is manual review of the final README and its Phase 6K checkpoint. After that,
-  external documentation work may organize project-summary, resume, interview, and demonstration
-  materials. No new feature phase is marked as started.
+- Phase 6K is closed. External documentation may organize project-summary, resume, interview, and
+  demonstration materials without changing the verified feature boundaries.
+
+Phase 6L-1: Custom Graph Endpoint Integration
+----------------------------------------------
+Status: implemented locally and pending manual review; not checkpointed.
+
+Protocol decision:
+- Confirmed that the legacy `enterprise-rag-agent` uses `MessagesState` and the generic service
+  message protocol, while `enterprise_rag_graph` uses a plain typed state and `final_response`.
+- The `enterprise-rag-agent` registry entry remains unchanged.
+- `/enterprise/agent/query` performs endpoint-level routing based on
+  `ENTERPRISE_AGENT_GRAPH_MODE=legacy|custom_graph`; `legacy` remains the default.
+
+Implementation:
+- Converted all custom graph nodes to async functions and changed the runner to
+  `await compiled_graph.ainvoke(...)`.
+- Added a model-backed answer node using the existing model registry and answer synthesis prompt.
+  Missing sources and model failures return a safe fallback.
+- Added additive `graph_debug` to the business response schema.
+- Added `scripts/smoke_phase6l_custom_graph_endpoint.py` and a bounded JSON summary.
+- Updated the Phase 6J smoke for the async runner.
+
+Local smoke result:
+- Custom graph endpoint status/schema, graph mode, executed nodes, custom model provider marker,
+  model-failure safe fallback, and legacy availability checks passed.
+- `calls_llm=false`, `calls_real_llm=false`, `writes_chroma=false`,
+  `starts_long_running_service=false`, and `error_count=0`.
+- No 240-case run, benchmark, HPC execution, real provider call, or Chroma write was performed.
+
+Next decision:
+- Phase 6L-2 is not started. After manual review, it may compare legacy and custom graph behavior
+  on source hit, latency, errors, fallbacks, and calibrated bad cases.

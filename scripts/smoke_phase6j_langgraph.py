@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 import sys
 from pathlib import Path
@@ -99,9 +100,11 @@ def main() -> int:
             )
         )
 
-        semantic = run_enterprise_rag_graph("What is RAG?", graph=graph)
-        ambiguous = run_enterprise_rag_graph("继续", graph=graph)
-        unsupported = run_enterprise_rag_graph("今天的股票价格是多少？", graph=graph)
+        semantic = asyncio.run(run_enterprise_rag_graph("What is RAG?", graph=graph))
+        ambiguous = asyncio.run(run_enterprise_rag_graph("继续", graph=graph))
+        unsupported = asyncio.run(
+            run_enterprise_rag_graph("今天的股票价格是多少？", graph=graph)
+        )
 
         rag_settings.ENTERPRISE_MEMORY_MODE = "buffer"
         store.append_turn(
@@ -110,10 +113,12 @@ def main() -> int:
             "RAG 是检索增强生成。",
             [{"source_id": "rag_overview", "title": "RAG Overview"}],
         )
-        memory_follow_up = run_enterprise_rag_graph(
-            "它有什么局限？",
-            session_id=session_id,
-            graph=graph,
+        memory_follow_up = asyncio.run(
+            run_enterprise_rag_graph(
+                "它有什么局限？",
+                session_id=session_id,
+                graph=graph,
+            )
         )
 
         semantic_nodes = _nodes(semantic)
