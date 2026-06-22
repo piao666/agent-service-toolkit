@@ -2096,3 +2096,22 @@ Status: completed in `phase-6l final documentation refresh`.
   - `runs_benchmark=false`
 - No further core feature development is planned unless a factual documentation issue is found.
 - Recommended next step: external project summary, resume refresh, and interview-material refresh.
+
+Phase 6M-1: Graph Debug UI and Real LLM Representative Eval Preparation
+-------------------------------------------------------------------------
+Status: completed locally; checkpoint pending validation.
+
+- Streamlit now includes a dedicated, display-safe Graph debug expander.
+- Non-empty custom-graph diagnostics render directly; empty legacy graph debug produces a friendly
+  explanation and does not fail the UI.
+- Added an eight-case representative evaluation set covering semantic QA, memory follow-up,
+  code/API/config, citation, metadata, ambiguous, unsupported, and multi-hop queries.
+- Added a bounded endpoint evaluation runner for `fake` and `deepseek` provider modes and
+  `legacy` or `custom_graph` endpoint modes.
+- The runner requires explicit `--execute`; missing DeepSeek credentials are recorded as skipped
+  without printing or storing a key.
+- DeepSeek representative evaluation has not been run in this phase.
+- Boundaries: `calls_real_llm=false`, `writes_chroma=false`, `runs_240_case=false`, and
+  `runs_benchmark=false` for this local preparation phase.
+- Recommended next step: run only the 5-10 representative cases in an authorized environment and
+  manually compare answer quality; do not interpret the result as a general benchmark.

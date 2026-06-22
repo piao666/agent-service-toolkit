@@ -12,6 +12,7 @@ REQUIRED_FUNCTIONS = {
     "render_memory_debug",
     "render_retrieval_debug",
     "render_verifier_debug",
+    "render_graph_debug",
 }
 REQUIRED_EXAMPLES = {
     "RAG 是什么？",
@@ -46,6 +47,13 @@ def main() -> int:
         "memory_debug_renderer_exists": "render_memory_debug" in functions,
         "retrieval_debug_renderer_exists": "render_retrieval_debug" in functions,
         "verifier_debug_renderer_exists": "render_verifier_debug" in functions,
+        "graph_debug_expander_exists": "Graph debug" in string_literals,
+        "graph_debug_renderer_exists": (
+            "render_graph_debug" in functions and "graph_debug" in string_literals
+        ),
+        "legacy_empty_graph_debug_message_exists": any(
+            "legacy 模式下该字段可以为空" in value for value in string_literals
+        ),
         "grounding_status_display_exists": "grounding_status" in string_literals,
         "example_questions_present": REQUIRED_EXAMPLES.issubset(string_literals),
         "no_api_key_literal": not any(pattern.search(source) for pattern in SECRET_VALUE_PATTERNS),
@@ -61,6 +69,9 @@ def main() -> int:
         "memory_debug_renderer_exists",
         "retrieval_debug_renderer_exists",
         "verifier_debug_renderer_exists",
+        "graph_debug_expander_exists",
+        "graph_debug_renderer_exists",
+        "legacy_empty_graph_debug_message_exists",
         "grounding_status_display_exists",
         "example_questions_present",
         "no_api_key_literal",

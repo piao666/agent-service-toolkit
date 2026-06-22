@@ -34,7 +34,7 @@
 - **Evidence Grounding**：rule-based verifier 输出 grounding status、coverage 和 unsupported terms。
 - **Custom LangGraph Graph**：显式编排分类、记忆、检索、排序、生成和证据校验。
 - **Custom Graph Endpoint Routing**：通过 `ENTERPRISE_AGENT_GRAPH_MODE` 在 `/enterprise/agent/query` 内切换 `legacy` 与 `custom_graph` 两条链路，避免强行混用 message-style 与 typed-state graph 协议。
-- **Streamlit Demo**：展示 answer、source cards 及 retrieval/memory/verifier debug。
+- **Streamlit Demo**：展示 answer、source cards 及 retrieval/memory/verifier/graph debug。
 
 ## System Architecture / 系统架构
 
@@ -192,7 +192,7 @@ Phase 6L dual-service comparison 在 fake model 环境下进一步验证了 endp
 
 ## Streamlit Demo
 
-`src/streamlit_app.py` 提供聊天界面，可配置 API base URL、endpoint、session 和 top-k，展示 Agent answer、expandable source cards、`retrieval_debug`、`memory_debug`、`verifier_debug`、request payload 和 raw response。API 不可用或超时时会显示友好错误；前端不读取、保存或展示 provider API key。
+`src/streamlit_app.py` 提供聊天界面，可配置 API base URL、endpoint、session 和 top-k，展示 Agent answer、expandable source cards、`retrieval_debug`、`memory_debug`、`verifier_debug`、独立的 `graph_debug` 面板、request payload 和 raw response。API 不可用或超时时会显示友好错误；前端不读取、保存或展示 provider API key。
 
 前端开关不能修改已启动后端进程的环境变量。实际 memory、structured retrieval、verifier 和 graph mode 由服务启动环境决定。
 
@@ -321,6 +321,11 @@ Phase 6L Dual-Service Endpoint Comparison:
 
 Phase 6L 证明两条 endpoint 链路在 fake model representative cases 下均可稳定响应，并验证 `custom_graph` 的 `graph_debug` 可观测性已经闭环。
 
+Phase 6L dual-service comparison validates endpoint routing, schema stability, and `graph_debug`
+observability under fake model mode. It does not evaluate real LLM answer quality. Phase 6M 已准备
+5-10 条 DeepSeek representative eval，用于后续对比 fake-model behavior 与真实 LLM answer
+quality；该真实 provider 评测尚未执行。
+
 这些指标对应固定版本、固定样本和明确评测方法，不外推为生产准确率或通用 benchmark 结论。
 
 ## Contribution Boundary
@@ -340,7 +345,7 @@ Phase 6L 证明两条 endpoint 链路在 fake model representative cases 下均�
 5. HPC preflight 是轻量复验，未运行 240-case 或 benchmark，并保留一项 service compatibility note。
 6. Phase 6F-8 仍有 49 个 calibrated bad cases，metadata lookup、code/config 和 evidence filtering 仍可改进。
 7. Phase 6L dual-service comparison 使用 fake model 和 representative cases，验证的是 endpoint routing、schema stability、graph_debug observability 和服务稳定性，不代表真实 LLM answer quality，也没有重新运行 240-case。
-8. 后续可增加真实 LLM 小样本 legacy vs custom_graph 对比、custom_graph 全量 240-case endpoint evaluation、persistent memory backend、claim-level evidence verifier。
+8. 已准备 5-10 条真实 DeepSeek representative eval，后续可在授权环境执行；还可继续进行 custom_graph 全量 240-case endpoint evaluation、persistent memory backend、claim-level evidence verifier。
 
 ## Repository Structure
 

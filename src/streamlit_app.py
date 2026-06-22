@@ -234,9 +234,22 @@ def render_retrieval_debug(retrieval_debug: dict[str, Any]) -> None:
             st.caption("本轮 response 未返回 retrieval_debug。")
 
 
+def render_graph_debug(graph_debug: dict[str, Any]) -> None:
+    """Render custom graph execution diagnostics in a dedicated section."""
+    with st.expander("Graph debug", expanded=False):
+        if graph_debug:
+            st.json(redact_for_display(graph_debug), expanded=False)
+        else:
+            st.info(
+                "本轮 response 未返回 graph_debug。legacy 模式下该字段可以为空；"
+                "custom_graph 模式下应包含 graph_mode、nodes_executed 等信息。"
+            )
+
+
 def render_debug_panel(payload: dict[str, Any], response: dict[str, Any]) -> None:
     """Render request and response diagnostics after display-safe redaction."""
     render_retrieval_debug(response.get("retrieval_debug") or {})
+    render_graph_debug(response.get("graph_debug") or {})
     with st.expander("Memory debug JSON", expanded=False):
         st.json(redact_for_display(response.get("memory_debug") or {}), expanded=False)
     with st.expander("Request payload", expanded=False):

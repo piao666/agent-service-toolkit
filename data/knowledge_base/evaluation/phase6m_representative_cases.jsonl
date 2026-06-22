@@ -1,0 +1,8 @@
+{"case_id":"phase6m_001","query_type":"semantic_qa","query":"RAG 是什么？","session_id":"phase6m_semantic_001","top_k":5,"return_sources":true,"expected_keywords":["RAG","检索","生成"]}
+{"case_id":"phase6m_002","query_type":"memory_follow_up","session_id":"phase6m_memory_001","top_k":5,"return_sources":true,"turns":[{"query":"RAG 是什么？","expected_keywords":["RAG","检索"]},{"query":"它有什么局限？","expected_keywords":["RAG","局限"]}]}
+{"case_id":"phase6m_003","query_type":"code_api_config","query":"/enterprise/agent/query 的请求字段有哪些？","session_id":"phase6m_api_001","top_k":5,"return_sources":true,"expected_keywords":["query","session_id","top_k"]}
+{"case_id":"phase6m_004","query_type":"citation_required_query","query":"请给出 FastAPI Request Body 定义的来源和证据。","session_id":"phase6m_citation_001","top_k":5,"return_sources":true,"expected_keywords":["FastAPI","Request Body","来源"]}
+{"case_id":"phase6m_005","query_type":"exact_metadata_lookup","query":"查找 source_id 为 fastapi_docs 的文档。","session_id":"phase6m_metadata_001","top_k":5,"return_sources":true,"expected_keywords":["fastapi_docs","FastAPI"]}
+{"case_id":"phase6m_006","query_type":"ambiguous_query","query":"哪个模型最好？","session_id":"phase6m_ambiguous_001","top_k":5,"return_sources":true,"expected_keywords":["场景","需求"]}
+{"case_id":"phase6m_007","query_type":"unsupported_query","query":"今天的股票价格是多少？","session_id":"phase6m_unsupported_001","top_k":5,"return_sources":true,"expected_keywords":["无法","知识库"]}
+{"case_id":"phase6m_008","query_type":"multi_hop_lookup","query":"RAG 与传统搜索有什么区别，各自适合什么场景？","session_id":"phase6m_multihop_001","top_k":5,"return_sources":true,"expected_keywords":["RAG","搜索","场景"]}
