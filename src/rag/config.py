@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from dotenv import find_dotenv
@@ -65,7 +66,13 @@ class RagSettings(BaseSettings):
 
     @property
     def agent_graph_mode(self) -> str:
-        mode = self.ENTERPRISE_AGENT_GRAPH_MODE.strip().lower()
+        # Read the process environment first so an explicitly configured service
+        # instance cannot be shadowed by a value loaded from .env at import time.
+        configured_mode = os.getenv(
+            "ENTERPRISE_AGENT_GRAPH_MODE",
+            self.ENTERPRISE_AGENT_GRAPH_MODE,
+        )
+        mode = configured_mode.strip().lower()
         return mode if mode in {"legacy", "custom_graph"} else "legacy"
 
 

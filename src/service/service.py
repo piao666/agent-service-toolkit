@@ -242,6 +242,7 @@ def _enterprise_model_debug(
     model_debug = dict(metadata.get("model_debug") or {})
     model_debug.setdefault("model", str(request.model or settings.DEFAULT_MODEL))
     model_debug.setdefault("provider", "configured" if request.model or settings.DEFAULT_MODEL else "unknown")
+    model_debug.setdefault("agent_graph_mode", rag_settings.agent_graph_mode)
     return model_debug
 
 
@@ -274,6 +275,7 @@ async def enterprise_agent_query(
             "provider": "custom_graph",
             "model": str(request.model or settings.DEFAULT_MODEL),
             "graph_mode": "custom_graph",
+            "agent_graph_mode": rag_settings.agent_graph_mode,
         }
         if graph_model_debug:
             model_debug["answer_generator"] = graph_model_debug.get("answer_generator")

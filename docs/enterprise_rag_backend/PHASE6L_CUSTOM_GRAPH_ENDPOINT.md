@@ -133,3 +133,29 @@ Phase 6L-3 hardens both boundaries:
 
 Legacy responses may continue to return an empty `graph_debug`. Phase 6L-3 does not rerun the HPC
 comparison; that is a separate Phase 6L-4 decision.
+
+## Phase 6L-5 graph-mode environment precedence
+
+The Phase 6L-4 dual-service run returned successful transport and schemas for both processes, but
+the process labelled `custom_graph` returned no graph debug. Repository inspection found no
+`load_dotenv(override=True)` call: Pydantic Settings already gives process variables precedence
+over values from `.env`. The remaining risk was an import-time settings instance combined with an
+incorrectly propagated service environment.
+
+Phase 6L-5 makes this boundary explicit:
+
+- `rag_settings.agent_graph_mode` reads `ENTERPRISE_AGENT_GRAPH_MODE` directly from the current
+  process before falling back to the value captured by the settings instance;
+- the endpoint reports the resolved mode in `model_debug.agent_graph_mode` without exposing any
+  environment contents;
+- the endpoint smoke launches an isolated Python subprocess and verifies that an explicit
+  `custom_graph` process variable overrides the `.env` default;
+- the in-process ASGI smoke separately requires a non-empty custom graph debug payload and executed
+  node list;
+- the dual-service runner starts independent legacy and custom processes with explicit modes and
+  refuses to run the comparison unless diagnostic requests confirm both modes. A failed diagnostic
+  does not produce a successful comparison summary.
+
+The failed Phase 6L-4 result remains diagnostic evidence only. A new dual-service comparison is
+required after this fix; no 240-case run, real provider call, or Chroma write is part of Phase
+6L-5.

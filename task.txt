@@ -2022,3 +2022,29 @@ Status: implemented locally and pending checkpoint.
 Next decision:
 - Phase 6L-4 may rerun the legacy/custom endpoint comparison with two correctly configured service
   processes after this fix is reviewed and checkpointed.
+
+Phase 6L-5: Graph Mode Environment Precedence
+----------------------------------------------
+Status: implemented locally and pending verification/checkpoint.
+
+- Phase 6L-4 used separate legacy and custom service processes, but the custom-labelled process
+  returned no graph debug and therefore did not prove that the custom branch ran.
+- Static inspection found no dotenv override that reverses Pydantic's normal process-environment
+  precedence. The practical failure boundary is process environment propagation plus the
+  import-time settings instance.
+- `rag_settings.agent_graph_mode` now checks the current process environment before the settings
+  value loaded from `.env`.
+- Endpoint `model_debug` reports the resolved `agent_graph_mode` for bounded diagnostics.
+- The Phase 6L endpoint smoke now verifies process-environment precedence in an isolated Python
+  subprocess and continues to require custom graph mode plus a non-empty executed-node list from
+  the ASGI endpoint.
+- The dual-service runner now starts two isolated processes with explicit graph modes and applies a
+  diagnostic gate before comparison. It must not treat the failed Phase 6L-4 artifacts as a
+  successful result.
+- This phase does not run 240 cases, use HPC, call a real LLM, or write Chroma.
+
+Next decision:
+- After local verification and checkpoint, rerun the controlled Phase 6L-4 dual-service comparison
+  in the external environment. The custom process must report
+  `model_debug.agent_graph_mode=custom_graph`, `graph_debug.graph_mode=custom_graph`, and at least
+  one executed node before quality metrics are accepted.

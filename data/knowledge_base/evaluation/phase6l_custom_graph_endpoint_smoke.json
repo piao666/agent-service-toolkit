@@ -9,6 +9,8 @@
   "model_provider_is_custom": true,
   "legacy_mode_still_available": true,
   "model_failure_safe_fallback": true,
+  "env_precedence_ok": true,
+  "subprocess_custom_graph_mode_ok": true,
   "calls_llm": false,
   "calls_real_llm": false,
   "writes_chroma": false,

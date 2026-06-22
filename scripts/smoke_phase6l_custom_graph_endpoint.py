@@ -3,6 +3,7 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import subprocess
 import sys
 from pathlib import Path
 from unittest.mock import AsyncMock, patch
@@ -28,6 +29,46 @@ OUTPUT_PATH = (
     REPO_ROOT
     / "data/knowledge_base/evaluation/phase6l_custom_graph_endpoint_smoke.json"
 )
+
+
+def run_subprocess_env_smoke() -> tuple[bool, list[str]]:
+    child_code = r'''
+import json
+
+from rag.config import rag_settings
+
+print(json.dumps({"resolved_mode": rag_settings.agent_graph_mode}))
+'''
+    child_env = os.environ.copy()
+    child_env.update(
+        {
+            "PYTHONPATH": str(SRC_DIR),
+            "USE_FAKE_MODEL": "true",
+            "ENTERPRISE_AGENT_GRAPH_MODE": "custom_graph",
+            "ENTERPRISE_MEMORY_MODE": "off",
+            "ENTERPRISE_EVIDENCE_VERIFIER_MODE": "off",
+        }
+    )
+    completed = subprocess.run(
+        [sys.executable, "-c", child_code],
+        cwd=REPO_ROOT,
+        env=child_env,
+        capture_output=True,
+        text=True,
+        timeout=60,
+        check=False,
+    )
+    errors: list[str] = []
+    if completed.returncode != 0:
+        errors.append(f"subprocess_exit_{completed.returncode}")
+        return False, errors
+    try:
+        result = json.loads(completed.stdout.strip().splitlines()[-1])
+    except (IndexError, json.JSONDecodeError):
+        errors.append("subprocess_invalid_json")
+        return False, errors
+    mode_ok = result.get("resolved_mode") == "custom_graph"
+    return mode_ok, errors
 
 
 def fake_retriever(query: str, top_k: int | None) -> dict[str, object]:
@@ -60,11 +101,13 @@ def fake_retriever(query: str, top_k: int | None) -> dict[str, object]:
 
 async def run_smoke() -> dict[str, object]:
     errors: list[str] = []
+    original_graph_mode_env = os.environ.get("ENTERPRISE_AGENT_GRAPH_MODE")
     original_graph_mode = rag_settings.ENTERPRISE_AGENT_GRAPH_MODE
     original_memory_mode = rag_settings.ENTERPRISE_MEMORY_MODE
     original_verifier_mode = rag_settings.ENTERPRISE_EVIDENCE_VERIFIER_MODE
     original_cached_graph = graph_module._enterprise_rag_graph
     try:
+        os.environ["ENTERPRISE_AGENT_GRAPH_MODE"] = "custom_graph"
         rag_settings.ENTERPRISE_AGENT_GRAPH_MODE = "custom_graph"
         rag_settings.ENTERPRISE_MEMORY_MODE = "buffer"
         rag_settings.ENTERPRISE_EVIDENCE_VERIFIER_MODE = "rule_based"
@@ -106,6 +149,7 @@ async def run_smoke() -> dict[str, object]:
                 )
             fallback_payload = fallback_response.json()
 
+            os.environ["ENTERPRISE_AGENT_GRAPH_MODE"] = "legacy"
             rag_settings.ENTERPRISE_AGENT_GRAPH_MODE = "legacy"
             legacy_output = ChatMessage(
                 type="ai",
@@ -191,6 +235,13 @@ async def run_smoke() -> dict[str, object]:
         rag_settings.ENTERPRISE_AGENT_GRAPH_MODE = original_graph_mode
         rag_settings.ENTERPRISE_MEMORY_MODE = original_memory_mode
         rag_settings.ENTERPRISE_EVIDENCE_VERIFIER_MODE = original_verifier_mode
+        if original_graph_mode_env is None:
+            os.environ.pop("ENTERPRISE_AGENT_GRAPH_MODE", None)
+        else:
+            os.environ["ENTERPRISE_AGENT_GRAPH_MODE"] = original_graph_mode_env
+
+    subprocess_mode_ok, subprocess_errors = run_subprocess_env_smoke()
+    errors.extend(subprocess_errors)
 
     summary = {
         "phase": "6L_custom_graph_endpoint_smoke",
@@ -203,6 +254,8 @@ async def run_smoke() -> dict[str, object]:
         "model_provider_is_custom": model_provider_is_custom,
         "legacy_mode_still_available": legacy_mode_still_available,
         "model_failure_safe_fallback": model_failure_safe_fallback,
+        "env_precedence_ok": subprocess_mode_ok,
+        "subprocess_custom_graph_mode_ok": subprocess_mode_ok,
         "calls_llm": calls_llm,
         "calls_real_llm": calls_real_llm,
         "writes_chroma": writes_chroma,
@@ -219,6 +272,8 @@ async def run_smoke() -> dict[str, object]:
         "model_provider_is_custom",
         "legacy_mode_still_available",
         "model_failure_safe_fallback",
+        "env_precedence_ok",
+        "subprocess_custom_graph_mode_ok",
     )
     summary["recommended_checkpoint"] = False
     summary["phase6l1_acceptance_passed"] = bool(
