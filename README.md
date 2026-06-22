@@ -33,6 +33,7 @@
 - **Conversational Memory**：按 `session_id` 隔离的短期 buffer 与 follow-up rewrite。
 - **Evidence Grounding**：rule-based verifier 输出 grounding status、coverage 和 unsupported terms。
 - **Custom LangGraph Graph**：显式编排分类、记忆、检索、排序、生成和证据校验。
+- **Custom Graph Endpoint Routing**：通过 `ENTERPRISE_AGENT_GRAPH_MODE` 在 `/enterprise/agent/query` 内切换 `legacy` 与 `custom_graph` 两条链路，避免强行混用 message-style 与 typed-state graph 协议。
 - **Streamlit Demo**：展示 answer、source cards 及 retrieval/memory/verifier debug。
 
 ## System Architecture / 系统架构
@@ -40,13 +41,16 @@
 ```mermaid
 flowchart TD
     U["User Query"] --> API["FastAPI Service"]
-    API --> A["Enterprise Agent / RAG Pipeline"]
+    API --> MODE{"ENTERPRISE_AGENT_GRAPH_MODE"}
+    MODE -->|legacy| A["Legacy enterprise_rag_agent"]
+    MODE -->|custom_graph| CG["Custom Enterprise RAG LangGraph"]
     A --> M["Conversational Memory"]
+    CG --> M
     M --> Q["Follow-up Query Rewrite"]
     Q --> R["Retriever + Structured Retrieval"]
     R --> G["Answer Generation"]
     G --> V["Evidence Verifier"]
-    V --> O["Answer + Sources + Debug"]
+    V --> O["Answer + Sources + Debug + graph_debug"]
     O --> UI["Streamlit Demo"]
 ```
 
@@ -153,6 +157,10 @@ Phase 6I 增加默认关闭的 rule-based evidence verifier。它比较 query、
 
 Phase 6J 实现可独立 import 和 smoke 的 custom graph。默认 API 仍使用 `legacy`，避免影响既有行为。
 
+`legacy enterprise-rag-agent` 与 `custom_graph` 使用不同 state/call protocol。`legacy` 走 message-style Agent invocation，`custom_graph` 使用 `EnterpriseRAGGraphState` TypedDict 和 `final_response` 输出。因此项目没有把 `custom_graph` 强行注册成 `enterprise-rag-agent`，而是在 `/enterprise/agent/query` 内通过 `ENTERPRISE_AGENT_GRAPH_MODE` 做 endpoint-level routing。
+
+Phase 6L 之后，`custom_graph` 已支持 async LangGraph nodes、`compiled_graph.ainvoke(...)`、基于 `get_model(...).ainvoke(...)` 的 answer node、模型失败时的 safe fallback，以及顶层 `graph_debug` / `nodes_executed` 可观测性。
+
 ```mermaid
 flowchart TD
     A["query_classifier"] --> B{"query_type"}
@@ -180,6 +188,8 @@ calls_llm=false
 writes_chroma=false
 ```
 
+Phase 6L dual-service comparison 在 fake model 环境下进一步验证了 endpoint routing：`legacy` 与 `custom_graph` 两个独立 FastAPI 实例都能稳定返回 24/24 `status_ok` 和 24/24 `schema_valid`；`custom_graph` 额外返回 24/24 顶层 `graph_debug`，其中 `graph_mode=custom_graph`，`nodes_executed_count=7`。
+
 ## Streamlit Demo
 
 `src/streamlit_app.py` 提供聊天界面，可配置 API base URL、endpoint、session 和 top-k，展示 Agent answer、expandable source cards、`retrieval_debug`、`memory_debug`、`verifier_debug`、request payload 和 raw response。API 不可用或超时时会显示友好错误；前端不读取、保存或展示 provider API key。
@@ -206,6 +216,19 @@ $env:ENTERPRISE_MEMORY_MODE = "buffer"
 $env:ENTERPRISE_STRUCTURED_RETRIEVAL_MODE = "metadata_symbol"
 $env:ENTERPRISE_EVIDENCE_VERIFIER_MODE = "rule_based"
 $env:ENTERPRISE_AGENT_GRAPH_MODE = "legacy"
+.\.venv\Scripts\python.exe -m uvicorn service.service:app --host 127.0.0.1 --port 8000
+```
+
+### 启动 custom_graph 路径
+
+```powershell
+cd <PROJECT_ROOT>
+$env:PYTHONPATH = "$PWD\src"
+$env:USE_FAKE_MODEL = "true"
+$env:ENTERPRISE_MEMORY_MODE = "buffer"
+$env:ENTERPRISE_STRUCTURED_RETRIEVAL_MODE = "metadata_symbol"
+$env:ENTERPRISE_EVIDENCE_VERIFIER_MODE = "rule_based"
+$env:ENTERPRISE_AGENT_GRAPH_MODE = "custom_graph"
 .\.venv\Scripts\python.exe -m uvicorn service.service:app --host 127.0.0.1 --port 8000
 ```
 
@@ -262,6 +285,17 @@ cd <PROJECT_ROOT>
 
 观察 `graph_import_ok`、`graph_build_ok`、`semantic_route_ok`、`ambiguous_route_ok` 和 `unsupported_route_ok` 均为 `true`。
 
+### Demo 5：Custom Graph Endpoint Routing
+
+```text
+1. 启动服务时设置 ENTERPRISE_AGENT_GRAPH_MODE=custom_graph。
+2. 访问 Streamlit 或直接请求 /enterprise/agent/query。
+3. 观察 response 中的 graph_debug：
+   - graph_mode = custom_graph
+   - nodes_executed 非空
+   - route / verifier_debug 可用于排查执行链路
+```
+
 ## Key Results
 
 | Area | Measured result |
@@ -275,11 +309,25 @@ cd <PROJECT_ROOT>
 | Evidence citation checks | 3/3 checked; unsupported answers 2/2 detected |
 | Custom graph smoke | import/build/semantic/ambiguous/unsupported routes passed |
 
+Phase 6L Dual-Service Endpoint Comparison:
+- legacy service and custom_graph service were launched as two independent FastAPI instances.
+- legacy endpoint: 24/24 status_ok, 24/24 schema_valid, error=0, timeout=0.
+- custom_graph endpoint: 24/24 status_ok, 24/24 schema_valid, error=0, timeout=0.
+- custom_graph graph_debug_present: 24/24.
+- custom_graph graph_debug.graph_mode: custom_graph.
+- custom_graph nodes_executed_count: 7.
+- services were cleaned up after evaluation.
+- calls_real_llm=false, writes_chroma=false, runs_240_case=false, runs_benchmark=false.
+
+Phase 6L 证明两条 endpoint 链路在 fake model representative cases 下均可稳定响应，并验证 `custom_graph` 的 `graph_debug` 可观测性已经闭环。
+
 这些指标对应固定版本、固定样本和明确评测方法，不外推为生产准确率或通用 benchmark 结论。
 
 ## Contribution Boundary
 
 本项目在通用 `agent-service-toolkit` Agent service skeleton 基础上进行企业知识库 Agent + RAG 系统扩展。基础框架提供 FastAPI、LangGraph service skeleton、多 Agent 接口、streaming 和通用客户端等能力；本项目重点实现和验证了企业知识库 RAG pipeline、受控多格式 corpus、chunk/source tracing、structured retrieval materialization、240-case 评测体系、conversational memory、evidence grounding verifier、custom LangGraph graph 与 Streamlit demo。
+
+`custom_graph` endpoint routing、`graph_debug` observability 和 dual-service comparison 也是本项目在通用 service skeleton 之上的新增工程能力。
 
 该边界既不把上游框架能力归为本项目原创，也不把本项目简化为仅修改模板配置。
 
@@ -291,7 +339,8 @@ cd <PROJECT_ROOT>
 4. Streamlit 是 demo UI，不具备生产级认证、权限、审计和部署能力。
 5. HPC preflight 是轻量复验，未运行 240-case 或 benchmark，并保留一项 service compatibility note。
 6. Phase 6F-8 仍有 49 个 calibrated bad cases，metadata lookup、code/config 和 evidence filtering 仍可改进。
-7. 后续可增加 claim-level verifier、persistent memory、graph-mode API 完整接入、query decomposition、多租户权限与系统化性能评测。
+7. Phase 6L dual-service comparison 使用 fake model 和 representative cases，验证的是 endpoint routing、schema stability、graph_debug observability 和服务稳定性，不代表真实 LLM answer quality，也没有重新运行 240-case。
+8. 后续可增加真实 LLM 小样本 legacy vs custom_graph 对比、custom_graph 全量 240-case endpoint evaluation、persistent memory backend、claim-level evidence verifier。
 
 ## Repository Structure
 

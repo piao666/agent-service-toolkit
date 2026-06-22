@@ -1966,7 +1966,7 @@ Roadmap Checkpoint Rules
 
 Phase 6L-1: Custom Graph Endpoint Integration
 ----------------------------------------------
-Status: implemented locally and pending manual review; not checkpointed.
+Status: checkpointed in `c7adabf phase-6l custom graph endpoint routing`.
 
 Protocol decision:
 - Confirmed that the legacy `enterprise-rag-agent` uses `MessagesState` and the generic service
@@ -2007,7 +2007,7 @@ Status: checkpointed in `d69fbeb phase-6l endpoint comparison baseline`.
 
 Phase 6L-3: Custom Graph Debug Surfacing Fix
 ---------------------------------------------
-Status: implemented locally and pending checkpoint.
+Status: checkpointed in `744e3fc phase-6l expose custom graph debug`.
 
 - Preserved `graph_debug` defensively from final graph state through `final_response` and the
   business response schema.
@@ -2025,7 +2025,7 @@ Next decision:
 
 Phase 6L-5: Graph Mode Environment Precedence
 ----------------------------------------------
-Status: implemented locally and pending verification/checkpoint.
+Status: checkpointed in `27d38e8 phase-6l fix graph mode env precedence`.
 
 - Phase 6L-4 used separate legacy and custom service processes, but the custom-labelled process
   returned no graph debug and therefore did not prove that the custom branch ran.
@@ -2048,3 +2048,51 @@ Next decision:
   in the external environment. The custom process must report
   `model_debug.agent_graph_mode=custom_graph`, `graph_debug.graph_mode=custom_graph`, and at least
   one executed node before quality metrics are accepted.
+
+Phase 6L-4: Dual-Service Comparison Rerun
+-----------------------------------------
+Status: checkpointed in `2bee59f phase-6l dual service comparison results`.
+
+- The rerun used two independent FastAPI service instances:
+  `ENTERPRISE_AGENT_GRAPH_MODE=legacy` and `ENTERPRISE_AGENT_GRAPH_MODE=custom_graph`.
+- Legacy service result: `status_ok=24/24`, `schema_valid=24/24`, `error_count=0`,
+  `timeout_count=0`.
+- Custom-graph service result: `status_ok=24/24`, `schema_valid=24/24`, `error_count=0`,
+  `timeout_count=0`.
+- Custom-graph observability result: `graph_debug_present=24/24`,
+  `graph_debug.graph_mode=custom_graph`, `nodes_executed_count=7`.
+- The comparison validated endpoint routing, schema stability, and graph-debug surfacing in the
+  fake-model representative-case environment.
+- The evaluation cleaned up both service processes after completion.
+- Boundaries: `calls_real_llm=false`, `writes_chroma=false`, `runs_240_case=false`,
+  `runs_benchmark=false`.
+- This result demonstrates stable dual-service endpoint behavior; it does not claim that
+  `custom_graph` is globally better than `legacy`, and it does not replace a real-LLM or 240-case
+  quality comparison.
+
+Phase 6L Final Documentation Refresh
+------------------------------------
+Status: completed in `phase-6l final documentation refresh`.
+
+- Refresh `README.md` and `task.txt` so Phase 6L routing, graph-debug observability, and
+  dual-service comparison are reflected in the final project documentation.
+- Record the completed sequence:
+  - Phase 6L-1 custom_graph endpoint routing completed.
+  - Phase 6L-2 endpoint comparison baseline completed and identified the graph-debug surfacing
+    issue.
+  - Phase 6L-3 graph-debug surfacing fixed.
+  - Phase 6L-5 graph-mode environment precedence fixed.
+  - Phase 6L-4 dual-service comparison rerun completed successfully.
+- Final Phase 6L measured result:
+  - dual-service comparison legacy status/schema: `24/24`, `24/24`
+  - dual-service comparison custom_graph status/schema: `24/24`, `24/24`
+  - custom_graph `graph_debug_present=24/24`
+  - custom_graph `nodes_executed_count=7`
+  - `error_count=0`
+  - `timeout_count=0`
+  - `calls_real_llm=false`
+  - `writes_chroma=false`
+  - `runs_240_case=false`
+  - `runs_benchmark=false`
+- No further core feature development is planned unless a factual documentation issue is found.
+- Recommended next step: external project summary, resume refresh, and interview-material refresh.
