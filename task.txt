@@ -2099,7 +2099,7 @@ Status: completed in `phase-6l final documentation refresh`.
 
 Phase 6M-1: Graph Debug UI and Real LLM Representative Eval Preparation
 -------------------------------------------------------------------------
-Status: completed locally; checkpoint pending validation.
+Status: checkpointed in `f3e139f phase-6m graph debug ui and llm eval prep`.
 
 - Streamlit now includes a dedicated, display-safe Graph debug expander.
 - Non-empty custom-graph diagnostics render directly; empty legacy graph debug produces a friendly
@@ -2110,8 +2110,29 @@ Status: completed locally; checkpoint pending validation.
   `legacy` or `custom_graph` endpoint modes.
 - The runner requires explicit `--execute`; missing DeepSeek credentials are recorded as skipped
   without printing or storing a key.
-- DeepSeek representative evaluation has not been run in this phase.
 - Boundaries: `calls_real_llm=false`, `writes_chroma=false`, `runs_240_case=false`, and
   `runs_benchmark=false` for this local preparation phase.
-- Recommended next step: run only the 5-10 representative cases in an authorized environment and
-  manually compare answer quality; do not interpret the result as a general benchmark.
+
+Phase 6M-2: DeepSeek Representative Real LLM Evaluation
+-------------------------------------------------------
+Status: checkpointed in `07e566c phase-6m deepseek representative eval results`.
+
+- Providers: `fake` + `deepseek`.
+- Endpoint mode: `custom_graph`.
+- `case_count=8`.
+- Fake run: `request_count=8`, `answer_non_empty=8/8`, `graph_debug_present=8/8`,
+  `verifier_debug_present=8/8`, `error_count=0`, `timeout_count=0`.
+- DeepSeek run: `request_count=8`, `answer_non_empty=8/8`, `graph_debug_present=8/8`,
+  `verifier_debug_present=8/8`, `error_count=0`, `timeout_count=0`.
+- `calls_real_llm=true`.
+- `writes_chroma=false`.
+- `runs_240_case=false`.
+- `runs_benchmark=false`.
+- `unsupported_answer_observed=false`.
+- This is a small representative real-LLM sanity check for custom-graph endpoint execution and
+  debug observability. It is not a 240-case evaluation, benchmark, or production-quality claim.
+
+Current project wrap-up:
+- No further core feature development is planned unless a factual issue is found.
+- Recommended next step: refresh external DOCX project summary, resume, and interview material
+  with Phase 6L and Phase 6M results.

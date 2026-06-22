@@ -322,9 +322,18 @@ Phase 6L Dual-Service Endpoint Comparison:
 Phase 6L 证明两条 endpoint 链路在 fake model representative cases 下均可稳定响应，并验证 `custom_graph` 的 `graph_debug` 可观测性已经闭环。
 
 Phase 6L dual-service comparison validates endpoint routing, schema stability, and `graph_debug`
-observability under fake model mode. It does not evaluate real LLM answer quality. Phase 6M 已准备
-5-10 条 DeepSeek representative eval，用于后续对比 fake-model behavior 与真实 LLM answer
-quality；该真实 provider 评测尚未执行。
+observability under fake model mode. It does not evaluate real LLM answer quality.
+
+Phase 6M-2 DeepSeek Representative Evaluation:
+- Ran 8 representative cases under `custom_graph` endpoint mode.
+- Compared fake model and real DeepSeek responses.
+- fake: 8/8 `answer_non_empty`, 8/8 `graph_debug_present`, 8/8 `verifier_debug_present`, `error=0`, `timeout=0`.
+- DeepSeek: 8/8 `answer_non_empty`, 8/8 `graph_debug_present`, 8/8 `verifier_debug_present`, `error=0`, `timeout=0`.
+- `calls_real_llm=true` for the DeepSeek run.
+- `writes_chroma=false`, `runs_240_case=false`, `runs_benchmark=false`.
+- No unsupported answer was observed in this representative run.
+
+This is a small representative real-LLM sanity check, not a full benchmark or 240-case evaluation.
 
 这些指标对应固定版本、固定样本和明确评测方法，不外推为生产准确率或通用 benchmark 结论。
 
@@ -345,7 +354,8 @@ quality；该真实 provider 评测尚未执行。
 5. HPC preflight 是轻量复验，未运行 240-case 或 benchmark，并保留一项 service compatibility note。
 6. Phase 6F-8 仍有 49 个 calibrated bad cases，metadata lookup、code/config 和 evidence filtering 仍可改进。
 7. Phase 6L dual-service comparison 使用 fake model 和 representative cases，验证的是 endpoint routing、schema stability、graph_debug observability 和服务稳定性，不代表真实 LLM answer quality，也没有重新运行 240-case。
-8. 已准备 5-10 条真实 DeepSeek representative eval，后续可在授权环境执行；还可继续进行 custom_graph 全量 240-case endpoint evaluation、persistent memory backend、claim-level evidence verifier。
+8. Phase 6M-2 使用真实 DeepSeek 跑了 8 条 representative cases，验证了 real-LLM 路径下 `custom_graph`、`graph_debug` 和 `verifier_debug` 的保留，但这不替代 240-case 评测、成本分析、吞吐 benchmark 或生产事实性评估。
+9. 后续仍可继续进行 custom_graph 全量 240-case endpoint evaluation、persistent memory backend、claim-level evidence verifier 与 real-LLM latency/cost benchmark。
 
 ## Repository Structure
 
