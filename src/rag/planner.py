@@ -9,8 +9,6 @@ MULTI_HOP_CONNECTORS = (
     "difference",
     "versus",
     " vs ",
-    "both",
-    "and",
     "multi-hop",
 )
 AMBIGUOUS_TERMS = (
@@ -88,7 +86,7 @@ def split_multi_hop_query(query: str, *, max_parts: int = 3) -> list[str]:
     return cleaned[:max_parts]
 
 
-def _has_multi_hop_signal(query: str) -> bool:
+def _has_multi_hop_signal(query: str) -> bool:  # noqa: F811
     lowered = query.casefold()
     if any(term in lowered for term in MULTI_HOP_CONNECTORS):
         return True
@@ -186,4 +184,40 @@ def plan_query(
         requires_multi_hop=False,
         sub_queries=[],
         reason="no complex planning signal detected",
+    )
+
+
+def split_multi_hop_query(query: str, *, max_parts: int = 3) -> list[str]:  # noqa: F811
+    """Split only after an explicit multi-hop signal has already been detected."""
+
+    normalized = " ".join(str(query or "").split())
+    if not normalized:
+        return []
+    if _contains_cjk(normalized):
+        parts = re.split(
+            r"(?:\u5bf9\u6bd4|\u6bd4\u8f83|\u533a\u522b|\u5206\u522b|\u540c\u65f6|\u4ee5\u53ca|\u5e76\u4e14|\u548c)",
+            normalized,
+        )
+    else:
+        parts = re.split(
+            r"(?:\bcompare\b|\bdifference\b|\bversus\b|\bvs\.?\b|\band\b|\bboth\b)",
+            normalized,
+            flags=re.IGNORECASE,
+        )
+    cleaned = [part.strip(" ,;:?!.，。；：？！") for part in parts]
+    cleaned = [part for part in cleaned if len(part) >= 2]
+    if len(cleaned) < 2:
+        return [normalized]
+    return cleaned[:max_parts]
+
+
+def _has_multi_hop_signal(query: str) -> bool:  # noqa: F811
+    lowered = query.casefold()
+    if any(term in lowered for term in MULTI_HOP_CONNECTORS):
+        return True
+    return bool(
+        re.search(
+            r"(\u5bf9\u6bd4|\u6bd4\u8f83|\u533a\u522b|\u5206\u522b|\u540c\u65f6)",
+            query,
+        )
     )

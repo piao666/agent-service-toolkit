@@ -158,8 +158,9 @@ async def query_classifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAG
 
 
 async def planner_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+    query = state.get("contextual_query") or _normalized_query(state)
     plan = plan_query(
-        _normalized_query(state),
+        query,
         query_type_hint=state.get("query_type"),
     )
     planner_debug = plan.as_debug()
@@ -239,11 +240,26 @@ def _build_retriever_node(
 ) -> Callable[[EnterpriseRAGGraphState], Awaitable[EnterpriseRAGGraphState]]:
     async def retriever_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
         query = state.get("contextual_query") or _normalized_query(state)
-        if inspect.iscoroutinefunction(retriever):
-            payload = await retriever(query, state.get("top_k", 5))
-        else:
-            payload_result = await asyncio.to_thread(retriever, query, state.get("top_k", 5))
-            payload = await payload_result if inspect.isawaitable(payload_result) else payload_result
+        try:
+            if inspect.iscoroutinefunction(retriever):
+                payload = await retriever(query, state.get("top_k", 5))
+            else:
+                payload_result = await asyncio.to_thread(retriever, query, state.get("top_k", 5))
+                payload = await payload_result if inspect.isawaitable(payload_result) else payload_result
+        except Exception as exc:
+            debug = {
+                "original_query": _normalized_query(state),
+                "rewritten_query": query,
+                "hit_count": 0,
+                "graph_retrieval_adapter": "enterprise_retriever",
+                "error": type(exc).__name__,
+            }
+            return {
+                "retrieved_sources": [],
+                "retrieval_debug": debug,
+                "fallback": {"triggered": True, "reason": "retriever_error"},
+                "graph_debug": _append_node(state, "retriever"),
+            }
         sources = list(payload.get("sources") or [])
         debug = dict(payload.get("retrieval_debug") or {})
         debug.update(
@@ -281,19 +297,29 @@ def _build_multi_hop_retriever_node(
     ) -> EnterpriseRAGGraphState:
         sub_queries = list(state.get("sub_queries") or [])
         query = state.get("contextual_query") or _normalized_query(state)
-        if not sub_queries:
-            sub_queries = [query]
+        retrieval_queries = [query]
+        retrieval_queries.extend(sub_query for sub_query in sub_queries[:2] if sub_query != query)
 
         merged_sources: list[dict[str, Any]] = []
         seen: set[str] = set()
         subquery_debug: list[dict[str, Any]] = []
         per_query_top_k = state.get("top_k", 5)
-        for sub_query in sub_queries[:3]:
-            if inspect.iscoroutinefunction(retriever):
-                payload = await retriever(sub_query, per_query_top_k)
-            else:
-                payload_result = await asyncio.to_thread(retriever, sub_query, per_query_top_k)
-                payload = await payload_result if inspect.isawaitable(payload_result) else payload_result
+        for sub_query in retrieval_queries[:3]:
+            try:
+                if inspect.iscoroutinefunction(retriever):
+                    payload = await retriever(sub_query, per_query_top_k)
+                else:
+                    payload_result = await asyncio.to_thread(retriever, sub_query, per_query_top_k)
+                    payload = await payload_result if inspect.isawaitable(payload_result) else payload_result
+            except Exception as exc:
+                subquery_debug.append(
+                    {
+                        "query": sub_query,
+                        "hit_count": 0,
+                        "error": type(exc).__name__,
+                    }
+                )
+                continue
             sources = list(payload.get("sources") or [])
             subquery_debug.append({"query": sub_query, "hit_count": len(sources)})
             for source in sources:
@@ -310,21 +336,24 @@ def _build_multi_hop_retriever_node(
             "rewritten_query": query,
             "hit_count": len(merged_sources),
             "graph_retrieval_adapter": "multi_hop_enterprise_retriever",
-            "sub_queries": sub_queries[:3],
+            "sub_queries": retrieval_queries[:3],
             "subquery_debug": subquery_debug,
         }
         graph_debug = _append_node(state, "multi_hop_retriever")
         graph_debug["multi_hop"] = {
             "enabled": True,
-            "sub_queries": sub_queries[:3],
+            "sub_queries": retrieval_queries[:3],
             "merged_source_count": len(merged_sources),
             "calls_llm": False,
             "writes_chroma": False,
         }
+        fallback = {"triggered": False, "reason": None}
+        if not merged_sources and any("error" in item for item in subquery_debug):
+            fallback = {"triggered": True, "reason": "multi_hop_retriever_error"}
         return {
             "retrieved_sources": merged_sources,
             "retrieval_debug": retrieval_debug,
-            "fallback": {"triggered": False, "reason": None},
+            "fallback": fallback,
             "graph_debug": graph_debug,
         }
 
@@ -490,16 +519,28 @@ def _build_evidence_verifier_node(
     verifier_mode: str,
 ) -> Callable[[EnterpriseRAGGraphState], Awaitable[EnterpriseRAGGraphState]]:
     async def evidence_verifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
-        result = verify_answer_grounding(
-            query=_normalized_query(state),
-            answer=state.get("answer", ""),
-            sources=list(state.get("ranked_sources") or []),
-            query_type=state.get("query_type"),
-            mode=verifier_mode,
-            safe_fallback_enabled=rag_settings.ENTERPRISE_EVIDENCE_SAFE_FALLBACK,
-            min_score=rag_settings.ENTERPRISE_EVIDENCE_MIN_SCORE,
-            high_score=rag_settings.ENTERPRISE_EVIDENCE_HIGH_SCORE,
-        )
+        try:
+            result = verify_answer_grounding(
+                query=_normalized_query(state),
+                answer=state.get("answer", ""),
+                sources=list(state.get("ranked_sources") or []),
+                query_type=state.get("query_type"),
+                mode=verifier_mode,
+                safe_fallback_enabled=rag_settings.ENTERPRISE_EVIDENCE_SAFE_FALLBACK,
+                min_score=rag_settings.ENTERPRISE_EVIDENCE_MIN_SCORE,
+                high_score=rag_settings.ENTERPRISE_EVIDENCE_HIGH_SCORE,
+            )
+        except Exception as exc:
+            return {
+                "verifier_debug": {
+                    "verifier_mode": verifier_mode,
+                    "grounding_status": "not_checked",
+                    "error": type(exc).__name__,
+                    "calls_llm": False,
+                    "writes_chroma": False,
+                },
+                "graph_debug": _append_node(state, "evidence_verifier"),
+            }
         update: EnterpriseRAGGraphState = {
             "verifier_debug": result.as_debug(),
             "graph_debug": _append_node(state, "evidence_verifier"),
@@ -524,12 +565,21 @@ async def judge_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
             "writes_chroma": False,
         }
     else:
-        judge_debug = judge_answer_rule_based(
-            query=_normalized_query(state),
-            answer=state.get("answer", ""),
-            sources=list(state.get("ranked_sources") or []),
-            verifier_debug=dict(state.get("verifier_debug") or {}),
-        ).as_debug()
+        try:
+            judge_debug = judge_answer_rule_based(
+                query=_normalized_query(state),
+                answer=state.get("answer", ""),
+                sources=list(state.get("ranked_sources") or []),
+                verifier_debug=dict(state.get("verifier_debug") or {}),
+            ).as_debug()
+        except Exception as exc:
+            judge_debug = {
+                "judge_mode": "rule_based_fallback",
+                "verdict": "skipped",
+                "error": type(exc).__name__,
+                "calls_llm": False,
+                "writes_chroma": False,
+            }
     graph_debug = _append_node(state, "judge")
     graph_debug["judge"] = judge_debug
     return {
@@ -548,6 +598,15 @@ async def clarification_response_node(state: EnterpriseRAGGraphState) -> Enterpr
         "answer": answer,
         "retrieved_sources": [],
         "ranked_sources": [],
+        "planner_debug": {
+            "planner_mode": "rule_based",
+            "planner_type": "ambiguous",
+            "requires_multi_hop": False,
+            "sub_queries": [],
+            "reason": "query classifier short-circuited to clarification",
+            "calls_llm": False,
+            "writes_chroma": False,
+        },
         "retrieval_debug": {"hit_count": 0, "skipped_reason": "clarification_required"},
         "verifier_debug": {},
         "fallback": {"triggered": True, "reason": "clarification_required"},
@@ -565,6 +624,15 @@ async def safe_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGra
         "answer": answer,
         "retrieved_sources": [],
         "ranked_sources": [],
+        "planner_debug": {
+            "planner_mode": "rule_based",
+            "planner_type": "unsupported",
+            "requires_multi_hop": False,
+            "sub_queries": [],
+            "reason": "query classifier short-circuited to safe response",
+            "calls_llm": False,
+            "writes_chroma": False,
+        },
         "retrieval_debug": {"hit_count": 0, "skipped_reason": "unsupported_query"},
         "verifier_debug": {},
         "fallback": {"triggered": True, "reason": "unsupported_query"},
@@ -625,10 +693,6 @@ async def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGr
 
 
 def route_after_classifier(state: EnterpriseRAGGraphState) -> str:
-    return "planner"
-
-
-def route_after_planner(state: EnterpriseRAGGraphState) -> str:
     query_type = state.get("query_type")
     if query_type == "ambiguous_query":
         return "clarification_response"
@@ -638,6 +702,15 @@ def route_after_planner(state: EnterpriseRAGGraphState) -> str:
 
 
 def route_after_memory_rewriter(state: EnterpriseRAGGraphState) -> str:
+    return "planner"
+
+
+def route_after_planner(state: EnterpriseRAGGraphState) -> str:
+    query_type = state.get("query_type")
+    if query_type == "ambiguous_query":
+        return "clarification_response"
+    if query_type == "unsupported_query":
+        return "safe_response"
     planner_debug = dict(state.get("planner_debug") or {})
     if planner_debug.get("requires_multi_hop") is True:
         return "multi_hop_retriever"
@@ -682,11 +755,6 @@ def build_enterprise_rag_graph(
     graph.add_conditional_edges(
         "query_classifier",
         route_after_classifier,
-        {"planner": "planner"},
-    )
-    graph.add_conditional_edges(
-        "planner",
-        route_after_planner,
         {
             "clarification_response": "clarification_response",
             "safe_response": "safe_response",
@@ -696,9 +764,16 @@ def build_enterprise_rag_graph(
     graph.add_conditional_edges(
         "memory_rewriter",
         route_after_memory_rewriter,
+        {"planner": "planner"},
+    )
+    graph.add_conditional_edges(
+        "planner",
+        route_after_planner,
         {
             "retriever": "retriever",
             "multi_hop_retriever": "multi_hop_retriever",
+            "clarification_response": "clarification_response",
+            "safe_response": "safe_response",
         },
     )
     graph.add_edge("retriever", "ranker")

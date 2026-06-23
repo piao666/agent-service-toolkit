@@ -265,8 +265,8 @@ async def enterprise_agent_query(
                 return_sources=request.return_sources,
                 model=request.model,
             )
-        except Exception as e:
-            logger.error(f"Enterprise custom graph query failed: {e}")
+        except Exception:
+            logger.exception("Enterprise custom graph query failed")
             raise HTTPException(status_code=500, detail="Enterprise custom graph query failed")
 
         all_sources = list(result.get("sources") or [])

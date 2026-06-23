@@ -74,3 +74,28 @@ debug surfacing rather than retrieval quality.
 After local review and checkpoint, a later phase can decide whether to run a bounded endpoint-level
 comparison for custom graph planner and judge behavior. That should remain separate from this local
 prototype.
+
+## Default Endpoint Hardening
+
+After the first local prototype, external endpoint testing showed that the fake-retriever smoke did
+not cover the real default custom-graph endpoint path. The hardening patch adds a default endpoint
+smoke that calls `/enterprise/agent/query` with `ENTERPRISE_AGENT_GRAPH_MODE=custom_graph` and
+`USE_FAKE_MODEL=true` without injecting a retriever or answer generator.
+
+The graph order is now:
+
+1. `query_classifier`
+2. `clarification_response` or `safe_response` for ambiguous or unsupported queries
+3. `memory_rewriter`
+4. `planner`
+5. `retriever` or `multi_hop_retriever`
+6. `ranker`
+7. `answer_generator`
+8. `evidence_verifier`
+9. `judge`
+10. `final_response`
+
+The planner runs after memory rewriting, so follow-up queries can be planned against the
+contextualized query. Multi-hop retrieval keeps the full contextual query and adds up to two
+subqueries. Retriever, verifier, and judge failures are recorded in debug fields and should not
+turn a single local component failure into an endpoint-level 500.

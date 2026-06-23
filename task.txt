@@ -2139,7 +2139,7 @@ Current project wrap-up:
 
 Phase 7A: Planner + Multi-hop + Judge Local Prototype
 -----------------------------------------------------
-Status: implemented locally; pending checkpoint after verification.
+Status: checkpointed in `de9b951 phase-7a planner multihop judge prototype`.
 
 - Added a local rule-based planner for custom graph requests.
 - Added `planner_debug` with `simple`, `complex`, `multi_hop`, `ambiguous`, and `unsupported`
@@ -2153,3 +2153,25 @@ Status: implemented locally; pending checkpoint after verification.
   `multi_hop_retriever`; judged normal cases include `judge`.
 - Legacy default logic is not changed.
 - Boundaries: no real LLM call, no HPC run, no 240-case run, no benchmark, and no Chroma write.
+
+Phase 7A Fix: Custom Graph Default Endpoint Hardening
+-----------------------------------------------------
+Status: implemented locally; pending checkpoint after verification.
+
+- External custom-graph 240-case execution exposed a default endpoint failure that the injected
+  retriever smoke did not cover.
+- Added a default `/enterprise/agent/query` custom-graph endpoint smoke with `USE_FAKE_MODEL=true`
+  and the real default retriever path.
+- Reordered custom graph execution so ambiguous and unsupported queries are handled immediately,
+  while normal queries run `memory_rewriter -> planner -> retriever`.
+- Planner now plans against the contextual query after memory rewriting.
+- Planner multi-hop triggering no longer uses ordinary `and` or standalone Chinese `和`; it
+  requires explicit comparison/difference semantics.
+- Multi-hop retrieval now keeps the full contextual query and adds up to two subqueries.
+- Subquery retrieval failures are recorded in `retrieval_debug.subquery_debug` and do not turn the
+  whole graph into a 500.
+- Evidence verifier and rule-based judge now return skipped/not-checked debug payloads on local
+  errors instead of raising through the endpoint.
+- Custom graph endpoint exceptions use server-side `logger.exception` without exposing tracebacks
+  to API callers.
+- Boundaries: no real DeepSeek call, no HPC run, no 240-case run, no benchmark, and no Chroma write.

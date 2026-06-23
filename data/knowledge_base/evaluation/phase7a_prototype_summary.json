@@ -19,8 +19,8 @@
       "requires_multi_hop": false,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "memory_rewriter",
+        "planner",
         "retriever",
         "ranker",
         "answer_generator",
@@ -38,8 +38,8 @@
       "requires_multi_hop": true,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "memory_rewriter",
+        "planner",
         "multi_hop_retriever",
         "ranker",
         "answer_generator",
@@ -57,8 +57,8 @@
       "requires_multi_hop": false,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "memory_rewriter",
+        "planner",
         "retriever",
         "ranker",
         "answer_generator",
@@ -76,8 +76,8 @@
       "requires_multi_hop": false,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "memory_rewriter",
+        "planner",
         "retriever",
         "ranker",
         "answer_generator",
@@ -95,7 +95,6 @@
       "requires_multi_hop": false,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "clarification_response",
         "final_response"
       ],
@@ -109,7 +108,6 @@
       "requires_multi_hop": false,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "safe_response",
         "final_response"
       ],
@@ -123,8 +121,8 @@
       "requires_multi_hop": false,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "memory_rewriter",
+        "planner",
         "retriever",
         "ranker",
         "answer_generator",
@@ -142,8 +140,8 @@
       "requires_multi_hop": true,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "memory_rewriter",
+        "planner",
         "multi_hop_retriever",
         "ranker",
         "answer_generator",
@@ -161,8 +159,8 @@
       "requires_multi_hop": false,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "memory_rewriter",
+        "planner",
         "retriever",
         "ranker",
         "answer_generator",
@@ -180,8 +178,8 @@
       "requires_multi_hop": false,
       "nodes_executed": [
         "query_classifier",
-        "planner",
         "memory_rewriter",
+        "planner",
         "retriever",
         "ranker",
         "answer_generator",

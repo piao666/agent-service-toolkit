@@ -36,6 +36,7 @@ class RagSettings(BaseSettings):
     ENTERPRISE_EVIDENCE_MIN_SCORE: float = 0.30
     ENTERPRISE_EVIDENCE_HIGH_SCORE: float = 0.60
     ENTERPRISE_AGENT_GRAPH_MODE: str = "legacy"
+    ENTERPRISE_LLM_JUDGE_MODE: str | None = None
     ENTERPRISE_JUDGE_MODE: str = "rule_based_fallback"
     RAG_CHUNK_SIZE: int = 800
     RAG_CHUNK_OVERLAP: int = 120
@@ -78,7 +79,14 @@ class RagSettings(BaseSettings):
 
     @property
     def judge_mode(self) -> str:
-        mode = self.ENTERPRISE_JUDGE_MODE.strip().lower()
+        configured_mode = (
+            os.getenv("ENTERPRISE_LLM_JUDGE_MODE")
+            or os.getenv("ENTERPRISE_JUDGE_MODE")
+            or self.ENTERPRISE_LLM_JUDGE_MODE
+            or self.ENTERPRISE_JUDGE_MODE
+            or "rule_based_fallback"
+        )
+        mode = configured_mode.strip().lower()
         return mode if mode in {"off", "rule_based_fallback"} else "rule_based_fallback"
 
 

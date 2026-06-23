@@ -128,8 +128,8 @@ def main() -> int:
         semantic_nodes = _nodes(semantic)
         semantic_route_ok = semantic.get("query_type") == "semantic_qa" and semantic_nodes == [
             "query_classifier",
-            "planner",
             "memory_rewriter",
+            "planner",
             "retriever",
             "ranker",
             "answer_generator",
@@ -139,10 +139,10 @@ def main() -> int:
         ]
         ambiguous_route_ok = ambiguous.get("query_type") == "ambiguous_query" and _nodes(
             ambiguous
-        ) == ["query_classifier", "planner", "clarification_response", "final_response"]
+        ) == ["query_classifier", "clarification_response", "final_response"]
         unsupported_route_ok = unsupported.get("query_type") == "unsupported_query" and _nodes(
             unsupported
-        ) == ["query_classifier", "planner", "safe_response", "final_response"]
+        ) == ["query_classifier", "safe_response", "final_response"]
         memory_debug = memory_follow_up.get("memory_debug") or {}
         memory_rewriter_node_ok = bool(
             memory_follow_up.get("query_type") == "memory_follow_up"

@@ -89,7 +89,7 @@ def _check_case(case: dict[str, Any], response: dict[str, Any]) -> list[str]:
     judge_debug = response.get("judge_debug") or {}
     graph_debug = response.get("graph_debug") or {}
 
-    if "planner" not in nodes:
+    if case.get("expected_route") not in {"clarification_response", "safe_response"} and "planner" not in nodes:
         errors.append("planner_node_missing")
     if case.get("expected_route") == "clarification_response":
         if "clarification_response" not in nodes:
