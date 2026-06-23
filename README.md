@@ -335,6 +335,22 @@ Phase 6M-2 DeepSeek Representative Evaluation:
 
 This is a small representative real-LLM sanity check, not a full benchmark or 240-case evaluation.
 
+Phase 7A after-fix DeepSeek 240-case regression:
+- custom_graph smoke: 3/3 pass, no 500.
+- 240 cases x 2 modes = 480 requests.
+- legacy bad_case_count = 49.
+- custom_graph bad_case_count = 49.
+- legacy source_hit_rate = 0.751.
+- custom_graph source_hit_rate = 0.746.
+- legacy keyword_hit_rate = 0.981.
+- custom_graph keyword_hit_rate = 0.986.
+- error_count = 0 and timeout_count = 0 for both modes.
+- custom_graph graph_debug / planner / judge are present in 240/240.
+- custom_graph avg latency is lower by about 216 ms in this run.
+- writes_chroma=false, runs_benchmark=false.
+
+This is a DeepSeek 240-case regression comparison, not a production benchmark.
+
 这些指标对应固定版本、固定样本和明确评测方法，不外推为生产准确率或通用 benchmark 结论。
 
 ## Contribution Boundary
@@ -355,7 +371,8 @@ This is a small representative real-LLM sanity check, not a full benchmark or 24
 6. Phase 6F-8 仍有 49 个 calibrated bad cases，metadata lookup、code/config 和 evidence filtering 仍可改进。
 7. Phase 6L dual-service comparison 使用 fake model 和 representative cases，验证的是 endpoint routing、schema stability、graph_debug observability 和服务稳定性，不代表真实 LLM answer quality，也没有重新运行 240-case。
 8. Phase 6M-2 使用真实 DeepSeek 跑了 8 条 representative cases，验证了 real-LLM 路径下 `custom_graph`、`graph_debug` 和 `verifier_debug` 的保留，但这不替代 240-case 评测、成本分析、吞吐 benchmark 或生产事实性评估。
-9. 后续仍可继续进行 custom_graph 全量 240-case endpoint evaluation、persistent memory backend、claim-level evidence verifier 与 real-LLM latency/cost benchmark。
+9. Phase 7A after-fix comparison keeps legacy and custom_graph at the same bad_case_count on this DeepSeek 240-case regression set. It validates stability and observability after the custom_graph 500 fix, but it does not prove production quality or that custom_graph is globally better.
+10. 后续仍可继续进行 custom_graph endpoint diagnostics、persistent memory backend、claim-level evidence verifier 与 real-LLM latency/cost benchmark。
 
 ## Repository Structure
 

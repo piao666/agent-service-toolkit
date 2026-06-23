@@ -2156,7 +2156,7 @@ Status: checkpointed in `de9b951 phase-7a planner multihop judge prototype`.
 
 Phase 7A Fix: Custom Graph Default Endpoint Hardening
 -----------------------------------------------------
-Status: implemented locally; pending checkpoint after verification.
+Status: checkpointed in `bcb25a7 fix phase-7a custom graph default endpoint`.
 
 - External custom-graph 240-case execution exposed a default endpoint failure that the injected
   retriever smoke did not cover.
@@ -2175,3 +2175,44 @@ Status: implemented locally; pending checkpoint after verification.
 - Custom graph endpoint exceptions use server-side `logger.exception` without exposing tracebacks
   to API callers.
 - Boundaries: no real DeepSeek call, no HPC run, no 240-case run, no benchmark, and no Chroma write.
+
+Phase 7A After-Fix DeepSeek 240-case Regression
+-----------------------------------------------
+Status: checkpointed in `8147aa1 phase-7a deepseek regression after custom graph fix`.
+
+- custom_graph smoke: 3/3 pass, no 500.
+- 240 cases x 2 modes = 480 requests.
+- legacy bad_case_count = 49.
+- custom_graph bad_case_count = 49.
+- legacy source_hit_rate = 0.751.
+- custom_graph source_hit_rate = 0.746.
+- legacy keyword_hit_rate = 0.981.
+- custom_graph keyword_hit_rate = 0.986.
+- error_count = 0 and timeout_count = 0 for both modes.
+- custom_graph graph_debug / planner / judge present in 240/240.
+- custom_graph avg latency lower by about 216 ms in this run.
+- writes_chroma=false.
+- runs_benchmark=false.
+- This is a DeepSeek 240-case regression comparison, not a production benchmark.
+
+Phase 7B: Bad-Case Diagnostics
+------------------------------
+Status: completed locally; pending checkpoint.
+
+- Analyze existing Phase 7A after-fix JSONL outputs only.
+- Do not call LLM.
+- Do not request endpoints.
+- Do not run 240-case again.
+- Do not write Chroma.
+- Separate calibrated bad_case_count from visible source/keyword/doc-type miss diagnostics.
+- legacy calibrated bad_case_count = 49.
+- custom_graph calibrated bad_case_count = 49.
+- Available persisted bad-id overlap: shared=19, only_legacy=1, only_custom_graph=1.
+- Diagnostic bad proxy overlap from visible row-level signals: shared=96, only_legacy=1,
+  only_custom_graph=1.
+- custom_graph visible miss signals: source_miss=84, doc_type_miss=86, keyword_miss=6.
+- multi_hop diagnostic bad proxy count = 7 out of 20 multi-hop cases.
+- Raw judge_debug is not persisted in the Phase 7A 240-case JSONL, so judge verdict analysis is
+  recorded as `not_persisted_in_result_jsonl`.
+- Top visible bad-case patterns: doc_type_miss, source_miss, source_and_doc_type_miss,
+  citation_required_bad_proxy, multi_hop_bad_proxy, keyword_miss, metadata_lookup_source_miss.

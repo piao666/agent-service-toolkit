@@ -1,0 +1,229 @@
+{
+  "available_bad_id_overlap": {
+    "only_custom_graph_bad_case_ids": [
+      "exp_070"
+    ],
+    "only_custom_graph_bad_count": 1,
+    "only_legacy_bad_case_ids": [
+      "exp_037"
+    ],
+    "only_legacy_bad_count": 1,
+    "shared_bad_case_count": 19,
+    "shared_bad_case_ids": [
+      "exp_054",
+      "exp_055",
+      "exp_056",
+      "exp_074",
+      "exp_082",
+      "exp_090",
+      "exp_100",
+      "exp_104",
+      "exp_107",
+      "exp_112",
+      "exp_114",
+      "exp_115",
+      "exp_116",
+      "exp_119",
+      "exp_127",
+      "exp_136",
+      "exp_137",
+      "exp_138",
+      "exp_140"
+    ]
+  },
+  "available_calibrated_bad_id_note": "The Phase 7A summary stores only the available bad_case_ids list, while the authoritative calibrated bad_case_count is recorded separately.",
+  "case_count": 240,
+  "custom_graph": {
+    "available_bad_case_id_count": 20,
+    "calibrated_bad_case_count": 49,
+    "case_count": 240,
+    "diagnostic_bad_proxy_count": 97,
+    "doc_type_miss_count": 86,
+    "empty_answer_count": 0,
+    "error_count": 0,
+    "judge_verdict_distribution": {
+      "not_persisted_in_result_jsonl": 240
+    },
+    "keyword_miss_count": 6,
+    "multi_hop_bad_proxy_count": 7,
+    "multi_hop_case_count": 20,
+    "planner_type_distribution": {
+      "ambiguous": 20,
+      "complex": 60,
+      "multi_hop": 20,
+      "simple_or_semantic": 120,
+      "unsupported_or_guarded": 20
+    },
+    "query_type_distribution": {
+      "agent_rag_concept": 20,
+      "ambiguous_query": 20,
+      "citation_required_query": 20,
+      "code_api_config": 20,
+      "en_api_doc": 20,
+      "exact_metadata_lookup": 20,
+      "mixed_zh_en_api": 20,
+      "multi_hop_lookup": 20,
+      "negative_banned_source": 20,
+      "phase6c_bad_case_regression": 20,
+      "short_keyword": 20,
+      "zh_knowledge": 20
+    },
+    "schema_invalid_count": 0,
+    "source_miss_count": 84,
+    "timeout_count": 0,
+    "top_bad_case_patterns": [
+      [
+        "doc_type_miss",
+        86
+      ],
+      [
+        "source_miss",
+        84
+      ],
+      [
+        "source_and_doc_type_miss",
+        73
+      ],
+      [
+        "citation_required_bad_proxy",
+        10
+      ],
+      [
+        "multi_hop_bad_proxy",
+        7
+      ],
+      [
+        "keyword_miss",
+        6
+      ],
+      [
+        "metadata_lookup_source_miss",
+        3
+      ]
+    ]
+  },
+  "diagnostic_bad_proxy_overlap": {
+    "only_custom_graph_bad_proxy_count": 1,
+    "only_legacy_bad_proxy_count": 1,
+    "shared_bad_proxy_count": 96
+  },
+  "diagnostic_boundaries": {
+    "calls_llm": false,
+    "runs_240_case": false,
+    "uses_existing_results_only": true,
+    "writes_chroma": false
+  },
+  "input_files": {
+    "custom_graph_results": "data\\knowledge_base\\evaluation\\phase7a_after_fix_deepseek_custom_240_results.jsonl",
+    "custom_graph_summary": "data\\knowledge_base\\evaluation\\phase7a_after_fix_deepseek_custom_240_summary.json",
+    "legacy_results": "data\\knowledge_base\\evaluation\\phase7a_after_fix_deepseek_legacy_240_results.jsonl",
+    "legacy_summary": "data\\knowledge_base\\evaluation\\phase7a_after_fix_deepseek_legacy_240_summary.json",
+    "regression_summary": "data\\knowledge_base\\evaluation\\phase7a_after_fix_deepseek_240_regression_summary.json"
+  },
+  "legacy": {
+    "available_bad_case_id_count": 20,
+    "calibrated_bad_case_count": 49,
+    "case_count": 240,
+    "diagnostic_bad_proxy_count": 97,
+    "doc_type_miss_count": 85,
+    "empty_answer_count": 0,
+    "error_count": 0,
+    "judge_verdict_distribution": {
+      "not_persisted_in_result_jsonl": 240
+    },
+    "keyword_miss_count": 4,
+    "multi_hop_bad_proxy_count": 7,
+    "multi_hop_case_count": 20,
+    "planner_type_distribution": {
+      "ambiguous": 20,
+      "complex": 60,
+      "multi_hop": 20,
+      "simple_or_semantic": 120,
+      "unsupported_or_guarded": 20
+    },
+    "query_type_distribution": {
+      "agent_rag_concept": 20,
+      "ambiguous_query": 20,
+      "citation_required_query": 20,
+      "code_api_config": 20,
+      "en_api_doc": 20,
+      "exact_metadata_lookup": 20,
+      "mixed_zh_en_api": 20,
+      "multi_hop_lookup": 20,
+      "negative_banned_source": 20,
+      "phase6c_bad_case_regression": 20,
+      "short_keyword": 20,
+      "zh_knowledge": 20
+    },
+    "schema_invalid_count": 0,
+    "source_miss_count": 83,
+    "timeout_count": 0,
+    "top_bad_case_patterns": [
+      [
+        "doc_type_miss",
+        85
+      ],
+      [
+        "source_miss",
+        83
+      ],
+      [
+        "source_and_doc_type_miss",
+        72
+      ],
+      [
+        "citation_required_bad_proxy",
+        10
+      ],
+      [
+        "multi_hop_bad_proxy",
+        7
+      ],
+      [
+        "keyword_miss",
+        4
+      ],
+      [
+        "metadata_lookup_source_miss",
+        3
+      ]
+    ]
+  },
+  "phase": "7B_bad_case_diagnostics",
+  "recommended_next_actions": [
+    "Prioritize source/doc-type miss analysis before changing planner policy.",
+    "Persist planner_debug and judge_debug in future 240-case JSONL if deeper Phase 7 diagnostics are needed.",
+    "Treat multi-hop improvements conservatively because the visible result rows do not retain subquery debug."
+  ],
+  "regression_summary_bad_case_count": 49,
+  "top_bad_case_patterns": [
+    [
+      "doc_type_miss",
+      86
+    ],
+    [
+      "source_miss",
+      84
+    ],
+    [
+      "source_and_doc_type_miss",
+      73
+    ],
+    [
+      "citation_required_bad_proxy",
+      10
+    ],
+    [
+      "multi_hop_bad_proxy",
+      7
+    ],
+    [
+      "keyword_miss",
+      6
+    ],
+    [
+      "metadata_lookup_source_miss",
+      3
+    ]
+  ]
+}
