@@ -1,0 +1,10 @@
+{"case_id":"phase7a_001","case_type":"simple_qa","query":"What is RAG?","expected_planner_type":"simple","expected_multi_hop":false}
+{"case_id":"phase7a_002","case_type":"multi_hop_compare","query":"Compare RAG and LoRA and explain the difference","expected_planner_type":"multi_hop","expected_multi_hop":true,"expected_sub_query_min":2}
+{"case_id":"phase7a_003","case_type":"code_config","query":"How does ENTERPRISE_AGENT_GRAPH_MODE configure /enterprise/agent/query?","expected_planner_type":"complex","expected_multi_hop":false}
+{"case_id":"phase7a_004","case_type":"citation_required","query":"What is RAG? cite the source evidence","expected_planner_type":"complex","expected_multi_hop":false}
+{"case_id":"phase7a_005","case_type":"ambiguous_query","query":"continue","expected_route":"clarification_response","expected_multi_hop":false}
+{"case_id":"phase7a_006","case_type":"unsupported_query","query":"What is the weather tomorrow?","expected_route":"safe_response","expected_multi_hop":false}
+{"case_id":"phase7a_007","case_type":"evidence_sensitive","query":"Explain citation verifier grounding status","expected_planner_type":"complex","expected_multi_hop":false}
+{"case_id":"phase7a_008","case_type":"multi_hop_compare","query":"Compare FastAPI Request Body and RAG sources","expected_planner_type":"multi_hop","expected_multi_hop":true,"expected_sub_query_min":2}
+{"case_id":"phase7a_009","case_type":"simple_qa","query":"What is LoRA?","expected_planner_type":"simple","expected_multi_hop":false}
+{"case_id":"phase7a_010","case_type":"code_config","query":"Which schema field carries graph_debug?","expected_planner_type":"complex","expected_multi_hop":false}

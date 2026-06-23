@@ -14,6 +14,8 @@ from core import get_model, settings
 from rag.config import rag_settings
 from rag.conversation_memory import contextualize_query_with_memory, get_memory_store
 from rag.evidence_verifier import build_safe_fallback_answer, verify_answer_grounding
+from rag.llm_judge import judge_answer_rule_based
+from rag.planner import plan_query
 from schema.models import FakeModelName
 
 Retriever = Callable[
@@ -66,6 +68,8 @@ class EnterpriseRAGGraphState(TypedDict, total=False):
     return_sources: bool
     model: Any | None
     query_type: str | None
+    planner_debug: dict[str, Any]
+    sub_queries: list[str]
     contextual_query: str | None
     memory_debug: dict[str, Any]
     retrieved_sources: list[dict[str, Any]]
@@ -76,6 +80,7 @@ class EnterpriseRAGGraphState(TypedDict, total=False):
     fallback: dict[str, Any]
     citations: list[dict[str, Any]]
     verifier_debug: dict[str, Any]
+    judge_debug: dict[str, Any]
     graph_debug: dict[str, Any]
     final_response: dict[str, Any]
 
@@ -102,6 +107,9 @@ def _append_node(
             "calls_llm": bool(debug.get("calls_llm", False)),
             "calls_real_llm": bool(debug.get("calls_real_llm", False)),
             "writes_chroma": False,
+            "planner": dict(debug.get("planner") or {}),
+            "multi_hop": dict(debug.get("multi_hop") or {}),
+            "judge": dict(debug.get("judge") or {}),
         }
     )
     return debug
@@ -146,6 +154,29 @@ async def query_classifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAG
     return {
         "query_type": query_type,
         "graph_debug": _append_node(state, "query_classifier", route=route),
+    }
+
+
+async def planner_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+    plan = plan_query(
+        _normalized_query(state),
+        query_type_hint=state.get("query_type"),
+    )
+    planner_debug = plan.as_debug()
+    graph_debug = _append_node(state, "planner")
+    graph_debug["planner"] = planner_debug
+    query_type = state.get("query_type")
+    if plan.planner_type == "multi_hop":
+        query_type = "multi_hop_lookup"
+    elif plan.planner_type == "ambiguous":
+        query_type = "ambiguous_query"
+    elif plan.planner_type == "unsupported":
+        query_type = "unsupported_query"
+    return {
+        "query_type": query_type,
+        "planner_debug": planner_debug,
+        "sub_queries": list(plan.sub_queries),
+        "graph_debug": graph_debug,
     }
 
 
@@ -233,9 +264,81 @@ def _build_retriever_node(
     return retriever_node
 
 
+def _source_key(source: dict[str, Any]) -> str:
+    metadata = source.get("metadata") if isinstance(source.get("metadata"), dict) else {}
+    for field in ("chunk_id", "source_id", "title"):
+        value = source.get(field) or metadata.get(field)
+        if value not in (None, "", "unknown"):
+            return f"{field}:{value}"
+    return repr(sorted(source.items()))
+
+
+def _build_multi_hop_retriever_node(
+    retriever: Retriever,
+) -> Callable[[EnterpriseRAGGraphState], Awaitable[EnterpriseRAGGraphState]]:
+    async def multi_hop_retriever_node(
+        state: EnterpriseRAGGraphState,
+    ) -> EnterpriseRAGGraphState:
+        sub_queries = list(state.get("sub_queries") or [])
+        query = state.get("contextual_query") or _normalized_query(state)
+        if not sub_queries:
+            sub_queries = [query]
+
+        merged_sources: list[dict[str, Any]] = []
+        seen: set[str] = set()
+        subquery_debug: list[dict[str, Any]] = []
+        per_query_top_k = state.get("top_k", 5)
+        for sub_query in sub_queries[:3]:
+            if inspect.iscoroutinefunction(retriever):
+                payload = await retriever(sub_query, per_query_top_k)
+            else:
+                payload_result = await asyncio.to_thread(retriever, sub_query, per_query_top_k)
+                payload = await payload_result if inspect.isawaitable(payload_result) else payload_result
+            sources = list(payload.get("sources") or [])
+            subquery_debug.append({"query": sub_query, "hit_count": len(sources)})
+            for source in sources:
+                key = _source_key(source)
+                if key in seen:
+                    continue
+                seen.add(key)
+                merged_sources.append(source)
+
+        top_k = int(state.get("top_k", 5) or 5)
+        merged_sources = merged_sources[:top_k]
+        retrieval_debug = {
+            "original_query": _normalized_query(state),
+            "rewritten_query": query,
+            "hit_count": len(merged_sources),
+            "graph_retrieval_adapter": "multi_hop_enterprise_retriever",
+            "sub_queries": sub_queries[:3],
+            "subquery_debug": subquery_debug,
+        }
+        graph_debug = _append_node(state, "multi_hop_retriever")
+        graph_debug["multi_hop"] = {
+            "enabled": True,
+            "sub_queries": sub_queries[:3],
+            "merged_source_count": len(merged_sources),
+            "calls_llm": False,
+            "writes_chroma": False,
+        }
+        return {
+            "retrieved_sources": merged_sources,
+            "retrieval_debug": retrieval_debug,
+            "fallback": {"triggered": False, "reason": None},
+            "graph_debug": graph_debug,
+        }
+
+    return multi_hop_retriever_node
+
+
 async def retriever_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     """Run the existing enterprise retriever in the default custom graph."""
     return await _build_retriever_node(_default_retriever)(state)
+
+
+async def multi_hop_retriever_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+    """Run rule-based multi-hop retrieval through the existing enterprise retriever."""
+    return await _build_multi_hop_retriever_node(_default_retriever)(state)
 
 
 async def ranker_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
@@ -413,6 +516,28 @@ async def evidence_verifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRA
     return await _build_evidence_verifier_node(rag_settings.evidence_verifier_mode)(state)
 
 
+async def judge_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+    if rag_settings.judge_mode == "off":
+        judge_debug = {
+            "judge_mode": "off",
+            "calls_llm": False,
+            "writes_chroma": False,
+        }
+    else:
+        judge_debug = judge_answer_rule_based(
+            query=_normalized_query(state),
+            answer=state.get("answer", ""),
+            sources=list(state.get("ranked_sources") or []),
+            verifier_debug=dict(state.get("verifier_debug") or {}),
+        ).as_debug()
+    graph_debug = _append_node(state, "judge")
+    graph_debug["judge"] = judge_debug
+    return {
+        "judge_debug": judge_debug,
+        "graph_debug": graph_debug,
+    }
+
+
 async def clarification_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     query = _normalized_query(state)
     if any("\u4e00" <= character <= "\u9fff" for character in query):
@@ -482,9 +607,11 @@ async def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGr
         "sources": response_sources,
         "citations": citations,
         "query_type": state.get("query_type"),
+        "planner_debug": dict(state.get("planner_debug") or {}),
         "memory_debug": memory_debug,
         "retrieval_debug": dict(state.get("retrieval_debug") or {}),
         "verifier_debug": dict(state.get("verifier_debug") or {}),
+        "judge_debug": dict(state.get("judge_debug") or {}),
         "graph_debug": final_graph_debug,
         "model_debug": dict(state.get("model_debug") or {}),
         "fallback": dict(state.get("fallback") or {}),
@@ -498,6 +625,10 @@ async def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGr
 
 
 def route_after_classifier(state: EnterpriseRAGGraphState) -> str:
+    return "planner"
+
+
+def route_after_planner(state: EnterpriseRAGGraphState) -> str:
     query_type = state.get("query_type")
     if query_type == "ambiguous_query":
         return "clarification_response"
@@ -506,8 +637,15 @@ def route_after_classifier(state: EnterpriseRAGGraphState) -> str:
     return "memory_rewriter"
 
 
+def route_after_memory_rewriter(state: EnterpriseRAGGraphState) -> str:
+    planner_debug = dict(state.get("planner_debug") or {})
+    if planner_debug.get("requires_multi_hop") is True:
+        return "multi_hop_retriever"
+    return "retriever"
+
+
 def route_after_verifier(state: EnterpriseRAGGraphState) -> str:
-    return "final_response"
+    return "judge"
 
 
 def build_enterprise_rag_graph(
@@ -518,8 +656,13 @@ def build_enterprise_rag_graph(
 ) -> Any:
     graph = StateGraph(EnterpriseRAGGraphState)
     graph.add_node("query_classifier", query_classifier_node)
+    graph.add_node("planner", planner_node)
     graph.add_node("memory_rewriter", memory_rewriter_node)
     graph.add_node("retriever", _build_retriever_node(retriever) if retriever else retriever_node)
+    graph.add_node(
+        "multi_hop_retriever",
+        _build_multi_hop_retriever_node(retriever) if retriever else multi_hop_retriever_node,
+    )
     graph.add_node("ranker", ranker_node)
     graph.add_node(
         "answer_generator",
@@ -531,6 +674,7 @@ def build_enterprise_rag_graph(
         if verifier_mode
         else evidence_verifier_node,
     )
+    graph.add_node("judge", judge_node)
     graph.add_node("clarification_response", clarification_response_node)
     graph.add_node("safe_response", safe_response_node)
     graph.add_node("final_response", final_response_node)
@@ -538,21 +682,35 @@ def build_enterprise_rag_graph(
     graph.add_conditional_edges(
         "query_classifier",
         route_after_classifier,
+        {"planner": "planner"},
+    )
+    graph.add_conditional_edges(
+        "planner",
+        route_after_planner,
         {
             "clarification_response": "clarification_response",
             "safe_response": "safe_response",
             "memory_rewriter": "memory_rewriter",
         },
     )
-    graph.add_edge("memory_rewriter", "retriever")
+    graph.add_conditional_edges(
+        "memory_rewriter",
+        route_after_memory_rewriter,
+        {
+            "retriever": "retriever",
+            "multi_hop_retriever": "multi_hop_retriever",
+        },
+    )
     graph.add_edge("retriever", "ranker")
+    graph.add_edge("multi_hop_retriever", "ranker")
     graph.add_edge("ranker", "answer_generator")
     graph.add_edge("answer_generator", "evidence_verifier")
     graph.add_conditional_edges(
         "evidence_verifier",
         route_after_verifier,
-        {"final_response": "final_response"},
+        {"judge": "judge"},
     )
+    graph.add_edge("judge", "final_response")
     graph.add_edge("clarification_response", "final_response")
     graph.add_edge("safe_response", "final_response")
     graph.add_edge("final_response", END)
@@ -593,6 +751,9 @@ async def run_enterprise_rag_graph(
                 "calls_llm": False,
                 "calls_real_llm": False,
                 "writes_chroma": False,
+                "planner": {},
+                "multi_hop": {},
+                "judge": {},
             },
         }
     )

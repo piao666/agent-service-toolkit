@@ -1,0 +1,197 @@
+{
+  "phase": "7A_planner_multihop_judge_prototype",
+  "case_count": 10,
+  "planner_debug_present_count": 10,
+  "multi_hop_enabled_count": 2,
+  "judge_debug_present_count": 8,
+  "rule_based_planner": true,
+  "rule_based_judge": true,
+  "calls_real_llm": false,
+  "writes_chroma": false,
+  "runs_240_case": false,
+  "error_count": 0,
+  "errors": [],
+  "results": [
+    {
+      "case_id": "phase7a_001",
+      "case_type": "simple_qa",
+      "planner_type": "simple",
+      "requires_multi_hop": false,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "memory_rewriter",
+        "retriever",
+        "ranker",
+        "answer_generator",
+        "evidence_verifier",
+        "judge",
+        "final_response"
+      ],
+      "judge_mode": "rule_based_fallback",
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_002",
+      "case_type": "multi_hop_compare",
+      "planner_type": "multi_hop",
+      "requires_multi_hop": true,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "memory_rewriter",
+        "multi_hop_retriever",
+        "ranker",
+        "answer_generator",
+        "evidence_verifier",
+        "judge",
+        "final_response"
+      ],
+      "judge_mode": "rule_based_fallback",
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_003",
+      "case_type": "code_config",
+      "planner_type": "complex",
+      "requires_multi_hop": false,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "memory_rewriter",
+        "retriever",
+        "ranker",
+        "answer_generator",
+        "evidence_verifier",
+        "judge",
+        "final_response"
+      ],
+      "judge_mode": "rule_based_fallback",
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_004",
+      "case_type": "citation_required",
+      "planner_type": "complex",
+      "requires_multi_hop": false,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "memory_rewriter",
+        "retriever",
+        "ranker",
+        "answer_generator",
+        "evidence_verifier",
+        "judge",
+        "final_response"
+      ],
+      "judge_mode": "rule_based_fallback",
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_005",
+      "case_type": "ambiguous_query",
+      "planner_type": "ambiguous",
+      "requires_multi_hop": false,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "clarification_response",
+        "final_response"
+      ],
+      "judge_mode": null,
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_006",
+      "case_type": "unsupported_query",
+      "planner_type": "unsupported",
+      "requires_multi_hop": false,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "safe_response",
+        "final_response"
+      ],
+      "judge_mode": null,
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_007",
+      "case_type": "evidence_sensitive",
+      "planner_type": "complex",
+      "requires_multi_hop": false,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "memory_rewriter",
+        "retriever",
+        "ranker",
+        "answer_generator",
+        "evidence_verifier",
+        "judge",
+        "final_response"
+      ],
+      "judge_mode": "rule_based_fallback",
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_008",
+      "case_type": "multi_hop_compare",
+      "planner_type": "multi_hop",
+      "requires_multi_hop": true,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "memory_rewriter",
+        "multi_hop_retriever",
+        "ranker",
+        "answer_generator",
+        "evidence_verifier",
+        "judge",
+        "final_response"
+      ],
+      "judge_mode": "rule_based_fallback",
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_009",
+      "case_type": "simple_qa",
+      "planner_type": "simple",
+      "requires_multi_hop": false,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "memory_rewriter",
+        "retriever",
+        "ranker",
+        "answer_generator",
+        "evidence_verifier",
+        "judge",
+        "final_response"
+      ],
+      "judge_mode": "rule_based_fallback",
+      "error_count": 0
+    },
+    {
+      "case_id": "phase7a_010",
+      "case_type": "code_config",
+      "planner_type": "complex",
+      "requires_multi_hop": false,
+      "nodes_executed": [
+        "query_classifier",
+        "planner",
+        "memory_rewriter",
+        "retriever",
+        "ranker",
+        "answer_generator",
+        "evidence_verifier",
+        "judge",
+        "final_response"
+      ],
+      "judge_mode": "rule_based_fallback",
+      "error_count": 0
+    }
+  ],
+  "recommended_checkpoint": true
+}

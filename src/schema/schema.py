@@ -128,8 +128,16 @@ class EnterpriseAgentQueryResponse(BaseModel):
         description="Session-scoped conversational memory diagnostics.",
         default_factory=dict,
     )
+    planner_debug: dict[str, Any] = Field(
+        description="Optional rule-based planning diagnostics.",
+        default_factory=dict,
+    )
     verifier_debug: dict[str, Any] = Field(
         description="Optional deterministic evidence-grounding diagnostics.",
+        default_factory=dict,
+    )
+    judge_debug: dict[str, Any] = Field(
+        description="Optional rule-based answer-judge diagnostics.",
         default_factory=dict,
     )
     graph_debug: dict[str, Any] = Field(

@@ -26,9 +26,11 @@ REQUIRED_RESPONSE_FIELDS = {
     "sources",
     "citations",
     "query_type",
+    "planner_debug",
     "memory_debug",
     "retrieval_debug",
     "verifier_debug",
+    "judge_debug",
     "graph_debug",
 }
 
@@ -91,11 +93,13 @@ def main() -> int:
             node in mermaid
             for node in (
                 "query_classifier",
+                "planner",
                 "memory_rewriter",
                 "retriever",
                 "ranker",
                 "answer_generator",
                 "evidence_verifier",
+                "judge",
                 "final_response",
             )
         )
@@ -124,19 +128,21 @@ def main() -> int:
         semantic_nodes = _nodes(semantic)
         semantic_route_ok = semantic.get("query_type") == "semantic_qa" and semantic_nodes == [
             "query_classifier",
+            "planner",
             "memory_rewriter",
             "retriever",
             "ranker",
             "answer_generator",
             "evidence_verifier",
+            "judge",
             "final_response",
         ]
         ambiguous_route_ok = ambiguous.get("query_type") == "ambiguous_query" and _nodes(
             ambiguous
-        ) == ["query_classifier", "clarification_response", "final_response"]
+        ) == ["query_classifier", "planner", "clarification_response", "final_response"]
         unsupported_route_ok = unsupported.get("query_type") == "unsupported_query" and _nodes(
             unsupported
-        ) == ["query_classifier", "safe_response", "final_response"]
+        ) == ["query_classifier", "planner", "safe_response", "final_response"]
         memory_debug = memory_follow_up.get("memory_debug") or {}
         memory_rewriter_node_ok = bool(
             memory_follow_up.get("query_type") == "memory_follow_up"
@@ -147,6 +153,9 @@ def main() -> int:
         answer_generator_node_ok = bool(semantic.get("answer"))
         evidence_verifier_node_ok = bool(
             semantic.get("verifier_debug", {}).get("verifier_mode") == "rule_based"
+        )
+        judge_node_ok = bool(
+            semantic.get("judge_debug", {}).get("judge_mode") == "rule_based_fallback"
         )
         final_response_schema_ok = REQUIRED_RESPONSE_FIELDS.issubset(semantic)
     except Exception as exc:
@@ -161,6 +170,7 @@ def main() -> int:
         retriever_node_ok = False
         answer_generator_node_ok = False
         evidence_verifier_node_ok = False
+        judge_node_ok = False
         final_response_schema_ok = False
     finally:
         rag_settings.ENTERPRISE_MEMORY_MODE = original_memory_mode
@@ -178,6 +188,7 @@ def main() -> int:
         "retriever_node_ok": retriever_node_ok,
         "answer_generator_node_ok": answer_generator_node_ok,
         "evidence_verifier_node_ok": evidence_verifier_node_ok,
+        "judge_node_ok": judge_node_ok,
         "final_response_schema_ok": final_response_schema_ok,
         "calls_llm": False,
         "writes_chroma": False,

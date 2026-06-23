@@ -10,6 +10,7 @@
   "retriever_node_ok": true,
   "answer_generator_node_ok": true,
   "evidence_verifier_node_ok": true,
+  "judge_node_ok": true,
   "final_response_schema_ok": true,
   "calls_llm": false,
   "writes_chroma": false,

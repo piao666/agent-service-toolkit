@@ -36,6 +36,7 @@ class RagSettings(BaseSettings):
     ENTERPRISE_EVIDENCE_MIN_SCORE: float = 0.30
     ENTERPRISE_EVIDENCE_HIGH_SCORE: float = 0.60
     ENTERPRISE_AGENT_GRAPH_MODE: str = "legacy"
+    ENTERPRISE_JUDGE_MODE: str = "rule_based_fallback"
     RAG_CHUNK_SIZE: int = 800
     RAG_CHUNK_OVERLAP: int = 120
     RAG_DEFAULT_TOP_K: int = 5
@@ -74,6 +75,11 @@ class RagSettings(BaseSettings):
         )
         mode = configured_mode.strip().lower()
         return mode if mode in {"legacy", "custom_graph"} else "legacy"
+
+    @property
+    def judge_mode(self) -> str:
+        mode = self.ENTERPRISE_JUDGE_MODE.strip().lower()
+        return mode if mode in {"off", "rule_based_fallback"} else "rule_based_fallback"
 
 
 rag_settings = RagSettings()

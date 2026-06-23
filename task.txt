@@ -2136,3 +2136,20 @@ Current project wrap-up:
 - No further core feature development is planned unless a factual issue is found.
 - Recommended next step: refresh external DOCX project summary, resume, and interview material
   with Phase 6L and Phase 6M results.
+
+Phase 7A: Planner + Multi-hop + Judge Local Prototype
+-----------------------------------------------------
+Status: implemented locally; pending checkpoint after verification.
+
+- Added a local rule-based planner for custom graph requests.
+- Added `planner_debug` with `simple`, `complex`, `multi_hop`, `ambiguous`, and `unsupported`
+  planning decisions.
+- Added a multi-hop prototype that is enabled only when `requires_multi_hop=true`.
+- Multi-hop prototype creates bounded subqueries and reuses the existing retriever to merge
+  sources.
+- Added a local `rule_based_fallback` judge and `judge_debug`.
+- Custom graph `graph_debug` now includes `planner`, `multi_hop`, and `judge` sections.
+- Custom graph `nodes_executed` now includes `planner`; multi-hop cases include
+  `multi_hop_retriever`; judged normal cases include `judge`.
+- Legacy default logic is not changed.
+- Boundaries: no real LLM call, no HPC run, no 240-case run, no benchmark, and no Chroma write.
