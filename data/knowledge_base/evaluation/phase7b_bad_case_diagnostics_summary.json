@@ -113,6 +113,7 @@
     "uses_existing_results_only": true,
     "writes_chroma": false
   },
+  "diagnostics_source": "old_proxy",
   "input_files": {
     "custom_graph_results": "data\\knowledge_base\\evaluation\\phase7a_after_fix_deepseek_custom_240_results.jsonl",
     "custom_graph_summary": "data\\knowledge_base\\evaluation\\phase7a_after_fix_deepseek_custom_240_summary.json",

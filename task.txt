@@ -2216,3 +2216,22 @@ Status: completed locally; pending checkpoint.
   recorded as `not_persisted_in_result_jsonl`.
 - Top visible bad-case patterns: doc_type_miss, source_miss, source_and_doc_type_miss,
   citation_required_bad_proxy, multi_hop_bad_proxy, keyword_miss, metadata_lookup_source_miss.
+
+Phase 7C-1: Evaluation Instrumentation and Diagnostics Enrichment
+-----------------------------------------------------------------
+Status: completed locally; pending checkpoint.
+
+- Added an enriched DeepSeek 240-case regression runner for future HPC execution.
+- The runner requires explicit `--execute`; this local phase does not call endpoints or real LLMs.
+- Per-case enriched result rows are designed to persist `planner_debug`, `judge_debug`,
+  `graph_debug`, `nodes_executed`, planner type, multi-hop flags, judge verdict, bad-case reasons,
+  and calibrated bad-case reasons.
+- Enriched summary is designed to persist complete bad-case ID sets for legacy, custom_graph,
+  shared, only-legacy, and only-custom_graph categories.
+- Updated Phase 7B analyzer to support both current old-proxy artifacts and future enriched
+  Phase 7C artifacts.
+- Current local diagnostics source remains `old_proxy` because enriched HPC results have not been
+  generated yet.
+- No core RAG strategy, planner rule, judge rule, retriever, service endpoint, Chroma data, or
+  README was changed in this phase.
+- Boundaries: no HPC run, no real DeepSeek call, no 240-case run, no benchmark, and no Chroma write.

@@ -7,7 +7,6 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-
 ROOT = Path(__file__).resolve().parents[1]
 EVAL_DIR = ROOT / "data" / "knowledge_base" / "evaluation"
 
@@ -16,6 +15,8 @@ CUSTOM_RESULTS = EVAL_DIR / "phase7a_after_fix_deepseek_custom_240_results.jsonl
 LEGACY_SUMMARY = EVAL_DIR / "phase7a_after_fix_deepseek_legacy_240_summary.json"
 CUSTOM_SUMMARY = EVAL_DIR / "phase7a_after_fix_deepseek_custom_240_summary.json"
 REGRESSION_SUMMARY = EVAL_DIR / "phase7a_after_fix_deepseek_240_regression_summary.json"
+ENRICHED_RESULTS = EVAL_DIR / "phase7c_enriched_deepseek_240_results.jsonl"
+ENRICHED_SUMMARY = EVAL_DIR / "phase7c_enriched_deepseek_240_summary.json"
 
 OUT_RESULTS = EVAL_DIR / "phase7b_bad_case_diagnostics_results.jsonl"
 OUT_SUMMARY = EVAL_DIR / "phase7b_bad_case_diagnostics_summary.json"
@@ -46,6 +47,8 @@ def _truthy(value: Any) -> bool:
 
 
 def _is_error(row: dict[str, Any]) -> bool:
+    if row.get("error"):
+        return True
     if row.get("error_type") or row.get("error_summary"):
         return True
     status = row.get("http_status")
@@ -55,7 +58,14 @@ def _is_error(row: dict[str, Any]) -> bool:
 
 
 def _is_timeout(row: dict[str, Any]) -> bool:
-    fields = [row.get("error_type"), row.get("error_summary"), row.get("retrieval_error_summary")]
+    if row.get("timeout") is True:
+        return True
+    fields = [
+        row.get("error"),
+        row.get("error_type"),
+        row.get("error_summary"),
+        row.get("retrieval_error_summary"),
+    ]
     return any("timeout" in str(value).lower() for value in fields if value)
 
 
@@ -64,7 +74,8 @@ def _mode_flags(row: dict[str, Any]) -> dict[str, bool]:
     keyword_miss = row.get("keyword_hit") is False
     doc_type_miss = row.get("doc_type_hit") is False
     empty_answer = row.get("answer_non_empty") is False or not str(row.get("answer_preview") or "").strip()
-    schema_invalid = row.get("response_schema_valid") is False
+    schema_value = row.get("schema_valid", row.get("response_schema_valid"))
+    schema_invalid = schema_value is False
     error = _is_error(row)
     timeout = _is_timeout(row)
     proxy_bad = any(
@@ -186,7 +197,171 @@ def _summary_for_mode(rows: list[dict[str, Any]], summary: dict[str, Any]) -> di
     }
 
 
-def main() -> None:
+def _split_enriched_rows(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    legacy_rows = [row for row in rows if row.get("mode") == "legacy"]
+    custom_rows = [row for row in rows if row.get("mode") == "custom_graph"]
+    return legacy_rows, custom_rows
+
+
+def _enriched_summary_for_mode(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    flags = _count_flags(rows)
+    planner = Counter(str(row.get("planner_type") or "none") for row in rows)
+    judge = Counter(str(row.get("judge_verdict") or "none") for row in rows)
+    judge_bad = Counter(
+        str(row.get("judge_verdict") or "none")
+        for row in rows
+        if row.get("calibrated_bad_case")
+    )
+    multi_hop_rows = [row for row in rows if row.get("multi_hop_enabled")]
+    return {
+        "case_count": len(rows),
+        "bad_case_count": sum(bool(row.get("bad_case")) for row in rows),
+        "calibrated_bad_case_count": sum(bool(row.get("calibrated_bad_case")) for row in rows),
+        "source_miss_count": flags["source_miss"],
+        "keyword_miss_count": flags["keyword_miss"],
+        "doc_type_miss_count": flags["doc_type_miss"],
+        "empty_answer_count": flags["empty_answer"],
+        "schema_invalid_count": flags["schema_invalid"],
+        "error_count": flags["error"],
+        "timeout_count": flags["timeout"],
+        "multi_hop_enabled_count": len(multi_hop_rows),
+        "multi_hop_bad_case_count": sum(
+            bool(row.get("calibrated_bad_case")) for row in multi_hop_rows
+        ),
+        "planner_type_distribution": dict(planner),
+        "judge_verdict_distribution": dict(judge),
+        "judge_bad_case_distribution": dict(judge_bad),
+        "query_type_distribution": dict(
+            Counter(str(row.get("query_type") or "unknown") for row in rows)
+        ),
+    }
+
+
+def _run_enriched() -> dict[str, Any]:
+    rows = _load_jsonl(ENRICHED_RESULTS)
+    enriched_summary = _load_json(ENRICHED_SUMMARY)
+    legacy_rows, custom_rows = _split_enriched_rows(rows)
+    legacy_by_id = {str(row["case_id"]): row for row in legacy_rows}
+    custom_by_id = {str(row["case_id"]): row for row in custom_rows}
+    case_ids = sorted(set(legacy_by_id) | set(custom_by_id))
+
+    legacy_bad_ids = set(str(x) for x in enriched_summary.get("legacy_bad_case_ids") or [])
+    custom_bad_ids = set(str(x) for x in enriched_summary.get("custom_graph_bad_case_ids") or [])
+    legacy_calibrated_ids = set(
+        str(x) for x in enriched_summary.get("legacy_calibrated_bad_case_ids") or []
+    )
+    custom_calibrated_ids = set(
+        str(x) for x in enriched_summary.get("custom_graph_calibrated_bad_case_ids") or []
+    )
+
+    results: list[dict[str, Any]] = []
+    pattern_counts: Counter[str] = Counter()
+    for case_id in case_ids:
+        legacy_row = legacy_by_id.get(case_id, {})
+        custom_row = custom_by_id.get(case_id, {})
+        custom_flags = _mode_flags(custom_row)
+        if custom_row.get("calibrated_bad_case"):
+            pattern_counts.update(_patterns(custom_row, custom_flags))
+        results.append(
+            {
+                "case_id": case_id,
+                "query": custom_row.get("query") or legacy_row.get("query"),
+                "query_type": custom_row.get("query_type") or legacy_row.get("query_type"),
+                "expected_source_id": custom_row.get("expected_source_id")
+                or legacy_row.get("expected_source_id"),
+                "legacy_bad": case_id in legacy_bad_ids,
+                "custom_graph_bad": case_id in custom_bad_ids,
+                "shared_bad": case_id in (legacy_bad_ids & custom_bad_ids),
+                "only_legacy_bad": case_id in (legacy_bad_ids - custom_bad_ids),
+                "only_custom_graph_bad": case_id in (custom_bad_ids - legacy_bad_ids),
+                "legacy_calibrated_bad": case_id in legacy_calibrated_ids,
+                "custom_graph_calibrated_bad": case_id in custom_calibrated_ids,
+                "shared_calibrated_bad": case_id
+                in (legacy_calibrated_ids & custom_calibrated_ids),
+                "only_legacy_calibrated_bad": case_id
+                in (legacy_calibrated_ids - custom_calibrated_ids),
+                "only_custom_graph_calibrated_bad": case_id
+                in (custom_calibrated_ids - legacy_calibrated_ids),
+                "legacy_flags": _mode_flags(legacy_row),
+                "custom_graph_flags": custom_flags,
+                "planner_type": custom_row.get("planner_type") or _infer_planner_type(custom_row),
+                "judge_verdict": custom_row.get("judge_verdict") or _judge_verdict(custom_row),
+                "requires_multi_hop": bool(custom_row.get("requires_multi_hop")),
+                "multi_hop_enabled": bool(custom_row.get("multi_hop_enabled")),
+                "legacy_bad_case_reasons": legacy_row.get("bad_case_reasons") or [],
+                "custom_graph_bad_case_reasons": custom_row.get("bad_case_reasons") or [],
+                "legacy_calibrated_bad_case_reasons": legacy_row.get(
+                    "calibrated_bad_case_reasons"
+                )
+                or [],
+                "custom_graph_calibrated_bad_case_reasons": custom_row.get(
+                    "calibrated_bad_case_reasons"
+                )
+                or [],
+                "patterns": _patterns(custom_row or legacy_row, custom_flags),
+            }
+        )
+
+    OUT_RESULTS.write_text(
+        "\n".join(json.dumps(row, ensure_ascii=False, sort_keys=True) for row in results)
+        + "\n",
+        encoding="utf-8",
+    )
+
+    summary = {
+        "phase": "7B_bad_case_diagnostics",
+        "diagnostics_source": "enriched",
+        "input_files": {
+            "enriched_results": str(ENRICHED_RESULTS.relative_to(ROOT)),
+            "enriched_summary": str(ENRICHED_SUMMARY.relative_to(ROOT)),
+        },
+        "case_count": len(case_ids),
+        "legacy": _enriched_summary_for_mode(legacy_rows),
+        "custom_graph": _enriched_summary_for_mode(custom_rows),
+        "bad_id_overlap": {
+            "shared_bad_case_count": len(legacy_bad_ids & custom_bad_ids),
+            "only_legacy_bad_count": len(legacy_bad_ids - custom_bad_ids),
+            "only_custom_graph_bad_count": len(custom_bad_ids - legacy_bad_ids),
+            "shared_bad_case_ids": sorted(legacy_bad_ids & custom_bad_ids),
+            "only_legacy_bad_case_ids": sorted(legacy_bad_ids - custom_bad_ids),
+            "only_custom_graph_bad_case_ids": sorted(custom_bad_ids - legacy_bad_ids),
+        },
+        "calibrated_bad_id_overlap": {
+            "shared_calibrated_bad_case_count": len(
+                legacy_calibrated_ids & custom_calibrated_ids
+            ),
+            "only_legacy_calibrated_bad_count": len(
+                legacy_calibrated_ids - custom_calibrated_ids
+            ),
+            "only_custom_graph_calibrated_bad_count": len(
+                custom_calibrated_ids - legacy_calibrated_ids
+            ),
+            "shared_calibrated_bad_case_ids": sorted(
+                legacy_calibrated_ids & custom_calibrated_ids
+            ),
+            "only_legacy_calibrated_bad_case_ids": sorted(
+                legacy_calibrated_ids - custom_calibrated_ids
+            ),
+            "only_custom_graph_calibrated_bad_case_ids": sorted(
+                custom_calibrated_ids - legacy_calibrated_ids
+            ),
+        },
+        "top_bad_case_patterns": pattern_counts.most_common(10),
+        "diagnostic_boundaries": {
+            "calls_llm": False,
+            "writes_chroma": False,
+            "runs_240_case": False,
+            "uses_existing_results_only": True,
+        },
+    }
+    OUT_SUMMARY.write_text(
+        json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    return summary
+
+
+def _run_old_proxy() -> dict[str, Any]:
     legacy_rows = _load_jsonl(LEGACY_RESULTS)
     custom_rows = _load_jsonl(CUSTOM_RESULTS)
     legacy_summary = _load_json(LEGACY_SUMMARY)
@@ -257,6 +432,7 @@ def main() -> None:
 
     summary = {
         "phase": "7B_bad_case_diagnostics",
+        "diagnostics_source": "old_proxy",
         "input_files": {
             "legacy_results": str(LEGACY_RESULTS.relative_to(ROOT)),
             "custom_graph_results": str(CUSTOM_RESULTS.relative_to(ROOT)),
@@ -302,6 +478,14 @@ def main() -> None:
         json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
+    return summary
+
+
+def main() -> None:
+    if ENRICHED_RESULTS.exists() and ENRICHED_SUMMARY.exists():
+        summary = _run_enriched()
+    else:
+        summary = _run_old_proxy()
 
     print(json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True))
 
