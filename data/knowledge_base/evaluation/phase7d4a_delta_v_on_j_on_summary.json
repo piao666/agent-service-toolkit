@@ -1,0 +1,111 @@
+{
+  "calls_real_llm": true,
+  "case_count": 11,
+  "custom_graph": {
+    "bad_case_count": 6,
+    "calibrated_bad_case_count": 6,
+    "case_count": 11,
+    "doc_type_miss_count": 0,
+    "error_count": 0,
+    "judge_bad_case_distribution": {
+      "needs_review": 4,
+      "pass": 2
+    },
+    "judge_verdict_distribution": {
+      "needs_review": 7,
+      "pass": 4
+    },
+    "keyword_miss_count": 6,
+    "multi_hop_bad_case_count": 0,
+    "multi_hop_enabled_count": 0,
+    "planner_type_distribution": {
+      "complex": 4,
+      "multi_hop": 2,
+      "simple": 5
+    },
+    "source_and_doc_type_miss_count": 0,
+    "source_miss_count": 0,
+    "timeout_count": 0
+  },
+  "custom_graph_bad_case_ids": [
+    "exp_021",
+    "exp_039",
+    "exp_041",
+    "exp_058",
+    "exp_134",
+    "exp_193"
+  ],
+  "custom_graph_calibrated_bad_case_ids": [
+    "exp_021",
+    "exp_039",
+    "exp_041",
+    "exp_058",
+    "exp_134",
+    "exp_193"
+  ],
+  "legacy": {
+    "bad_case_count": 3,
+    "calibrated_bad_case_count": 3,
+    "case_count": 11,
+    "doc_type_miss_count": 0,
+    "error_count": 0,
+    "judge_bad_case_distribution": {
+      "none": 3
+    },
+    "judge_verdict_distribution": {
+      "none": 11
+    },
+    "keyword_miss_count": 3,
+    "multi_hop_bad_case_count": 0,
+    "multi_hop_enabled_count": 0,
+    "planner_type_distribution": {
+      "multi_hop": 1,
+      "none": 10
+    },
+    "source_and_doc_type_miss_count": 0,
+    "source_miss_count": 0,
+    "timeout_count": 0
+  },
+  "legacy_bad_case_ids": [
+    "exp_039",
+    "exp_193",
+    "exp_226"
+  ],
+  "legacy_calibrated_bad_case_ids": [
+    "exp_039",
+    "exp_193",
+    "exp_226"
+  ],
+  "note": "This summary is produced only when --execute is used against running endpoints.",
+  "only_custom_graph_bad_case_ids": [
+    "exp_021",
+    "exp_041",
+    "exp_058",
+    "exp_134"
+  ],
+  "only_custom_graph_calibrated_bad_case_ids": [
+    "exp_021",
+    "exp_041",
+    "exp_058",
+    "exp_134"
+  ],
+  "only_legacy_bad_case_ids": [
+    "exp_226"
+  ],
+  "only_legacy_calibrated_bad_case_ids": [
+    "exp_226"
+  ],
+  "phase": "7C_enriched_deepseek_240_regression",
+  "request_count": 22,
+  "runs_240_case": true,
+  "runs_benchmark": false,
+  "shared_bad_case_ids": [
+    "exp_039",
+    "exp_193"
+  ],
+  "shared_calibrated_bad_case_ids": [
+    "exp_039",
+    "exp_193"
+  ],
+  "writes_chroma": false
+}

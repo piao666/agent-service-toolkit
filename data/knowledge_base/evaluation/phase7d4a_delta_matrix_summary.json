@@ -1,0 +1,50 @@
+{
+  "results": {
+    "v_on_j_on": {
+      "verifier": "rule_based",
+      "judge": "rule_based_fallback",
+      "legacy_bad": 3,
+      "custom_bad": 6,
+      "gap": 3,
+      "only_custom": 4,
+      "only_legacy": 1,
+      "custom_le_legacy": false,
+      "error": 0
+    },
+    "v_on_j_off": {
+      "verifier": "rule_based",
+      "judge": "off",
+      "legacy_bad": 3,
+      "custom_bad": 7,
+      "gap": 4,
+      "only_custom": 5,
+      "only_legacy": 1,
+      "custom_le_legacy": false,
+      "error": 0
+    },
+    "v_off_j_off": {
+      "verifier": "off",
+      "judge": "off",
+      "legacy_bad": 5,
+      "custom_bad": 7,
+      "gap": 2,
+      "only_custom": 4,
+      "only_legacy": 2,
+      "custom_le_legacy": false,
+      "error": 0
+    },
+    "v_off_j_on": {
+      "verifier": "off",
+      "judge": "rule_based_fallback",
+      "legacy_bad": 2,
+      "custom_bad": 5,
+      "gap": 3,
+      "only_custom": 5,
+      "only_legacy": 2,
+      "custom_le_legacy": false,
+      "error": 0
+    }
+  },
+  "best": "v_off_j_off",
+  "candidate_for_full_240": false
+}
