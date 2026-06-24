@@ -157,9 +157,14 @@ def sequence_from_sources(sources: list[dict[str, Any]], *keys: str) -> list[Any
 
 
 def prompt_profile(mode: str, top_k: int) -> dict[str, Any]:
+    answer_synthesis_profile = (
+        "keyword_coverage_v1" if mode == "custom_graph" else "legacy_default"
+    )
     return {
         "mode": mode,
         "agent_graph_mode": "legacy" if mode == "legacy" else "custom_graph",
+        "answer_synthesis_profile": answer_synthesis_profile,
+        "answer_synthesis_mode": answer_synthesis_profile,
         "planner_mode": os.getenv("ENTERPRISE_PLANNER_MODE"),
         "multi_hop_mode": os.getenv("ENTERPRISE_MULTI_HOP_MODE"),
         "judge_mode": os.getenv("ENTERPRISE_LLM_JUDGE_MODE")

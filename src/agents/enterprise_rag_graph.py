@@ -61,6 +61,31 @@ _METADATA_TERMS = (
 _CODE_TERMS = ("config", "schema", "endpoint", "环境变量", "配置项", "错误码", "参数", "字段")
 
 
+_ANSWER_SYNTHESIS_PROFILE = "keyword_coverage_v1"
+_MAX_KEYWORD_HINT_TERMS = 12
+_TERM_STOPWORDS = {
+    "what",
+    "which",
+    "when",
+    "where",
+    "why",
+    "how",
+    "does",
+    "with",
+    "from",
+    "into",
+    "about",
+    "compare",
+    "difference",
+    "between",
+    "the",
+    "and",
+    "for",
+    "are",
+    "is",
+}
+
+
 class EnterpriseRAGGraphState(TypedDict, total=False):
     query: str
     session_id: str | None
@@ -237,6 +262,100 @@ def _source_value(source: dict[str, Any], field: str) -> str:
     if value in (None, "", "unknown"):
         value = metadata.get(field)
     return str(value or "").strip()
+
+
+def _unique_terms(terms: list[str]) -> list[str]:
+    seen: set[str] = set()
+    unique: list[str] = []
+    for term in terms:
+        normalized = str(term or "").strip().strip(".,;:()[]{}<>\"'")
+        if not normalized:
+            continue
+        key = normalized.casefold()
+        if key in seen or key in _TERM_STOPWORDS:
+            continue
+        if len(normalized) < 2 and not normalized.isupper():
+            continue
+        seen.add(key)
+        unique.append(normalized)
+        if len(unique) >= _MAX_KEYWORD_HINT_TERMS:
+            break
+    return unique
+
+
+def extract_query_keywords(query: str) -> list[str]:
+    """Extract bounded user-query terms for custom-graph answer synthesis hints."""
+    text = str(query or "")
+    terms: list[str] = []
+    terms.extend(
+        re.findall(
+            r"\b[A-Za-z][A-Za-z0-9_]*(?:[./_-][A-Za-z0-9_]+)*\b",
+            text,
+        )
+    )
+    terms.extend(re.findall(r"/[A-Za-z0-9_.{}-]+(?:/[A-Za-z0-9_.{}-]+)*", text))
+    terms.extend(re.findall(r"\b[A-Za-z][A-Za-z0-9_]*\(\)", text))
+    terms.extend(re.findall(r"[\u4e00-\u9fff]{2,8}", text))
+    return _unique_terms(terms)
+
+
+def extract_source_keywords(
+    sources: list[dict[str, Any]],
+    query_keywords: list[str],
+) -> list[str]:
+    """Extract source terms without changing source order or serialized sources."""
+    values: list[str] = []
+    query_lowers = {term.casefold() for term in query_keywords}
+    for source in sources[:5]:
+        for field in ("source_id", "title", "doc_type", "section_path", "chunk_id"):
+            value = _source_value(source, field)
+            if value:
+                values.append(value)
+        preview = _source_value(source, "content_preview") or _source_value(source, "preview")
+        values.extend(
+            re.findall(
+                r"\b[A-Za-z][A-Za-z0-9_]*(?:[./_-][A-Za-z0-9_]+)*\b",
+                preview,
+            )
+        )
+        values.extend(re.findall(r"/[A-Za-z0-9_.{}-]+(?:/[A-Za-z0-9_.{}-]+)*", preview))
+
+    prioritized = [
+        value
+        for value in values
+        if value.casefold() in query_lowers or any(q in value.casefold() for q in query_lowers)
+    ]
+    return _unique_terms(prioritized + values)
+
+
+def build_keyword_coverage_hint(query: str, sources: list[dict[str, Any]]) -> str:
+    query_terms = extract_query_keywords(query)
+    source_terms = extract_source_keywords(sources, query_terms)
+    merged_terms = _unique_terms(query_terms + source_terms)
+    if not merged_terms:
+        return (
+            "Answer only from the retrieved context. Preserve exact API names, config keys, "
+            "function names, parameters, document types, and source terms when they are relevant. "
+            "If the evidence is insufficient, say that the current sources are insufficient."
+        )
+    terms = ", ".join(merged_terms)
+    return (
+        "Answer only from the retrieved context. When natural, cover the key user/source terms "
+        f"without forcing a list: {terms}. Preserve exact API names, config keys, function names, "
+        "parameters, document types, and source terms from the evidence. Do not introduce facts "
+        "outside the sources. If the evidence is insufficient, say that the current sources are "
+        "insufficient."
+    )
+
+
+def build_answer_synthesis_instruction(query: str, sources: list[dict[str, Any]]) -> str:
+    return (
+        ANSWER_SYNTHESIS_PROMPT
+        + "\n\nCustom graph answer synthesis profile: "
+        + _ANSWER_SYNTHESIS_PROFILE
+        + "\n"
+        + build_keyword_coverage_hint(query, sources)
+    )
 
 
 def _default_answer_generator(query: str, sources: list[dict[str, Any]]) -> str:
@@ -454,6 +573,8 @@ async def _real_answer_generator(
                 "provider": "fallback",
                 "model": str(selected_model),
                 "answer_generator": "safe_fallback",
+                "answer_synthesis_profile": _ANSWER_SYNTHESIS_PROFILE,
+                "answer_synthesis_mode": _ANSWER_SYNTHESIS_PROFILE,
             },
             False,
         )
@@ -464,8 +585,9 @@ async def _real_answer_generator(
         preview = _source_value(source, "content_preview") or _source_value(source, "preview")
         context_parts.append(f"[{title}] {preview}")
     context = "\n\n".join(context_parts)
+    instruction = build_answer_synthesis_instruction(query, sources)
     messages = [
-        SystemMessage(content=ANSWER_SYNTHESIS_PROMPT),
+        SystemMessage(content=instruction),
         HumanMessage(content=f"User question:\n{query}\n\nRetrieved context:\n{context}"),
     ]
     calls_real_llm = False
@@ -482,6 +604,8 @@ async def _real_answer_generator(
                 "provider": "fake" if _is_fake_model(selected_model) else "configured",
                 "model": str(selected_model),
                 "answer_generator": "model_ainvoke",
+                "answer_synthesis_profile": _ANSWER_SYNTHESIS_PROFILE,
+                "answer_synthesis_mode": _ANSWER_SYNTHESIS_PROFILE,
             },
             calls_real_llm,
         )
@@ -492,6 +616,8 @@ async def _real_answer_generator(
                 "provider": "model_error",
                 "model": str(selected_model),
                 "answer_generator": "safe_fallback",
+                "answer_synthesis_profile": _ANSWER_SYNTHESIS_PROFILE,
+                "answer_synthesis_mode": _ANSWER_SYNTHESIS_PROFILE,
                 "error": type(exc).__name__,
             },
             calls_real_llm,
@@ -510,6 +636,8 @@ async def answer_generator_node(state: EnterpriseRAGGraphState) -> EnterpriseRAG
     graph_debug.update(
         {
             "answer_generator": model_debug.get("answer_generator"),
+            "answer_synthesis_profile": model_debug.get("answer_synthesis_profile"),
+            "answer_synthesis_mode": model_debug.get("answer_synthesis_mode"),
             "calls_llm": calls_real_llm,
             "calls_real_llm": calls_real_llm,
         }

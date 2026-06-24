@@ -280,6 +280,12 @@ async def enterprise_agent_query(
         if graph_model_debug:
             model_debug["answer_generator"] = graph_model_debug.get("answer_generator")
             model_debug["answer_provider"] = graph_model_debug.get("provider")
+            model_debug["answer_synthesis_profile"] = graph_model_debug.get(
+                "answer_synthesis_profile"
+            )
+            model_debug["answer_synthesis_mode"] = graph_model_debug.get(
+                "answer_synthesis_mode"
+            )
         graph_debug = dict(result.get("graph_debug") or {})
         if graph_debug:
             graph_debug["nodes_executed"] = list(graph_debug.get("nodes_executed") or [])

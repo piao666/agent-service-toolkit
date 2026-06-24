@@ -21,6 +21,7 @@ os.environ.setdefault("ENTERPRISE_PLANNER_MODE", "debug_only")
 
 import httpx  # noqa: E402
 
+from agents.enterprise_rag_graph import build_answer_synthesis_instruction  # noqa: E402
 from rag.config import rag_settings  # noqa: E402
 from service.service import app  # noqa: E402
 
@@ -50,6 +51,32 @@ def _nodes(payload: dict[str, Any]) -> list[str]:
     return list((payload.get("graph_debug") or {}).get("nodes_executed") or [])
 
 
+def _check_answer_synthesis_helper() -> dict[str, Any]:
+    sources = [
+        {
+            "source_id": "fastapi_docs",
+            "title": "FastAPI Request Body",
+            "doc_type": "html",
+            "chunk_id": "fastapi-body-001",
+            "content_preview": (
+                "FastAPI Request Body definitions use Pydantic models and endpoint schemas."
+            ),
+        }
+    ]
+    before_sequence = [source.get("source_id") for source in sources]
+    instruction = build_answer_synthesis_instruction(
+        "How does FastAPI define Request Body?",
+        sources,
+    )
+    after_sequence = [source.get("source_id") for source in sources]
+    return {
+        "keyword_coverage_hint_present": "key user/source terms" in instruction,
+        "answer_synthesis_profile_present": "keyword_coverage_v1" in instruction,
+        "source_id_sequence_unchanged": before_sequence == after_sequence,
+        "empty_sources_safe": bool(build_answer_synthesis_instruction("What is RAG?", [])),
+    }
+
+
 def _check_payload(
     *,
     status_code: int,
@@ -60,6 +87,7 @@ def _check_payload(
     graph_debug = payload.get("graph_debug") or {}
     planner_debug = payload.get("planner_debug") or {}
     judge_debug = payload.get("judge_debug") or {}
+    model_debug = payload.get("model_debug") or {}
     nodes = _nodes(payload)
     planner_mode = rag_settings.planner_mode
 
@@ -79,6 +107,13 @@ def _check_payload(
         errors.append("judge_debug_missing")
     if graph_debug.get("writes_chroma") is not False:
         errors.append("writes_chroma_not_false")
+    if (
+        model_debug.get("answer_synthesis_profile")
+        and model_debug.get("answer_synthesis_profile") != "keyword_coverage_v1"
+    ):
+        errors.append("answer_synthesis_profile_unexpected")
+    if "answer_generator" in nodes and not model_debug.get("answer_synthesis_profile"):
+        errors.append("answer_synthesis_profile_missing")
     has_multi_hop_node = "multi_hop_retriever" in nodes
     if planner_mode == "active" and case["expect_multi_hop"] and not has_multi_hop_node:
         errors.append("multi_hop_retriever_missing")
@@ -96,6 +131,7 @@ def _check_payload(
 
 
 async def run_smoke() -> dict[str, Any]:
+    helper_summary = _check_answer_synthesis_helper()
     original_graph_mode = rag_settings.ENTERPRISE_AGENT_GRAPH_MODE
     original_memory_mode = rag_settings.ENTERPRISE_MEMORY_MODE
     original_verifier_mode = rag_settings.ENTERPRISE_EVIDENCE_VERIFIER_MODE
@@ -150,6 +186,9 @@ async def run_smoke() -> dict[str, Any]:
                         "planner_debug_present": bool(payload.get("planner_debug")),
                         "planner_mode": rag_settings.planner_mode,
                         "judge_debug_present": bool(payload.get("judge_debug")),
+                        "answer_synthesis_profile": (
+                            payload.get("model_debug") or {}
+                        ).get("answer_synthesis_profile"),
                         "nodes_executed": _nodes(payload),
                         "writes_chroma": bool(
                             (payload.get("graph_debug") or {}).get("writes_chroma", False)
@@ -176,6 +215,7 @@ async def run_smoke() -> dict[str, Any]:
         "calls_real_llm": False,
         "writes_chroma": False,
         "runs_240_case": False,
+        **helper_summary,
         "error_count": len(errors),
         "errors": errors,
         "results": results,
@@ -189,6 +229,10 @@ async def run_smoke() -> dict[str, Any]:
         and summary["writes_chroma"] is False
         and summary["calls_real_llm"] is False
         and summary["runs_240_case"] is False
+        and summary["keyword_coverage_hint_present"] is True
+        and summary["answer_synthesis_profile_present"] is True
+        and summary["source_id_sequence_unchanged"] is True
+        and summary["empty_sources_safe"] is True
         and summary["error_count"] == 0
     )
     return summary
@@ -201,4 +245,6 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    exit_code = main()
+    sys.stdout.flush()
+    os._exit(exit_code)

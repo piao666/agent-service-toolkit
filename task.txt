@@ -2383,3 +2383,23 @@ Status: completed locally; pending checkpoint.
   retrieval/data/chunk gaps.
 - Raw Phase 7E-4B result artifacts are not checkpointed here because source previews may contain
   secret-like sample text from corpus content; diagnosis outputs passed leak checks.
+
+Phase 7E-5A: Answer Synthesis / Keyword Coverage Minimal Alignment
+------------------------------------------------------------------
+Status: completed locally; pending checkpoint.
+
+- Added a custom_graph-only answer synthesis instruction helper for conservative keyword coverage.
+- Added `answer_synthesis_profile=keyword_coverage_v1` / `answer_synthesis_mode=keyword_coverage_v1`
+  to custom_graph model/debug metadata.
+- The patch only affects custom_graph answer synthesis instruction/context construction.
+- It does not change retrieval, Chroma, chunking, embeddings, source ordering, source serialization,
+  verifier behavior, judge behavior, multi-hop routing, or the legacy endpoint path.
+- Local smoke verifies that the keyword coverage hint exists, source_id sequence remains unchanged,
+  empty-source instruction construction is safe, and custom_graph endpoint responses expose the
+  answer synthesis profile.
+- No LLM call was made locally.
+- No HPC run was executed locally.
+- No full 240-case run was executed locally.
+- No Chroma write was performed.
+- Next required step: Phase 7E-5B HPC delta rerun with top_k=10 to determine whether the
+  keyword coverage alignment reduces same-source answer differences.
