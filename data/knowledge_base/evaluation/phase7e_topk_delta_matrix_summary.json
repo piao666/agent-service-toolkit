@@ -1,0 +1,42 @@
+{
+  "results": {
+    "5": {
+      "top_k": 5,
+      "legacy_bad": 12,
+      "custom_bad": 16,
+      "gap": 4,
+      "source_miss_c": 6,
+      "doc_type_miss_c": 9,
+      "only_custom": 5,
+      "only_legacy": 1,
+      "custom_le_legacy": false,
+      "error": 0
+    },
+    "8": {
+      "top_k": 8,
+      "legacy_bad": 10,
+      "custom_bad": 15,
+      "gap": 5,
+      "source_miss_c": 4,
+      "doc_type_miss_c": 7,
+      "only_custom": 6,
+      "only_legacy": 1,
+      "custom_le_legacy": false,
+      "error": 0
+    },
+    "10": {
+      "top_k": 10,
+      "legacy_bad": 11,
+      "custom_bad": 12,
+      "gap": 1,
+      "source_miss_c": 4,
+      "doc_type_miss_c": 7,
+      "only_custom": 3,
+      "only_legacy": 2,
+      "custom_le_legacy": false,
+      "error": 0
+    }
+  },
+  "best": "10",
+  "candidate_for_full_240": false
+}
