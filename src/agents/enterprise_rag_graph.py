@@ -713,6 +713,11 @@ def route_after_planner(state: EnterpriseRAGGraphState) -> str:
         return "safe_response"
     planner_debug = dict(state.get("planner_debug") or {})
     if planner_debug.get("requires_multi_hop") is True:
+        if rag_settings.multi_hop_mode == "off":
+            planner_debug["multi_hop_disabled_by_config"] = True
+            planner_debug["multi_hop_mode"] = "off"
+            state["planner_debug"] = planner_debug
+            return "retriever"  # Phase 7D: ablation — skip multi_hop
         return "multi_hop_retriever"
     return "retriever"
 

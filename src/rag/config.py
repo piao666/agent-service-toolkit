@@ -38,6 +38,7 @@ class RagSettings(BaseSettings):
     ENTERPRISE_AGENT_GRAPH_MODE: str = "legacy"
     ENTERPRISE_LLM_JUDGE_MODE: str | None = None
     ENTERPRISE_JUDGE_MODE: str = "rule_based_fallback"
+    ENTERPRISE_MULTI_HOP_MODE: str = "off"  # Phase 7D: "off" | "rule_based"
     RAG_CHUNK_SIZE: int = 800
     RAG_CHUNK_OVERLAP: int = 120
     RAG_DEFAULT_TOP_K: int = 5
@@ -88,6 +89,16 @@ class RagSettings(BaseSettings):
         )
         mode = configured_mode.strip().lower()
         return mode if mode in {"off", "rule_based_fallback"} else "rule_based_fallback"
+
+    @property
+    def multi_hop_mode(self) -> str:
+        configured_mode = (
+            os.getenv("ENTERPRISE_MULTI_HOP_MODE")
+            or self.ENTERPRISE_MULTI_HOP_MODE
+            or "off"
+        )
+        mode = configured_mode.strip().lower()
+        return mode if mode in {"off", "rule_based"} else "off"
 
 
 rag_settings = RagSettings()
