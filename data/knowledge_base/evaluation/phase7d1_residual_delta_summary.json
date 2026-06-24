@@ -1,0 +1,58 @@
+{
+  "calls_llm": false,
+  "custom_graph_bad_case_count": 101,
+  "custom_graph_calibrated_bad_case_count": 101,
+  "input_results": "data\\knowledge_base\\evaluation\\phase7d1_multihop_off_deepseek_240_results.jsonl",
+  "input_summary": "data\\knowledge_base\\evaluation\\phase7d1_multihop_off_deepseek_240_summary.json",
+  "judge_side_effect_found": true,
+  "legacy_bad_case_count": 97,
+  "legacy_calibrated_bad_case_count": 97,
+  "only_custom_bad_case_ids": [
+    "exp_003",
+    "exp_021",
+    "exp_029",
+    "exp_041",
+    "exp_058",
+    "exp_062",
+    "exp_078",
+    "exp_118",
+    "exp_174"
+  ],
+  "only_custom_bad_count": 9,
+  "only_custom_judge_verdict_distribution": {
+    "needs_review": 6,
+    "pass": 3
+  },
+  "only_custom_planner_type_distribution": {
+    "complex": 1,
+    "simple": 8
+  },
+  "only_custom_root_cause_distribution": {
+    "judge_side_effect": 6,
+    "keyword_miss": 9,
+    "planner_side_effect": 1
+  },
+  "only_legacy_bad_case_ids": [
+    "exp_034",
+    "exp_035",
+    "exp_039",
+    "exp_093",
+    "exp_185"
+  ],
+  "only_legacy_bad_count": 5,
+  "phase": "7D-1b_residual_delta_diagnosis",
+  "planner_side_effect_found": true,
+  "recommend_defer_conservative_multi_hop_gate": true,
+  "recommend_judge_ablation": true,
+  "recommend_planner_debug_only_ablation": true,
+  "recommendations": [
+    "Run judge ablation before changing retrieval policy because only-custom deltas include judge_side_effect signals.",
+    "Run planner debug-only ablation if planner_side_effect persists after judge ablation.",
+    "Inspect answer generation and source ordering for only-custom deltas that have retrieval_order_diff.",
+    "Defer conservative multi-hop gate changes until judge/planner residual deltas are isolated."
+  ],
+  "retrieval_order_diff_found": false,
+  "runs_240_case": false,
+  "runs_benchmark": false,
+  "writes_chroma": false
+}
