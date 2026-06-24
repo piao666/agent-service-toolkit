@@ -2356,3 +2356,30 @@ Status: implemented locally; pending checkpoint.
 - The analyzer exits cleanly when the future HPC result files are not present.
 - This phase does not change core RAG/Agent strategy, does not call a real LLM, does not run
   240 cases locally, and does not write Chroma.
+
+Phase 7E-4C: Answer / Source Alignment Diagnosis
+------------------------------------------------
+Status: completed locally; pending checkpoint.
+
+- Ran offline answer/source alignment diagnosis on Phase 7E-4B persisted result artifacts.
+- Phase 7E-4B delta summary:
+  - case_count=20
+  - request_count=40
+  - legacy_bad=11
+  - custom_graph_bad=13
+  - custom_graph_error_count=0
+  - custom_graph_timeout_count=0
+- only_custom_bad case ids: exp_034, exp_041, exp_058, exp_193.
+- only_legacy_bad case ids: exp_039, exp_059.
+- Alignment signals for only_custom_bad:
+  - same_sources_answer_diff=4
+  - suspected_stochastic_or_synthesis_diff=4
+  - source_order_diff=0
+  - source_serialization_diff=0
+  - prompt_profile_diff=0
+  - source_missing_or_doc_type_gap=0
+- Interpretation: the remaining gap in this delta run is more consistent with answer synthesis /
+  keyword coverage differences than with source ordering, source persistence, prompt profile, or
+  retrieval/data/chunk gaps.
+- Raw Phase 7E-4B result artifacts are not checkpointed here because source previews may contain
+  secret-like sample text from corpus content; diagnosis outputs passed leak checks.
