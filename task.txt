@@ -2275,7 +2275,7 @@ Status: checkpointed in `0d5ad03 phase-7d2 judge ablation results`.
 
 Phase 7D-3: Planner Debug-only Mode
 -----------------------------------
-Status: implemented locally and ready for checkpoint.
+Status: checkpointed in `d0e86dc phase-7d3 planner debug only mode`.
 
 - Added `ENTERPRISE_PLANNER_MODE=active|debug_only`.
 - Default is `debug_only`.
@@ -2284,3 +2284,41 @@ Status: implemented locally and ready for checkpoint.
 - In debug-only mode, planner does not trigger multi-hop routing.
 - In debug-only mode, planner does not convert a request into ambiguous or unsupported routing.
 - Goal: isolate planner side effects without losing planner observability.
+
+Phase 7D-4A: Delta Verifier / Judge Matrix
+------------------------------------------
+Status: checkpointed in `43a9c22 phase-7d4a verifier judge matrix results`.
+
+- Tested verifier/judge combinations on Phase 7D delta cases.
+- No verifier/judge combination made custom_graph less than or equal to legacy.
+- Matrix result:
+  - verifier=rule_based, judge=rule_based_fallback: legacy bad=3, custom bad=6.
+  - verifier=rule_based, judge=off: legacy bad=3, custom bad=7.
+  - verifier=off, judge=off: legacy bad=5, custom bad=7.
+  - verifier=off, judge=rule_based_fallback: legacy bad=2, custom bad=5.
+- Conclusion: verifier/judge tuning does not explain the remaining Phase 7D-3 residual gap.
+- Current best tested configuration remains Phase 7D-3:
+  - multi-hop=off
+  - planner=debug_only
+  - judge=on
+- Next diagnostic direction: source coverage / retrieval top_k control-variable testing.
+
+Phase 7E-1: Source Coverage / Top-K Eval Preparation
+----------------------------------------------------
+Status: prepared locally; pending checkpoint.
+
+- Added an offline preparation script for future HPC top_k/source coverage tests.
+- The script selects delta cases from Phase 7D-3 residual artifacts when available, otherwise derives
+  them from local Phase 7D-3 240-case result artifacts.
+- Outputs:
+  - `data/knowledge_base/evaluation/phase7e_topk_delta_cases.jsonl`
+  - `data/knowledge_base/evaluation/phase7e_topk_source_coverage_plan.json`
+- Fixed variables for the next run:
+  - multi-hop=off
+  - planner=debug_only
+  - judge=rule_based_fallback
+  - verifier=rule_based
+- Control variable:
+  - top_k=5/8/10
+- This preparation does not call an endpoint, does not call a real LLM, does not run 240 cases, and
+  does not write Chroma.
