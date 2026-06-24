@@ -8,7 +8,9 @@ legacy-vs-custom_graph run. It does not write Chroma and it only calls endpoints
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import time
 import urllib.error
 import urllib.request
@@ -24,6 +26,9 @@ DEFAULT_SUMMARY = EVAL_DIR / "phase7c_enriched_deepseek_240_summary.json"
 
 DEFAULT_LEGACY_URL = "http://127.0.0.1:8011/enterprise/agent/query"
 DEFAULT_CUSTOM_GRAPH_URL = "http://127.0.0.1:8012/enterprise/agent/query"
+ANSWER_PREVIEW_CHARS = 800
+SOURCE_PREVIEW_CHARS = 500
+MAX_PERSISTED_SOURCES = 10
 
 
 def parse_args() -> argparse.Namespace:
@@ -86,6 +91,82 @@ def source_text(source: dict[str, Any]) -> str:
         if value
     )
     return " ".join(values).lower()
+
+
+def text_hash(value: str) -> str | None:
+    if not value:
+        return None
+    return hashlib.sha256(value.encode("utf-8")).hexdigest()
+
+
+def first_text_value(*values: Any) -> str | None:
+    for value in values:
+        if isinstance(value, str) and value.strip():
+            return value
+    return None
+
+
+def source_field(source: dict[str, Any], *keys: str) -> Any:
+    metadata = source.get("metadata") if isinstance(source.get("metadata"), dict) else {}
+    for key in keys:
+        value = source.get(key)
+        if value not in (None, ""):
+            return value
+        value = metadata.get(key)
+        if value not in (None, ""):
+            return value
+    return None
+
+
+def source_content(source: dict[str, Any]) -> str:
+    metadata = source.get("metadata") if isinstance(source.get("metadata"), dict) else {}
+    return first_text_value(
+        source.get("content_preview"),
+        source.get("preview"),
+        source.get("content"),
+        source.get("text"),
+        metadata.get("content_preview"),
+        metadata.get("preview"),
+        metadata.get("content"),
+        metadata.get("text"),
+    ) or ""
+
+
+def source_previews(sources: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    previews: list[dict[str, Any]] = []
+    for rank, source in enumerate(sources[:MAX_PERSISTED_SOURCES], start=1):
+        content = source_content(source)
+        previews.append(
+            {
+                "rank": rank,
+                "source_id": source_field(source, "source_id", "doc_id", "source"),
+                "source_url": source_field(source, "source_url"),
+                "title": source_field(source, "title"),
+                "doc_type": source_field(source, "doc_type"),
+                "chunk_id": source_field(source, "chunk_id"),
+                "score": source_field(source, "score", "relevance_score", "distance"),
+                "content_preview": content[:SOURCE_PREVIEW_CHARS],
+                "content_sha256": text_hash(content),
+            }
+        )
+    return previews
+
+
+def sequence_from_sources(sources: list[dict[str, Any]], *keys: str) -> list[Any]:
+    return [source_field(source, *keys) for source in sources[:MAX_PERSISTED_SOURCES]]
+
+
+def prompt_profile(mode: str, top_k: int) -> dict[str, Any]:
+    return {
+        "mode": mode,
+        "agent_graph_mode": "legacy" if mode == "legacy" else "custom_graph",
+        "planner_mode": os.getenv("ENTERPRISE_PLANNER_MODE"),
+        "multi_hop_mode": os.getenv("ENTERPRISE_MULTI_HOP_MODE"),
+        "judge_mode": os.getenv("ENTERPRISE_LLM_JUDGE_MODE")
+        or os.getenv("ENTERPRISE_JUDGE_MODE"),
+        "evidence_verifier_mode": os.getenv("ENTERPRISE_EVIDENCE_VERIFIER_MODE"),
+        "top_k": top_k,
+    }
 
 
 def contains_any(text: str, needles: list[str]) -> bool:
@@ -229,6 +310,7 @@ def build_result(
     status_code: int,
     latency_ms: float,
     error: str | None,
+    top_k: int,
 ) -> dict[str, Any]:
     answer = str(payload.get("answer") or "")
     sources = payload.get("sources") if isinstance(payload.get("sources"), list) else []
@@ -249,8 +331,17 @@ def build_result(
         "expected_doc_type": case["expected_doc_type"],
         "expected_keywords": case["expected_keywords"],
         "answer_non_empty": bool(answer.strip()),
+        "answer_preview": answer[:ANSWER_PREVIEW_CHARS],
+        "answer_chars": len(answer),
+        "answer_sha256": text_hash(answer),
         "schema_valid": all(key in payload for key in ("answer", "sources", "retrieval_debug")),
+        "sources_persisted": bool(sources),
+        "sources_persisted_reason": "sources_present" if sources else "response_sources_empty_or_missing",
         "source_count": len(sources),
+        "source_previews": source_previews(sources),
+        "source_id_sequence": sequence_from_sources(sources, "source_id", "doc_id", "source"),
+        "doc_type_sequence": sequence_from_sources(sources, "doc_type"),
+        "chunk_id_sequence": sequence_from_sources(sources, "chunk_id"),
         "source_hit": check_source_hit(sources, case["expected_source_id"]),
         "doc_type_hit": check_doc_type_hit(sources, case["expected_doc_type"]),
         "keyword_hit": check_keyword_hit(
@@ -276,6 +367,7 @@ def build_result(
         "requires_multi_hop": requires_multi_hop,
         "multi_hop_enabled": "multi_hop_retriever" in nodes,
         "judge_verdict": judge_debug.get("verdict") or judge_debug.get("status"),
+        "prompt_profile": prompt_profile(mode, top_k),
         "graph_debug_present": bool(graph_debug),
         "graph_mode": graph_debug.get("graph_mode"),
         "nodes_executed_count": len(nodes),
@@ -407,6 +499,7 @@ def main() -> int:
                     status_code=status,
                     latency_ms=latency_ms,
                     error=error,
+                    top_k=args.top_k,
                 )
             )
 

@@ -2322,3 +2322,37 @@ Status: prepared locally; pending checkpoint.
   - top_k=5/8/10
 - This preparation does not call an endpoint, does not call a real LLM, does not run 240 cases, and
   does not write Chroma.
+
+Phase 7E-2: Top-K Source Coverage Matrix
+----------------------------------------
+Status: checkpointed in `e8ea4b8 phase-7e topk source coverage matrix results` and
+`3e30fa4 phase-7e topk source coverage result artifacts`.
+
+- top_k=5: legacy bad=12, custom bad=16, gap=+4, only_custom=5.
+- top_k=8: legacy bad=10, custom bad=15, gap=+5, only_custom=6.
+- top_k=10: legacy bad=11, custom bad=12, gap=+1, only_custom=3.
+- Conclusion: top_k=10 is the best delta-case setting so far, but custom_graph still does not
+  meet `custom_graph <= legacy`.
+
+Phase 7E-3: TopK=10 Residual Diagnosis
+--------------------------------------
+Status: checkpointed in `ded9f07 phase-7e topk10 residual diagnosis`.
+
+- top_k=10 only_custom_bad case ids: exp_041, exp_058, exp_134.
+- top_k=10 only_legacy_bad case ids: exp_034, exp_193.
+- only_custom root-cause signals: keyword_still_missing=3, answer_synthesis_diff=3,
+  source_serialization_not_persisted=3.
+- Current JSONL did not persist full answer/source previews or source ordering, so source ordering
+  and serialization differences cannot be safely diagnosed yet.
+- Recommendation: add answer/source persistence instrumentation before changing strategy.
+
+Phase 7E-4A: Answer / Source Persistence Instrumentation
+--------------------------------------------------------
+Status: implemented locally; pending checkpoint.
+
+- Enhanced the enriched regression runner to persist bounded answer previews, answer hashes,
+  source previews, source sequences, and prompt profiles.
+- Added an offline answer/source alignment analyzer for future Phase 7E-4B artifacts.
+- The analyzer exits cleanly when the future HPC result files are not present.
+- This phase does not change core RAG/Agent strategy, does not call a real LLM, does not run
+  240 cases locally, and does not write Chroma.
