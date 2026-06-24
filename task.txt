@@ -2235,3 +2235,52 @@ Status: completed locally; pending checkpoint.
 - No core RAG strategy, planner rule, judge rule, retriever, service endpoint, Chroma data, or
   README was changed in this phase.
 - Boundaries: no HPC run, no real DeepSeek call, no 240-case run, no benchmark, and no Chroma write.
+
+Phase 7D-1: Multi-hop Ablation
+------------------------------
+Status: checkpointed in `50f781b phase-7d1 multihop ablation results`.
+
+- Added `ENTERPRISE_MULTI_HOP_MODE=off|rule_based`.
+- Phase 7D-1 disables multi-hop routing while preserving planner visibility.
+- Result: multi_hop_enabled changed from 20 to 0.
+- custom_graph bad_case_count improved from 105 to 101.
+- legacy bad_case_count improved from 100 to 97.
+- custom_graph remained worse than legacy: 101 vs 97.
+- only_custom_bad = 9.
+- only_legacy_bad = 5.
+- Conclusion: multi-hop was one degradation source, but not the only residual delta.
+
+Phase 7D-1b: Residual Delta Diagnosis
+-------------------------------------
+Status: checkpointed in `d4c0fd2 phase-7d1 residual delta diagnosis`.
+
+- Offline analysis only; no endpoint requests, no LLM call, no 240-case rerun, and no Chroma write.
+- only_custom_bad case ids: exp_003, exp_021, exp_029, exp_041, exp_058, exp_062, exp_078,
+  exp_118, exp_174.
+- only_legacy_bad case ids: exp_034, exp_035, exp_039, exp_093, exp_185.
+- only_custom root-cause signals: keyword_miss=9, judge_side_effect=6, planner_side_effect=1.
+- retrieval_order_diff was not observed in the available delta diagnostics.
+- Recommended next isolation steps: judge ablation first, then planner debug-only ablation if
+  planner side effects remain visible.
+
+Phase 7D-2: Judge-off Ablation
+------------------------------
+Status: checkpointed in `0d5ad03 phase-7d2 judge ablation results`.
+
+- Phase 7C: multi_hop=on, judge=on, custom bad=105, legacy bad=100.
+- Phase 7D-1: multi_hop=off, judge=on, custom bad=101, legacy bad=97.
+- Phase 7D-2: multi_hop=off, judge=off, custom bad=107, legacy bad=100.
+- Conclusion: closing the judge did not improve the custom graph; it made the result worse.
+- Current best tested configuration remains Phase 7D-1: multi_hop=off, judge=on.
+
+Phase 7D-3: Planner Debug-only Mode
+-----------------------------------
+Status: implemented locally and ready for checkpoint.
+
+- Added `ENTERPRISE_PLANNER_MODE=active|debug_only`.
+- Default is `debug_only`.
+- In debug-only mode, planner still runs and writes `planner_debug`.
+- In debug-only mode, planner does not change `query_type`.
+- In debug-only mode, planner does not trigger multi-hop routing.
+- In debug-only mode, planner does not convert a request into ambiguous or unsupported routing.
+- Goal: isolate planner side effects without losing planner observability.

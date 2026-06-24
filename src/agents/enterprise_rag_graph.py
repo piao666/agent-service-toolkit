@@ -165,6 +165,21 @@ async def planner_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphStat
     )
     planner_debug = plan.as_debug()
     graph_debug = _append_node(state, "planner")
+    planner_mode = rag_settings.planner_mode
+    planner_debug["planner_mode"] = planner_mode
+    planner_debug["side_effects_enabled"] = planner_mode == "active"
+    if planner_mode == "debug_only":
+        planner_debug["debug_only_original_planner_type"] = planner_debug.get("planner_type")
+        if planner_debug.get("requires_multi_hop") is True:
+            planner_debug["multi_hop_disabled_by_planner_debug_only"] = True
+        graph_debug["planner"] = planner_debug
+        return {
+            "query_type": state.get("query_type"),
+            "planner_debug": planner_debug,
+            "sub_queries": [],
+            "graph_debug": graph_debug,
+        }
+
     graph_debug["planner"] = planner_debug
     query_type = state.get("query_type")
     if plan.planner_type == "multi_hop":
@@ -711,6 +726,8 @@ def route_after_planner(state: EnterpriseRAGGraphState) -> str:
         return "clarification_response"
     if query_type == "unsupported_query":
         return "safe_response"
+    if rag_settings.planner_mode == "debug_only":
+        return "retriever"
     planner_debug = dict(state.get("planner_debug") or {})
     if planner_debug.get("requires_multi_hop") is True:
         if rag_settings.multi_hop_mode == "off":

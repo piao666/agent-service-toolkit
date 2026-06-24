@@ -99,3 +99,27 @@ The planner runs after memory rewriting, so follow-up queries can be planned aga
 contextualized query. Multi-hop retrieval keeps the full contextual query and adds up to two
 subqueries. Retriever, verifier, and judge failures are recorded in debug fields and should not
 turn a single local component failure into an endpoint-level 500.
+
+## Phase 7D Planner Isolation
+
+Phase 7D-2 tested a judge-off ablation after multi-hop had already been disabled. The result was
+worse than Phase 7D-1:
+
+```text
+Phase 7C: multi_hop=on, judge=on, custom bad=105, legacy bad=100
+Phase 7D-1: multi_hop=off, judge=on, custom bad=101, legacy bad=97
+Phase 7D-2: multi_hop=off, judge=off, custom bad=107, legacy bad=100
+```
+
+The judge-off result does not support disabling the judge. The current best tested configuration
+remains Phase 7D-1: `multi_hop=off`, `judge=on`.
+
+Phase 7D-3 introduces:
+
+```text
+ENTERPRISE_PLANNER_MODE=active|debug_only
+```
+
+The default is `debug_only`. In this mode, the planner still runs and writes `planner_debug`, but
+it does not change `query_type`, does not route to multi-hop, and does not convert a query into an
+ambiguous or unsupported route. This isolates planner side effects while preserving observability.

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 import sys
 from pathlib import Path
 from typing import Any
@@ -82,7 +83,12 @@ def _nodes(response: dict[str, Any]) -> list[str]:
     return list((response.get("graph_debug") or {}).get("nodes_executed") or [])
 
 
-def _check_case(case: dict[str, Any], response: dict[str, Any]) -> list[str]:
+def _check_case(
+    case: dict[str, Any],
+    response: dict[str, Any],
+    *,
+    planner_mode: str,
+) -> list[str]:
     errors: list[str] = []
     nodes = _nodes(response)
     planner_debug = response.get("planner_debug") or {}
@@ -111,9 +117,24 @@ def _check_case(case: dict[str, Any], response: dict[str, Any]) -> list[str]:
     requires_multi_hop = planner_debug.get("requires_multi_hop") is True
     if expected_multi_hop is not None and requires_multi_hop is not expected_multi_hop:
         errors.append("requires_multi_hop_mismatch")
-    if expected_multi_hop and "multi_hop_retriever" not in nodes:
+    if planner_mode == "active" and expected_multi_hop and "multi_hop_retriever" not in nodes:
         errors.append("multi_hop_retriever_missing")
-    if not expected_multi_hop and "multi_hop_retriever" in nodes:
+    if planner_mode == "debug_only" and "multi_hop_retriever" in nodes:
+        errors.append("debug_only_unexpected_multi_hop_retriever")
+    if (
+        planner_mode == "debug_only"
+        and planner_debug
+        and "planner" in nodes
+        and planner_debug.get("side_effects_enabled") is not False
+    ):
+        errors.append("debug_only_side_effects_not_disabled")
+    if (
+        planner_mode == "debug_only"
+        and expected_multi_hop
+        and planner_debug.get("multi_hop_disabled_by_planner_debug_only") is not True
+    ):
+        errors.append("debug_only_multi_hop_not_marked_disabled")
+    if planner_mode == "active" and not expected_multi_hop and "multi_hop_retriever" in nodes:
         errors.append("unexpected_multi_hop_retriever")
 
     if expected_multi_hop:
@@ -126,7 +147,7 @@ def _check_case(case: dict[str, Any], response: dict[str, Any]) -> list[str]:
     return errors
 
 
-async def run_smoke() -> dict[str, Any]:
+async def run_mode_smoke(planner_mode: str) -> dict[str, Any]:
     cases = _load_cases()
     graph = build_enterprise_rag_graph(
         retriever=fake_retriever,
@@ -138,6 +159,8 @@ async def run_smoke() -> dict[str, Any]:
     multi_hop_enabled_count = 0
     judge_debug_present_count = 0
     planner_debug_present_count = 0
+    multi_hop_retriever_count = 0
+    debug_only_disabled_count = 0
 
     for case in cases:
         response = await run_enterprise_rag_graph(
@@ -146,24 +169,31 @@ async def run_smoke() -> dict[str, Any]:
             return_sources=True,
             graph=graph,
         )
-        case_errors = _check_case(case, response)
+        case_errors = _check_case(case, response, planner_mode=planner_mode)
         planner_debug = response.get("planner_debug") or {}
         judge_debug = response.get("judge_debug") or {}
+        nodes = _nodes(response)
         if planner_debug:
             planner_debug_present_count += 1
         if judge_debug:
             judge_debug_present_count += 1
         if planner_debug.get("requires_multi_hop") is True:
             multi_hop_enabled_count += 1
+        if "multi_hop_retriever" in nodes:
+            multi_hop_retriever_count += 1
+        if planner_debug.get("multi_hop_disabled_by_planner_debug_only") is True:
+            debug_only_disabled_count += 1
         if case_errors:
             errors.append({"case_id": case["case_id"], "errors": case_errors})
         results.append(
             {
                 "case_id": case["case_id"],
                 "case_type": case["case_type"],
+                "planner_mode": planner_mode,
                 "planner_type": planner_debug.get("planner_type"),
+                "side_effects_enabled": planner_debug.get("side_effects_enabled"),
                 "requires_multi_hop": planner_debug.get("requires_multi_hop"),
-                "nodes_executed": _nodes(response),
+                "nodes_executed": nodes,
                 "judge_mode": judge_debug.get("judge_mode"),
                 "error_count": len(case_errors),
             }
@@ -171,9 +201,13 @@ async def run_smoke() -> dict[str, Any]:
 
     summary = {
         "phase": "7A_planner_multihop_judge_prototype",
+        "planner_mode": planner_mode,
+        "planner_side_effects_enabled": planner_mode == "active",
         "case_count": len(cases),
         "planner_debug_present_count": planner_debug_present_count,
         "multi_hop_enabled_count": multi_hop_enabled_count,
+        "multi_hop_retriever_count": multi_hop_retriever_count,
+        "multi_hop_disabled_by_planner_debug_only": debug_only_disabled_count,
         "judge_debug_present_count": judge_debug_present_count,
         "rule_based_planner": True,
         "rule_based_judge": True,
@@ -188,12 +222,69 @@ async def run_smoke() -> dict[str, Any]:
         summary["case_count"] >= 8
         and summary["planner_debug_present_count"] == summary["case_count"]
         and summary["multi_hop_enabled_count"] >= 2
+        and (
+            (
+                planner_mode == "active"
+                and summary["multi_hop_retriever_count"] >= 2
+            )
+            or (
+                planner_mode == "debug_only"
+                and summary["multi_hop_retriever_count"] == 0
+                and summary["multi_hop_disabled_by_planner_debug_only"] >= 2
+            )
+        )
         and summary["judge_debug_present_count"] >= summary["case_count"] - 2
         and summary["calls_real_llm"] is False
         and summary["writes_chroma"] is False
         and summary["runs_240_case"] is False
         and summary["error_count"] == 0
     )
+    return summary
+
+
+async def run_smoke() -> dict[str, Any]:
+    previous_mode = os.environ.get("ENTERPRISE_PLANNER_MODE")
+    previous_multi_hop_mode = os.environ.get("ENTERPRISE_MULTI_HOP_MODE")
+    try:
+        os.environ["ENTERPRISE_PLANNER_MODE"] = "active"
+        os.environ["ENTERPRISE_MULTI_HOP_MODE"] = "rule_based"
+        active_summary = await run_mode_smoke("active")
+        os.environ["ENTERPRISE_PLANNER_MODE"] = "debug_only"
+        os.environ["ENTERPRISE_MULTI_HOP_MODE"] = "off"
+        debug_only_summary = await run_mode_smoke("debug_only")
+    finally:
+        if previous_mode is None:
+            os.environ.pop("ENTERPRISE_PLANNER_MODE", None)
+        else:
+            os.environ["ENTERPRISE_PLANNER_MODE"] = previous_mode
+        if previous_multi_hop_mode is None:
+            os.environ.pop("ENTERPRISE_MULTI_HOP_MODE", None)
+        else:
+            os.environ["ENTERPRISE_MULTI_HOP_MODE"] = previous_multi_hop_mode
+
+    summary = {
+        "phase": "7A_planner_multihop_judge_prototype",
+        "planner_mode": "active_and_debug_only",
+        "active": active_summary,
+        "debug_only": debug_only_summary,
+        "case_count": active_summary["case_count"],
+        "planner_debug_present_count": debug_only_summary["planner_debug_present_count"],
+        "multi_hop_enabled_count": active_summary["multi_hop_enabled_count"],
+        "judge_debug_present_count": debug_only_summary["judge_debug_present_count"],
+        "planner_side_effects_enabled": {
+            "active": True,
+            "debug_only": False,
+        },
+        "multi_hop_disabled_by_planner_debug_only": debug_only_summary[
+            "multi_hop_disabled_by_planner_debug_only"
+        ],
+        "calls_real_llm": False,
+        "writes_chroma": False,
+        "runs_240_case": False,
+        "error_count": active_summary["error_count"] + debug_only_summary["error_count"],
+        "recommended_checkpoint": active_summary["recommended_checkpoint"]
+        and debug_only_summary["recommended_checkpoint"],
+    }
     return summary
 
 

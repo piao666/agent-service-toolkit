@@ -17,6 +17,7 @@ os.environ["ENTERPRISE_AGENT_GRAPH_MODE"] = "custom_graph"
 os.environ["ENTERPRISE_MEMORY_MODE"] = "buffer"
 os.environ["ENTERPRISE_EVIDENCE_VERIFIER_MODE"] = "rule_based"
 os.environ["ENTERPRISE_JUDGE_MODE"] = "rule_based_fallback"
+os.environ.setdefault("ENTERPRISE_PLANNER_MODE", "debug_only")
 
 import httpx  # noqa: E402
 
@@ -60,6 +61,7 @@ def _check_payload(
     planner_debug = payload.get("planner_debug") or {}
     judge_debug = payload.get("judge_debug") or {}
     nodes = _nodes(payload)
+    planner_mode = rag_settings.planner_mode
 
     if status_code != 200:
         errors.append(f"status_code_{status_code}")
@@ -78,9 +80,17 @@ def _check_payload(
     if graph_debug.get("writes_chroma") is not False:
         errors.append("writes_chroma_not_false")
     has_multi_hop_node = "multi_hop_retriever" in nodes
-    if case["expect_multi_hop"] and not has_multi_hop_node:
+    if planner_mode == "active" and case["expect_multi_hop"] and not has_multi_hop_node:
         errors.append("multi_hop_retriever_missing")
-    if not case["expect_multi_hop"] and has_multi_hop_node:
+    if planner_mode == "debug_only" and has_multi_hop_node:
+        errors.append("debug_only_unexpected_multi_hop_retriever")
+    if (
+        planner_mode == "debug_only"
+        and "planner" in nodes
+        and planner_debug.get("side_effects_enabled") is not False
+    ):
+        errors.append("debug_only_side_effects_not_disabled")
+    if planner_mode == "active" and not case["expect_multi_hop"] and has_multi_hop_node:
         errors.append("unexpected_multi_hop_retriever")
     return errors
 
@@ -90,10 +100,15 @@ async def run_smoke() -> dict[str, Any]:
     original_memory_mode = rag_settings.ENTERPRISE_MEMORY_MODE
     original_verifier_mode = rag_settings.ENTERPRISE_EVIDENCE_VERIFIER_MODE
     original_judge_mode = rag_settings.ENTERPRISE_JUDGE_MODE
+    original_planner_mode = rag_settings.ENTERPRISE_PLANNER_MODE
     rag_settings.ENTERPRISE_AGENT_GRAPH_MODE = "custom_graph"
     rag_settings.ENTERPRISE_MEMORY_MODE = "buffer"
     rag_settings.ENTERPRISE_EVIDENCE_VERIFIER_MODE = "rule_based"
     rag_settings.ENTERPRISE_JUDGE_MODE = "rule_based_fallback"
+    rag_settings.ENTERPRISE_PLANNER_MODE = os.environ.get(
+        "ENTERPRISE_PLANNER_MODE",
+        "debug_only",
+    )
 
     results: list[dict[str, Any]] = []
     errors: list[dict[str, Any]] = []
@@ -133,6 +148,7 @@ async def run_smoke() -> dict[str, Any]:
                         "answer_non_empty": bool(payload.get("answer")),
                         "graph_debug_present": bool(payload.get("graph_debug")),
                         "planner_debug_present": bool(payload.get("planner_debug")),
+                        "planner_mode": rag_settings.planner_mode,
                         "judge_debug_present": bool(payload.get("judge_debug")),
                         "nodes_executed": _nodes(payload),
                         "writes_chroma": bool(
@@ -146,9 +162,11 @@ async def run_smoke() -> dict[str, Any]:
         rag_settings.ENTERPRISE_MEMORY_MODE = original_memory_mode
         rag_settings.ENTERPRISE_EVIDENCE_VERIFIER_MODE = original_verifier_mode
         rag_settings.ENTERPRISE_JUDGE_MODE = original_judge_mode
+        rag_settings.ENTERPRISE_PLANNER_MODE = original_planner_mode
 
     summary = {
         "phase": "7A_default_custom_graph_endpoint_smoke",
+        "planner_mode": rag_settings.planner_mode,
         "case_count": len(CASES),
         "status_ok_count": sum(1 for item in results if item["status_code"] == 200),
         "answer_non_empty_count": sum(1 for item in results if item["answer_non_empty"]),
