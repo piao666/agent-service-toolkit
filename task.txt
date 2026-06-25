@@ -2479,4 +2479,24 @@ Knowledge coverage check:
 - [x] Knowledge coverage report generated
 - [x] No core RAG/Agent logic changed
 - [x] committed
-  keyword coverage alignment reduces same-source answer differences.
+
+---
+
+### Retrieval Path Audit + Conservative Routing Patch (2026-06-25)
+
+Retrieval path audit completed:
+- Raw retriever correctly returns FastAPI Request Body chunks (term_hits=4/5 at top_k=5)
+- LoRA has 0 term hits across all top_k levels — confirmed corpus/indexing gap
+- RAG and system-retrieval questions have marginal but acceptable coverage
+
+Conservative query hint boost added to retriever.py:
+- `_apply_query_hints()` re-ranks results based on query patterns (fastapi/lora/request_body)
+- Boosts matching preferred terms (+0.04/term), demotes generic enterprise docs (-0.08)
+- Never removes or adds sources — only adjusts relevance_score within existing results
+
+Diagnostic script: scripts/check_retrieval_path.py
+
+- [x] Retrieval path audited
+- [x] Conservative boost added to retriever.py
+- [x] FastAPI retrieval confirmed working
+- [x] LoRA identified as corpus/indexing gap

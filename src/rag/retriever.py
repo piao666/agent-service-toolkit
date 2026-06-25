@@ -82,6 +82,7 @@ def retrieve(
     for doc, score in results:
         metadata = dict(doc.metadata)
         output.append(_result_from_document(doc.page_content, metadata, float(score)))
+    output = _apply_query_hints(query, output)
     return output
 
 
@@ -342,3 +343,69 @@ def retrieve_with_overlay(
         overlay_debug["boost_applied"] = True
 
     return baseline_results[:resolved_top_k], overlay_debug
+
+
+# ── Phase 8: Conservative query hint boost ──
+
+EXTERNAL_TECH_PATTERNS: dict[str, dict[str, Any]] = {
+    "fastapi": {
+        "preferred_terms": ["fastapi", "request body", "pydantic", "body", "请求体", "路径参数"],
+        "preferred_source_parts": ["fastapi", "pydantic"],
+        "demote_source_parts": ["enterprise_prompt", "enterprise_model_provider", "enterprise_agent_overview"],
+    },
+    "lora": {
+        "preferred_terms": ["lora", "低秩适配", "低秩", "微调", "finetune", "fine-tune", "peft", "qlora"],
+        "preferred_source_parts": ["deep_learning", "nlp"],
+        "demote_source_parts": [],
+    },
+    "request body": {
+        "preferred_terms": ["request body", "pydantic", "basemodel", "参数", "body", "请求体", "field"],
+        "preferred_source_parts": ["fastapi", "pydantic"],
+        "demote_source_parts": ["enterprise_prompt", "enterprise_model_provider", "enterprise_agent_overview"],
+    },
+}
+
+
+def _apply_query_hints(query: str, results: list[RetrievalResult]) -> list[RetrievalResult]:
+    """Conservative query hint boost — re-rank existing results without changing retrieval."""
+    q_lower = query.lower()
+    hints = None
+    for trigger, hint_cfg in EXTERNAL_TECH_PATTERNS.items():
+        if trigger in q_lower:
+            hints = hint_cfg
+            break
+    if hints is None:
+        return results
+
+    for r in results:
+        metadata = getattr(r, "metadata", {}) or {}
+        source_id = str(metadata.get("source_id", "") or getattr(r, "source", "") or "")
+        title = str(metadata.get("title", "") or getattr(r, "title", "") or "")
+        chunk_id = str(metadata.get("chunk_id", "") or getattr(r, "chunk_id", "") or "")
+        content = str(getattr(r, "content_preview", "") or getattr(r, "page_content", "") or "")
+        combined = f"{source_id} {title} {chunk_id} {content}".lower()
+
+        boost = 0.0
+        penalty = 0.0
+
+        # Boost for preferred terms
+        for term in hints.get("preferred_terms", []):
+            if term.lower() in combined:
+                boost += 0.04
+        for part in hints.get("preferred_source_parts", []):
+            if part.lower() in source_id:
+                boost += 0.06
+
+        # Demote generic enterprise docs for external tech queries
+        for part in hints.get("demote_source_parts", []):
+            if part.lower() in source_id:
+                penalty += 0.08
+
+        if boost > 0 or penalty > 0:
+            current = float(getattr(r, "relevance_score", 0.5) or 0.5)
+            new_score = min(max(current + min(boost, 0.20) - min(penalty, 0.10), 0.0), 1.0)
+            r.relevance_score = new_score
+
+    # Re-sort after boost
+    results.sort(key=lambda x: getattr(x, "relevance_score", 0) or 0, reverse=True)
+    return results
