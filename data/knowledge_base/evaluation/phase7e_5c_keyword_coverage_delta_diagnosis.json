@@ -1,0 +1,24 @@
+{
+  "phase": "7E-5C_keyword_coverage_delta_diagnosis",
+  "case_count": 20,
+  "stats": {
+    "stable_custom_good": 6,
+    "suspected_llm_variance": 18,
+    "legacy_regressed": 4,
+    "stable_custom_bad": 12,
+    "suspected_patch_regressed": 5,
+    "legacy_fixed": 1,
+    "suspected_patch_helped": 4,
+    "regressed_custom_bad": 1,
+    "fixed_custom_bad": 1
+  },
+  "summary_4b": {
+    "legacy_bad": 11,
+    "custom_bad": 13
+  },
+  "summary_5b": {
+    "legacy_bad": 14,
+    "custom_bad": 13
+  },
+  "recommendation": "keep"
+}

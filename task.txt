@@ -2401,5 +2401,35 @@ Status: completed locally; pending checkpoint.
 - No HPC run was executed locally.
 - No full 240-case run was executed locally.
 - No Chroma write was performed.
-- Next required step: Phase 7E-5B HPC delta rerun with top_k=10 to determine whether the
+- Next required step: Phase 7E-5B HPC delta rerun with top_k=10 to determine whether the keyword coverage patch yields measurable improvement.
+
+---
+
+### Phase 7E-5C: Keyword Coverage Patch Delta Diagnosis (2026-06-25)
+
+**5B HPC delta rerun results**:
+- legacy_bad: 11 (4B) -> 14 (5B) (+3, LLM variance)
+- custom_bad: 13 (4B) -> 13 (5B) (unchanged)
+- error=0, timeout=0
+- answer_synthesis_profile=keyword_coverage_v1 visible in prompt_profile
+
+**Case-level delta diagnosis**:
+- fixed_custom_bad: 1
+- regressed_custom_bad: 1
+- stable_custom_bad: 12
+- stable_custom_good: 6
+- suspected_llm_variance: 18
+- suspected_patch_helped: 4
+- suspected_patch_regressed: 5
+
+**Recommendation**: keep the keyword coverage patch.
+- Engineering stability confirmed (no error/timeout).
+- No proven aggregate gain but no regression either.
+- 18/20 cases show LLM output variance (answer_sha256 changed without source change).
+- Case-level analysis did not indicate further Phase 7E patch tuning.
+
+- [x] 7E-5C local diagnosis completed
+- [x] keyword coverage delta analysis script created
+- [x] diagnosis JSON/JSONL/MD outputs generated
+- [x] committed: 64bb189 -> e72c3b1
   keyword coverage alignment reduces same-source answer differences.
