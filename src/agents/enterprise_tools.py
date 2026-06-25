@@ -138,8 +138,16 @@ def _fallback_payload(
 
 def _source_payload(result: Any) -> dict[str, Any]:
     metadata = dict(result.metadata or {})
-    return {
+    #  补充 phase6 metadata schema 中的关键字段，兼容小型 Chroma 的 source 字段
+    payload: dict[str, Any] = {
         "source": result.source,
+        "source_id": metadata.get("source_id", ""),
+        "source_url": metadata.get("source_url", ""),
+        "section_path": metadata.get("section_path", ""),
+        "domain": metadata.get("domain", ""),
+        "normalized_id": metadata.get("normalized_id", ""),
+        "language": metadata.get("language", ""),
+        "review_status": metadata.get("review_status", ""),
         "title": result.title,
         "doc_type": result.doc_type,
         "chunk_id": result.chunk_id,
@@ -149,6 +157,7 @@ def _source_payload(result: Any) -> dict[str, Any]:
         "content_preview": _clip_text(result.content_preview, PREVIEW_CHAR_LIMIT),
         "metadata": metadata,
     }
+    return payload
 
 
 def _format_context(sources: list[dict[str, Any]], page_contents: list[str]) -> str:
@@ -162,6 +171,7 @@ def _format_context(sources: list[dict[str, Any]], page_contents: list[str]) -> 
                 f"[Source {index}]",
                 f"title: {source.get('title') or ''}",
                 f"source: {source.get('source') or ''}",
+                f"source_id: {source.get('source_id') or ''}",
                 f"chunk_id: {source.get('chunk_id') or ''}",
                 f"distance: {source.get('distance')}",
                 "content:",

@@ -2500,3 +2500,48 @@ Diagnostic script: scripts/check_retrieval_path.py
 - [x] Conservative boost added to retriever.py
 - [x] FastAPI retrieval confirmed working
 - [x] LoRA identified as corpus/indexing gap
+
+---
+
+### Final Chroma Index Fix (2026-06-25)
+
+**根因确认**:
+- 原 FastAPI / Request Body 问题失败，服务连接了错误的小型 Chroma 库 (chroma_enterprise, 6 chunks)
+- Phase6 完整库 (chroma_enterprise_phase6, 80 chunks) 包含 FastAPI/NLP/深度学习/Agent 课程资料
+- metadata schema 不兼容：小型库使用 `source` (文件路径)，Phase6 使用 `source_id`
+
+**A. metadata schema 兼容修复**:
+- [x] `src/rag/retriever.py`: 新增 `_resolve_source()` 函数，按 `source_id` → `source_url` → `source` 优先级解析
+- [x] `src/agents/enterprise_tools.py`: `_source_payload()` 新增 `source_id`、`source_url`、`section_path`、`domain`、`normalized_id`、`language`、`review_status` 字段
+- [x] `src/agents/enterprise_tools.py`: `_format_context()` 新增 `source_id` 行
+
+**B. 新增脚本**:
+- [x] `scripts/build_final_enterprise_chroma.py`: 合并 Phase6 + enterprise_docs → chroma_enterprise_final
+- [x] `scripts/audit_chroma_collections.py`: Chroma 库审计（count、source_id 分布、关键文档覆盖）
+
+**C. 文档与配置**:
+- [x] `docs/enterprise_rag_backend/FINAL_CHROMA_INDEX_FIX.md`
+- [x] `data/knowledge_base/evaluation/final_chroma_index_audit.json`
+- [x] `.env.example` 推荐配置更新为 chroma_enterprise_final
+- [x] `task.txt` 更新
+
+**Final collection 验证**:
+- [x] final collection 存在: chroma_enterprise_final / enterprise_knowledge_base
+- [x] final collection count = 86 (> 80)
+- [x] 包含 fastapi_docs: 16 chunks
+- [x] 包含 enterprise_rag_pipeline: 2 chunks
+- [x] 包含 enterprise_agent_overview: 2 chunks
+- [x] 9 unique sources
+- [x] FastAPI / Request Body 查询: source=fastapi_docs (不再是 unknown), top-4 全部命中
+- [x] 系统检索查询: sources 包含 enterprise_rag_pipeline (#2) 和 enterprise_agent_overview (#3, #4)
+- [x] LoRA 确认是语料缺口: 0/5 直接命中
+
+**不修改的模块**:
+- src/service/service.py
+- src/agents/enterprise_rag_graph.py
+- src/streamlit_app.py
+- prompt / verifier / judge / multi-hop
+
+**不提交**:
+- .env / chroma_enterprise / chroma_enterprise_phase6 / chroma_enterprise_final
+- 本地模型 / __pycache__ / 临时文件 / raw JSONL

@@ -31,6 +31,20 @@ def _relevance_score(distance: float) -> float:
     return 1 / (1 + max(distance, 0.0))
 
 
+def _resolve_source(metadata: dict[str, Any]) -> str:
+    """解析 source 字段，兼容 source_id / source_url / source 三种 metadata schema。
+
+    Phase6 Chroma 使用 source_id / source_url，小型 Chroma 使用 source（文件路径）。
+    优先使用 source_id，其次 source_url，最后回退到 source。
+    """
+    return str(
+        metadata.get("source_id")
+        or metadata.get("source_url")
+        or metadata.get("source")
+        or "unknown"
+    )
+
+
 def _result_from_document(
     page_content: str,
     metadata: dict[str, Any],
@@ -38,7 +52,7 @@ def _result_from_document(
 ) -> RetrievalResult:
     distance = float(score)
     return RetrievalResult(
-        source=str(metadata.get("source", "unknown")),
+        source=_resolve_source(metadata),
         title=metadata.get("title"),
         doc_type=metadata.get("doc_type"),
         chunk_id=str(metadata.get("chunk_id", "")),
