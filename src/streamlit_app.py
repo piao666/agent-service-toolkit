@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import hashlib
 import json
 import os
 import re
@@ -117,6 +118,12 @@ def _source_value(source: dict[str, Any], field: str, default: Any = "-") -> Any
     return default if value in (None, "") else value
 
 
+def _stable_streamlit_key(*parts: object) -> str:
+    raw = "::".join(str(p or "") for p in parts)
+    digest = hashlib.sha1(raw.encode("utf-8")).hexdigest()[:12]
+    return f"kb_{digest}"
+
+
 def _clip_text(text: str | None, limit: int = 800) -> str:
     if not text:
         return ""
@@ -124,7 +131,12 @@ def _clip_text(text: str | None, limit: int = 800) -> str:
     return text if len(text) <= limit else text[:limit] + "…"
 
 
-def render_source_cards(sources: list[dict[str, Any]]) -> None:
+def render_source_cards(
+    sources: list[dict[str, Any]],
+    *,
+    message_index: int = 0,
+    response_index: int = 0,
+) -> None:
     if not sources:
         st.caption("本轮未返回来源依据。")
         return
@@ -145,7 +157,12 @@ def render_source_cards(sources: list[dict[str, Any]]) -> None:
             preview = _clip_text(str(_source_value(source, "content_preview", "")))
             if preview:
                 st.caption("内容预览")
-                st.text_area("内容预览", value=preview, height=160, disabled=True, label_visibility="collapsed")
+                preview_key = _stable_streamlit_key(
+                    "source_preview", message_index, response_index, index,
+                    source_id, _source_value(source, "chunk_id", ""),
+                    _source_value(source, "doc_type", ""), preview[:32],
+                )
+                st.text_area("内容预览", value=preview, height=160, disabled=True, label_visibility="collapsed", key=preview_key)
 
 
 def render_memory_debug(memory_debug: dict[str, Any]) -> None:
@@ -255,13 +272,13 @@ def _render_sidebar() -> dict[str, Any]:
     }
 
 
-def _render_message(message: dict[str, Any], show_advanced: bool) -> None:
+def _render_message(message: dict[str, Any], show_advanced: bool, message_index: int = 0) -> None:
     with st.chat_message(message["role"]):
         st.write(message["content"])
         if message["role"] == "assistant" and message.get("response"):
             response = message["response"]
             with st.expander("来源依据", expanded=False):
-                render_source_cards(response.get("sources") or [])
+                render_source_cards(response.get("sources") or [], message_index=message_index, response_index=message_index)
             render_verifier_debug(response.get("verifier_debug") or {})
             if show_advanced:
                 render_memory_debug(response.get("memory_debug") or {})
@@ -307,8 +324,8 @@ def main() -> None:
 
     show_advanced = st.session_state.get("show_advanced", False)
 
-    for message in st.session_state.messages:
-        _render_message(message, show_advanced)
+    for message_index, message in enumerate(st.session_state.messages):
+        _render_message(message, show_advanced, message_index=message_index)
 
     question = st.chat_input("输入知识库问题")
     if st.session_state.get("pending_question"):
@@ -335,7 +352,8 @@ def main() -> None:
             answer = response["answer"] or "后端返回了空回答。"
             st.write(answer)
             with st.expander("来源依据", expanded=False):
-                render_source_cards(response.get("sources") or [])
+                live_idx = len(st.session_state.messages)
+                render_source_cards(response.get("sources") or [], message_index=live_idx, response_index=live_idx)
             render_verifier_debug(response.get("verifier_debug") or {})
             if show_advanced:
                 render_memory_debug(response.get("memory_debug") or {})
