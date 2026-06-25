@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import uuid
 from typing import Any
@@ -10,7 +11,7 @@ from urllib.request import Request, urlopen
 
 import streamlit as st
 
-APP_TITLE = "Enterprise RAG Console"
+APP_TITLE = "企业知识库 Agent 控制台"
 DEFAULT_API_BASE_URL = "http://127.0.0.1:8000"
 DEFAULT_API_ENDPOINT = "/enterprise/agent/query"
 EXAMPLE_QUESTIONS = (
@@ -19,20 +20,20 @@ EXAMPLE_QUESTIONS = (
     "那它适合什么场景？",
     "FastAPI 的 Request Body 如何定义？",
     "LoRA 有什么作用？",
+    "这个系统是如何进行检索的？",
 )
-MEMORY_DEBUG_FIELDS = (
-    "memory_mode",
-    "memory_enabled",
-    "session_id",
-    "memory_turn_count_before",
-    "memory_turn_count_after",
-    "is_follow_up",
-    "original_query",
-    "contextual_query",
-    "memory_rewrite_strategy",
-    "memory_used_for_retrieval",
-    "cross_session_isolated",
-)
+MEMORY_DEBUG_FIELDS_CN = {
+    "memory_mode": "记忆模式",
+    "memory_enabled": "是否启用",
+    "session_id": "会话 ID",
+    "memory_turn_count_before": "本轮前对话数",
+    "memory_turn_count_after": "本轮后对话数",
+    "is_follow_up": "是否追问",
+    "original_query": "原始问题",
+    "contextual_query": "改写后问题",
+    "memory_rewrite_strategy": "改写策略",
+    "memory_used_for_retrieval": "是否用于检索",
+}
 SENSITIVE_KEY_PARTS = ("api_key", "authorization", "credential", "password", "secret", "token")
 WINDOWS_PATH_PATTERN = re.compile(r"\b[A-Za-z]:[\\/][^\s\"']+")
 BEARER_PATTERN = re.compile(r"(?i)\bBearer\s+[A-Za-z0-9_.-]+")
@@ -44,7 +45,6 @@ class ApiRequestError(RuntimeError):
 
 
 def normalize_base_url(base_url: str) -> str:
-    """Validate and normalize an HTTP API base URL."""
     normalized = base_url.strip().rstrip("/")
     parsed = urlparse(normalized)
     if parsed.scheme not in {"http", "https"} or not parsed.netloc:
@@ -53,87 +53,59 @@ def normalize_base_url(base_url: str) -> str:
 
 
 def build_api_url(base_url: str, endpoint: str) -> str:
-    """Build an endpoint URL without accepting non-HTTP schemes."""
     normalized_base = normalize_base_url(base_url)
     normalized_endpoint = "/" + endpoint.strip().lstrip("/")
     return urljoin(normalized_base + "/", normalized_endpoint.lstrip("/"))
 
 
 def _request_json(
-    url: str,
-    *,
-    timeout_seconds: float,
-    payload: dict[str, Any] | None = None,
+    url: str, *, timeout_seconds: float, payload: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     data = None if payload is None else json.dumps(payload, ensure_ascii=False).encode("utf-8")
-    request = Request(
-        url,
-        data=data,
-        headers={"Accept": "application/json", "Content-Type": "application/json"},
-        method="GET" if payload is None else "POST",
-    )
+    req = Request(url, data=data, headers={"Accept": "application/json", "Content-Type": "application/json"}, method="POST" if payload else "GET")
     try:
-        with urlopen(request, timeout=timeout_seconds) as response:  # noqa: S310
-            body = response.read().decode("utf-8")
+        with urlopen(req, timeout=timeout_seconds) as resp:
+            body = resp.read().decode("utf-8")
     except HTTPError as exc:
-        detail = exc.read().decode("utf-8", errors="replace")[:500]
-        raise ApiRequestError(f"Agent API 返回 HTTP {exc.code}: {detail}") from exc
+        raise ApiRequestError(f"后端返回 HTTP {exc.code}，请检查服务日志。") from exc
     except URLError as exc:
-        raise ApiRequestError("未连接到 Agent API，请先启动 FastAPI 服务。") from exc
+        raise ApiRequestError("未连接到后端服务，请先启动 FastAPI。") from exc
     except TimeoutError as exc:
-        raise ApiRequestError("Agent API 请求超时，请检查服务状态后重试。") from exc
-
+        raise ApiRequestError("请求超时，请稍后重试。") from exc
     try:
         parsed = json.loads(body)
     except json.JSONDecodeError as exc:
-        raise ApiRequestError("Agent API 返回了无效 JSON。") from exc
+        raise ApiRequestError("后端返回了无效 JSON。") from exc
     if not isinstance(parsed, dict):
-        raise ApiRequestError("Agent API response schema 不完整：根节点不是对象。")
+        raise ApiRequestError("response schema 不完整。")
     return parsed
 
 
-def request_agent_api(
-    base_url: str,
-    endpoint: str,
-    payload: dict[str, Any],
-    timeout_seconds: float,
-) -> dict[str, Any]:
-    """Call the existing enterprise query endpoint and validate its core response shape."""
-    response = _request_json(
-        build_api_url(base_url, endpoint),
-        timeout_seconds=timeout_seconds,
-        payload=payload,
-    )
+def request_agent_api(base_url: str, endpoint: str, payload: dict[str, Any], timeout_seconds: float) -> dict[str, Any]:
+    response = _request_json(build_api_url(base_url, endpoint), timeout_seconds=timeout_seconds, payload=payload)
     if not isinstance(response.get("answer"), str):
-        raise ApiRequestError("Agent API response schema 不完整：缺少 answer。")
-    if not isinstance(response.get("sources", []), list):
-        raise ApiRequestError("Agent API response schema 不完整：sources 不是列表。")
+        raise ApiRequestError("response 缺少 answer 字段。")
     return response
 
 
 def check_api_health(base_url: str, timeout_seconds: float = 5.0) -> dict[str, Any]:
-    """Call the backend health endpoint."""
-    return _request_json(
-        build_api_url(base_url, "/health"),
-        timeout_seconds=timeout_seconds,
-    )
+    return _request_json(build_api_url(base_url, "/health"), timeout_seconds=timeout_seconds)
 
 
 def redact_for_display(value: Any, key: str = "") -> Any:
-    """Remove credentials and local absolute paths before rendering backend diagnostics."""
     lowered_key = key.lower()
     if any(part in lowered_key for part in SENSITIVE_KEY_PARTS):
         return "<REDACTED>"
     if lowered_key in {"persist_dir", "model_path", "local_path"}:
         return "<LOCAL_PATH>"
     if isinstance(value, dict):
-        return {item_key: redact_for_display(item, item_key) for item_key, item in value.items()}
+        return {k: redact_for_display(v, k) for k, v in value.items()}
     if isinstance(value, list):
-        return [redact_for_display(item, key) for item in value]
+        return [redact_for_display(v, key) for v in value]
     if isinstance(value, str):
-        redacted = WINDOWS_PATH_PATTERN.sub("<LOCAL_PATH>", value)
-        redacted = BEARER_PATTERN.sub("Bearer <REDACTED>", redacted)
-        return SECRET_PATTERN.sub("<REDACTED>", redacted)
+        value = WINDOWS_PATH_PATTERN.sub("<LOCAL_PATH>", value)
+        value = BEARER_PATTERN.sub("Bearer <REDACTED>", value)
+        return SECRET_PATTERN.sub("<REDACTED>", value)
     return value
 
 
@@ -145,117 +117,79 @@ def _source_value(source: dict[str, Any], field: str, default: Any = "-") -> Any
     return default if value in (None, "") else value
 
 
-def render_source_cards(sources: list[dict[str, Any]]) -> None:
-    """Render source-tracing metadata without exposing complete retrieved chunks."""
-    st.markdown("#### Sources")
-    if not sources:
-        st.caption("本轮没有返回 sources。")
-        return
+def _clip_text(text: str | None, limit: int = 800) -> str:
+    if not text:
+        return ""
+    text = str(text).strip()
+    return text if len(text) <= limit else text[:limit] + "…"
 
+
+def render_source_cards(sources: list[dict[str, Any]]) -> None:
+    if not sources:
+        st.caption("本轮未返回来源依据。")
+        return
     for index, raw_source in enumerate(sources, start=1):
         source = redact_for_display(raw_source)
-        title = str(_source_value(source, "title", f"Source {index}"))
+        title = str(_source_value(source, "title", f"来源 {index}"))
         source_id = str(_source_value(source, "source_id"))
-        with st.expander(f"{index}. {title} · {source_id}", expanded=index == 1):
+        with st.expander(f"{index}. {title} · {source_id}", expanded=False):
             left, right = st.columns(2)
-            left.markdown(f"**Document type:** `{_source_value(source, 'doc_type')}`")
-            left.markdown(f"**Section:** `{_source_value(source, 'section_path')}`")
+            left.markdown(f"**文档类型:** `{_source_value(source, 'doc_type')}`")
+            left.markdown(f"**章节:** `{_source_value(source, 'section_path')}`")
             right.markdown(f"**Chunk ID:** `{_source_value(source, 'chunk_id')}`")
             score = _source_value(source, "relevance_score", _source_value(source, "score"))
-            right.markdown(f"**Relevance:** `{score}`")
-
+            right.markdown(f"**相关度:** `{score}`")
             source_url = str(_source_value(source, "source_url", ""))
             if source_url and urlparse(source_url).scheme in {"http", "https"}:
                 st.markdown(f"[打开来源页面]({source_url})")
-
-            preview = str(_source_value(source, "content_preview", ""))
+            preview = _clip_text(str(_source_value(source, "content_preview", "")))
             if preview:
-                st.caption("Content preview")
-                st.write(preview[:500] + ("…" if len(preview) > 500 else ""))
+                st.caption("内容预览")
+                st.text_area("内容预览", value=preview, height=160, disabled=True, label_visibility="collapsed")
 
 
 def render_memory_debug(memory_debug: dict[str, Any]) -> None:
-    """Render conversational memory diagnostics and follow-up rewriting."""
-    st.markdown("#### Memory")
     if not memory_debug:
-        st.caption("本轮 response 未返回 memory_debug。")
         return
-
-    safe_debug = redact_for_display(memory_debug)
-    if not safe_debug.get("memory_enabled"):
-        st.caption("Memory 未启用；本轮按无记忆模式处理。")
-    original = str(safe_debug.get("original_query") or "")
-    contextual = str(safe_debug.get("contextual_query") or "")
-    if safe_debug.get("is_follow_up") and contextual and contextual != original:
-        st.info(f"Follow-up rewrite: {original} → {contextual}")
-
-    rows = [{"field": field, "value": safe_debug.get(field)} for field in MEMORY_DEBUG_FIELDS]
+    safe = redact_for_display(memory_debug)
+    if not safe.get("memory_enabled"):
+        return
+    original = str(safe.get("original_query") or "")
+    contextual = str(safe.get("contextual_query") or "")
+    if safe.get("is_follow_up") and contextual and contextual != original:
+        st.info(f"追问改写: {original} → {contextual}")
+    rows = [{"字段": MEMORY_DEBUG_FIELDS_CN.get(field, field), "值": safe.get(field)} for field in MEMORY_DEBUG_FIELDS_CN]
     st.dataframe(rows, hide_index=True, use_container_width=True)
 
 
 def render_verifier_debug(verifier_debug: dict[str, Any]) -> None:
-    """Render deterministic evidence-grounding diagnostics."""
-    st.markdown("#### Evidence grounding")
     if not verifier_debug:
-        st.caption("本轮 response 未返回 verifier_debug。")
         return
-
-    safe_debug = redact_for_display(verifier_debug)
-    grounding_status = str(safe_debug.get("grounding_status") or "not_checked")
-    grounding_score = safe_debug.get("grounding_score", 0.0)
-    citation_coverage = bool(safe_debug.get("citation_coverage"))
-    safe_fallback_triggered = bool(safe_debug.get("safe_fallback_triggered"))
-
+    safe = redact_for_display(verifier_debug)
+    grounding_status = str(safe.get("grounding_status") or "not_checked")
     if grounding_status == "low":
-        st.error("Evidence grounding: LOW。当前答案缺少充分的来源支持。")
+        st.warning("⚠️ 当前回答缺少充分来源支持，建议补充知识库资料或扩大检索范围。")
     elif grounding_status == "medium":
-        st.warning("Evidence grounding: MEDIUM。建议结合来源人工复核。")
+        st.info("⚠️ 证据支持一般，建议结合来源依据查看。")
     elif grounding_status == "high":
-        st.success("Evidence grounding: HIGH。答案关键术语与返回来源具有较高覆盖。")
+        st.success("✅ 证据支持充分")
     else:
-        st.caption("Evidence verifier 未启用或未执行。")
+        st.caption("证据验证未启用或未执行。")
 
+
+def render_verifier_detail(verifier_debug: dict[str, Any]) -> None:
+    safe = redact_for_display(verifier_debug or {})
+    grounding_score = safe.get("grounding_score", 0.0)
+    citation_coverage = bool(safe.get("citation_coverage"))
+    safe_fallback_triggered = bool(safe.get("safe_fallback_triggered"))
     left, middle, right = st.columns(3)
-    left.metric("Grounding score", grounding_score)
-    middle.metric("Citation coverage", "yes" if citation_coverage else "no")
-    right.metric("Safe fallback", "triggered" if safe_fallback_triggered else "not triggered")
-    st.markdown("**Matched terms**")
-    st.write(safe_debug.get("matched_terms") or [])
-    st.markdown("**Unsupported terms**")
-    st.write(safe_debug.get("unsupported_terms") or [])
-
-
-def render_retrieval_debug(retrieval_debug: dict[str, Any]) -> None:
-    """Render retrieval diagnostics in a collapsed section."""
-    with st.expander("Retrieval debug", expanded=False):
-        if retrieval_debug:
-            st.json(redact_for_display(retrieval_debug), expanded=False)
-        else:
-            st.caption("本轮 response 未返回 retrieval_debug。")
-
-
-def render_graph_debug(graph_debug: dict[str, Any]) -> None:
-    """Render custom graph execution diagnostics in a dedicated section."""
-    with st.expander("Graph debug", expanded=False):
-        if graph_debug:
-            st.json(redact_for_display(graph_debug), expanded=False)
-        else:
-            st.info(
-                "本轮 response 未返回 graph_debug。legacy 模式下该字段可以为空；"
-                "custom_graph 模式下应包含 graph_mode、nodes_executed 等信息。"
-            )
-
-
-def render_debug_panel(payload: dict[str, Any], response: dict[str, Any]) -> None:
-    """Render request and response diagnostics after display-safe redaction."""
-    render_retrieval_debug(response.get("retrieval_debug") or {})
-    render_graph_debug(response.get("graph_debug") or {})
-    with st.expander("Memory debug JSON", expanded=False):
-        st.json(redact_for_display(response.get("memory_debug") or {}), expanded=False)
-    with st.expander("Request payload", expanded=False):
-        st.json(redact_for_display(payload), expanded=False)
-    with st.expander("Raw response JSON", expanded=False):
-        st.json(redact_for_display(response), expanded=False)
+    left.metric("证据得分", grounding_score)
+    middle.metric("引用覆盖", "是" if citation_coverage else "否")
+    right.metric("安全兜底", "已触发" if safe_fallback_triggered else "未触发")
+    st.markdown("**已匹配术语**")
+    st.write(safe.get("matched_terms") or [])
+    st.markdown("**未支持术语**")
+    st.write(safe.get("unsupported_terms") or [])
 
 
 def _new_session_id() -> str:
@@ -265,76 +199,101 @@ def _new_session_id() -> str:
 def _initialize_state() -> None:
     st.session_state.setdefault("messages", [])
     st.session_state.setdefault("session_id", _new_session_id())
-    st.session_state.setdefault("pending_question", None)
 
 
 def _render_sidebar() -> dict[str, Any]:
     with st.sidebar:
-        st.header("Demo controls")
-        api_base_url = st.text_input("API Base URL", value=DEFAULT_API_BASE_URL)
-        api_endpoint = st.text_input("API Endpoint", value=DEFAULT_API_ENDPOINT)
-        session_id = st.text_input("Session ID", key="session_id")
+        st.title("企业知识库问答")
+        st.caption("基于企业知识库的 RAG 问答演示")
+        api_base_url = st.text_input("后端服务地址", value=DEFAULT_API_BASE_URL)
+        api_endpoint = st.text_input("接口路径", value=DEFAULT_API_ENDPOINT)
+        session_id = st.text_input("会话 ID", key="session_id")
 
-        session_col, clear_col = st.columns(2)
-        if session_col.button("↻ Session", use_container_width=True, help="生成新的 session ID"):
+        col1, col2 = st.columns(2)
+        if col1.button("新建会话", use_container_width=True, help="生成新 session ID"):
             st.session_state.session_id = _new_session_id()
             st.session_state.messages = []
             st.rerun()
-        if clear_col.button("Clear chat", use_container_width=True):
+        if col2.button("清空对话", use_container_width=True):
             st.session_state.messages = []
             st.rerun()
-        st.caption("Clear chat 仅清除前端消息；刷新 Session 会使用新的后端 memory 隔离键。")
+        st.caption("新建会话会用新的 memory 隔离键；清空对话仅清除前端消息。")
 
-        memory_mode = st.selectbox("Memory Mode", options=("off", "buffer"), index=0)
-        structured_mode = st.selectbox(
-            "Structured Retrieval Mode",
-            options=("off", "metadata_symbol"),
-            index=0,
-        )
-        st.caption(
-            "当前后端模式由服务启动环境变量决定；此处用于展示预期模式，不会修改服务进程配置。"
-        )
-        top_k = st.number_input("Top K", min_value=1, max_value=10, value=5, step=1)
-        return_sources = st.toggle("Return Sources", value=True)
-        timeout_seconds = st.number_input(
-            "Timeout seconds", min_value=5, max_value=300, value=120, step=5
-        )
-
-        if st.button("API Health Check", use_container_width=True):
+        if st.button("检查后端状态", use_container_width=True):
             try:
                 health = check_api_health(api_base_url)
-                st.success("Agent API health check 通过。")
-                st.json(redact_for_display(health), expanded=False)
-            except (ApiRequestError, ValueError) as exc:
-                st.error(str(exc))
+                st.success("后端服务正常")
+            except Exception:
+                st.error("后端服务不可用，请先启动 FastAPI。")
 
-        st.subheader("Example questions")
+        st.subheader("示例问题")
         for index, question in enumerate(EXAMPLE_QUESTIONS):
             if st.button(question, key=f"example_{index}", use_container_width=True):
                 st.session_state.pending_question = question
                 st.rerun()
 
+        st.session_state.show_advanced = st.checkbox("显示高级调试信息", value=False)
+
+    top_k = int(os.getenv("RAG_DEFAULT_TOP_K", "5"))
+    try:
+        top_k = int(os.getenv("RAG_DEFAULT_TOP_K", "5"))
+    except ValueError:
+        top_k = 5
+    timeout_seconds = 120
+    try:
+        timeout_seconds = int(os.getenv("STREAMLIT_API_TIMEOUT_SECONDS", "120"))
+    except ValueError:
+        timeout_seconds = 120
+
     return {
         "api_base_url": api_base_url,
         "api_endpoint": api_endpoint,
         "session_id": session_id,
-        "memory_mode": memory_mode,
-        "structured_mode": structured_mode,
-        "top_k": int(top_k),
-        "return_sources": bool(return_sources),
+        "top_k": top_k,
+        "return_sources": True,
         "timeout_seconds": float(timeout_seconds),
     }
 
 
-def _render_message(message: dict[str, Any]) -> None:
+def _render_message(message: dict[str, Any], show_advanced: bool) -> None:
     with st.chat_message(message["role"]):
         st.write(message["content"])
         if message["role"] == "assistant" and message.get("response"):
             response = message["response"]
-            render_source_cards(response.get("sources") or [])
-            render_memory_debug(response.get("memory_debug") or {})
+            with st.expander("来源依据", expanded=False):
+                render_source_cards(response.get("sources") or [])
             render_verifier_debug(response.get("verifier_debug") or {})
-            render_debug_panel(message.get("payload") or {}, response)
+            if show_advanced:
+                render_memory_debug(response.get("memory_debug") or {})
+                render_verifier_detail(response.get("verifier_debug") or {})
+                _render_debug_panel(message.get("payload") or {}, response)
+
+
+def _render_debug_panel(payload: dict[str, Any], response: dict[str, Any]) -> None:
+    st.subheader("高级调试信息")
+    with st.expander("检索诊断", expanded=False):
+        rd = response.get("retrieval_debug")
+        if rd:
+            st.json(redact_for_display(rd))
+        else:
+            st.caption("未返回检索诊断。")
+    with st.expander("图执行追踪", expanded=False):
+        gd = response.get("graph_debug")
+        if gd:
+            st.json(redact_for_display(gd))
+        else:
+            st.caption("未返回图执行追踪（legacy 模式下该字段为空）。")
+    with st.expander("会话记忆", expanded=False):
+        md = response.get("memory_debug")
+        if md:
+            render_memory_debug(md)
+            st.json(redact_for_display(md))
+        else:
+            st.caption("未返回会话记忆。")
+    with st.expander("请求参数", expanded=False):
+        st.json(redact_for_display(payload))
+    with st.expander("原始响应", expanded=False):
+        st.json(redact_for_display(response))
 
 
 def main() -> None:
@@ -343,21 +302,16 @@ def main() -> None:
     controls = _render_sidebar()
 
     st.title(APP_TITLE)
-    st.caption("Knowledge-base answers, source tracing, retrieval diagnostics, and session memory.")
+    st.caption("面向企业内部知识资料的 RAG 问答、来源追踪与调试演示。")
+    st.caption(f"接口：{controls['api_endpoint']} ｜ 会话：{controls['session_id']}")
 
-    status_col, session_col, mode_col = st.columns(3)
-    status_col.metric("API endpoint", controls["api_endpoint"])
-    session_col.metric("Session", controls["session_id"])
-    mode_col.metric(
-        "Requested view",
-        f"memory={controls['memory_mode']} · retrieval={controls['structured_mode']}",
-    )
+    show_advanced = st.session_state.get("show_advanced", False)
 
     for message in st.session_state.messages:
-        _render_message(message)
+        _render_message(message, show_advanced)
 
     question = st.chat_input("输入知识库问题")
-    if st.session_state.pending_question:
+    if st.session_state.get("pending_question"):
         question = st.session_state.pending_question
         st.session_state.pending_question = None
 
@@ -368,7 +322,7 @@ def main() -> None:
         "query": question,
         "session_id": controls["session_id"] or None,
         "top_k": controls["top_k"],
-        "return_sources": controls["return_sources"],
+        "return_sources": True,
     }
     st.session_state.messages.append({"role": "user", "content": question})
     with st.chat_message("user"):
@@ -376,28 +330,22 @@ def main() -> None:
 
     with st.chat_message("assistant"):
         try:
-            with st.spinner("Agent 正在查询知识库…"):
-                response = request_agent_api(
-                    controls["api_base_url"],
-                    controls["api_endpoint"],
-                    payload,
-                    controls["timeout_seconds"],
-                )
-            answer = response["answer"] or "Agent API 返回了空 answer。"
+            with st.spinner("正在查询知识库…"):
+                response = request_agent_api(controls["api_base_url"], controls["api_endpoint"], payload, controls["timeout_seconds"])
+            answer = response["answer"] or "后端返回了空回答。"
             st.write(answer)
-            render_source_cards(response.get("sources") or [])
-            render_memory_debug(response.get("memory_debug") or {})
+            with st.expander("来源依据", expanded=False):
+                render_source_cards(response.get("sources") or [])
             render_verifier_debug(response.get("verifier_debug") or {})
-            render_debug_panel(payload, response)
-            st.session_state.messages.append(
-                {"role": "assistant", "content": answer, "payload": payload, "response": response}
-            )
+            if show_advanced:
+                render_memory_debug(response.get("memory_debug") or {})
+                render_verifier_detail(response.get("verifier_debug") or {})
+                _render_debug_panel(payload, response)
+            st.session_state.messages.append({"role": "assistant", "content": answer, "payload": payload, "response": response})
         except (ApiRequestError, ValueError) as exc:
             st.error(str(exc))
             st.caption("请确认 FastAPI 已启动、地址正确，并检查服务日志后重试。")
-            st.session_state.messages.append(
-                {"role": "assistant", "content": f"请求失败：{exc}", "payload": payload}
-            )
+            st.session_state.messages.append({"role": "assistant", "content": f"请求失败：{exc}", "payload": payload})
 
 
 if __name__ == "__main__":

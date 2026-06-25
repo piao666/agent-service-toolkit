@@ -2454,5 +2454,29 @@ Current recommendation:
 - [x] PHASE7E_FINAL_CONSOLIDATION.md created
 - [x] phase7e_final_consolidation_summary.json created
 - [x] task.txt updated
-- [x] committed: 5112642 -> current
+- [x] committed: 5112642 -> ed92bd6
+
+---
+
+### Streamlit Demo UI Simplification & Knowledge Coverage Check (2026-06-25)
+
+Streamlit demo UI simplified:
+- Sidebar title changed to "企业知识库问答"
+- Removed Memory Mode, Structured Retrieval Mode, Top K, Timeout, Return Sources controls
+- Added "显示高级调试信息" toggle (default off)
+- All debug panels now behind toggle
+- Sources default collapsed, Chinese labels
+- Source preview font fixed (text_area instead of st.write)
+- Evidence: Chinese, simplified view by default
+- Memory: collapsed, only in advanced mode
+- All user-visible labels localized to Chinese
+
+Knowledge coverage check:
+- All 32 keywords COVERED (FastAPI 96 files/33925 hits, LoRA 42/500, RAG 130/5553)
+- If demo shows "no sources" for FastAPI/Request Body, it's retrieval not corpus coverage
+
+- [x] Streamlit UI simplified
+- [x] Knowledge coverage report generated
+- [x] No core RAG/Agent logic changed
+- [x] committed
   keyword coverage alignment reduces same-source answer differences.
