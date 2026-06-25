@@ -1,0 +1,142 @@
+{
+  "generated_at": "2026-06-25T15:01:35.094439+00:00",
+  "verifier_version": "v2_weighted_rule_based",
+  "calls_llm": false,
+  "writes_chroma": false,
+  "execute": false,
+  "offline_verification": [
+    {
+      "id": "fastapi_request_body",
+      "query": "FastAPI 里 Request Body 如何定义？",
+      "source_id_sequence": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "title_sequence": [
+        "Request Body - FastAPI",
+        "Request Body - FastAPI",
+        "Request Body - FastAPI",
+        "Path Parameters - FastAPI",
+        "Repository YAML sample"
+      ],
+      "source_unknown_count": 0,
+      "grounding_status": "high",
+      "grounding_score": 0.537,
+      "source_quality_gate": "high",
+      "corpus_gap_detected": false,
+      "diagnosis": "fastapi_source_quality_gate: 来源正确且关键术语全部命中",
+      "verifier_version": "v2_weighted_rule_based",
+      "critical_terms_count": 6,
+      "matched_critical_count": 4,
+      "support_terms_count": 10,
+      "matched_support_count": 2,
+      "example_terms_count": 0,
+      "matched_example_count": 0
+    },
+    {
+      "id": "rag_definition",
+      "query": "RAG 是什么？",
+      "source_id_sequence": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "title_sequence": [
+        "Local AI Agent Course PDF",
+        "Local AI Agent Course PDF",
+        "enterprise_rag_pipeline",
+        "Local AI Agent Course PDF",
+        "Local NLP Course DOCX"
+      ],
+      "source_unknown_count": 0,
+      "grounding_status": "medium",
+      "grounding_score": 0.3611,
+      "source_quality_gate": "medium",
+      "corpus_gap_detected": false,
+      "diagnosis": "rag_source_quality_gate: 来源包含 enterprise_rag_pipeline",
+      "verifier_version": "v2_weighted_rule_based",
+      "critical_terms_count": 6,
+      "matched_critical_count": 3,
+      "support_terms_count": 5,
+      "matched_support_count": 0,
+      "example_terms_count": 0,
+      "matched_example_count": 0
+    },
+    {
+      "id": "system_retrieval",
+      "query": "这个系统是如何进行检索的？",
+      "source_id_sequence": [
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "title_sequence": [
+        "Local AI Agent Course PDF",
+        "enterprise_rag_pipeline",
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "Local AI Agent Course PDF"
+      ],
+      "source_unknown_count": 0,
+      "grounding_status": "medium",
+      "grounding_score": 0.379,
+      "source_quality_gate": "medium",
+      "corpus_gap_detected": false,
+      "diagnosis": "rag_source_quality_gate: 来源包含 RAG 定义但术语命中不足",
+      "verifier_version": "v2_weighted_rule_based",
+      "critical_terms_count": 7,
+      "matched_critical_count": 3,
+      "support_terms_count": 12,
+      "matched_support_count": 3,
+      "example_terms_count": 0,
+      "matched_example_count": 0
+    },
+    {
+      "id": "lora_corpus_gap",
+      "query": "LoRA 有什么作用？",
+      "source_id_sequence": [
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "title_sequence": [
+        "Local Deep Learning Course DOCX",
+        "Local NLP Course DOCX",
+        "Local Deep Learning Course DOCX",
+        "Local NLP Course DOCX",
+        "Local AI Agent Course PDF"
+      ],
+      "source_unknown_count": 0,
+      "grounding_status": "low",
+      "grounding_score": 0.0,
+      "source_quality_gate": "low",
+      "corpus_gap_detected": true,
+      "diagnosis": "corpus_gap: LoRA/PEFT/QLoRA/低秩来源缺失",
+      "verifier_version": "v2_weighted_rule_based",
+      "critical_terms_count": 4,
+      "matched_critical_count": 0,
+      "support_terms_count": 6,
+      "matched_support_count": 0,
+      "example_terms_count": 0,
+      "matched_example_count": 0
+    }
+  ],
+  "offline_summary": {
+    "total_cases": 4,
+    "grounding_status_distribution": {
+      "high": 1,
+      "medium": 2,
+      "low": 1
+    },
+    "corpus_gap_count": 1
+  }
+}

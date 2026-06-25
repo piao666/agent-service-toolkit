@@ -2545,3 +2545,38 @@ Diagnostic script: scripts/check_retrieval_path.py
 **不提交**:
 - .env / chroma_enterprise / chroma_enterprise_phase6 / chroma_enterprise_final
 - 本地模型 / __pycache__ / 临时文件 / raw JSONL
+
+---
+
+### Evidence Verifier V2 校准 + Streamlit 高级调试修复 (2026-06-25)
+
+**A. Evidence Verifier V2** (`src/rag/evidence_verifier.py`):
+- [x] 文本归一化: `unicodedata.normalize("NFKC")` 全角→半角
+- [x] 三级 term 分类: critical (0.65) / support (0.25) / example (0.10)
+- [x] 停止词与碎片过滤: 排除中文 2-4 字碎片、代码变量
+- [x] 加权覆盖率评分
+- [x] Source quality gate: FastAPI / RAG / 系统检索 来源正确时至少 MEDIUM
+- [x] Corpus gap guardrail: LoRA / PEFT / QLoRA / 低秩 无来源时强制 LOW
+- [x] 使用完整 source text (content/page_content), 非仅 content_preview
+- [x] 保留 V1 字段兼容 (important_terms, matched_terms, unsupported_terms)
+
+**B. Streamlit 修复** (`src/streamlit_app.py`):
+- [x] 修复 checkbox state 丢失: 使用稳定的 `key="show_advanced_debug"`
+- [x] 修复新问题不显示高级调试: API 调用后 `st.rerun()` 统一走历史渲染
+- [x] 已匹配术语/未支持术语默认折叠 `expanded=False`
+- [x] V2 三级术语分类展示
+- [x] 中文文案更新: LOW/MEDIUM/HIGH 表述更准确
+- [x] corpus_gap 检测时显示警告
+
+**验证结果**:
+- [x] FastAPI Request Body: grounding_status=HIGH, gate=high, source_unknown=0
+- [x] RAG 定义: grounding_status=MEDIUM, gate=medium, sources 包含 enterprise_rag_pipeline
+- [x] 系统检索: grounding_status=MEDIUM, gate=medium, sources 包含 enterprise_rag_pipeline + enterprise_agent_overview
+- [x] LoRA: grounding_status=LOW, corpus_gap_detected=True (语料缺口, 不强行升分)
+
+**不修改的模块**:
+- src/rag/retriever.py (本轮不动)
+- src/agents/enterprise_tools.py (本轮不动)
+- src/service/service.py
+- src/agents/enterprise_rag_graph.py (仅通过 as_debug() 自动获取 V2 字段, 不修改图流程)
+- prompt / judge / multi-hop

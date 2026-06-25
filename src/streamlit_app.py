@@ -185,11 +185,14 @@ def render_verifier_debug(verifier_debug: dict[str, Any]) -> None:
     safe = redact_for_display(verifier_debug)
     grounding_status = str(safe.get("grounding_status") or "not_checked")
     if grounding_status == "low":
-        st.warning("⚠️ 当前回答缺少充分来源支持，建议补充知识库资料或扩大检索范围。")
+        st.warning(
+            "⚠️ 当前回答与已检索来源的逐词重合较低，"
+            "建议展开来源核对；可能是资料不足、代码示例扩展或校验器保守导致。"
+        )
     elif grounding_status == "medium":
-        st.info("⚠️ 证据支持一般，建议结合来源依据查看。")
+        st.info("ℹ️ 当前回答有一定来源支撑，建议结合来源查看。")
     elif grounding_status == "high":
-        st.success("✅ 证据支持充分")
+        st.success("✅ 当前回答与来源高度一致。")
     else:
         st.caption("证据验证未启用或未执行。")
 
@@ -199,14 +202,69 @@ def render_verifier_detail(verifier_debug: dict[str, Any]) -> None:
     grounding_score = safe.get("grounding_score", 0.0)
     citation_coverage = bool(safe.get("citation_coverage"))
     safe_fallback_triggered = bool(safe.get("safe_fallback_triggered"))
+    corpus_gap = bool(safe.get("corpus_gap_detected"))
+    diagnosis = str(safe.get("diagnosis") or "")
+    gate = str(safe.get("source_quality_gate") or "none")
+
     left, middle, right = st.columns(3)
     left.metric("证据得分", grounding_score)
     middle.metric("引用覆盖", "是" if citation_coverage else "否")
     right.metric("安全兜底", "已触发" if safe_fallback_triggered else "未触发")
-    st.markdown("**已匹配术语**")
-    st.write(safe.get("matched_terms") or [])
-    st.markdown("**未支持术语**")
-    st.write(safe.get("unsupported_terms") or [])
+
+    if gate != "none":
+        st.caption(f"来源质量判定: {gate}")
+    if corpus_gap:
+        st.warning("⚠️ 检测到语料缺口: 知识库中可能缺少该主题的专题文档。")
+    if diagnosis:
+        st.caption(f"诊断: {diagnosis}")
+
+    # V2 三级术语（默认折叠）
+    critical_terms = safe.get("critical_terms") or []
+    support_terms = safe.get("support_terms") or []
+    example_terms = safe.get("example_terms") or []
+    matched_critical = safe.get("matched_critical_terms") or []
+    matched_support = safe.get("matched_support_terms") or []
+    matched_example = safe.get("matched_example_terms") or []
+    unsupported_critical = safe.get("unsupported_critical_terms") or []
+    unsupported_support = safe.get("unsupported_support_terms") or []
+    unsupported_example = safe.get("unsupported_example_terms") or []
+
+    # 有 V2 字段时用三级展示
+    if critical_terms or support_terms or example_terms:
+        col_a, col_b = st.columns(2)
+        with col_a:
+            with st.expander(f"✅ 已匹配关键词 ({len(matched_critical)} 关键 / {len(matched_support)} 辅助 / {len(matched_example)} 示例)", expanded=False):
+                if matched_critical:
+                    st.caption("**关键术语**")
+                    st.code(json.dumps(matched_critical, ensure_ascii=False, indent=2), language="json")
+                if matched_support:
+                    st.caption("**辅助术语**")
+                    st.code(json.dumps(matched_support, ensure_ascii=False, indent=2), language="json")
+                if matched_example:
+                    st.caption("**示例术语**")
+                    st.code(json.dumps(matched_example, ensure_ascii=False, indent=2), language="json")
+        with col_b:
+            with st.expander(f"❌ 未匹配关键词 ({len(unsupported_critical)} 关键 / {len(unsupported_support)} 辅助 / {len(unsupported_example)} 示例)", expanded=False):
+                if unsupported_critical:
+                    st.caption("**关键术语**")
+                    st.code(json.dumps(unsupported_critical, ensure_ascii=False, indent=2), language="json")
+                if unsupported_support:
+                    st.caption("**辅助术语**")
+                    st.code(json.dumps(unsupported_support, ensure_ascii=False, indent=2), language="json")
+                if unsupported_example:
+                    st.caption("**示例术语**")
+                    st.code(json.dumps(unsupported_example, ensure_ascii=False, indent=2), language="json")
+    else:
+        # V1 回退（仍默认折叠）
+        matched_terms = safe.get("matched_terms") or []
+        unsupported_terms = safe.get("unsupported_terms") or []
+        col_a, col_b = st.columns(2)
+        with col_a:
+            with st.expander(f"已匹配术语（{len(matched_terms)}）", expanded=False):
+                st.code(json.dumps(matched_terms, ensure_ascii=False, indent=2), language="json")
+        with col_b:
+            with st.expander(f"未支持术语（{len(unsupported_terms)}）", expanded=False):
+                st.code(json.dumps(unsupported_terms, ensure_ascii=False, indent=2), language="json")
 
 
 def _new_session_id() -> str:
@@ -238,7 +296,7 @@ def _render_sidebar() -> dict[str, Any]:
 
         if st.button("检查后端状态", use_container_width=True):
             try:
-                health = check_api_health(api_base_url)
+                check_api_health(api_base_url)
                 st.success("后端服务正常")
             except Exception:
                 st.error("后端服务不可用，请先启动 FastAPI。")
@@ -249,7 +307,10 @@ def _render_sidebar() -> dict[str, Any]:
                 st.session_state.pending_question = question
                 st.rerun()
 
-        st.session_state.show_advanced = st.checkbox("显示高级调试信息", value=False)
+        st.checkbox(
+        "显示高级调试信息",
+        key="show_advanced_debug",
+    )
 
     top_k = int(os.getenv("RAG_DEFAULT_TOP_K", "5"))
     try:
@@ -322,7 +383,7 @@ def main() -> None:
     st.caption("面向企业内部知识资料的 RAG 问答、来源追踪与调试演示。")
     st.caption(f"接口：{controls['api_endpoint']} ｜ 会话：{controls['session_id']}")
 
-    show_advanced = st.session_state.get("show_advanced", False)
+    show_advanced = st.session_state.get("show_advanced_debug", False)
 
     for message_index, message in enumerate(st.session_state.messages):
         _render_message(message, show_advanced, message_index=message_index)
@@ -341,29 +402,26 @@ def main() -> None:
         "top_k": controls["top_k"],
         "return_sources": True,
     }
+    # 先 append user message，再通过 st.rerun() 让统一渲染流程处理
     st.session_state.messages.append({"role": "user", "content": question})
-    with st.chat_message("user"):
-        st.write(question)
 
-    with st.chat_message("assistant"):
-        try:
-            with st.spinner("正在查询知识库…"):
-                response = request_agent_api(controls["api_base_url"], controls["api_endpoint"], payload, controls["timeout_seconds"])
-            answer = response["answer"] or "后端返回了空回答。"
-            st.write(answer)
-            with st.expander("来源依据", expanded=False):
-                live_idx = len(st.session_state.messages)
-                render_source_cards(response.get("sources") or [], message_index=live_idx, response_index=live_idx)
-            render_verifier_debug(response.get("verifier_debug") or {})
-            if show_advanced:
-                render_memory_debug(response.get("memory_debug") or {})
-                render_verifier_detail(response.get("verifier_debug") or {})
-                _render_debug_panel(payload, response)
-            st.session_state.messages.append({"role": "assistant", "content": answer, "payload": payload, "response": response})
-        except (ApiRequestError, ValueError) as exc:
-            st.error(str(exc))
-            st.caption("请确认 FastAPI 已启动、地址正确，并检查服务日志后重试。")
-            st.session_state.messages.append({"role": "assistant", "content": f"请求失败：{exc}", "payload": payload})
+    try:
+        with st.spinner("正在查询知识库…"):
+            response = request_agent_api(controls["api_base_url"], controls["api_endpoint"], payload, controls["timeout_seconds"])
+        answer = response["answer"] or "后端返回了空回答。"
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": answer,
+            "payload": payload,
+            "response": response,
+        })
+    except (ApiRequestError, ValueError) as exc:
+        st.session_state.messages.append({
+            "role": "assistant",
+            "content": f"请求失败：{exc}",
+            "payload": payload,
+        })
+    st.rerun()
 
 
 if __name__ == "__main__":
