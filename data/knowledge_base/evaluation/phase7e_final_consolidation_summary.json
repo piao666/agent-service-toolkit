@@ -1,0 +1,50 @@
+{
+  "phase": "7E-final_consolidation_freeze",
+  "date": "2026-06-25",
+  "branch": "feature/enterprise-rag-backend",
+  "calls_llm": false,
+  "runs_hpc": false,
+  "runs_full_240": false,
+  "writes_chroma": false,
+  "conclusions": {
+    "custom_graph_engineering_stable": true,
+    "primary_value_is_observability": true,
+    "legacy_remains_stable_baseline": true,
+    "custom_graph_does_not_universally_outperform_legacy": true,
+    "multi_hop_no_benefit": true,
+    "planner_active_side_effects": true,
+    "verifier_judge_tuning_no_gap_resolution": true,
+    "topk10_best_delta_only": true,
+    "answer_source_persistence_complete": true,
+    "keyword_coverage_patch_stable_but_neutral": true,
+    "recommend_keep_keyword_coverage_stop_expansion": true
+  },
+  "best_config": {
+    "enterprise_agent_graph_mode": "custom_graph",
+    "enterprise_multi_hop_mode": "off",
+    "enterprise_planner_mode": "debug_only",
+    "enterprise_judge_mode": "rule_based_fallback",
+    "enterprise_llm_judge_mode": "rule_based_fallback",
+    "enterprise_evidence_verifier_mode": "rule_based",
+    "enterprise_structured_retrieval_mode": "metadata_symbol",
+    "enterprise_memory_mode": "buffer"
+  },
+  "key_results_240": {
+    "phase_7c_baseline": {"legacy_calibrated_bad": 100, "custom_calibrated_bad": 105, "gap": 5},
+    "phase_7d1_multi_hop_ablation": {"custom_bad": 101, "gap": 4},
+    "phase_7d3_planner_debug_only": {"legacy_bad": 102, "custom_bad": 103, "gap": 1, "only_custom": 6}
+  },
+  "key_results_delta": {
+    "topk10_best": {"legacy_bad": 11, "custom_bad": 12, "gap": 1, "only_custom": 3},
+    "keyword_coverage_5c_diagnosis": {"fixed": 1, "regressed": 1, "stable_bad": 12, "stable_good": 6, "recommendation": "keep"}
+  },
+  "do_not_continue": [
+    "conservative_multi_hop_gate",
+    "verifier_judge_tuning",
+    "prompt_keyword_coverage_expansion",
+    "full_240_with_current_config",
+    "claim_custom_graph_superiority",
+    "overfit_20_delta_cases"
+  ],
+  "next_phase": "Phase 8 — Demo / Interview / Resume Packaging"
+}
