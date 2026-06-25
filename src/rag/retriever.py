@@ -296,30 +296,58 @@ def retrieve_with_overlay(
     - Only strong-signal queries get auxiliary boost (via score adjustment)
     """
     resolved_top_k = top_k or rag_settings.RAG_DEFAULT_TOP_K
+    candidate_pool_k = max(resolved_top_k * 4, 20)
 
-    # ── Step 1: Always run standard baseline dense retrieval ──
+    # ── Step 0: Infer query hints ──
+    hints = infer_query_retrieval_hints(query)
+    force_structured = bool(
+        rag_settings.ENTERPRISE_STRUCTURED_RETRIEVAL_MODE == "metadata_symbol"
+        and hints.get("allow_structured_lookup")
+    )
+
+    # ── Step 1: Always run standard baseline dense retrieval with larger pool ──
     baseline_results = retrieve(
         query,
-        top_k=resolved_top_k,
+        top_k=candidate_pool_k,
         persist_dir=persist_dir,
         collection_name=collection_name,
     )
 
-    # ── Step 2: Decide overlay (metadata only, no retrieval change) ──
+    # ── Step 2: Decide overlay — force if hints allow ──
     decision = decide_overlay(query)
-    overlay_debug: dict[str, Any] = {
-        "policy_mode": "targeted_overlay",
-        "overlay_enabled": decision.overlay_enabled,
-        "overlay_type": decision.overlay_type,
-        "baseline_noop": decision.baseline_noop,
-        "overlay_reason": decision.reason,
-        "metadata_overlay": decision.metadata_overlay,
-        "sparse_overlay": decision.sparse_overlay,
-        "citation_overlay": decision.citation_overlay,
-        "baseline_result_count": len(baseline_results),
-        "selected_policy": decision.overlay_type if decision.overlay_enabled else "baseline_dense",
-        "fallback_to_baseline": decision.baseline_noop,
-    }
+    if force_structured and not decision.overlay_enabled:
+        # Force structured lookup for external technical queries
+        overlay_debug: dict[str, Any] = {
+            "policy_mode": "targeted_overlay",
+            "overlay_enabled": True,
+            "overlay_type": "query_hints_forced",
+            "baseline_noop": False,
+            "overlay_reason": f"query hints force structured lookup: {hints.get('hint_profile')}",
+            "metadata_overlay": True,
+            "sparse_overlay": True,
+            "citation_overlay": False,
+            "baseline_result_count": len(baseline_results),
+            "selected_policy": "query_hints_structured",
+            "fallback_to_baseline": False,
+            "structured_forced_by_query_hints": True,
+            "structured_skip_reason": "",
+        }
+    else:
+        overlay_debug = {
+            "policy_mode": "targeted_overlay",
+            "overlay_enabled": decision.overlay_enabled,
+            "overlay_type": decision.overlay_type,
+            "baseline_noop": decision.baseline_noop,
+            "overlay_reason": decision.reason,
+            "metadata_overlay": decision.metadata_overlay,
+            "sparse_overlay": decision.sparse_overlay,
+            "citation_overlay": decision.citation_overlay,
+            "baseline_result_count": len(baseline_results),
+            "selected_policy": decision.overlay_type if decision.overlay_enabled else "baseline_dense",
+            "fallback_to_baseline": decision.baseline_noop,
+            "structured_forced_by_query_hints": False,
+            "structured_skip_reason": "overlay decision did not trigger" if not decision.overlay_enabled else "",
+        }
 
     # ── Step 3: If overlay enabled, boost relevant results ──
     if decision.overlay_enabled and baseline_results:
@@ -342,10 +370,120 @@ def retrieve_with_overlay(
                 r.relevance_score = min(current + boost, 1.0)
         overlay_debug["boost_applied"] = True
 
+    # ── Step 4: Apply query hint boost/demote + rerank + cut to top_k ──
+    boosted = 0
+    demoted = 0
+    for r in baseline_results:
+        metadata = getattr(r, "metadata", {}) or {}
+        sid = str(metadata.get("source_id", "") or getattr(r, "source", "") or "")
+        title = str(metadata.get("title", "") or getattr(r, "title", "") or "")
+        content = str(getattr(r, "content_preview", "") or getattr(r, "page_content", "") or "")
+        combined = f"{sid} {title} {content}".lower()
+        boost_val = 0.0
+        penalty_val = 0.0
+
+        for term in hints.get("preferred_terms", []):
+            if term.lower() in combined:
+                boost_val += 0.04
+        for pt in hints.get("preferred_source_terms", []):
+            if pt.lower() in sid:
+                boost_val += 0.06
+
+        if hints.get("is_external_technical_query") and not hints.get("is_project_internal_query"):
+            for dp in hints.get("demote_source_prefixes", []):
+                if sid.startswith(dp):
+                    penalty_val += 0.08
+
+        if boost_val > 0 or penalty_val > 0:
+            current = float(getattr(r, "relevance_score", 0.5) or 0.5)
+            r.relevance_score = min(max(current + min(boost_val, 0.20) - min(penalty_val, 0.10), 0.0), 1.0)
+            if boost_val > 0:
+                boosted += 1
+            if penalty_val > 0:
+                demoted += 1
+
+    baseline_results.sort(key=lambda x: getattr(x, "relevance_score", 0) or 0, reverse=True)
+
+    overlay_debug.update({
+        "query_hints": hints,
+        "requested_top_k": resolved_top_k,
+        "candidate_pool_k": candidate_pool_k,
+        "boosted_candidates_count": boosted,
+        "demoted_candidates_count": demoted,
+        "final_source_id_sequence": [str(getattr(r, "metadata", {}).get("source_id", "") or getattr(r, "source", "")) for r in baseline_results[:resolved_top_k]],
+        "final_chunk_id_sequence": [str(getattr(r, "chunk_id", "")) for r in baseline_results[:resolved_top_k]],
+        "final_doc_type_sequence": [str(getattr(r, "metadata", {}).get("doc_type", "") or getattr(r, "doc_type", "")) for r in baseline_results[:resolved_top_k]],
+    })
+
     return baseline_results[:resolved_top_k], overlay_debug
 
 
 # ── Phase 8: Conservative query hint boost ──
+
+
+def infer_query_retrieval_hints(query: str) -> dict[str, Any]:
+    """Infer query-level hints for retrieval routing, boost, and demotion."""
+    q = query.lower().strip()
+    hints: dict[str, Any] = {
+        "hint_profile": "generic",
+        "is_external_technical_query": False,
+        "is_project_internal_query": False,
+        "preferred_terms": [],
+        "preferred_source_terms": [],
+        "demote_source_prefixes": [],
+        "allow_structured_lookup": False,
+    }
+
+    # External tech: FastAPI / Request Body / Pydantic
+    if any(t in q for t in ("fastapi", "request body", "requestbody", "pydantic", "body 参数", "请求体")):
+        hints.update({
+            "hint_profile": "fastapi_request_body",
+            "is_external_technical_query": True,
+            "preferred_terms": ["fastapi", "request body", "pydantic", "body", "请求体", "basemodel"],
+            "preferred_source_terms": ["fastapi", "pydantic"],
+            "demote_source_prefixes": ["enterprise_prompt_guidelines", "enterprise_model_provider_policy", "enterprise_agent_overview"],
+            "allow_structured_lookup": True,
+        })
+        return hints
+
+    # External tech: LoRA
+    if any(t in q for t in ("lora", "低秩适配", "低秩", "finetune", "fine-tune", "peft", "qlora")):
+        hints.update({
+            "hint_profile": "lora",
+            "is_external_technical_query": True,
+            "preferred_terms": ["lora", "low-rank", "低秩", "微调", "finetune", "fine-tune", "peft", "qlora"],
+            "preferred_source_terms": ["deep_learning", "nlp"],
+            "demote_source_prefixes": [],
+            "allow_structured_lookup": True,
+        })
+        return hints
+
+    # Project internal: system/architecture questions
+    if any(t in q for t in ("这个系统", "本系统", "本项目", "企业知识库", "如何进行检索", "检索流程", "rag 数据流", "agent 架构", "graph_debug", "来源追踪", "这个项目")):
+        hints.update({
+            "hint_profile": "project_internal",
+            "is_project_internal_query": True,
+            "preferred_terms": ["检索", "rag", "retrieval", "pipeline", "agent", "graph"],
+            "preferred_source_terms": [],
+            "demote_source_prefixes": [],
+            "allow_structured_lookup": False,
+        })
+        return hints
+
+    # RAG general knowledge
+    if any(t in q for t in ("rag", "检索增强", "retrieval augmented")):
+        hints.update({
+            "hint_profile": "rag_knowledge",
+            "is_external_technical_query": False,
+            "is_project_internal_query": False,
+            "preferred_terms": ["rag", "检索", "retrieval", "生成", "augmented"],
+            "preferred_source_terms": [],
+            "demote_source_prefixes": [],
+            "allow_structured_lookup": False,
+        })
+        return hints
+
+    return hints
 
 EXTERNAL_TECH_PATTERNS: dict[str, dict[str, Any]] = {
     "fastapi": {

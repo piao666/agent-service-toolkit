@@ -271,6 +271,7 @@ def build_enterprise_retrieval_payload(
     policy_mode = rag_settings.ENTERPRISE_RAG_POLICY_MODE.lower()
     policy_debug: dict[str, Any] = {"policy_mode": "baseline"}
     try:
+        structured_mode = rag_settings.ENTERPRISE_STRUCTURED_RETRIEVAL_MODE.lower()
         if policy_mode == "query_type_aware":
             results, policy_debug = retrieve_with_policy(
                 normalized_query,
@@ -278,7 +279,7 @@ def build_enterprise_retrieval_payload(
                 persist_dir=resolved_persist_dir,
                 collection_name=resolved_collection,
             )
-        elif policy_mode == "targeted_overlay":
+        elif policy_mode == "targeted_overlay" or structured_mode == "metadata_symbol":
             results, policy_debug = retrieve_with_overlay(
                 normalized_query,
                 top_k=resolved_top_k,
