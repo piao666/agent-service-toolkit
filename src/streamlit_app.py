@@ -307,10 +307,9 @@ def _render_sidebar() -> dict[str, Any]:
                 st.session_state.pending_question = question
                 st.rerun()
 
-        st.checkbox(
-        "显示高级调试信息",
-        key="show_advanced_debug",
-    )
+        # 确保 key 存在默认值，checkbox 不覆盖已有状态
+        st.session_state.setdefault("show_advanced_debug", False)
+        st.checkbox("显示高级调试信息", key="show_advanced_debug")
 
     top_k = int(os.getenv("RAG_DEFAULT_TOP_K", "5"))
     try:
@@ -333,7 +332,10 @@ def _render_sidebar() -> dict[str, Any]:
     }
 
 
-def _render_message(message: dict[str, Any], show_advanced: bool, message_index: int = 0) -> None:
+def _render_message(message: dict[str, Any], message_index: int = 0) -> None:
+    # 高级调试是全局显示状态，渲染时实时读取 session_state，
+    # 避免外部局部变量在 st.rerun() 后捕获到 stale 值。
+    show_advanced = bool(st.session_state.get("show_advanced_debug", False))
     with st.chat_message(message["role"]):
         st.write(message["content"])
         if message["role"] == "assistant" and message.get("response"):
@@ -383,10 +385,8 @@ def main() -> None:
     st.caption("面向企业内部知识资料的 RAG 问答、来源追踪与调试演示。")
     st.caption(f"接口：{controls['api_endpoint']} ｜ 会话：{controls['session_id']}")
 
-    show_advanced = st.session_state.get("show_advanced_debug", False)
-
     for message_index, message in enumerate(st.session_state.messages):
-        _render_message(message, show_advanced, message_index=message_index)
+        _render_message(message, message_index=message_index)
 
     question = st.chat_input("输入知识库问题")
     if st.session_state.get("pending_question"):

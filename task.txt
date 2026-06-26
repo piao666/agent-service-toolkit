@@ -2580,3 +2580,22 @@ Diagnostic script: scripts/check_retrieval_path.py
 - src/service/service.py
 - src/agents/enterprise_rag_graph.py (仅通过 as_debug() 自动获取 V2 字段, 不修改图流程)
 - prompt / judge / multi-hop
+
+---
+
+### Streamlit 高级调试首次渲染状态修复 (2026-06-25)
+
+**根因**: `_render_message()` 的 `show_advanced` 参数在主循环前通过局部变量
+`show_advanced = st.session_state.get(...)` 捕获，然后传入循环。但 `st.rerun()` 后
+新消息在下一帧渲染时，虽然 session_state 中的 `show_advanced_debug` 已经为 True，
+但某些 Streamlit widget 状态同步边界情况下该局部变量可能不是最新值。
+
+**修复**:
+- [x] `_render_message()` 改为内部实时读取 `st.session_state.get("show_advanced_debug", False)`，不再依赖外部传参
+- [x] checkbox 初始化使用 `st.session_state.setdefault("show_advanced_debug", False)` 防止误覆盖
+- [x] 主流程移除 `show_advanced` 局部变量，循环调用 `_render_message(message, message_index=...)`
+- [x] 高级调试是全局显示状态，不在 message 内部固化
+- [x] 术语列表默认折叠不变
+- [x] assistant message 始终保存完整 response dict
+
+**不修改的模块**: 同前（不修改 retriever / tools / service / graph / prompt / verifier / judge）
