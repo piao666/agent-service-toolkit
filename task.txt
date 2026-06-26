@@ -2599,3 +2599,24 @@ Diagnostic script: scripts/check_retrieval_path.py
 - [x] assistant message 始终保存完整 response dict
 
 **不修改的模块**: 同前（不修改 retriever / tools / service / graph / prompt / verifier / judge）
+
+---
+
+### Streamlit 高级调试状态持久化 + 请求执行期间禁用控件 (2026-06-25)
+
+**根因**:
+1. checkbox 使用单一 widget key 同时作显示状态，Streamlit rerun 时 widget 状态可能被重置。
+2. API 请求在 render 周期内执行，期间点击任何 widget 都会触发 Streamlit rerun 中断请求。
+
+**修复**:
+- [x] 拆分 widget 临时状态 (`show_advanced_debug_checkbox`) 与持久业务状态 (`advanced_debug_enabled`)
+- [x] `on_change=_sync_advanced_debug_state` 回调仅在用户点击时同步
+- [x] `_render_message` 读取持久业务状态，不读 widget key
+- [x] pending-query 两阶段流程：阶段 A 接受输入 → st.rerun → 阶段 B 执行 API（控件已 disabled）
+- [x] 请求执行期间 checkbox 和 chat_input 均 `disabled=request_in_flight`
+- [x] `_REQUEST_IN_FLIGHT_KEY` / `_PENDING_QUERY_KEY` / `_PENDING_PAYLOAD_KEY` 管理请求生命周期
+- [x] `finally` 块确保 flags 始终清理，防止死锁
+- [x] 术语列表默认折叠不变
+- [x] assistant message 始终保存完整 response dict
+
+**不修改的模块**: 同前

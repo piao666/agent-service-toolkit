@@ -12,6 +12,13 @@ from urllib.request import Request, urlopen
 
 import streamlit as st
 
+# ── 持久业务状态 key（与 widget 临时状态解耦）──
+_ADVANCED_DEBUG_STATE_KEY = "advanced_debug_enabled"
+_ADVANCED_DEBUG_WIDGET_KEY = "show_advanced_debug_checkbox"
+_REQUEST_IN_FLIGHT_KEY = "enterprise_request_in_flight"
+_PENDING_QUERY_KEY = "pending_enterprise_query"
+_PENDING_PAYLOAD_KEY = "pending_enterprise_payload"
+
 APP_TITLE = "企业知识库 Agent 控制台"
 DEFAULT_API_BASE_URL = "http://127.0.0.1:8000"
 DEFAULT_API_ENDPOINT = "/enterprise/agent/query"
@@ -267,6 +274,13 @@ def render_verifier_detail(verifier_debug: dict[str, Any]) -> None:
                 st.code(json.dumps(unsupported_terms, ensure_ascii=False, indent=2), language="json")
 
 
+def _sync_advanced_debug_state() -> None:
+    """将 widget 临时状态同步到持久业务状态。"""
+    st.session_state[_ADVANCED_DEBUG_STATE_KEY] = bool(
+        st.session_state.get(_ADVANCED_DEBUG_WIDGET_KEY, False)
+    )
+
+
 def _new_session_id() -> str:
     return f"demo-{uuid.uuid4().hex[:12]}"
 
@@ -274,6 +288,12 @@ def _new_session_id() -> str:
 def _initialize_state() -> None:
     st.session_state.setdefault("messages", [])
     st.session_state.setdefault("session_id", _new_session_id())
+    # 持久业务状态（不随 widget rerun 丢失）
+    st.session_state.setdefault(_ADVANCED_DEBUG_STATE_KEY, False)
+    st.session_state.setdefault(_ADVANCED_DEBUG_WIDGET_KEY, False)
+    st.session_state.setdefault(_REQUEST_IN_FLIGHT_KEY, False)
+    st.session_state.setdefault(_PENDING_QUERY_KEY, "")
+    st.session_state.setdefault(_PENDING_PAYLOAD_KEY, {})
 
 
 def _render_sidebar() -> dict[str, Any]:
@@ -307,9 +327,13 @@ def _render_sidebar() -> dict[str, Any]:
                 st.session_state.pending_question = question
                 st.rerun()
 
-        # 确保 key 存在默认值，checkbox 不覆盖已有状态
-        st.session_state.setdefault("show_advanced_debug", False)
-        st.checkbox("显示高级调试信息", key="show_advanced_debug")
+        # widget 状态与持久业务状态解耦，on_change 同步
+        st.checkbox(
+            "显示高级调试信息",
+            key=_ADVANCED_DEBUG_WIDGET_KEY,
+            on_change=_sync_advanced_debug_state,
+            disabled=bool(st.session_state.get(_REQUEST_IN_FLIGHT_KEY, False)),
+        )
 
     top_k = int(os.getenv("RAG_DEFAULT_TOP_K", "5"))
     try:
@@ -333,9 +357,8 @@ def _render_sidebar() -> dict[str, Any]:
 
 
 def _render_message(message: dict[str, Any], message_index: int = 0) -> None:
-    # 高级调试是全局显示状态，渲染时实时读取 session_state，
-    # 避免外部局部变量在 st.rerun() 后捕获到 stale 值。
-    show_advanced = bool(st.session_state.get("show_advanced_debug", False))
+    # 读取持久业务状态（非 widget key），不受 widget rerun 影响
+    show_advanced = bool(st.session_state.get(_ADVANCED_DEBUG_STATE_KEY, False))
     with st.chat_message(message["role"]):
         st.write(message["content"])
         if message["role"] == "assistant" and message.get("response"):
@@ -385,10 +408,49 @@ def main() -> None:
     st.caption("面向企业内部知识资料的 RAG 问答、来源追踪与调试演示。")
     st.caption(f"接口：{controls['api_endpoint']} ｜ 会话：{controls['session_id']}")
 
+    request_in_flight = bool(st.session_state.get(_REQUEST_IN_FLIGHT_KEY, False))
+
+    # ── 渲染已有 messages ──
     for message_index, message in enumerate(st.session_state.messages):
         _render_message(message, message_index=message_index)
 
-    question = st.chat_input("输入知识库问题")
+    # ── 阶段 B: 如果存在 pending query，执行 API（此时所有控件已 disabled）──
+    pending_query = st.session_state.get(_PENDING_QUERY_KEY, "")
+    if pending_query and request_in_flight:
+        pending_payload = dict(st.session_state.get(_PENDING_PAYLOAD_KEY) or {})
+        try:
+            with st.spinner("正在检索知识库并生成回答…"):
+                response = request_agent_api(
+                    controls["api_base_url"],
+                    controls["api_endpoint"],
+                    pending_payload,
+                    controls["timeout_seconds"],
+                )
+            answer = response.get("answer") or "后端返回了空回答。"
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": answer,
+                "payload": pending_payload,
+                "response": response,
+            })
+        except (ApiRequestError, ValueError) as exc:
+            st.session_state.messages.append({
+                "role": "assistant",
+                "content": f"请求失败：{exc}",
+                "payload": pending_payload,
+                "response": {"answer": f"请求失败：{exc}", "error": str(exc)},
+            })
+        finally:
+            st.session_state[_PENDING_QUERY_KEY] = ""
+            st.session_state[_PENDING_PAYLOAD_KEY] = {}
+            st.session_state[_REQUEST_IN_FLIGHT_KEY] = False
+            st.rerun()
+
+    # ── 阶段 A: 接受用户输入（请求期间 chat_input disabled）──
+    question = st.chat_input(
+        "输入知识库问题",
+        disabled=request_in_flight,
+    )
     if st.session_state.get("pending_question"):
         question = st.session_state.pending_question
         st.session_state.pending_question = None
@@ -396,31 +458,17 @@ def main() -> None:
     if not question:
         return
 
+    # 保存 payload（此时 controls 已就绪），切换到 pending-query 流程
     payload = {
         "query": question,
         "session_id": controls["session_id"] or None,
         "top_k": controls["top_k"],
         "return_sources": True,
     }
-    # 先 append user message，再通过 st.rerun() 让统一渲染流程处理
     st.session_state.messages.append({"role": "user", "content": question})
-
-    try:
-        with st.spinner("正在查询知识库…"):
-            response = request_agent_api(controls["api_base_url"], controls["api_endpoint"], payload, controls["timeout_seconds"])
-        answer = response["answer"] or "后端返回了空回答。"
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": answer,
-            "payload": payload,
-            "response": response,
-        })
-    except (ApiRequestError, ValueError) as exc:
-        st.session_state.messages.append({
-            "role": "assistant",
-            "content": f"请求失败：{exc}",
-            "payload": payload,
-        })
+    st.session_state[_PENDING_QUERY_KEY] = question
+    st.session_state[_PENDING_PAYLOAD_KEY] = payload
+    st.session_state[_REQUEST_IN_FLIGHT_KEY] = True
     st.rerun()
 
 
