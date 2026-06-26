@@ -76,7 +76,17 @@ System retrieval gate:
 - grounding_status 强制 LOW
 - diagnosis = "corpus_gap: LoRA/PEFT/QLoRA/低秩来源缺失"
 
-### 2.7 更完整的 source text
+### 2.7 状态与分数一致性校准
+
+V2 区分 `raw_grounding_score` 与 UI 展示用的 `grounding_score`：
+
+- `raw_grounding_score`：纯术语覆盖得分，用于调试和诊断；
+- `grounding_score` / `calibrated_grounding_score`：结合 source quality gate 后的展示分；
+- 当 `source_quality_gate=high` 时，展示分会提升到 HIGH 区间，避免出现 HIGH 状态低于 MEDIUM 分数的情况；
+- 当 `source_quality_gate=medium` 时，展示分至少进入 MEDIUM 区间；若原始分已达到 HIGH 阈值，则状态同步升级为 HIGH；
+- `corpus_gap_detected=True` 的场景优先级最高，LoRA 等语料缺口不会被 gate 升分。
+
+### 2.8 更完整的 source text
 
 `_source_full_text()` 优先取 `content` / `page_content` / `text` 字段（常用于传递完整文档内容），回退到 `content_preview`。
 

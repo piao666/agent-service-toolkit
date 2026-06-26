@@ -34,6 +34,18 @@ OUTPUT_PATH = (
 
 FINAL_PERSIST_DIR = "./chroma_enterprise_final"
 FINAL_COLLECTION = "enterprise_knowledge_base"
+def _status_score_consistent(status: str | None, score: float | int | None) -> bool:
+    status_text = str(status or "").strip().lower()
+    value = float(score or 0.0)
+    if status_text == "high":
+        return value >= 0.70
+    if status_text == "medium":
+        return 0.35 <= value < 0.70
+    if status_text in {"low", "insufficient"}:
+        return value < 0.35
+    if status_text == "not_checked":
+        return value == 0.0
+    return True
 
 
 def _parse_args() -> argparse.Namespace:
@@ -146,6 +158,16 @@ def _run_retrieval_verification() -> list[dict[str, Any]]:
             "source_unknown_count": source_unknown_count,
             "grounding_status": vd.get("grounding_status"),
             "grounding_score": vd.get("grounding_score"),
+            "raw_grounding_score": vd.get("raw_grounding_score"),
+            "calibrated_grounding_score": vd.get("calibrated_grounding_score"),
+            "grounding_status_before_calibration": vd.get("grounding_status_before_calibration"),
+            "score_floor_applied": vd.get("score_floor_applied"),
+            "calibrated_by_source_quality_gate": vd.get("calibrated_by_source_quality_gate"),
+            "score_calibration_reason": vd.get("score_calibration_reason"),
+            "status_score_consistent": _status_score_consistent(
+                vd.get("grounding_status"),
+                vd.get("grounding_score"),
+            ),
             "source_quality_gate": vd.get("source_quality_gate"),
             "corpus_gap_detected": vd.get("corpus_gap_detected"),
             "diagnosis": vd.get("diagnosis"),
@@ -218,6 +240,16 @@ def _run_api_verification(base_url: str) -> list[dict[str, Any]] | None:
             "source_unknown_count": source_unknown,
             "grounding_status": vd.get("grounding_status"),
             "grounding_score": vd.get("grounding_score"),
+            "raw_grounding_score": vd.get("raw_grounding_score"),
+            "calibrated_grounding_score": vd.get("calibrated_grounding_score"),
+            "grounding_status_before_calibration": vd.get("grounding_status_before_calibration"),
+            "score_floor_applied": vd.get("score_floor_applied"),
+            "calibrated_by_source_quality_gate": vd.get("calibrated_by_source_quality_gate"),
+            "score_calibration_reason": vd.get("score_calibration_reason"),
+            "status_score_consistent": _status_score_consistent(
+                vd.get("grounding_status"),
+                vd.get("grounding_score"),
+            ),
             "source_quality_gate": vd.get("source_quality_gate"),
             "corpus_gap_detected": vd.get("corpus_gap_detected"),
             "diagnosis": vd.get("diagnosis"),
@@ -256,6 +288,9 @@ def main() -> None:
         "total_cases": len(offline_results),
         "grounding_status_distribution": dict(statuses),
         "corpus_gap_count": sum(1 for r in offline_results if r.get("corpus_gap_detected")),
+        "status_score_consistent_count": sum(
+            1 for r in offline_results if r.get("status_score_consistent")
+        ),
     }
 
     # 打印验收结果

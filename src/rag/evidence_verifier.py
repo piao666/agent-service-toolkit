@@ -380,6 +380,74 @@ def _weighted_grounding_score(
         return 0.0
     return round(matched_weight / total_weight, 4)
 
+_HIGH_GROUNDING_THRESHOLD = 0.70
+_MEDIUM_GROUNDING_THRESHOLD = 0.35
+_GATE_HIGH_SCORE_FLOOR = 0.72
+_GATE_MEDIUM_SCORE_FLOOR = 0.45
+_CORPUS_GAP_SCORE_CEILING = 0.20
+
+
+def _calibrate_grounding_score_and_status(
+    raw_score: float,
+    status_before_calibration: str,
+    *,
+    source_quality_gate: str,
+    corpus_gap_detected: bool,
+) -> tuple[float, str, dict[str, Any]]:
+    """Align UI-facing grounding_score with grounding_status.
+
+    raw_score is the pure weighted term-overlap score.
+    grounding_score is the calibrated UI-facing score after source-quality gates.
+    Corpus-gap guardrail has the highest priority and cannot be elevated.
+    """
+    raw = round(float(raw_score or 0.0), 4)
+    gate = str(source_quality_gate or "none").strip().lower()
+    status_before = str(status_before_calibration or "low").strip().lower()
+
+    score_floor_applied: float | None = None
+    calibrated_by_gate = False
+    reason = "raw_score_threshold"
+
+    if corpus_gap_detected:
+        calibrated = round(min(raw, _CORPUS_GAP_SCORE_CEILING), 4)
+        return calibrated, "low", {
+            "score_floor_applied": None,
+            "calibrated_by_source_quality_gate": False,
+            "score_calibration_reason": "corpus_gap_guardrail",
+        }
+
+    if gate == "high":
+        score_floor_applied = _GATE_HIGH_SCORE_FLOOR
+        calibrated = round(max(raw, score_floor_applied), 4)
+        calibrated_by_gate = True
+        status = "high"
+        reason = "source_quality_gate_high_floor"
+    elif gate == "medium":
+        score_floor_applied = _GATE_MEDIUM_SCORE_FLOOR
+        calibrated = round(max(raw, score_floor_applied), 4)
+        calibrated_by_gate = True
+        status = "high" if calibrated >= _HIGH_GROUNDING_THRESHOLD else "medium"
+        reason = "source_quality_gate_medium_floor"
+    elif status_before == "high":
+        score_floor_applied = _HIGH_GROUNDING_THRESHOLD if raw < _HIGH_GROUNDING_THRESHOLD else None
+        calibrated = round(max(raw, _HIGH_GROUNDING_THRESHOLD), 4)
+        status = "high"
+        reason = "status_high_score_floor" if score_floor_applied is not None else "raw_score_threshold"
+    elif status_before == "medium":
+        score_floor_applied = _MEDIUM_GROUNDING_THRESHOLD if raw < _MEDIUM_GROUNDING_THRESHOLD else None
+        calibrated = round(max(raw, _MEDIUM_GROUNDING_THRESHOLD), 4)
+        status = "high" if calibrated >= _HIGH_GROUNDING_THRESHOLD else "medium"
+        reason = "status_medium_score_floor" if score_floor_applied is not None else "raw_score_threshold"
+    else:
+        calibrated = round(min(raw, _MEDIUM_GROUNDING_THRESHOLD - 0.0001), 4)
+        status = "low"
+        reason = "status_low_score_ceiling" if raw >= _MEDIUM_GROUNDING_THRESHOLD else "raw_score_threshold"
+
+    return calibrated, status, {
+        "score_floor_applied": score_floor_applied,
+        "calibrated_by_source_quality_gate": calibrated_by_gate,
+        "score_calibration_reason": reason,
+    }
 
 # ============================================================================
 # V2: 主入口
@@ -414,7 +482,12 @@ class EvidenceVerificationResult:
     source_quality_gate: str = "none"
     corpus_gap_detected: bool = False
     diagnosis: str = ""
-
+    raw_grounding_score: float = 0.0
+    calibrated_grounding_score: float = 0.0
+    grounding_status_before_calibration: str = ""
+    score_floor_applied: float | None = None
+    calibrated_by_source_quality_gate: bool = False
+    score_calibration_reason: str = ""
     def as_debug(self) -> dict[str, Any]:
         return asdict(self)
 
@@ -625,6 +698,13 @@ def verify_answer_grounding(
 
     # ── Step 7: Citation coverage ──
     all_matched = matched_critical + matched_support + matched_example
+    status_before_calibration = status
+    grounding_score, status, calibration_debug = _calibrate_grounding_score_and_status(
+        wscore,
+        status_before_calibration,
+        source_quality_gate=gate_result,
+        corpus_gap_detected=corpus_gap,
+    )
     citation_coverage = bool(
         sources and all_matched and len(all_matched) >= 1
     )
@@ -637,7 +717,7 @@ def verify_answer_grounding(
     return EvidenceVerificationResult(
         verifier_mode="rule_based",
         grounding_status=status,
-        grounding_score=wscore,
+        grounding_score=grounding_score,
         answer_has_sources=has_answer and has_sources,
         citation_coverage=citation_coverage,
         # V1
@@ -660,4 +740,10 @@ def verify_answer_grounding(
         source_quality_gate=gate_result,
         corpus_gap_detected=corpus_gap,
         diagnosis=diagnosis,
+        raw_grounding_score=wscore,
+        calibrated_grounding_score=grounding_score,
+        grounding_status_before_calibration=status_before_calibration,
+        score_floor_applied=calibration_debug["score_floor_applied"],
+        calibrated_by_source_quality_gate=calibration_debug["calibrated_by_source_quality_gate"],
+        score_calibration_reason=calibration_debug["score_calibration_reason"],
     )
