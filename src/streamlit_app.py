@@ -249,7 +249,9 @@ def render_verifier_detail(verifier_debug: dict[str, Any]) -> None:
                     st.code(json.dumps(matched_critical, ensure_ascii=False, indent=2), language="json")
                 if matched_support:
                     st.caption("**辅助术语**")
-                    st.code(json.dumps(matched_support, ensure_ascii=False, indent=2), language="json")
+                    st.code(json.dumps(matched_support[:12], ensure_ascii=False, indent=2), language="json")
+                    if len(matched_support) > 12:
+                        st.caption(f"已省略 {len(matched_support) - 12} 个辅助术语。")
                 if matched_example:
                     st.caption("**示例术语**")
                     st.code(json.dumps(matched_example, ensure_ascii=False, indent=2), language="json")
@@ -260,7 +262,9 @@ def render_verifier_detail(verifier_debug: dict[str, Any]) -> None:
                     st.code(json.dumps(unsupported_critical, ensure_ascii=False, indent=2), language="json")
                 if unsupported_support:
                     st.caption("**辅助术语**")
-                    st.code(json.dumps(unsupported_support, ensure_ascii=False, indent=2), language="json")
+                    st.code(json.dumps(unsupported_support[:12], ensure_ascii=False, indent=2), language="json")
+                    if len(unsupported_support) > 12:
+                        st.caption(f"已省略 {len(unsupported_support) - 12} 个辅助术语。")
                 if unsupported_example:
                     st.caption("**示例术语**")
                     st.code(json.dumps(unsupported_example, ensure_ascii=False, indent=2), language="json")
@@ -334,13 +338,116 @@ def _initialize_state() -> None:
     st.session_state.setdefault(_PENDING_PAYLOAD_KEY, {})
     st.session_state.setdefault(_PENDING_EXAMPLE_QUESTION_KEY, "")
 
+def _inject_page_styles() -> None:
+    """注入页面级样式：隐藏 Streamlit 框架菜单，并优化首页欢迎区。"""
+    st.markdown(
+        """
+        <style>
+        /* 尽量隐藏 Streamlit 右上角框架菜单、Deploy、顶部工具栏、页脚 */
+        #MainMenu {
+            visibility: hidden;
+        }
+
+        header[data-testid="stHeader"] {
+            display: none;
+        }
+
+        div[data-testid="stToolbar"] {
+            display: none;
+        }
+
+        div[data-testid="stDecoration"] {
+            display: none;
+        }
+
+        footer {
+            visibility: hidden;
+        }
+
+        /* 主内容区：保留宽屏，但减少顶部工程感 */
+        .block-container {
+            padding-top: 3.2rem;
+            padding-bottom: 6rem;
+            max-width: 1280px;
+        }
+
+        /* 首页欢迎语：参考聊天产品的开场提示，不显示工程接口与会话信息 */
+        .enterprise-kb-welcome {
+            max-width: 880px;
+            margin: 5.8rem auto 0 auto;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            color: #F8FAFC;
+        }
+
+        .enterprise-kb-welcome-icon {
+            width: 38px;
+            height: 38px;
+            min-width: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #F59E0B, #F97316);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.22);
+        }
+
+        .enterprise-kb-welcome-copy {
+            padding-top: 2px;
+        }
+
+        .enterprise-kb-welcome-title {
+            font-size: 18px;
+            font-weight: 700;
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+        }
+
+        .enterprise-kb-welcome-subtitle {
+            margin-top: 4px;
+            font-size: 13px;
+            line-height: 1.7;
+            color: rgba(248, 250, 252, 0.62);
+        }
+
+        /* 底部输入框宽度与主问答区对齐 */
+        div[data-testid="stChatInput"] {
+            max-width: 1180px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _render_welcome_message() -> None:
+    """渲染首页中文欢迎语。仅在没有历史消息时展示。"""
+    st.markdown(
+        """
+        <div class="enterprise-kb-welcome">
+            <div class="enterprise-kb-welcome-icon">🤖</div>
+            <div class="enterprise-kb-welcome-copy">
+                <div class="enterprise-kb-welcome-title">
+                    我是企业知识库问答助手，会基于内部技术资料为你检索答案，并提供可追踪的来源依据。
+                </div>
+                <div class="enterprise-kb-welcome-subtitle">
+                    你可以询问 RAG、FastAPI、LLM、Python、机器学习、深度学习等知识库已收录的技术问题。
+                </div>
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 def _render_sidebar() -> dict[str, Any]:
     request_in_flight = bool(st.session_state.get(_REQUEST_IN_FLIGHT_KEY, False))
 
     with st.sidebar:
         st.title("企业知识库问答")
-        st.caption("基于企业知识库的 RAG 问答演示")
         api_base_url = st.text_input("后端服务地址", value=DEFAULT_API_BASE_URL)
         api_endpoint = st.text_input("接口路径", value=DEFAULT_API_ENDPOINT)
         # session_id 使用只读展示，避免 widget key 与业务状态冲突
@@ -439,42 +546,180 @@ def _render_message(message: dict[str, Any], message_index: int = 0) -> None:
                 render_verifier_detail(response.get("verifier_debug") or {})
                 _render_debug_panel(message.get("payload") or {}, response)
 
+def _compact_debug_table(rows: list[dict[str, Any]]) -> None:
+    """以两列表格展示紧凑调试信息。"""
+    if not rows:
+        st.caption("暂无摘要信息。")
+        return
+    st.dataframe(rows, hide_index=True, use_container_width=True)
+
+
+def _join_debug_list(value: Any, limit: int = 6) -> str:
+    """将调试字段里的 list 压缩成短文本。"""
+    if not isinstance(value, list):
+        return str(value or "-")
+    clipped = value[:limit]
+    suffix = "" if len(value) <= limit else f" … 共 {len(value)} 项"
+    return " → ".join(str(item) for item in clipped) + suffix
+
+
+def _render_retrieval_debug_summary(retrieval_debug: dict[str, Any]) -> None:
+    """只展示检索诊断里最关键的字段。"""
+    if not retrieval_debug:
+        st.caption("未返回检索诊断。")
+        return
+
+    safe = redact_for_display(retrieval_debug)
+
+    rows = [
+        {"字段": "原始问题", "值": safe.get("original_query", "-")},
+        {"字段": "改写后问题", "值": safe.get("rewritten_query", "-")},
+        {"字段": "命中数量", "值": f"{safe.get('hit_count', '-')} / top_k={safe.get('top_k', '-')}" },
+        {"字段": "向量库", "值": f"{safe.get('vector_store', '-')} · {safe.get('collection', '-')}" },
+        {"字段": "Embedding", "值": safe.get("embedding_provider", "-")},
+        {"字段": "检索策略", "值": safe.get("selected_policy", safe.get("policy_mode", "-"))},
+        {"字段": "Overlay", "值": f"{safe.get('overlay_type', '-')}｜{safe.get('overlay_reason', '-')}" },
+        {"字段": "候选池", "值": f"candidate_pool={safe.get('candidate_pool_k', '-')}，baseline={safe.get('baseline_result_count', '-')}" },
+    ]
+    _compact_debug_table(rows)
+
+    source_ids = safe.get("final_source_id_sequence") or []
+    chunk_ids = safe.get("final_chunk_id_sequence") or []
+    doc_types = safe.get("final_doc_type_sequence") or []
+
+    source_rows = []
+    max_len = max(len(source_ids), len(chunk_ids), len(doc_types))
+    for i in range(max_len):
+        source_rows.append({
+            "序号": i + 1,
+            "source_id": source_ids[i] if i < len(source_ids) else "-",
+            "chunk_id": chunk_ids[i] if i < len(chunk_ids) else "-",
+            "doc_type": doc_types[i] if i < len(doc_types) else "-",
+        })
+
+    if source_rows:
+        st.caption("最终命中的来源顺序")
+        st.dataframe(source_rows, hide_index=True, use_container_width=True)
+
+
+def _render_graph_debug_summary(graph_debug: dict[str, Any]) -> None:
+    """只展示图执行追踪里的主链路信息。"""
+    if not graph_debug:
+        st.caption("未返回图执行追踪。")
+        return
+
+    safe = redact_for_display(graph_debug)
+    planner = safe.get("planner") if isinstance(safe.get("planner"), dict) else {}
+    judge = safe.get("judge") if isinstance(safe.get("judge"), dict) else {}
+
+    rows = [
+        {"字段": "Graph 模式", "值": safe.get("graph_mode", "-")},
+        {"字段": "执行路由", "值": safe.get("route", "-")},
+        {"字段": "节点链路", "值": _join_debug_list(safe.get("nodes_executed"), limit=10)},
+        {"字段": "是否调用真实 LLM", "值": safe.get("calls_real_llm", safe.get("calls_llm", "-"))},
+        {"字段": "是否写入 Chroma", "值": safe.get("writes_chroma", "-")},
+        {"字段": "Planner 模式", "值": planner.get("planner_mode", "-")},
+        {"字段": "Planner 类型", "值": planner.get("planner_type", "-")},
+        {"字段": "是否 Multi-hop", "值": planner.get("requires_multi_hop", "-")},
+        {"字段": "Judge 结论", "值": judge.get("verdict", "-")},
+        {"字段": "Judge 分数", "值": judge.get("score", "-")},
+    ]
+    _compact_debug_table(rows)
+
+
+def _render_memory_debug_summary(memory_debug: dict[str, Any]) -> None:
+    """只展示会话记忆摘要，不再重复输出完整 JSON。"""
+    if not memory_debug:
+        st.caption("未返回会话记忆。")
+        return
+
+    safe = redact_for_display(memory_debug)
+    rows = [
+        {"字段": "记忆模式", "值": safe.get("memory_mode", "-")},
+        {"字段": "是否追问", "值": safe.get("is_follow_up", "-")},
+        {"字段": "原始问题", "值": safe.get("original_query", "-")},
+        {"字段": "改写后问题", "值": safe.get("contextual_query", "-")},
+        {"字段": "改写策略", "值": safe.get("memory_rewrite_strategy", "-")},
+        {"字段": "是否用于检索", "值": safe.get("memory_used_for_retrieval", "-")},
+        {"字段": "本轮前对话数", "值": safe.get("memory_turn_count_before", "-")},
+        {"字段": "本轮后对话数", "值": safe.get("memory_turn_count_after", "-")},
+    ]
+    _compact_debug_table(rows)
+
+
+def _render_request_summary(payload: dict[str, Any]) -> None:
+    """只展示最关键请求参数。"""
+    safe = redact_for_display(payload or {})
+    rows = [
+        {"字段": "query", "值": safe.get("query", "-")},
+        {"字段": "session_id", "值": safe.get("session_id", "-")},
+        {"字段": "top_k", "值": safe.get("top_k", "-")},
+        {"字段": "return_sources", "值": safe.get("return_sources", "-")},
+    ]
+    _compact_debug_table(rows)
+
+
+def _render_raw_response_summary(response: dict[str, Any]) -> None:
+    """原始响应默认只给结构摘要，完整 JSON 放到最后的开发者排错区。"""
+    safe = redact_for_display(response or {})
+    sources = safe.get("sources") or []
+    retrieval_debug = safe.get("retrieval_debug") or {}
+    verifier_debug = safe.get("verifier_debug") or {}
+    judge_debug = safe.get("judge_debug") or {}
+    graph_debug = safe.get("graph_debug") or {}
+
+    rows = [
+        {"字段": "answer 字符数", "值": len(str(safe.get("answer") or ""))},
+        {"字段": "sources 数量", "值": len(sources) if isinstance(sources, list) else 0},
+        {"字段": "latency_ms", "值": safe.get("latency_ms", "-")},
+        {"字段": "grounding_status", "值": verifier_debug.get("grounding_status", "-") if isinstance(verifier_debug, dict) else "-"},
+        {"字段": "grounding_score", "值": verifier_debug.get("grounding_score", "-") if isinstance(verifier_debug, dict) else "-"},
+        {"字段": "source_quality_gate", "值": verifier_debug.get("source_quality_gate", "-") if isinstance(verifier_debug, dict) else "-"},
+        {"字段": "corpus_gap", "值": verifier_debug.get("corpus_gap_detected", "-") if isinstance(verifier_debug, dict) else "-"},
+        {"字段": "judge_verdict", "值": judge_debug.get("verdict", "-") if isinstance(judge_debug, dict) else "-"},
+        {"字段": "graph_mode", "值": graph_debug.get("graph_mode", "-") if isinstance(graph_debug, dict) else "-"},
+        {"字段": "retrieval_policy", "值": retrieval_debug.get("selected_policy", "-") if isinstance(retrieval_debug, dict) else "-"},
+    ]
+    _compact_debug_table(rows)
 
 def _render_debug_panel(payload: dict[str, Any], response: dict[str, Any]) -> None:
     st.subheader("高级调试信息")
-    with st.expander("检索诊断", expanded=False):
-        rd = response.get("retrieval_debug")
-        if rd:
-            st.json(redact_for_display(rd))
-        else:
-            st.caption("未返回检索诊断。")
-    with st.expander("图执行追踪", expanded=False):
-        gd = response.get("graph_debug")
-        if gd:
-            st.json(redact_for_display(gd))
-        else:
-            st.caption("未返回图执行追踪（legacy 模式下该字段为空）。")
-    with st.expander("会话记忆", expanded=False):
-        md = response.get("memory_debug")
-        if md:
-            render_memory_debug(md)
-            st.json(redact_for_display(md))
-        else:
-            st.caption("未返回会话记忆。")
-    with st.expander("请求参数", expanded=False):
-        st.json(redact_for_display(payload))
-    with st.expander("原始响应", expanded=False):
+
+    with st.expander("检索摘要", expanded=False):
+        _render_retrieval_debug_summary(response.get("retrieval_debug") or {})
+
+    with st.expander("图执行摘要", expanded=False):
+        _render_graph_debug_summary(response.get("graph_debug") or {})
+
+    with st.expander("会话记忆摘要", expanded=False):
+        _render_memory_debug_summary(response.get("memory_debug") or {})
+
+    with st.expander("请求摘要", expanded=False):
+        _render_request_summary(payload)
+
+    with st.expander("响应结构摘要", expanded=False):
+        _render_raw_response_summary(response)
+
+    with st.expander("开发者原始 JSON（仅排错使用）", expanded=False):
+        st.caption("这里保留完整原始响应，默认折叠。普通演示时不建议展开。")
         st.json(redact_for_display(response))
 
 
 def main() -> None:
-    st.set_page_config(page_title=APP_TITLE, page_icon="▦", layout="wide")
+    st.set_page_config(
+        page_title=APP_TITLE,
+        page_icon="📚",
+        layout="wide",
+        menu_items={
+            "About": "企业知识库问答系统：基于内部技术资料进行 RAG 检索、来源追踪与证据校验。"
+        },
+    )
+    _inject_page_styles()
     _initialize_state()
     controls = _render_sidebar()
 
-    st.title(APP_TITLE)
-    st.caption("面向企业内部知识资料的 RAG 问答、来源追踪与调试演示。")
-    st.caption(f"接口：{controls['api_endpoint']} ｜ 会话：{controls['session_id']}")
+    if not st.session_state.messages:
+        _render_welcome_message()
 
     request_in_flight = bool(st.session_state.get(_REQUEST_IN_FLIGHT_KEY, False))
 
