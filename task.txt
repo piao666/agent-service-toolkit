@@ -2620,3 +2620,23 @@ Diagnostic script: scripts/check_retrieval_path.py
 - [x] assistant message 始终保存完整 response dict
 
 **不修改的模块**: 同前
+
+---
+
+### Streamlit session_id 冲突 + 高级调试双状态统一修复 (2026-06-25)
+
+**根因**:
+1. `session_id = st.text_input("会话 ID", key="session_id")` 和 `st.session_state.session_id = _new_session_id()` 使用相同 key，触发 Streamlit widget state 冲突。
+2. `show_advanced_debug_checkbox` 和 `advanced_debug_enabled` 双状态通过 `on_change` 同步，在 rerun/pending-query 流程中存在不同步窗口。
+
+**修复**:
+- [x] 移除 `_ADVANCED_DEBUG_WIDGET_KEY`，`advanced_debug_enabled` 成为唯一 source of truth
+- [x] 删除 `_sync_advanced_debug_state` 函数
+- [x] session_id 改为只读展示 (`st.code`)，消除 widget key 冲突
+- [x] 新增 `_clear_pending_request_state` / `_start_new_session` / `_clear_chat_messages`
+- [x] 新建会话不再重置高级调试开关（用户显示偏好）
+- [x] `_PENDING_EXAMPLE_QUESTION_KEY` 接管示例问题传递
+- [x] 所有 sidebar 按钮加上 `disabled=request_in_flight`
+- [x] 残留检查无输出
+
+**不修改的模块**: 同前（不修改 retriever / tools / service / graph / prompt / verifier / judge / evidence_verifier）

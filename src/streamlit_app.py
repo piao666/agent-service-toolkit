@@ -14,10 +14,10 @@ import streamlit as st
 
 # ── 持久业务状态 key（与 widget 临时状态解耦）──
 _ADVANCED_DEBUG_STATE_KEY = "advanced_debug_enabled"
-_ADVANCED_DEBUG_WIDGET_KEY = "show_advanced_debug_checkbox"
 _REQUEST_IN_FLIGHT_KEY = "enterprise_request_in_flight"
 _PENDING_QUERY_KEY = "pending_enterprise_query"
 _PENDING_PAYLOAD_KEY = "pending_enterprise_payload"
+_PENDING_EXAMPLE_QUESTION_KEY = "pending_example_question"
 
 APP_TITLE = "企业知识库 Agent 控制台"
 DEFAULT_API_BASE_URL = "http://127.0.0.1:8000"
@@ -274,15 +274,30 @@ def render_verifier_detail(verifier_debug: dict[str, Any]) -> None:
                 st.code(json.dumps(unsupported_terms, ensure_ascii=False, indent=2), language="json")
 
 
-def _sync_advanced_debug_state() -> None:
-    """将 widget 临时状态同步到持久业务状态。"""
-    st.session_state[_ADVANCED_DEBUG_STATE_KEY] = bool(
-        st.session_state.get(_ADVANCED_DEBUG_WIDGET_KEY, False)
-    )
-
-
 def _new_session_id() -> str:
     return f"demo-{uuid.uuid4().hex[:12]}"
+
+
+def _clear_pending_request_state() -> None:
+    """清理 pending-query 状态，防止旧请求残留。"""
+    st.session_state[_PENDING_QUERY_KEY] = ""
+    st.session_state[_PENDING_PAYLOAD_KEY] = {}
+    st.session_state[_REQUEST_IN_FLIGHT_KEY] = False
+    st.session_state[_PENDING_EXAMPLE_QUESTION_KEY] = ""
+
+
+def _start_new_session() -> None:
+    """新建会话：重置 session_id、清空 messages 和 pending 状态。
+    不重置高级调试开关（用户显示偏好）。"""
+    st.session_state["session_id"] = _new_session_id()
+    st.session_state["messages"] = []
+    _clear_pending_request_state()
+
+
+def _clear_chat_messages() -> None:
+    """清空对话：仅清除前端消息和 pending 状态。"""
+    st.session_state["messages"] = []
+    _clear_pending_request_state()
 
 
 def _initialize_state() -> None:
@@ -290,31 +305,48 @@ def _initialize_state() -> None:
     st.session_state.setdefault("session_id", _new_session_id())
     # 持久业务状态（不随 widget rerun 丢失）
     st.session_state.setdefault(_ADVANCED_DEBUG_STATE_KEY, False)
-    st.session_state.setdefault(_ADVANCED_DEBUG_WIDGET_KEY, False)
     st.session_state.setdefault(_REQUEST_IN_FLIGHT_KEY, False)
     st.session_state.setdefault(_PENDING_QUERY_KEY, "")
     st.session_state.setdefault(_PENDING_PAYLOAD_KEY, {})
+    st.session_state.setdefault(_PENDING_EXAMPLE_QUESTION_KEY, "")
 
 
 def _render_sidebar() -> dict[str, Any]:
+    request_in_flight = bool(st.session_state.get(_REQUEST_IN_FLIGHT_KEY, False))
+
     with st.sidebar:
         st.title("企业知识库问答")
         st.caption("基于企业知识库的 RAG 问答演示")
         api_base_url = st.text_input("后端服务地址", value=DEFAULT_API_BASE_URL)
         api_endpoint = st.text_input("接口路径", value=DEFAULT_API_ENDPOINT)
-        session_id = st.text_input("会话 ID", key="session_id")
+        # session_id 使用只读展示，避免 widget key 与业务状态冲突
+        session_id = str(st.session_state.get("session_id") or "")
+        st.caption("会话 ID")
+        st.code(session_id, language=None)
 
         col1, col2 = st.columns(2)
-        if col1.button("新建会话", use_container_width=True, help="生成新 session ID"):
-            st.session_state.session_id = _new_session_id()
-            st.session_state.messages = []
+        if col1.button(
+            "新建会话",
+            use_container_width=True,
+            help="生成新 session ID",
+            disabled=request_in_flight,
+        ):
+            _start_new_session()
             st.rerun()
-        if col2.button("清空对话", use_container_width=True):
-            st.session_state.messages = []
+        if col2.button(
+            "清空对话",
+            use_container_width=True,
+            disabled=request_in_flight,
+        ):
+            _clear_chat_messages()
             st.rerun()
         st.caption("新建会话会用新的 memory 隔离键；清空对话仅清除前端消息。")
 
-        if st.button("检查后端状态", use_container_width=True):
+        if st.button(
+            "检查后端状态",
+            use_container_width=True,
+            disabled=request_in_flight,
+        ):
             try:
                 check_api_health(api_base_url)
                 st.success("后端服务正常")
@@ -323,16 +355,20 @@ def _render_sidebar() -> dict[str, Any]:
 
         st.subheader("示例问题")
         for index, question in enumerate(EXAMPLE_QUESTIONS):
-            if st.button(question, key=f"example_{index}", use_container_width=True):
-                st.session_state.pending_question = question
+            if st.button(
+                question,
+                key=f"example_{index}",
+                use_container_width=True,
+                disabled=request_in_flight,
+            ):
+                st.session_state[_PENDING_EXAMPLE_QUESTION_KEY] = question
                 st.rerun()
 
-        # widget 状态与持久业务状态解耦，on_change 同步
+        # 高级调试：advanced_debug_enabled 是唯一 source of truth
         st.checkbox(
             "显示高级调试信息",
-            key=_ADVANCED_DEBUG_WIDGET_KEY,
-            on_change=_sync_advanced_debug_state,
-            disabled=bool(st.session_state.get(_REQUEST_IN_FLIGHT_KEY, False)),
+            key=_ADVANCED_DEBUG_STATE_KEY,
+            disabled=request_in_flight,
         )
 
     top_k = int(os.getenv("RAG_DEFAULT_TOP_K", "5"))
@@ -451,9 +487,9 @@ def main() -> None:
         "输入知识库问题",
         disabled=request_in_flight,
     )
-    if st.session_state.get("pending_question"):
-        question = st.session_state.pending_question
-        st.session_state.pending_question = None
+    if st.session_state.get(_PENDING_EXAMPLE_QUESTION_KEY):
+        question = str(st.session_state.get(_PENDING_EXAMPLE_QUESTION_KEY) or "")
+        st.session_state[_PENDING_EXAMPLE_QUESTION_KEY] = ""
 
     if not question:
         return
