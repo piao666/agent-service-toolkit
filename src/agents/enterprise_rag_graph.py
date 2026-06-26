@@ -46,6 +46,49 @@ _UNSUPPORTED_TERMS = (
     "stock price",
     "love letter",
 )
+
+_SMALLTALK_QUERIES = {
+    "hi",
+    "hello",
+    "hey",
+    "thanks",
+    "thank you",
+    "good morning",
+    "good afternoon",
+    "good evening",
+    "你好",
+    "您好",
+    "你好呀",
+    "你好啊",
+    "早上好",
+    "下午好",
+    "晚上好",
+    "谢谢",
+    "多谢",
+    "辛苦了",
+    "哈哈",
+}
+
+_SMALLTALK_PATTERNS = (
+    r"^你是谁[？?。!！]*$",
+    r"^你会做什么[？?。!！]*$",
+    r"^你能做什么[？?。!！]*$",
+    r"^讲个笑话[吧]?[？?。!！]*$",
+    r"^说个笑话[吧]?[？?。!！]*$",
+    r"^聊聊天[吧]?[？?。!！]*$",
+    r"^我心情不好[？?。!！]*$",
+    r"^陪我聊聊[吧]?[？?。!！]*$",
+)
+
+
+def _is_smalltalk_query(query: str) -> bool:
+    """识别明显不应进入企业知识库检索的闲聊类输入。"""
+    normalized = " ".join(str(query or "").split()).casefold()
+    normalized = normalized.strip(" ?？!！。.,，")
+    if normalized in _SMALLTALK_QUERIES:
+        return True
+    return any(re.search(pattern, normalized, flags=re.IGNORECASE) for pattern in _SMALLTALK_PATTERNS)
+
 _CITATION_TERMS = ("引用", "出处", "来源", "证据", "citation", "source", "reference")
 _METADATA_TERMS = (
     "source_id",
@@ -155,6 +198,8 @@ def _is_code_or_api_query(query: str) -> bool:
 def infer_graph_query_type(query: str, session_id: str | None = None) -> str:
     normalized = " ".join(str(query or "").split())
     lowered = normalized.casefold().rstrip("?？!！。")
+    if _is_smalltalk_query(normalized):
+        return "smalltalk_query"
     if any(term in lowered for term in _UNSUPPORTED_TERMS):
         return "unsupported_query"
     if session_id and lowered in _AMBIGUOUS_QUERIES:
@@ -175,6 +220,7 @@ async def query_classifier_node(state: EnterpriseRAGGraphState) -> EnterpriseRAG
     route = {
         "ambiguous_query": "clarification",
         "unsupported_query": "safe_response",
+        "smalltalk_query": "safe_response",
     }.get(query_type, "normal")
     return {
         "query_type": query_type,
@@ -759,29 +805,50 @@ async def clarification_response_node(state: EnterpriseRAGGraphState) -> Enterpr
 
 async def safe_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     query = _normalized_query(state)
+    query_type = str(state.get("query_type") or "unsupported_query")
+
     if any("\u4e00" <= character <= "\u9fff" for character in query):
-        answer = "该问题不在当前知识库问答范围内，请提供与知识库相关的问题。"
+        answer = (
+            "我无法基于当前企业知识库回答这个问题。你可以询问 RAG、FastAPI、LLM、Python、"
+            "机器学习、深度学习等知识库已收录的技术问题。"
+        )
     else:
-        answer = "This question is outside the current knowledge-base scope."
+        answer = (
+            "I cannot answer this from the current enterprise knowledge base. "
+            "You can ask about topics covered by the knowledge base, such as RAG, FastAPI, LLMs, "
+            "Python, machine learning, deep learning, and related technical materials."
+        )
+
+    planner_type = "smalltalk" if query_type == "smalltalk_query" else "unsupported"
+
     return {
         "answer": answer,
         "retrieved_sources": [],
         "ranked_sources": [],
         "planner_debug": {
             "planner_mode": "rule_based",
-            "planner_type": "unsupported",
+            "planner_type": planner_type,
             "requires_multi_hop": False,
             "sub_queries": [],
             "reason": "query classifier short-circuited to safe response",
             "calls_llm": False,
             "writes_chroma": False,
         },
-        "retrieval_debug": {"hit_count": 0, "skipped_reason": "unsupported_query"},
+        "retrieval_debug": {
+            "hit_count": 0,
+            "retrieval_skipped": True,
+            "skipped_reason": query_type,
+        },
         "verifier_debug": {},
-        "fallback": {"triggered": True, "reason": "unsupported_query"},
+        "judge_debug": {},
+        "model_debug": {
+            "provider": "rule_based_short_circuit",
+            "answer_generator": "safe_response",
+            "calls_llm": False,
+        },
+        "fallback": {"triggered": True, "reason": query_type},
         "graph_debug": _append_node(state, "safe_response"),
     }
-
 
 async def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     sources = list(state.get("ranked_sources") or state.get("retrieved_sources") or [])
@@ -839,7 +906,7 @@ def route_after_classifier(state: EnterpriseRAGGraphState) -> str:
     query_type = state.get("query_type")
     if query_type == "ambiguous_query":
         return "clarification_response"
-    if query_type == "unsupported_query":
+    if query_type in {"unsupported_query", "smalltalk_query"}:
         return "safe_response"
     return "memory_rewriter"
 
@@ -852,7 +919,7 @@ def route_after_planner(state: EnterpriseRAGGraphState) -> str:
     query_type = state.get("query_type")
     if query_type == "ambiguous_query":
         return "clarification_response"
-    if query_type == "unsupported_query":
+    if query_type in {"unsupported_query", "smalltalk_query"}:
         return "safe_response"
     if rag_settings.planner_mode == "debug_only":
         return "retriever"

@@ -228,6 +228,13 @@ def _enterprise_retrieval_debug(
     retrieval_debug.setdefault("rewritten_query", request.query.strip())
     retrieval_debug.setdefault("top_k", request.top_k)
     retrieval_debug.setdefault("hit_count", len(sources))
+
+    # 如果 query_classifier 已经判定为非知识库问题并短路，则不要补充 Chroma/Embedding 字段，
+    # 避免前端误以为本轮仍然执行了向量检索。
+    if retrieval_debug.get("retrieval_skipped") or retrieval_debug.get("skipped_reason"):
+        retrieval_debug["hit_count"] = 0
+        return retrieval_debug
+
     retrieval_debug.setdefault("embedding_provider", rag_settings.EMBEDDING_PROVIDER)
     retrieval_debug.setdefault("vector_store", "chroma")
     retrieval_debug.setdefault("collection", rag_settings.CHROMA_COLLECTION_NAME)
