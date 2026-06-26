@@ -173,8 +173,10 @@
     "cases_no_expected_source": 31,
     "in_corpus_legacy_bad": 110,
     "in_corpus_custom_bad": 114,
-    "out_of_corpus_legacy_bad": 7,
-    "out_of_corpus_custom_bad": 7,
+    "out_of_corpus_legacy_bad": 0,
+    "out_of_corpus_custom_bad": 0,
+    "no_expected_source_legacy_bad": 7,
+    "no_expected_source_custom_bad": 7,
     "corpus_gap_count": 3,
     "corpus_gap_ids": [
       "exp_185",
@@ -186,10 +188,11 @@
       "source_miss": 112,
       "keyword_miss": 103
     },
-    "out_of_corpus_miss_distribution": {
+    "no_expected_source_miss_distribution": {
       "doc_type_miss": 12,
       "keyword_miss": 2
-    }
+    },
+    "out_of_corpus_miss_distribution": {}
   },
   "action_distribution": {
     "inspect_in_corpus_bad": 120,
@@ -197,7 +200,7 @@
     "eval_spec_update": 7,
     "corpus_gap": 3
   },
-  "note": "Final Chroma has 86 chunks (vs historical ~575). Bad case increase (~20) is primarily corpus coverage difference, not configuration regression. Only 9 unique sources vs 5 in the old Phase6 Chroma — the old corpus had 575 chunks from 5 sources after banning 4 sources. Final Chroma adds 4 project docs (6 chunks) to the same 5 source core (80 chunks).",
+  "note": "Final Chroma has 86 chunks (vs historical ~575). Bad case increase (~20) is primarily corpus coverage difference, not configuration regression. in_corpus means expected_source_id exists in final Chroma source_id set; it does not guarantee chunk-level content completeness for every query. in_corpus bad cases involve source_miss, doc_type_miss, keyword_miss, and chunk-level content coverage gaps in the 86-chunk final corpus. Custom graph has graph_debug=240/240, planner/judge all present, and does not claim to be better than legacy.",
   "per_case_analysis": [
     {
       "case_id": "exp_001",

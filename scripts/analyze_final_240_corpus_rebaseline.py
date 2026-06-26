@@ -29,10 +29,13 @@ for r in rows:
         custom[cid] = r
 
 analysis = []
-in_l, in_c, out_l, out_c = 0, 0, 0, 0
+in_l, in_c = 0, 0
+no_exp_l, no_exp_c = 0, 0  # no_expected_source
+true_out_l, true_out_c = 0, 0  # genuinely out_of_corpus
 gap_ids = []
 in_miss = Counter()
-out_miss = Counter()
+no_exp_miss = Counter()
+true_out_miss = Counter()
 
 for case in cases:
     cid = case["case_id"]
@@ -70,19 +73,27 @@ for case in cases:
         action = "eval_spec_update"
 
     if lbad:
-        if cs in ("out_of_corpus", "no_expected_source"):
-            out_l += 1
+        if cs == "out_of_corpus":
+            true_out_l += 1
             for rn in lrns:
-                out_miss[rn] += 1
+                true_out_miss[rn] += 1
+        elif cs == "no_expected_source":
+            no_exp_l += 1
+            for rn in lrns:
+                no_exp_miss[rn] += 1
         else:
             in_l += 1
             for rn in lrns:
                 in_miss[rn] += 1
     if cbad:
-        if cs in ("out_of_corpus", "no_expected_source"):
-            out_c += 1
+        if cs == "out_of_corpus":
+            true_out_c += 1
             for rn in crns:
-                out_miss[rn] += 1
+                true_out_miss[rn] += 1
+        elif cs == "no_expected_source":
+            no_exp_c += 1
+            for rn in crns:
+                no_exp_miss[rn] += 1
         else:
             in_c += 1
             for rn in crns:
@@ -151,21 +162,27 @@ summary = {
         "cases_no_expected_source": cs_dist.get("no_expected_source", 0),
         "in_corpus_legacy_bad": in_l,
         "in_corpus_custom_bad": in_c,
-        "out_of_corpus_legacy_bad": out_l,
-        "out_of_corpus_custom_bad": out_c,
+        "out_of_corpus_legacy_bad": true_out_l,
+        "out_of_corpus_custom_bad": true_out_c,
+        "no_expected_source_legacy_bad": no_exp_l,
+        "no_expected_source_custom_bad": no_exp_c,
         "corpus_gap_count": len(gap_ids),
         "corpus_gap_ids": gap_ids,
         "in_corpus_miss_distribution": dict(in_miss.most_common()),
-        "out_of_corpus_miss_distribution": dict(out_miss.most_common()),
+        "no_expected_source_miss_distribution": dict(no_exp_miss.most_common()),
+        "out_of_corpus_miss_distribution": dict(true_out_miss.most_common()),
     },
     "action_distribution": dict(act_dist.most_common()),
     "note": (
         "Final Chroma has 86 chunks (vs historical ~575). "
         "Bad case increase (~20) is primarily corpus coverage difference, "
         "not configuration regression. "
-        "Only 9 unique sources vs 5 in the old Phase6 Chroma — "
-        "the old corpus had 575 chunks from 5 sources after banning 4 sources. "
-        "Final Chroma adds 4 project docs (6 chunks) to the same 5 source core (80 chunks)."
+        "in_corpus means expected_source_id exists in final Chroma source_id set; "
+        "it does not guarantee chunk-level content completeness for every query. "
+        "in_corpus bad cases involve source_miss, doc_type_miss, keyword_miss, "
+        "and chunk-level content coverage gaps in the 86-chunk final corpus. "
+        "Custom graph has graph_debug=240/240, planner/judge all present, "
+        "and does not claim to be better than legacy."
     ),
     "per_case_analysis": analysis,
 }
@@ -177,8 +194,8 @@ OUT_PATH.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", en
 print(f"Total cases: {len(analysis)}")
 print(f"Final Chroma: {coll.count()} chunks, {len(chroma_sids)} sources: {sorted(chroma_sids)}")
 print(f"in_corpus={cs_dist.get('in_corpus',0)} out_of_corpus={cs_dist.get('out_of_corpus',0)} no_expected={cs_dist.get('no_expected_source',0)}")
-print(f"legacy: total_bad={in_l+out_l} in_corpus_bad={in_l} out_of_corpus_bad={out_l}")
-print(f"custom:  total_bad={in_c+out_c} in_corpus_bad={in_c} out_of_corpus_bad={out_c}")
+print(f"legacy: total_bad={in_l+true_out_l+no_exp_l} in_corpus={in_l} out_of_corpus={true_out_l} no_expected_source={no_exp_l}")
+print(f"custom:  total_bad={in_c+true_out_c+no_exp_c} in_corpus={in_c} out_of_corpus={true_out_c} no_expected_source={no_exp_c}")
 print(f"corpus_gap: {len(gap_ids)} cases")
 print(f"only_legacy: {only_l}")
 print(f"only_custom: {only_c}")

@@ -71,16 +71,16 @@
 | no_expected_source | 31 | 评测 case 未指定 expected_source |
 | out_of_corpus | 0 | 所有指定 expected_source 均存在于 final Chroma |
 
+**关键洞察**：110/117 (94%) legacy bad 和 114/121 (94%) custom_graph bad 的 expected_source **存在于** final Chroma 中。in_corpus 只代表 expected_source_id 存在于 final Chroma 的 source_id 集合中，不代表该 source 在 86 chunks 下的 chunk 级内容一定完整。主要问题是 source 级覆盖存在但评测条件未满足，具体包括 source_miss、doc_type_miss、keyword_miss，以及 final Chroma 86 chunks 下的 chunk 级内容覆盖不足。
+
 ### Bad Case 按 Corpus 状态分解
 
 | | legacy | custom_graph |
 |---|---|---|
 | in_corpus bad | 110 | 114 |
+| out_of_corpus bad | 0 | 0 |
 | no_expected_source bad | 7 | 7 |
-| corpus_gap | 3 | 3 |
-| **Total bad** | **117** | **121** |
-
-**关键洞察**：110/117 (94%) legacy bad 和 114/121 (94%) custom_graph bad 的 expected_source **存在于** final Chroma 中。这说明主要问题是 **检索精度不足**（source 存在但未命中），而不是 corpus 覆盖缺失。
+| **Total** | **117** | **121** |
 
 ### Miss 分布 (in_corpus only)
 
@@ -94,7 +94,7 @@
 
 | 动作 | 数量 | 说明 |
 |---|---|---|
-| inspect_in_corpus_bad | 120 | expected_source 在 corpus 中但仍 bad — 需排查检索/评估 |
+| inspect_in_corpus_bad | 120 | expected_source 在 corpus 中但评测条件未满足 |
 | no_code_change | 110 | 两端均 pass |
 | eval_spec_update | 7 | no_expected_source 的 case 需更新评估规格 |
 | corpus_gap | 3 | 确认的语料缺口 |
