@@ -12,8 +12,11 @@ from urllib.request import Request, urlopen
 
 import streamlit as st
 
-# ── 持久业务状态 key（与 widget 临时状态解耦）──
+# ── Streamlit 状态 key ──
+# advanced_debug_enabled 是持久业务状态，不直接绑定 checkbox widget。
+# advanced_debug_toggle_widget 只是前端控件临时 key，非请求状态下同步到业务状态。
 _ADVANCED_DEBUG_STATE_KEY = "advanced_debug_enabled"
+_ADVANCED_DEBUG_WIDGET_KEY = "advanced_debug_toggle_widget"
 _REQUEST_IN_FLIGHT_KEY = "enterprise_request_in_flight"
 _PENDING_QUERY_KEY = "pending_enterprise_query"
 _PENDING_PAYLOAD_KEY = "pending_enterprise_payload"
@@ -299,6 +302,27 @@ def _clear_chat_messages() -> None:
     st.session_state["messages"] = []
     _clear_pending_request_state()
 
+def _ensure_advanced_debug_widget_state() -> None:
+    """仅在 checkbox 真正渲染前，用持久状态初始化 widget 临时状态。"""
+    if _ADVANCED_DEBUG_WIDGET_KEY not in st.session_state:
+        st.session_state[_ADVANCED_DEBUG_WIDGET_KEY] = bool(
+            st.session_state.get(_ADVANCED_DEBUG_STATE_KEY, False)
+        )
+
+
+def _sync_advanced_debug_from_widget() -> None:
+    """用户点击 checkbox 后，将 widget 临时状态同步到持久业务状态。"""
+    st.session_state[_ADVANCED_DEBUG_STATE_KEY] = bool(
+        st.session_state.get(_ADVANCED_DEBUG_WIDGET_KEY, False)
+    )
+
+
+def _capture_advanced_debug_widget_state() -> None:
+    """提交问题前捕获当前 checkbox 状态，防止请求 rerun 期间丢失显示偏好。"""
+    if _ADVANCED_DEBUG_WIDGET_KEY in st.session_state:
+        st.session_state[_ADVANCED_DEBUG_STATE_KEY] = bool(
+            st.session_state.get(_ADVANCED_DEBUG_WIDGET_KEY, False)
+        )
 
 def _initialize_state() -> None:
     st.session_state.setdefault("messages", [])
@@ -364,12 +388,20 @@ def _render_sidebar() -> dict[str, Any]:
                 st.session_state[_PENDING_EXAMPLE_QUESTION_KEY] = question
                 st.rerun()
 
-        # 高级调试：advanced_debug_enabled 是唯一 source of truth
-        st.checkbox(
-            "显示高级调试信息",
-            key=_ADVANCED_DEBUG_STATE_KEY,
-            disabled=request_in_flight,
-        )
+        # 高级调试显示偏好：
+        # 请求中不渲染绑定状态的 checkbox，避免 Streamlit disabled widget 覆盖持久状态。
+        if request_in_flight:
+            debug_enabled = bool(st.session_state.get(_ADVANCED_DEBUG_STATE_KEY, False))
+            st.caption(
+                f"显示高级调试信息：{'已开启' if debug_enabled else '已关闭'}（请求中暂不可切换）"
+            )
+        else:
+            _ensure_advanced_debug_widget_state()
+            st.checkbox(
+                "显示高级调试信息",
+                key=_ADVANCED_DEBUG_WIDGET_KEY,
+                on_change=_sync_advanced_debug_from_widget,
+            )
 
     top_k = int(os.getenv("RAG_DEFAULT_TOP_K", "5"))
     try:
@@ -494,6 +526,9 @@ def main() -> None:
     if not question:
         return
 
+    # 提交请求前捕获当前高级调试偏好。
+    _capture_advanced_debug_widget_state()
+
     # 保存 payload（此时 controls 已就绪），切换到 pending-query 流程
     payload = {
         "query": question,
@@ -501,6 +536,7 @@ def main() -> None:
         "top_k": controls["top_k"],
         "return_sources": True,
     }
+
     st.session_state.messages.append({"role": "user", "content": question})
     st.session_state[_PENDING_QUERY_KEY] = question
     st.session_state[_PENDING_PAYLOAD_KEY] = payload
