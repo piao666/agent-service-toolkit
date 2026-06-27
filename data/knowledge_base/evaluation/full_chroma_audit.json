@@ -1,0 +1,176 @@
+{
+  "generated_at": "2026-06-27T07:23:20.077973+00:00",
+  "persist_dir": "./chroma_enterprise_full",
+  "collection_name": "enterprise_knowledge_base_full",
+  "audit": {
+    "collection_count": 581,
+    "unknown_source_count": 0,
+    "duplicate_chunk_id_count": 0,
+    "duplicate_chunk_ids": [],
+    "empty_text_count": 0,
+    "chunk_length": {
+      "min": 22,
+      "max": 966,
+      "avg": 796.9,
+      "total_chars": 463012
+    },
+    "source_id_distribution": {
+      "local_nlp_course_docx": 205,
+      "local_ai_agent_course_pdf": 182,
+      "local_deep_learning_course_docx": 112,
+      "fastapi_docs": 39,
+      "repo_project_files": 37,
+      "enterprise_agent_overview": 2,
+      "enterprise_rag_pipeline": 2,
+      "enterprise_model_provider_policy": 1,
+      "enterprise_prompt_guidelines": 1
+    },
+    "doc_type_distribution": {
+      "docx": 317,
+      "pdf": 182,
+      "html": 39,
+      "markdown": 19,
+      "yaml": 16,
+      "md": 6,
+      "json": 2
+    },
+    "title_distribution_top30": {
+      "Local NLP Course DOCX": 205,
+      "Local AI Agent Course PDF": 182,
+      "Local Deep Learning Course DOCX": 112,
+      "Path Parameters - FastAPI": 22,
+      "Repository MARKDOWN sample": 19,
+      "Request Body - FastAPI": 17,
+      "Repository YAML sample": 16,
+      "Repository JSON sample": 2,
+      "enterprise_agent_overview": 2,
+      "enterprise_rag_pipeline": 2,
+      "enterprise_model_provider_policy": 1,
+      "enterprise_prompt_guidelines": 1
+    },
+    "per_source_chunk_length_stats": {
+      "local_deep_learning_course_docx": {
+        "count": 112,
+        "min": 22,
+        "max": 900,
+        "avg": 843.2
+      },
+      "local_nlp_course_docx": {
+        "count": 205,
+        "min": 612,
+        "max": 900,
+        "avg": 872.3
+      },
+      "local_ai_agent_course_pdf": {
+        "count": 182,
+        "min": 82,
+        "max": 966,
+        "avg": 692.7
+      },
+      "repo_project_files": {
+        "count": 37,
+        "min": 28,
+        "max": 961,
+        "avg": 734.9
+      },
+      "fastapi_docs": {
+        "count": 39,
+        "min": 174,
+        "max": 900,
+        "avg": 850.2
+      },
+      "enterprise_agent_overview": {
+        "count": 2,
+        "min": 209,
+        "max": 668,
+        "avg": 438.5
+      },
+      "enterprise_model_provider_policy": {
+        "count": 1,
+        "min": 791,
+        "max": 791,
+        "avg": 791.0
+      },
+      "enterprise_prompt_guidelines": {
+        "count": 1,
+        "min": 719,
+        "max": 719,
+        "avg": 719.0
+      },
+      "enterprise_rag_pipeline": {
+        "count": 2,
+        "min": 236,
+        "max": 715,
+        "avg": 475.5
+      }
+    },
+    "metadata_key_coverage": [
+      "chunk_id",
+      "chunk_index",
+      "doc_type",
+      "domain",
+      "ingest_candidate",
+      "language",
+      "normalized_id",
+      "review_status",
+      "section_path",
+      "source",
+      "source_id",
+      "source_url",
+      "title"
+    ]
+  },
+  "demo_vs_full_comparison": {
+    "demo_collection_count": 86,
+    "full_collection_count": 581,
+    "per_source_comparison": {
+      "enterprise_agent_overview": {
+        "demo_chunks": 2,
+        "full_chunks": 2,
+        "delta": 0
+      },
+      "enterprise_model_provider_policy": {
+        "demo_chunks": 1,
+        "full_chunks": 1,
+        "delta": 0
+      },
+      "enterprise_prompt_guidelines": {
+        "demo_chunks": 1,
+        "full_chunks": 1,
+        "delta": 0
+      },
+      "enterprise_rag_pipeline": {
+        "demo_chunks": 2,
+        "full_chunks": 2,
+        "delta": 0
+      },
+      "fastapi_docs": {
+        "demo_chunks": 16,
+        "full_chunks": 39,
+        "delta": 23
+      },
+      "local_ai_agent_course_pdf": {
+        "demo_chunks": 23,
+        "full_chunks": 182,
+        "delta": 159
+      },
+      "local_deep_learning_course_docx": {
+        "demo_chunks": 8,
+        "full_chunks": 112,
+        "delta": 104
+      },
+      "local_nlp_course_docx": {
+        "demo_chunks": 16,
+        "full_chunks": 205,
+        "delta": 189
+      },
+      "repo_project_files": {
+        "demo_chunks": 17,
+        "full_chunks": 37,
+        "delta": 20
+      }
+    }
+  },
+  "calls_llm": false,
+  "writes_chroma": false
+}

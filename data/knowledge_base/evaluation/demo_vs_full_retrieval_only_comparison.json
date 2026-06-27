@@ -1,0 +1,6647 @@
+{
+  "generated_at": "2026-06-27T07:27:15.301748+00:00",
+  "total_cases": 240,
+  "cases_with_expected_source": 209,
+  "demo": {
+    "source_hit_at_k": 148,
+    "doc_type_hit_at_k": 146,
+    "keyword_hit_rate": 0.4388,
+    "zero_keyword_cases": 74
+  },
+  "full": {
+    "source_hit_at_k": 143,
+    "doc_type_hit_at_k": 141,
+    "keyword_hit_rate": 0.4796,
+    "zero_keyword_cases": 69
+  },
+  "delta": {
+    "improved_cases": 49,
+    "regressed_cases": 45,
+    "unchanged_cases": 146
+  },
+  "per_source_improvement": {
+    "local_deep_learning_course_docx": {
+      "improved": 21,
+      "regressed": 1
+    },
+    "local_nlp_course_docx": {
+      "improved": 8,
+      "regressed": 1
+    },
+    "local_ai_agent_course_pdf": {
+      "regressed": 8,
+      "improved": 5
+    },
+    "fastapi_docs": {
+      "improved": 6,
+      "regressed": 10
+    },
+    "repo_project_files": {
+      "regressed": 19,
+      "improved": 6
+    }
+  },
+  "per_case": [
+    {
+      "case_id": "exp_001",
+      "query": "激活函数的作用是什么？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "激活函数",
+        "神经元",
+        "非线性"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_002",
+      "query": "感知机和神经网络有什么关系？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "感知机",
+        "神经网络",
+        "权重"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_003",
+      "query": "损失函数在模型训练中起什么作用？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "损失函数",
+        "误差",
+        "训练"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_004",
+      "query": "反向传播为什么能训练神经网络？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "反向传播",
+        "梯度",
+        "参数"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_005",
+      "query": "中文分词在 NLP 中为什么重要？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "分词",
+        "词",
+        "NLP"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_006",
+      "query": "词向量如何表示词语语义？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "词向量",
+        "语义",
+        "向量"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_007",
+      "query": "RNN 适合处理序列数据的原因是什么？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "RNN",
+        "序列",
+        "隐藏状态"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_008",
+      "query": "LSTM 相比普通 RNN 解决了什么问题？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "LSTM",
+        "门控",
+        "长期依赖"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_009",
+      "query": "激活函数的作用是什么？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "激活函数",
+        "神经元",
+        "非线性"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_010",
+      "query": "反向传播为什么能训练神经网络？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "反向传播",
+        "梯度",
+        "参数"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_011",
+      "query": "中文分词在 NLP 中为什么重要？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "分词",
+        "NLP",
+        "文本"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_012",
+      "query": "LSTM 相比普通 RNN 解决了什么问题？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "LSTM",
+        "门控",
+        "长期依赖"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_013",
+      "query": "RAG 在 Agent 系统中如何降低幻觉风险？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "RAG",
+        "检索",
+        "知识库"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_014",
+      "query": "SFT 和预训练的区别是什么？各自的训练目标有什么不同？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "微调",
+        "SFT",
+        "预训练",
+        "监督"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_015",
+      "query": "Transformer 中的多头注意力为什么比单头更好？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "多头注意力",
+        "Transformer",
+        "单头",
+        "表示"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_016",
+      "query": "批归一化和层归一化的数学公式分别是什么，各适用于什么场景？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "批归一化",
+        "层归一化",
+        "BatchNorm",
+        "LayerNorm"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_017",
+      "query": "Adam 优化器中 beta1 和 beta2 参数分别控制什么？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Adam",
+        "beta1",
+        "beta2",
+        "优化器"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_018",
+      "query": "自注意力中 Q、K、V 三个矩阵的计算流程是怎样的？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Q",
+        "K",
+        "V",
+        "自注意力",
+        "矩阵"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 5,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_019",
+      "query": "BERT 的预训练任务为什么选择 MLM 和 NSP？NSP 后来为什么被移除？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "BERT",
+        "MLM",
+        "NSP",
+        "预训练"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 4,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_020",
+      "query": "对比学习中的 InfoNCE loss 如何计算正负样本相似度？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "对比学习",
+        "InfoNCE",
+        "正样本",
+        "负样本"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_021",
+      "query": "What is a FastAPI request body?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "Pydantic",
+        "BaseModel"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_022",
+      "query": "How does FastAPI define path parameters?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "path",
+        "parameter",
+        "FastAPI"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_023",
+      "query": "FastAPI enum path parameters example",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "enum",
+        "path parameter",
+        "predefined"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_024",
+      "query": "FastAPI query parameters and validation",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "query",
+        "parameter",
+        "validation"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_025",
+      "query": "FastAPI Pydantic BaseModel documentation",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Pydantic",
+        "BaseModel",
+        "model"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_026",
+      "query": "FastAPI automatic docs from request model",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "docs",
+        "schema",
+        "request"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_027",
+      "query": "Declare request body parameters in FastAPI",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "declare",
+        "parameter"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_028",
+      "query": "FastAPI path operation function parameter types",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "path operation",
+        "function",
+        "parameter"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_029",
+      "query": "What is a FastAPI request body?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "Pydantic",
+        "BaseModel"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_030",
+      "query": "How does FastAPI define path parameters?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "path",
+        "parameter",
+        "FastAPI"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_031",
+      "query": "FastAPI enum path parameters example",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "enum",
+        "path parameter",
+        "predefined"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_032",
+      "query": "FastAPI query parameters and validation",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "query",
+        "parameter",
+        "validation"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_033",
+      "query": "FastAPI automatic docs from request model",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "docs",
+        "schema",
+        "request"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_034",
+      "query": "How does FastAPI handle dependency injection for path parameters vs query parameters?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "dependency injection",
+        "path parameters",
+        "query parameters"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_035",
+      "query": "What is the difference between Depends() and yield dependencies in FastAPI?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Depends",
+        "yield",
+        "dependency"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_036",
+      "query": "How do you configure CORS middleware for specific origins in FastAPI?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "CORS",
+        "middleware",
+        "origins"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_037",
+      "query": "What status codes does FastAPI return for validation errors by default?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "status codes",
+        "validation errors",
+        "422"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_038",
+      "query": "How do you implement WebSocket endpoints with FastAPI?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "WebSocket",
+        "endpoints",
+        "WebSocketDisconnect"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_039",
+      "query": "How does FastAPI generate OpenAPI schema for response models with Optional fields?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "OpenAPI",
+        "response model",
+        "Optional"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_040",
+      "query": "What is the purpose of APIRouter prefix and tags parameters?",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "APIRouter",
+        "prefix",
+        "tags"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_041",
+      "query": "FastAPI 请求体如何用 Pydantic model 定义？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "Pydantic",
+        "BaseModel"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_042",
+      "query": "FastAPI path parameter 怎么声明类型？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "path",
+        "parameter",
+        "type"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_043",
+      "query": "Pydantic BaseModel 在 request body 里起什么作用？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Pydantic",
+        "BaseModel",
+        "Request Body"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_044",
+      "query": "FastAPI enum 路径参数适合什么场景？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "enum",
+        "path parameter",
+        "predefined"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_045",
+      "query": "Request Body 和 query parameter 的区别是什么？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "query",
+        "parameter"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_046",
+      "query": "FastAPI docs 里如何展示 schema？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "schema",
+        "docs",
+        "FastAPI"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_047",
+      "query": "FastAPI Body field validation 怎么做？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Body",
+        "validation",
+        "Pydantic"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_048",
+      "query": "Python type hints 在 FastAPI 参数中有什么用？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "type",
+        "parameter",
+        "FastAPI"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_049",
+      "query": "FastAPI 里 Request Body 如何用 Pydantic model 定义？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "Pydantic",
+        "BaseModel"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_050",
+      "query": "FastAPI path parameter 怎么声明类型？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "path",
+        "parameter",
+        "type"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_051",
+      "query": "Pydantic BaseModel 在 request body 里起什么作用？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Pydantic",
+        "BaseModel",
+        "Request Body"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_052",
+      "query": "FastAPI enum 路径参数适合什么场景？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "enum",
+        "path parameter",
+        "predefined"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_053",
+      "query": "Request Body 和 query parameter 的区别是什么？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "query",
+        "parameter"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_054",
+      "query": "FastAPI 的 lifespan 事件和 @app.on_event 有什么区别？什么场景用哪个？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "lifespan",
+        "on_event",
+        "startup",
+        "shutdown"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "repo_project_files",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_055",
+      "query": "如何在 FastAPI 中使用 OAuth2PasswordBearer 实现 JWT 认证？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "OAuth2PasswordBearer",
+        "JWT",
+        "认证"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_056",
+      "query": "Pydantic BaseModel 中的 validator 和 field_validator 在 v1/v2 中有什么区别？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "validator",
+        "field_validator",
+        "Pydantic",
+        "v1",
+        "v2"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_057",
+      "query": "FastAPI middleware 的 order 如何影响 request/response 处理流程？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "middleware",
+        "order",
+        "request",
+        "response"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 4,
+      "full_keyword_hits": 3,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_058",
+      "query": "如何用 FastAPI 实现 SSE (Server-Sent Events) 的流式返回？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "SSE",
+        "Server-Sent Events",
+        "StreamingResponse"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_059",
+      "query": "FastAPI 的 response_model 和 response_model_exclude 如何在序列化时协同工作？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "response_model",
+        "exclude",
+        "序列化"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_060",
+      "query": "如何在 FastAPI 中集成 Prometheus metrics 监控端点？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Prometheus",
+        "metrics",
+        "监控"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_061",
+      "query": "AI Agent 中工具调用的作用是什么？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "Agent",
+        "工具",
+        "调用"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_062",
+      "query": "Agent 记忆机制可以解决什么问题？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "记忆",
+        "Agent",
+        "上下文"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 2,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_063",
+      "query": "RAG 在 Agent 系统中如何降低幻觉风险？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "RAG",
+        "检索",
+        "知识库"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_064",
+      "query": "checkpointer 在 Agent 工作流中有什么价值？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "checkpointer",
+        "状态",
+        "工作流"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_065",
+      "query": "多 Agent 协作通常解决什么问题？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "Agent",
+        "协作",
+        "任务"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_066",
+      "query": "Agent planning and tool execution relationship",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "planning",
+        "tool",
+        "Agent"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "enterprise_agent_overview",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_067",
+      "query": "为什么 Agent 需要外部知识库？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "Agent",
+        "知识库",
+        "检索"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_068",
+      "query": "Agent 工作流中的状态保存有什么用？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "状态",
+        "工作流",
+        "保存"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_069",
+      "query": "Agent 的 Plan-and-Execute 模式和 ReAct 模式各自的适用场景是什么？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "Plan-and-Execute",
+        "ReAct",
+        "Agent"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_070",
+      "query": "RAG 系统中 chunk size 和 overlap 如何影响检索质量和推理速度？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "chunk size",
+        "overlap",
+        "检索",
+        "RAG"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_071",
+      "query": "Multi-Agent 系统中 agent 之间如何通过共享记忆通信？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "Multi-Agent",
+        "共享记忆",
+        "通信"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_072",
+      "query": "Tool-use Agent 如何实现工具的动态注册和发现？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "Tool-use",
+        "动态注册",
+        "工具发现"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "repo_project_files",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_073",
+      "query": "RAG 系统中 reranker 和 embedding model 如何协同工作？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "reranker",
+        "embedding",
+        "协同",
+        "RAG"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_074",
+      "query": "LangGraph 中 checkpoint 和 interrupt 如何实现人机协同审批流程？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "LangGraph",
+        "checkpoint",
+        "interrupt",
+        "审批"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "repo_project_files",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_075",
+      "query": "Agent 评估中使用 LLM-as-Judge 有哪些局限性？如何缓解？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "LLM-as-Judge",
+        "评估",
+        "局限性"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_076",
+      "query": "RAG 系统中 hybrid search 的 dense 和 sparse 权重如何调优？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "hybrid search",
+        "dense",
+        "sparse",
+        "权重"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "enterprise_model_provider_policy"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_077",
+      "query": "Agent 系统中的 guardrail 和 safety filter 应该在哪个阶段介入？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "guardrail",
+        "safety",
+        "filter"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_078",
+      "query": "Function-calling Agent 如何处理 tool 返回结果过长的问题？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "Function-calling",
+        "tool",
+        "截断"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "enterprise_agent_overview",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_079",
+      "query": "知识库中 manifest 和 content cache 的关系是怎样的？各自解决什么问题？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "manifest",
+        "content cache",
+        "知识库"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "enterprise_model_provider_policy"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_080",
+      "query": "LangGraph agent 的 node 和 edge 设计模式有哪些最佳实践？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "LangGraph",
+        "node",
+        "edge",
+        "设计模式"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "enterprise_model_provider_policy",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_081",
+      "query": "source_id=fastapi_docs 有多少条 chunk？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "fastapi_docs",
+        "source_id"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_082",
+      "query": "doc_type=html 的 chunk 来自哪个 source？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "doc_type",
+        "html",
+        "fastapi_docs"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_083",
+      "query": "source_id=local_ai_agent_course_pdf 的文档类型是什么？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "local_ai_agent_course_pdf",
+        "source_id"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_084",
+      "query": "review_status=approved ingest_candidate=true 的 repo metadata chunk",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "review_status",
+        "approved",
+        "ingest_candidate"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "repo_project_files",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_085",
+      "query": "normalized_id norm_docx_001 对应哪个 source_id？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "normalized_id",
+        "norm_docx_001",
+        "source_id"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_086",
+      "query": "chunk_id chunk_norm_docx_001_0000",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "chunk_norm_docx_001_0000",
+        "chunk_id"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_087",
+      "query": "collection_name enterprise_ai_learning_kb_reviewed 在哪里记录？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "collection_name",
+        "enterprise_ai_learning_kb_reviewed"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_088",
+      "query": "metadata content_cache_alias normalized/docx/norm_docx_001.txt",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "content_cache_alias",
+        "norm_docx_001"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_089",
+      "query": "source_id=fastapi_docs 有哪些 chunk？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "source_id",
+        "fastapi_docs"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "repo_project_files",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_090",
+      "query": "doc_type=html 的 chunk 来自哪个 source？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "doc_type",
+        "html",
+        "fastapi_docs"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_091",
+      "query": "source_id=local_ai_agent_course_pdf 的文档类型是什么？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "source_id",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_092",
+      "query": "normalized_id norm_docx_001 对应哪个 source_id？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "normalized_id",
+        "norm_docx_001"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_093",
+      "query": "chunk_id chunk_norm_docx_001_0000 的来源是什么？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "chunk_norm_docx_001_0000",
+        "chunk_id"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_094",
+      "query": "local_nlp_course_docx 中有哪些章节标题？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "章节",
+        "标题",
+        "NLP"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_095",
+      "query": "chunk_manifest.jsonl 中 doc_type 为 pdf 的 chunk 有多少个？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "chunk_manifest",
+        "doc_type",
+        "pdf"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "repo_project_files"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_096",
+      "query": "哪些文档的 source_type 是 local_course？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "source_type",
+        "local_course"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_097",
+      "query": "repo_project_files 中有哪些 Python 文件？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "Python",
+        "repo_project_files",
+        ".py"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_098",
+      "query": "fastapi_docs 中包含 middleware 关键词的 chunk 有哪些？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "middleware",
+        "fastapi_docs"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_099",
+      "query": "source_catalog.yaml 中 domain 字段有哪些取值？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "source_catalog",
+        "domain"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "fastapi_docs",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_100",
+      "query": "哪些 chunk 的 language 标记为 zh？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "language",
+        "zh"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_101",
+      "query": "FastAPI BaseModel request schema",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "BaseModel",
+        "schema",
+        "request"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_102",
+      "query": "Request Body Pydantic model 示例",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "Pydantic",
+        "model"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_103",
+      "query": "API endpoint /enterprise/agent/query 配置在哪里说明？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "endpoint",
+        "enterprise",
+        "query"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_model_provider_policy",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_104",
+      "query": "provider config 如何记录模型供应商？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "provider",
+        "config",
+        "model"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_model_provider_policy",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "enterprise_model_provider_policy"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 2,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_105",
+      "query": "collection_name enterprise_ai_learning_kb_reviewed",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "collection_name",
+        "enterprise_ai_learning_kb_reviewed",
+        "Chroma"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_106",
+      "query": ".env provider config placeholder",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "provider",
+        "config",
+        "placeholder"
+      ],
+      "demo_sources_top3": [
+        "enterprise_model_provider_policy",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "enterprise_model_provider_policy"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_107",
+      "query": "Pydantic BaseModel 字段校验",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Pydantic",
+        "BaseModel",
+        "validation"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_108",
+      "query": "FastAPI path operation function code example",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "path operation",
+        "function",
+        "FastAPI"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_109",
+      "query": "FastAPI BaseModel request schema",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "BaseModel",
+        "schema",
+        "request"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_110",
+      "query": "Request Body Pydantic model 示例",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Request Body",
+        "Pydantic",
+        "model"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_111",
+      "query": "API endpoint /enterprise/agent/query 配置在哪里说明？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "endpoint",
+        "enterprise",
+        "query"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_model_provider_policy",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_112",
+      "query": "provider config 如何记录模型供应商？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "provider",
+        "config",
+        "model"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_model_provider_policy",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "enterprise_model_provider_policy"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 2,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_113",
+      "query": "collection_name enterprise_ai_learning_kb_reviewed",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "collection_name",
+        "enterprise_ai_learning_kb_reviewed"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_114",
+      "query": "pyproject.toml 中 dependencies 和 dev-dependencies 分别有哪些包？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "pyproject.toml",
+        "dependencies"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_115",
+      "query": "CHROMA_COLLECTION_NAME 在哪个文件中定义？默认值是什么？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "CHROMA_COLLECTION_NAME",
+        "config.py"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_116",
+      "query": "enterprise_tools.py 中 MAX_TOP_K 和 CONTEXT_TOTAL_CHAR_LIMIT 的值分别是多少？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "MAX_TOP_K",
+        "CONTEXT_TOTAL_CHAR_LIMIT"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_117",
+      "query": "langgraph.json 中 graphs 字段配置了哪些 graph？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "langgraph.json",
+        "graphs"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_118",
+      "query": "docker-compose.yml 中定义了哪些 service 和 port 映射？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "docker-compose",
+        "service",
+        "port"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_119",
+      "query": ".env 文件中默认的 EMBEDDING_PROVIDER 和 LLM_PROVIDER 是什么？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "EMBEDDING_PROVIDER",
+        "LLM_PROVIDER"
+      ],
+      "demo_sources_top3": [
+        "enterprise_model_provider_policy",
+        "enterprise_rag_pipeline",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "enterprise_model_provider_policy",
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_120",
+      "query": "vector_store.py 中 Chroma 的 PersistenceClient 是如何创建和配置的？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "PersistenceClient",
+        "Chroma",
+        "vector_store"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_121",
+      "query": "LSTM",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "LSTM"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_122",
+      "query": "GRU",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "GRU"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_123",
+      "query": "Seq2Seq",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Seq2Seq"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_124",
+      "query": "BERT",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "BERT"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_125",
+      "query": "RAG",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "RAG"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_126",
+      "query": "FastAPI",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "FastAPI"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_127",
+      "query": "manifest",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "manifest"
+      ],
+      "demo_sources_top3": [
+        "enterprise_model_provider_policy",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "fastapi_docs",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_128",
+      "query": "checkpointer",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "checkpointer"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_129",
+      "query": "LSTM",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "LSTM"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_130",
+      "query": "GRU",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "GRU"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_131",
+      "query": "Seq2Seq",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Seq2Seq"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_132",
+      "query": "BERT",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "BERT"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_133",
+      "query": "FastAPI",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "FastAPI"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_134",
+      "query": "Attention",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Attention",
+        "注意力"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_135",
+      "query": "Embedding",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Embedding",
+        "嵌入"
+      ],
+      "demo_sources_top3": [
+        "enterprise_model_provider_policy",
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_136",
+      "query": "Fine-tuning",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Fine-tuning",
+        "微调"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_137",
+      "query": "API Router",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Router",
+        "API"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_138",
+      "query": "Dependency",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "Dependency"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "enterprise_model_provider_policy"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_139",
+      "query": "向量检索",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "向量",
+        "检索"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_140",
+      "query": "模型推理",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "推理",
+        "模型"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_141",
+      "query": "Kubernetes deployment 怎么配置？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_142",
+      "query": "Chroma persist directory 如何配置？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "enterprise_model_provider_policy"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_143",
+      "query": "PyTorch DataLoader 官方文档怎么用？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_144",
+      "query": "LangGraph checkpointer 官方说明",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_145",
+      "query": "Kubernetes workload 是什么？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_146",
+      "query": "Chroma collection metadata where clause",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_147",
+      "query": "PyTorch tensor autograd 官方解释",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_148",
+      "query": "LangGraph graph state reducer 怎么写？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_149",
+      "query": "Kubernetes deployment 怎么配置？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_150",
+      "query": "Chroma persist directory 如何配置？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "enterprise_model_provider_policy"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_151",
+      "query": "PyTorch DataLoader 官方文档怎么用？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_152",
+      "query": "LangGraph checkpointer 官方说明",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_153",
+      "query": "Kubernetes workload 是什么？",
+      "expected_source_id": null,
+      "expected_doc_type": null,
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_154",
+      "query": "请解释 Kubernetes 中的 Pod 调度策略",
+      "expected_source_id": null,
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Kubernetes",
+        "Pod",
+        "kube"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_155",
+      "query": "PyTorch DataLoader 多进程加载数据的原理是什么？",
+      "expected_source_id": null,
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "DataLoader",
+        "PyTorch",
+        "多进程"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_156",
+      "query": "Give me a step-by-step guide to deploy with LangGraph Cloud",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "LangGraph Cloud"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_157",
+      "query": "ChromaDB collection 的 metadata 过滤语法怎么写？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "ChromaDB",
+        "metadata",
+        "filter"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_158",
+      "query": "如何在 HPC 集群上配置 SLURM 作业调度？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "SLURM",
+        "HPC"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_159",
+      "query": "介绍一下 TensorFlow 2.x 的 tf.function 装饰器",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "TensorFlow",
+        "tf.function"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_160",
+      "query": "Docker Compose 的 depends_on 和 healthcheck 如何配合使用？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "Docker Compose",
+        "depends_on",
+        "healthcheck"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_161",
+      "query": "source catalog 在知识库构建中记录什么？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "yaml",
+      "expected_keywords": [
+        "source_catalog",
+        "fetch_policy",
+        "source_id"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_162",
+      "query": "manifest 如何支持入库前审查？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "manifest",
+        "review_status",
+        "ingest_candidate"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_163",
+      "query": "为什么 Phase 6B-2 不应评估问答准确率？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "QA evaluation",
+        "semantic_quality_evaluated",
+        "Phase 6B-2"
+      ],
+      "demo_sources_top3": [
+        "enterprise_prompt_guidelines",
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "enterprise_prompt_guidelines",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_164",
+      "query": "HTML normalization 为什么需要保留 source_url？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "HTML",
+        "source_url",
+        "normalization"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_165",
+      "query": "chunk quality report 需要检查哪些指标？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "empty_chunk_count",
+        "missing_metadata_count",
+        "quality_pass"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_166",
+      "query": "review pack 如何发现 suspicious chunks？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "review",
+        "suspicious",
+        "chunk"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_167",
+      "query": "banned source exclusion test 的语义是什么？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "banned source",
+        "semantic_quality_evaluated",
+        "negative"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "enterprise_prompt_guidelines",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "repo_project_files"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_168",
+      "query": "API endpoint evaluation skipped 应如何记录？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "API",
+        "skipped",
+        "evaluation"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_169",
+      "query": "source catalog 在知识库构建中记录什么？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "yaml",
+      "expected_keywords": [
+        "source_catalog",
+        "fetch_policy",
+        "source_id"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_170",
+      "query": "manifest 如何支持入库前审查？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "manifest",
+        "review_status",
+        "ingest_candidate"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_171",
+      "query": "为什么 Phase 6B-2 不应评价问答准确率？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "QA evaluation",
+        "semantic_quality_evaluated",
+        "Phase 6B-2"
+      ],
+      "demo_sources_top3": [
+        "enterprise_prompt_guidelines",
+        "enterprise_rag_pipeline",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "enterprise_prompt_guidelines",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_172",
+      "query": "HTML normalization 为什么需要保留 source_url？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "HTML",
+        "source_url",
+        "normalization"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_173",
+      "query": "API endpoint evaluation skipped 应如何记录？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "markdown",
+      "expected_keywords": [
+        "API",
+        "skipped",
+        "evaluation"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_174",
+      "query": "PyTorch 训练模型通常包括哪些步骤？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "训练",
+        "PyTorch",
+        "步骤",
+        "数据加载"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 3,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_175",
+      "query": "RAG 在 Agent 系统中如何降低幻觉风险？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "RAG",
+        "幻觉",
+        "Agent",
+        "知识库"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_176",
+      "query": "manifest 如何支持入库前审查？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "manifest",
+        "审查",
+        "入库"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_177",
+      "query": "为什么 Phase 6B-2 不应该评估问答准确率？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "Phase 6B-2",
+        "评估",
+        "准确率"
+      ],
+      "demo_sources_top3": [
+        "enterprise_prompt_guidelines",
+        "enterprise_rag_pipeline",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_prompt_guidelines",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_178",
+      "query": "chunk_manifest 中的 review_status 字段有哪些可能取值？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "review_status",
+        "approved",
+        "rejected"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_179",
+      "query": "Phase 6D-4 中 Qwen3-Reranker 和 bge-reranker-base 的 latency 差异原因？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "Qwen3-Reranker",
+        "bge-reranker",
+        "latency"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_180",
+      "query": "embedding_benchmark_summary 中 best_models 的评选标准是什么？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "best_models",
+        "embedding",
+        "benchmark"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_prompt_guidelines",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_181",
+      "query": "RAGFlow 默认使用什么分块策略？这个策略在 AI Engineering Hub 中是如何被评价的？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "RAGFlow",
+        "分块",
+        "Chunking"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_182",
+      "query": "DeepSeek-R1 使用的蒸馏方法是什么？Tiny-LLM 项目中有没有类似的技术实践？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "蒸馏",
+        "DeepSeek",
+        "Tiny-LLM"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "enterprise_model_provider_policy",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_183",
+      "query": "vLLM 如何处理 KV cache？Flash Attention 提出了什么替代方案？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "KV cache",
+        "vLLM",
+        "Flash Attention"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_184",
+      "query": "LLaMA 架构中 RoPE 的作用是什么？ALiBi 相比 RoPE 有什么不同？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "RoPE",
+        "ALiBi",
+        "LLaMA",
+        "位置编码"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_185",
+      "query": "QLoRA 的 4-bit 量化如何减少显存？和标准 LoRA 在训练吞吐上有多少差异？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "QLoRA",
+        "4-bit",
+        "LoRA",
+        "显存"
+      ],
+      "demo_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_186",
+      "query": "FastAPI 的 Depends 和 LangGraph 的 StateGraph 中的 dependency 管理有什么异同？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "Depends",
+        "StateGraph",
+        "dependency",
+        "FastAPI",
+        "LangGraph"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_187",
+      "query": "在 RAG 系统中，Sentence-BERT 的 embedding 和 BM25 的 sparse retrieval 分别解决了什么问题？两者如何互补？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "Sentence-BERT",
+        "BM25",
+        "embedding",
+        "sparse"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines",
+        "enterprise_model_provider_policy"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_188",
+      "query": "LLM 推理中的 speculative decoding 和 KV cache compression 分别是什么原理？哪种对长文本更有效？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "speculative decoding",
+        "KV cache",
+        "推理"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_nlp_course_docx",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_189",
+      "query": "知识库 review pipeline 中 chunk manifest 如何驱动 normalization？两者之间的数据流是怎样的？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "chunk manifest",
+        "normalization",
+        "review",
+        "pipeline"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_190",
+      "query": "MoE 在 transformer 中最早由哪篇论文提出？Switch Transformer 和 Mixtral 分别在 MoE 上做了哪些改进？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "MoE",
+        "Switch Transformer",
+        "Mixtral"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_191",
+      "query": "LLM 评估中 BLEU 和 ROUGE 的局限性是什么？基于 embedding 的 BERTScore 如何改进？",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "BLEU",
+        "ROUGE",
+        "BERTScore",
+        "评估"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_192",
+      "query": "数据清洗 pipeline 中的去重和归一化分别用什么工具？Phase 6B-1 中选择了哪种方案？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "去重",
+        "归一化",
+        "Phase 6B-1",
+        "pipeline"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_193",
+      "query": "什么是 DPO 和 RLHF 的区别？在 agent-service-toolkit 项目中是否有相关的实现参考？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "DPO",
+        "RLHF",
+        "对齐"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "enterprise_agent_overview",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_194",
+      "query": "检索评估中 Recall@k 和 MRR 分别衡量什么？为什么只用 Recall 不够？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "Recall@k",
+        "MRR",
+        "检索评估"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_195",
+      "query": "如何进行 RAG 检索的 A/B 测试？评估中需要控制的变量有哪些？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "A/B测试",
+        "RAG",
+        "变量控制"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_196",
+      "query": "Transformer 的训练中 warmup steps 和学习率衰减如何配合？cosine schedule 相比 linear 有什么优势？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "warmup",
+        "学习率",
+        "cosine",
+        "schedule"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_197",
+      "query": "知识库检索中的 hybrid search 和 agent 中的 multi-tool retrieval 在架构上有什么不同？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "hybrid search",
+        "multi-tool",
+        "retrieval"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_198",
+      "query": "上下文窗口扩展方法（RoPE interpolation vs. PI）的原理区别是什么？各有什么优缺点？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "RoPE",
+        "interpolation",
+        "PI",
+        "上下文"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_199",
+      "query": "大模型部署中 ONNX Runtime 和 TensorRT-LLM 在 GPU 推理时各有什么优劣势？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "ONNX",
+        "TensorRT",
+        "推理",
+        "GPU"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_200",
+      "query": "评估集中的 negative_banned_source 和 phase6c_bad_case_regression 类型的 case 设计有什么不同目的？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "negative_banned_source",
+        "bad_case",
+        "评估"
+      ],
+      "demo_sources_top3": [
+        "enterprise_prompt_guidelines",
+        "enterprise_rag_pipeline",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "enterprise_prompt_guidelines"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_201",
+      "query": "什么是最好的模型？",
+      "expected_source_id": null,
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "模型"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_202",
+      "query": "怎么用 RAG？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "RAG"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_203",
+      "query": "介绍一下 Transformer",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Transformer"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_204",
+      "query": "学习率设多少？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "学习率"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_205",
+      "query": "GPU 怎么选？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "GPU"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_206",
+      "query": "部署需要注意什么？",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "部署"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "enterprise_agent_overview",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_207",
+      "query": "那个文档在哪里？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "文档"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_208",
+      "query": "这个参数怎么调？",
+      "expected_source_id": null,
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "参数"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_209",
+      "query": "效果不好怎么办？",
+      "expected_source_id": null,
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "效果"
+      ],
+      "demo_sources_top3": [
+        "enterprise_prompt_guidelines",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "enterprise_prompt_guidelines"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_210",
+      "query": "有什么改进建议？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "改进"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "enterprise_prompt_guidelines",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_211",
+      "query": "对比一下那几个方法",
+      "expected_source_id": null,
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "对比",
+        "方法"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_212",
+      "query": "这个错误怎么解决？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "错误"
+      ],
+      "demo_sources_top3": [
+        "enterprise_prompt_guidelines",
+        "repo_project_files",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_213",
+      "query": "配置应该怎么改？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "配置"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_214",
+      "query": "怎样才能更快？",
+      "expected_source_id": null,
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "更快"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "fastapi_docs",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_215",
+      "query": "API 怎么调用？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "API"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_216",
+      "query": "最新版本有什么变化？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "版本",
+        "变化"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 2,
+      "full_keyword_hits": 2,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_217",
+      "query": "token 不够用怎么办？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "token"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_218",
+      "query": "评估怎么做？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "评估"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_219",
+      "query": "和论文里的一样吗？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [
+        "论文"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_220",
+      "query": "这个好用吗？",
+      "expected_source_id": null,
+      "expected_doc_type": "md",
+      "expected_keywords": [],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_221",
+      "query": "根据 Flash Attention 论文，它的三个关键创新是什么？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Flash Attention",
+        "创新",
+        "IO-aware"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "enterprise_model_provider_policy",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_222",
+      "query": "Datawhale happy-llm 教程中关于 RoPE 的实现是怎么描述的？请给出具体章节。",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "RoPE",
+        "happy-llm",
+        "Datawhale"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_223",
+      "query": "引用 AI Engineering Hub 中对 RAG 评估方法的描述",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "AI Engineering Hub",
+        "RAG评估"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_224",
+      "query": "根据 source_catalog.yaml，知识库中包含哪些 domain？每个 domain 有哪些 source？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "source_catalog",
+        "domain"
+      ],
+      "demo_sources_top3": [
+        "enterprise_agent_overview",
+        "repo_project_files",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "enterprise_agent_overview",
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_225",
+      "query": "chunk_manifest.jsonl 中关于 review_status 的定义是怎样的？引用 schema 文件中的说明。",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "chunk_manifest",
+        "review_status",
+        "schema"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_226",
+      "query": "关于 LoRA 微调的最佳 rank 选择，deep_learning 课程文档中给出了什么建议？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "LoRA",
+        "rank",
+        "建议"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_227",
+      "query": "FastAPI 官方文档中关于 middleware 执行顺序的说明是什么？",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "middleware",
+        "执行顺序",
+        "FastAPI"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "repo_project_files",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_228",
+      "query": "引用 task.txt 中关于 Phase 6D-4 benchmark 结果的描述",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "Phase 6D-4",
+        "benchmark",
+        "task.txt"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_ai_agent_course_pdf",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "repo_project_files"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_229",
+      "query": "PyTorch 官方文档中关于 DataLoader num_workers 的最佳设置建议是什么？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "DataLoader",
+        "num_workers",
+        "PyTorch"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_model_provider_policy",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_230",
+      "query": "引用 NLP 教程中关于 Transformer 架构的解释，包括 encoder 和 decoder 的区别。",
+      "expected_source_id": "local_nlp_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "Transformer",
+        "encoder",
+        "decoder"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 3,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_231",
+      "query": "chunk_quality_report.json 中 quality_score 的计算公式是什么？引用相关文档说明。",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "quality_score",
+        "公式",
+        "chunk_quality"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "fastapi_docs",
+        "enterprise_rag_pipeline"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_232",
+      "query": "根据 LLaMA-Factory 文档，7B 模型 LoRA 训练的最低 GPU 显存要求是多少？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "LLaMA-Factory",
+        "LoRA",
+        "7B",
+        "GPU"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_ai_agent_course_pdf",
+        "enterprise_model_provider_policy"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_deep_learning_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 2,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_233",
+      "query": "引用 Agent 课程中关于 human-in-the-loop 设计模式的描述",
+      "expected_source_id": "local_ai_agent_course_pdf",
+      "expected_doc_type": "pdf",
+      "expected_keywords": [
+        "human-in-the-loop",
+        "Agent"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview",
+        "enterprise_agent_overview"
+      ],
+      "full_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "enterprise_agent_overview",
+        "enterprise_agent_overview"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_234",
+      "query": "FastAPI 的 lifespan 设计相对于 @app.on_event 的优势是什么？引用文档中的对比说明。",
+      "expected_source_id": "fastapi_docs",
+      "expected_doc_type": "html",
+      "expected_keywords": [
+        "lifespan",
+        "on_event",
+        "对比"
+      ],
+      "demo_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "full_sources_top3": [
+        "fastapi_docs",
+        "fastapi_docs",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_235",
+      "query": "在 Phase 6D-2 embedding benchmark 中，哪个 query_type 的 source_hit 最低？引用 summary 数据。",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "Phase 6D-2",
+        "embedding",
+        "source_hit"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_prompt_guidelines",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "local_nlp_course_docx",
+        "enterprise_prompt_guidelines"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_236",
+      "query": "根据 DeepSeek-V2 论文，MLA (Multi-head Latent Attention) 相比标准 MHA 减少了多少 KV cache？",
+      "expected_source_id": "local_deep_learning_course_docx",
+      "expected_doc_type": "docx",
+      "expected_keywords": [
+        "MLA",
+        "MHA",
+        "KV cache",
+        "DeepSeek"
+      ],
+      "demo_sources_top3": [
+        "repo_project_files",
+        "repo_project_files",
+        "local_ai_agent_course_pdf"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "local_nlp_course_docx",
+        "repo_project_files"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": true,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_237",
+      "query": "引用 chunk_manifest.schema.json 中 requires_exact_match 字段的定义",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "schema",
+        "requires_exact_match"
+      ],
+      "demo_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "repo_project_files"
+      ],
+      "full_sources_top3": [
+        "enterprise_rag_pipeline",
+        "enterprise_rag_pipeline",
+        "fastapi_docs"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": false,
+      "demo_doc_type_hit": true,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 0,
+      "improvement_reason": "regressed"
+    },
+    {
+      "case_id": "exp_238",
+      "query": "multilingual-e5-base 在 Phase 6D-4 benchmark 中的 MRR 是多少？引用 summary 数据。",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "multilingual-e5-base",
+        "MRR",
+        "Phase 6D-4"
+      ],
+      "demo_sources_top3": [
+        "local_ai_agent_course_pdf",
+        "repo_project_files",
+        "enterprise_rag_pipeline"
+      ],
+      "full_sources_top3": [
+        "local_deep_learning_course_docx",
+        "repo_project_files",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": true,
+      "full_source_hit": true,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 0,
+      "improvement_reason": "unchanged"
+    },
+    {
+      "case_id": "exp_239",
+      "query": "根据 tokenizer_config.json，bge-small-zh-v1.5 使用的 tokenizer 类型和 vocab_size 是多少？",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "tokenizer_config",
+        "bge-small",
+        "vocab_size"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 0,
+      "full_keyword_hits": 1,
+      "improvement_reason": "improved"
+    },
+    {
+      "case_id": "exp_240",
+      "query": "引用 pyproject.toml 中关于 sentence-transformers 和 transformers 的版本约束",
+      "expected_source_id": "repo_project_files",
+      "expected_doc_type": "json",
+      "expected_keywords": [
+        "pyproject.toml",
+        "sentence-transformers",
+        "transformers"
+      ],
+      "demo_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "full_sources_top3": [
+        "local_nlp_course_docx",
+        "local_nlp_course_docx",
+        "local_nlp_course_docx"
+      ],
+      "demo_source_hit": false,
+      "full_source_hit": false,
+      "demo_doc_type_hit": false,
+      "full_doc_type_hit": false,
+      "demo_keyword_hits": 1,
+      "full_keyword_hits": 1,
+      "improvement_reason": "unchanged"
+    }
+  ],
+  "calls_llm": false,
+  "writes_chroma": false
+}
