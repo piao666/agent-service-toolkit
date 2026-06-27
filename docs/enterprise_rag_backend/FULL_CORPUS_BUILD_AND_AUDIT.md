@@ -93,11 +93,32 @@ python scripts/compare_demo_vs_full_retrieval_only.py --top-k 5
 - **source_hit 下降 5 cases** — 部分 case 在 demo corpus 中因 chunk 少而 ranking 靠前，但 full corpus 中更多样化
 - **improved/regressed 几乎持平 (49 vs 45)** — corpus 扩大带来的收益与噪声基本相当
 
+## Multi-Mode Top-K Sweep (baseline_dense / overlay / enterprise_payload)
+
+| mode | top_k | demo src_hit | full src_hit | full kw_rate | improved | regressed |
+|---|---|---|---|---|---|---|
+| baseline_dense | 5 | 148 | 143 | 0.478 | 49 | 45 |
+| baseline_dense | 10 | 179 | 156 | 0.533 | 40 | 57 |
+| baseline_dense | 20 | 195 | 174 | 0.578 | 35 | 58 |
+| overlay | 5 | 140 | **150** ✅ | 0.484 | 46 | 37 |
+| overlay | 10 | 176 | 158 | 0.542 | 37 | 51 |
+| overlay | 20 | 193 | 175 | 0.582 | 35 | 55 |
+| enterprise_payload | 5 | 153 | **162** ✅ | — | 26 | 27 |
+| enterprise_payload | 10 | 186 | 170 | — | 10 | 39 |
+| enterprise_payload | 20 | 201 | 188 | — | 4 | 37 |
+
+**关键发现**：
+- full corpus 在 overlay top_k=5 和 enterprise_payload top_k=5 下 source_hit 超越 demo
+- full corpus 的 keyword_hit_rate 在所有模式/top_k 下均优于 demo
+- full corpus 在 larger top_k (10, 20) 下 source_hit 反而不如 demo — 更多 chunks 稀释了 top-k 排序
+- enterprise_payload 是最接近生产链路的模式
+
 ## 决策规则
 
-- ✅ retrieval-only 对比已完成，keyword 覆盖率有正向改善
-- ⚠️ source_hit 未显著提升 → 不建议直接宣称"full corpus 全面优于 demo"
-- 🔜 下一步：可以跑 full corpus 的 240-case DeepSeek，但预期改善有限（~+10 improved in bad count）
+- ✅ 多模式 top-k sweep 已完成
+- ⚠️ full corpus 在 top_k=5 生产模式下（overlay + enterprise_payload）source_hit 略优于 demo
+- ⚠️ 整体改善幅度有限（+2~+9 source_hit），keyword 覆盖率稳定提升
+- 🔜 可以跑 full corpus 的 240-case DeepSeek，但预期 bad count 改善有限（-5 到 -10）
 - ❌ 不要在审计前改 retriever / planner / multi-hop / judge
 
 ## 文件清单
