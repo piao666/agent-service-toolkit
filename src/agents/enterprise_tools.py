@@ -389,10 +389,92 @@ def build_enterprise_retrieval_payload(
     )
     retrieval_debug.update(structured_debug)
     retrieval_debug["final_sources_count"] = len(sources)
+
+    # ── source_catalog patch router (feature-flag gated, default off) ──
+    sc_debug = {"source_catalog_route_triggered": False}
+    try:
+        from rag.source_catalog_router import is_source_catalog_query, SourceCatalogRouter
+        if is_source_catalog_query(normalized_query):
+            sc_router = SourceCatalogRouter()
+            if sc_router.enabled:
+                patch_hits = sc_router.retrieve_patch(normalized_query)
+                if patch_hits:
+                    patch_sources = [{
+                        "source_id": h.get("source_id", ""),
+                        "chunk_id": h.get("chunk_id", ""),
+                        "title": "Source Catalog Domain Index v1.1",
+                        "doc_type": "markdown",
+                        "content": h.get("page_content", ""),
+                        "content_preview": h.get("page_content", "")[:500],
+                        "metadata": {"patch_doc_id": h.get("patch_doc_id", ""), "section_type": h.get("section_type", "")},
+                    } for h in patch_hits]
+                    patch_context = "\n\n".join(h.get("page_content", "") for h in patch_hits)
+                    # patch_first injection
+                    sources = patch_sources + sources
+                    context = patch_context + "\n\n" + context
+                    sc_debug = {
+                        "source_catalog_route_triggered": True,
+                        "source_catalog_patch_enabled": True,
+                        "source_catalog_patch_hit_count": len(patch_hits),
+                        "source_catalog_patch_doc_ids": [h.get("patch_doc_id", "") for h in patch_hits],
+                        "source_catalog_patch_collection": sc_router.collection_name,
+                        "source_catalog_injection_mode": sc_router.injection_mode,
+                        "source_catalog_patch_context_chars": len(patch_context),
+                        "fallback_to_base": False,
+                    }
+                else:
+                    sc_debug = {"source_catalog_route_triggered": True, "source_catalog_patch_hit_count": 0, "fallback_to_base": True}
+    except Exception as e:
+        sc_debug = {"source_catalog_route_triggered": False, "source_catalog_patch_error": str(e)[:200], "fallback_to_base": True}
+    retrieval_debug.update(sc_debug)
+
+    # ── source_catalog structured answer (non-LLM, feature-flag gated) ──
+    structured_answer_payload = None
+    sc_structured_debug: dict[str, Any] = {
+        "structured_answer_built": False,
+        "structured_answer_context_injected": False,
+    }
+    try:
+        from rag.source_catalog_router import build_source_catalog_structured_answer
+        structured_ans = build_source_catalog_structured_answer(normalized_query)
+        if structured_ans:
+            structured_answer_payload = {
+                "enabled": True,
+                "answer": structured_ans["answer"],
+                "sources": structured_ans.get("sources", []),
+                "answer_type": "source_catalog_structured",
+                "patch_doc_id": "source_catalog_domain_index_v1_1",
+            }
+            sources = structured_answer_payload["sources"]
+            context = structured_answer_payload["answer"]
+            retrieval_debug.update({
+                "structured_answer_used": True,
+                "structured_answer_built": True,
+                "structured_answer_context_injected": True,
+                "structured_answer_chars": len(structured_answer_payload["answer"]),
+                "source_catalog_structured_answer_debug": structured_ans.get("source_catalog_structured_answer_debug", {}),
+            })
+            sc_structured_debug = {
+                "structured_answer_built": True,
+                "structured_answer_context_injected": True,
+                "structured_answer_chars": len(structured_answer_payload["answer"]),
+            }
+    except Exception as sc_err:
+        sc_structured_debug = {
+            "structured_answer_built": False,
+            "structured_answer_context_injected": False,
+            "structured_answer_error": f"{type(sc_err).__name__}: {str(sc_err)[:200]}",
+        }
+        retrieval_debug.update(sc_structured_debug)
+
+    # 始终注入 structured_answer 构建状态到 retrieval_debug
+    retrieval_debug.update(sc_structured_debug)
+
     return {
         "context": context,
         "sources": sources,
         "retrieval_debug": retrieval_debug,
+        "structured_answer": structured_answer_payload,
         "fallback": {
             "triggered": False,
             "reason": None,

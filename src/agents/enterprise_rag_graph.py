@@ -151,6 +151,7 @@ class EnterpriseRAGGraphState(TypedDict, total=False):
     judge_debug: dict[str, Any]
     graph_debug: dict[str, Any]
     final_response: dict[str, Any]
+    structured_answer: dict[str, Any]  # source_catalog structured answer override
 
 
 def _normalized_query(state: EnterpriseRAGGraphState) -> str:
@@ -450,12 +451,16 @@ def _build_retriever_node(
                 "graph_retrieval_adapter": "enterprise_retriever",
             }
         )
-        return {
+        structured = payload.get("structured_answer")
+        result = {
             "retrieved_sources": sources,
             "retrieval_debug": debug,
             "fallback": dict(payload.get("fallback") or {}),
             "graph_debug": _append_node(state, "retriever"),
         }
+        if structured and structured.get("enabled"):
+            result["structured_answer"] = structured
+        return result
 
     return retriever_node
 
@@ -552,10 +557,15 @@ async def multi_hop_retriever_node(state: EnterpriseRAGGraphState) -> Enterprise
 
 async def ranker_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     ranked = sorted(state.get("retrieved_sources") or [], key=_source_score, reverse=True)
-    return {
+    # ── 显式透传 structured_answer，防止 LangGraph TypedDict 状态合并时丢失 ──
+    result: dict[str, Any] = {
         "ranked_sources": ranked,
         "graph_debug": _append_node(state, "ranker"),
     }
+    structured = state.get("structured_answer")
+    if structured and structured.get("enabled"):
+        result["structured_answer"] = structured
+    return result
 
 
 def _build_answer_generator_node(
@@ -672,6 +682,35 @@ async def _real_answer_generator(
 
 async def answer_generator_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
     """Generate an answer through the configured model with a stable fallback."""
+    # ── source_catalog structured answer: skip LLM entirely ──
+    structured = state.get("structured_answer")
+    if structured and structured.get("enabled"):
+        graph_debug = _append_node(state, "answer_generator")
+        graph_debug.update({
+            "answer_generator": "source_catalog_structured_answer",
+            "answer_synthesis_mode": "source_catalog_structured_answer",
+            "calls_llm": False,
+            "calls_llm_for_answer": False,
+            "calls_real_llm": False,
+            "structured_answer_used": True,
+            "structured_answer_final_override_used": True,
+            "structured_answer_type": structured.get("answer_type"),
+        })
+        return {
+            "answer": structured["answer"],
+            "model_debug": {
+                "answer_generator": "source_catalog_structured_answer",
+                "calls_llm": False,
+                "calls_llm_for_answer": False,
+                "provider": "structured",
+                "structured_answer_final_override_used": True,
+            },
+            "fallback": {"triggered": False, "reason": None},
+            "graph_debug": graph_debug,
+            # 显式透传 structured_answer 到后续节点
+            "structured_answer": structured,
+        }
+
     query = state.get("contextual_query") or _normalized_query(state)
     answer, model_debug, calls_real_llm = await _real_answer_generator(
         query,
@@ -850,7 +889,98 @@ async def safe_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGra
         "graph_debug": _append_node(state, "safe_response"),
     }
 
+# ── source_catalog structured answer 评估常量 ──
+_SC_EXPECTED_MAPPING: dict[str, list[str]] = {
+    "agent_workflow": ["langgraph_docs"],
+    "ai_agent": ["local_ai_agent_course_pdf"],
+    "ai_risk_management": ["nist_ai_rmf_docs"],
+    "api_backend": ["fastapi_docs"],
+    "deep_learning": ["local_deep_learning_course_docx", "pytorch_docs"],
+    "llm_security": ["owasp_llm_security_docs"],
+    "model_serving": ["vllm_docs"],
+    "nlp": ["local_nlp_course_docx"],
+    "orchestration": ["kubernetes_cn_docs"],
+    "programming_language": ["python_cn_docs"],
+    "retrieval_augmented_generation": ["rag_arxiv_papers"],
+    "retrieval_evaluation": ["retrieval_eval_papers"],
+    "transformer_models": ["huggingface_transformers_docs", "transformer_arxiv_papers"],
+    "vector_database": ["chroma_docs"],
+}
+_SC_DOMAINS = list(_SC_EXPECTED_MAPPING.keys())
+_SC_INSUFFICIENT_PHRASES = [
+    "上下文不足", "未完整", "无法确定", "中断", "未列出",
+    "知识库中没有", "不能完整回答", "不足以", "没有足够依据",
+    "not enough evidence", "cannot answer", "insufficient",
+]
+
+
+def _eval_sc_structured_answer(answer: str) -> dict[str, Any]:
+    """对 source_catalog structured answer 做确定性评估，不依赖 LLM。"""
+    ans_lower = answer.lower()
+    missing_domains = [d for d in _SC_DOMAINS if d.lower() not in ans_lower]
+    missing_sources: dict[str, list[str]] = {}
+    for domain, sources in _SC_EXPECTED_MAPPING.items():
+        if domain.lower() not in ans_lower:
+            if domain not in missing_domains:
+                missing_domains.append(domain)
+        else:
+            for src in sources:
+                if src.lower() not in ans_lower:
+                    missing_sources.setdefault(domain, []).append(src)
+    missing_domains = sorted(set(missing_domains))
+    insufficient = [ph for ph in _SC_INSUFFICIENT_PHRASES if ph.lower() in ans_lower]
+    return {
+        "missing_domains": missing_domains,
+        "missing_domains_count": len(missing_domains),
+        "missing_sources": missing_sources,
+        "missing_sources_total": sum(len(v) for v in missing_sources.values()),
+        "insufficient_phrases": insufficient,
+        "insufficient_phrases_count": len(insufficient),
+        "eval_strict_pass": len(missing_domains) == 0 and len(missing_sources) == 0 and len(insufficient) == 0,
+    }
+
+
 async def final_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGraphState:
+    # ── source_catalog structured answer: override final answer ──
+    structured = state.get("structured_answer")
+    retrieval_debug = dict(state.get("retrieval_debug") or {})
+
+    if structured and structured.get("enabled"):
+        graph_debug = dict(state.get("graph_debug") or {})
+        # 合并 retrieval_debug 中的 structured_answer 信号
+        sc_eval = _eval_sc_structured_answer(structured["answer"])
+        graph_debug.update({
+            "answer_generator": "source_catalog_structured_answer",
+            "calls_llm_for_answer": False,
+            "calls_llm": False,
+            "calls_real_llm": False,
+            "structured_answer_used": True,
+            "structured_answer_final_override_used": True,
+            "structured_answer_built": True,
+            "structured_answer_context_injected": retrieval_debug.get("structured_answer_used", False),
+            "structured_answer_type": structured.get("answer_type"),
+            **sc_eval,
+        })
+        model_debug = dict(state.get("model_debug") or {})
+        model_debug.update({
+            "answer_generator": "source_catalog_structured_answer",
+            "calls_llm_for_answer": False,
+            "calls_llm": False,
+            "structured_answer_final_override_used": True,
+        })
+        return {
+            "answer": structured["answer"],
+            "model_debug": model_debug,
+            "graph_debug": graph_debug,
+            "final_response": {
+                "answer": structured["answer"],
+                "sources": structured.get("sources", []),
+                "retrieval_debug": retrieval_debug,
+                "model_debug": model_debug,
+                "graph_debug": graph_debug,
+                "fallback": {"triggered": False, "reason": None},
+            },
+        }
     sources = list(state.get("ranked_sources") or state.get("retrieved_sources") or [])
     citations = [
         {
