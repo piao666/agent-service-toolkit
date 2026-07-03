@@ -97,7 +97,6 @@ _PHRASE_PATTERN = re.compile(
     r"Vector\s+Store|Knowledge\s+Base|"
     r"enterprise_rag_pipeline|enterprise_agent_overview|"
     r"enterprise_prompt_guidelines|enterprise_model_provider_policy|"
-    r"fastapi_docs|local_deep_learning|local_nlp_course|"
     r"检索增强生成|知识库|向量库|向量存储|"
     r"请求体|路径参数|查询参数|"
     r"参数高效微调|低秩适配|"
@@ -186,7 +185,6 @@ _CRITICAL_PATTERNS: list[tuple[re.Pattern, str]] = [
     (re.compile(r"vector\s*store", re.I), "vector store"),
     (re.compile(r"enterprise_rag_pipeline"), "enterprise_rag_pipeline"),
     (re.compile(r"enterprise_agent_overview"), "enterprise_agent_overview"),
-    (re.compile(r"fastapi_docs"), "fastapi_docs"),
     (re.compile(r"检索增强生成"), "Retrieval-Augmented Generation"),
     (re.compile(r"检索"), "retrieval"),
     (re.compile(r"生成"), "generation"),
@@ -290,11 +288,11 @@ def _source_quality_gate(
         if not source_has_lora:
             return "low", True, "corpus_gap: LoRA/PEFT/QLoRA/低秩来源缺失"
 
-    # ── FastAPI gate ──
+    # ── External source quality gate ──
     fastapi_signals = {"fastapi", "request body", "pydantic", "basemodel"}
     fastapi_in_query = sum(1 for sig in fastapi_signals if sig in qa_text)
     if fastapi_in_query >= 2:
-        has_fastapi_source = "fastapi_docs" in sid_text or any(
+        has_fastapi_source = any(
             "fastapi" in t for t in source_titles
         )
         if has_fastapi_source and max_relevance >= 0.60:

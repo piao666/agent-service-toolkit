@@ -1,4 +1,4 @@
-"""Phase 6F: Structured retrieval infrastructure.
+"""Structured retrieval infrastructure.
 
 Provides metadata index lookup and symbol index search for targeted
 query types (exact_metadata_lookup, code_api_config, citation_required_query).
@@ -15,11 +15,10 @@ from typing import Any
 
 from rag.config import rag_settings
 
-# ── Index file paths ──
+# ── Index file paths (KB v1: env-var only, no default old paths) ──
 ROOT_DIR = Path(__file__).resolve().parents[2]
-EVAL_DIR = ROOT_DIR / "data" / "knowledge_base" / "evaluation"
-META_INDEX_PATH = EVAL_DIR / "phase6f_metadata_index.json"
-SYMBOL_INDEX_PATH = EVAL_DIR / "phase6f_symbol_index.json"
+META_INDEX_PATH: Path | None = None
+SYMBOL_INDEX_PATH: Path | None = None
 
 # ── Query types that benefit from structured retrieval ──
 STRUCTURED_QUERY_TYPES = {
@@ -31,13 +30,13 @@ STRUCTURED_QUERY_TYPES = {
 
 
 def _load_meta_index() -> list[dict[str, Any]]:
-    if not META_INDEX_PATH.exists():
+    if META_INDEX_PATH is None or not META_INDEX_PATH.exists():
         return []
     return json.loads(META_INDEX_PATH.read_text(encoding="utf-8"))
 
 
 def _load_sym_index() -> list[dict[str, Any]]:
-    if not SYMBOL_INDEX_PATH.exists():
+    if SYMBOL_INDEX_PATH is None or not SYMBOL_INDEX_PATH.exists():
         return []
     return json.loads(SYMBOL_INDEX_PATH.read_text(encoding="utf-8"))
 
@@ -170,7 +169,7 @@ def materialize_structured_candidates(
     normalized_query: str,
     top_k: int = 5,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
-    """Phase 6F-7: Materialize structured candidates from Chroma."""
+    """Materialize structured candidates from Chroma."""
     from rag.vector_store import get_vector_store
     from rag.embeddings import get_embedding_model
 
@@ -186,7 +185,7 @@ def materialize_structured_candidates(
             persist_dir=rag_settings.CHROMA_PERSIST_DIR,
             collection_name=rag_settings.chroma_collection_name,
         )
-        # Phase 6F-8: Use safe chromadb collection.get() instead of similarity_search_with_score filter
+        # Safe collection: Use safe chromadb collection.get() instead of similarity_search_with_score filter
         chroma_col = None
         try:
             # LangChain Chroma wraps a chromadb collection
@@ -271,7 +270,7 @@ def materialize_structured_candidates(
 def _mk_safe(
     chunk_id: str, source_id: str, metadata: dict, doc_text: str, stage: str
 ) -> dict[str, Any]:
-    """Phase 6F-8: safe candidate factory (no doc object dependency)."""
+    """Safe candidate factory (no doc object dependency)."""
     return {
         "chunk_id": chunk_id, "source_id": source_id,
         "title": metadata.get("title", ""), "doc_type": metadata.get("doc_type", ""),

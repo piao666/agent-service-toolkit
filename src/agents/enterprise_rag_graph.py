@@ -889,23 +889,8 @@ async def safe_response_node(state: EnterpriseRAGGraphState) -> EnterpriseRAGGra
         "graph_debug": _append_node(state, "safe_response"),
     }
 
-# ── source_catalog structured answer 评估常量 ──
-_SC_EXPECTED_MAPPING: dict[str, list[str]] = {
-    "agent_workflow": ["langgraph_docs"],
-    "ai_agent": ["local_ai_agent_course_pdf"],
-    "ai_risk_management": ["nist_ai_rmf_docs"],
-    "api_backend": ["fastapi_docs"],
-    "deep_learning": ["local_deep_learning_course_docx", "pytorch_docs"],
-    "llm_security": ["owasp_llm_security_docs"],
-    "model_serving": ["vllm_docs"],
-    "nlp": ["local_nlp_course_docx"],
-    "orchestration": ["kubernetes_cn_docs"],
-    "programming_language": ["python_cn_docs"],
-    "retrieval_augmented_generation": ["rag_arxiv_papers"],
-    "retrieval_evaluation": ["retrieval_eval_papers"],
-    "transformer_models": ["huggingface_transformers_docs", "transformer_arxiv_papers"],
-    "vector_database": ["chroma_docs"],
-}
+# ── source_catalog structured answer evaluation (KB v1: empty — populate from source_registry) ──
+_SC_EXPECTED_MAPPING: dict[str, list[str]] = {}
 _SC_DOMAINS = list(_SC_EXPECTED_MAPPING.keys())
 _SC_INSUFFICIENT_PHRASES = [
     "上下文不足", "未完整", "无法确定", "中断", "未列出",

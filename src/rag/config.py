@@ -7,7 +7,7 @@ from dotenv import find_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 DEFAULT_LOCAL_EMBEDDING_MODEL_PATH = "./models/bge-small-zh-v1.5"
-DEFAULT_CHROMA_COLLECTION_NAME = "enterprise_knowledge_base"
+DEFAULT_CHROMA_COLLECTION_NAME = "enterprise_kb_v1"
 DEFAULT_LOCAL_EMBEDDING_MODEL_NAME = "bge-small-zh-v1.5"
 
 
@@ -23,11 +23,11 @@ class RagSettings(BaseSettings):
     EMBEDDING_PROVIDER: str = "local"
     LOCAL_EMBEDDING_MODEL_PATH: str = DEFAULT_LOCAL_EMBEDDING_MODEL_PATH
     LOCAL_EMBEDDING_MODEL_ROOT: str | None = None
-    CHROMA_PERSIST_DIR: str = "./chroma_enterprise"
+    CHROMA_PERSIST_DIR: str = "./storage/chroma_enterprise_kb_v1"
     CHROMA_COLLECTION_NAME: str = DEFAULT_CHROMA_COLLECTION_NAME
     ENTERPRISE_CHROMA_COLLECTION: str | None = None
     ENTERPRISE_RAG_POLICY_MODE: str = "baseline"
-    ENTERPRISE_STRUCTURED_RETRIEVAL_MODE: str = "off"  # Phase 6F: "off" | "metadata_symbol"
+    ENTERPRISE_STRUCTURED_RETRIEVAL_MODE: str = "off"  # structured retrieval: "off" | "metadata_symbol"
     ENTERPRISE_MEMORY_MODE: str = "off"
     ENTERPRISE_MEMORY_MAX_TURNS: int = 5
     ENTERPRISE_MEMORY_MAX_ANSWER_CHARS: int = 1000
@@ -39,7 +39,7 @@ class RagSettings(BaseSettings):
     ENTERPRISE_LLM_JUDGE_MODE: str | None = None
     ENTERPRISE_JUDGE_MODE: str = "rule_based_fallback"
     ENTERPRISE_PLANNER_MODE: str = "debug_only"
-    ENTERPRISE_MULTI_HOP_MODE: str = "off"  # Phase 7D: "off" | "rule_based"
+    ENTERPRISE_MULTI_HOP_MODE: str = "off"  # multi-hop retrieval: "off" | "rule_based"
     RAG_CHUNK_SIZE: int = 800
     RAG_CHUNK_OVERLAP: int = 120
     RAG_DEFAULT_TOP_K: int = 5

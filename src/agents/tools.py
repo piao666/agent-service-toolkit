@@ -56,8 +56,9 @@ def load_chroma_db():
             "Failed to initialize OpenAIEmbeddings. Ensure the OpenAI API key is set."
         ) from e
 
-    # Load the stored vector database
-    chroma_db = Chroma(persist_directory="./chroma_db", embedding_function=embeddings)
+    # Load the stored vector database (uses KB v1 persist dir from config)
+    from rag.config import rag_settings
+    chroma_db = Chroma(persist_directory=rag_settings.CHROMA_PERSIST_DIR, embedding_function=embeddings)
     retriever = chroma_db.as_retriever(search_kwargs={"k": 5})
     return retriever
 

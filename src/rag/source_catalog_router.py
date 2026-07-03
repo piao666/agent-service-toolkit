@@ -79,11 +79,11 @@ class SourceCatalogRouter:
         self.enabled = os.environ.get("SOURCE_CATALOG_PATCH_ENABLED", "false").lower() == "true"
         self.persist_dir = persist_dir or os.environ.get(
             "SOURCE_CATALOG_PATCH_PERSIST_DIR",
-            "./chroma_source_catalog_patch_bge_m3_v2_strict",
+            "./storage/chroma_source_catalog_kb_v1",
         )
         self.collection_name = collection_name or os.environ.get(
             "SOURCE_CATALOG_PATCH_COLLECTION",
-            "enterprise_source_catalog_patch_bge_m3_v2_strict",
+            "source_catalog_kb_v1",
         )
         self.top_k = int(os.environ.get("SOURCE_CATALOG_PATCH_TOP_K", "5"))
         self.injection_mode = os.environ.get("SOURCE_CATALOG_PATCH_INJECTION_MODE", "patch_first")
@@ -187,44 +187,28 @@ def build_source_catalog_structured_answer(query: str) -> dict | None:
     if not enabled or not is_source_catalog_query(query):
         return None
 
-    # 读取 authoritative JSON
-    source_path = os.environ.get(
-        "SOURCE_CATALOG_STRUCTURED_ANSWER_SOURCE",
-        "data/knowledge_base/curated_evidence/remaining15_v1_1/repo_exact/source_catalog_domain_index_v1_1.json",
-    )
+    # 读取 authoritative source registry (KB v1: env-var only, no default path)
+    source_path = os.environ.get("SOURCE_CATALOG_STRUCTURED_ANSWER_SOURCE")
+    if not source_path:
+        return None  # KB v1: no default source catalog data file; must be explicitly configured
+
     from pathlib import Path as _Path
     import json as _json
 
-    # Try relative to project root (2 levels up from this file)
-    for root_candidate in [_Path(__file__).parents[2], _Path(".")]:
-        sp = root_candidate / source_path
-        if sp.exists():
-            try:
-                data = _json.loads(sp.read_text(encoding="utf-8"))
-            except Exception:
-                return None
-            break
-    else:
-        # Fallback: read YAML directly
+    sp = _Path(source_path)
+    if not sp.is_absolute():
         for root_candidate in [_Path(__file__).parents[2], _Path(".")]:
-            yp = root_candidate / "data/knowledge_base/manifests/source_catalog.yaml"
-            if yp.exists():
-                try:
-                    import yaml
-                    raw = yaml.safe_load(yp.read_text(encoding="utf-8"))
-                except Exception:
-                    return None
-                data = {"domain_distribution": {}, "total_sources": 0, "total_domains": 0}
-                if isinstance(raw, dict):
-                    for source_id, meta in raw.items():
-                        if isinstance(meta, dict):
-                            domain = str(meta.get("domain", "unknown"))
-                            data["domain_distribution"].setdefault(domain, []).append(source_id)
-                    data["total_sources"] = sum(len(v) for v in data["domain_distribution"].values())
-                    data["total_domains"] = len(data["domain_distribution"])
+            candidate = root_candidate / source_path
+            if candidate.exists():
+                sp = candidate
                 break
-        else:
-            return None
+
+    if not sp.exists():
+        return None
+    try:
+        data = _json.loads(sp.read_text(encoding="utf-8"))
+    except Exception:
+        return None
 
     domains = data.get("domain_distribution", {})
     if not domains:
@@ -259,16 +243,16 @@ def build_source_catalog_structured_answer(query: str) -> dict | None:
         return {
             "answer": "\n".join(lines),
             "sources": [{
-                "source_id": "repo_project_files",
-                "chunk_id": "source_catalog_domain_index_v1_1_structured",
-                "title": "Source Catalog Domain Index v1.1",
-                "doc_type": "markdown",
+                "source_id": "source_catalog_structured",
+                "chunk_id": "source_catalog_kb_v1_structured",
+                "title": "Source Catalog Domain Index (KB v1)",
+                "doc_type": "structured",
                 "content": "\n".join(lines),
                 "content_preview": "\n".join(lines)[:500],
                 "metadata": {
-                    "patch_doc_id": "source_catalog_domain_index_v1_1",
+                    "doc_id": "source_catalog_kb_v1",
                     "trust_level": "authoritative_derived",
-                    "derived_from": "data/knowledge_base/manifests/source_catalog.yaml",
+                    "derived_from": source_path,
                 },
             }],
             "structured_answer_used": True,

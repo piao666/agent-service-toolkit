@@ -18,7 +18,7 @@ class QueryType(str, Enum):
     MULTI_HOP_LOOKUP = "multi_hop_lookup"
     CITATION_REQUIRED_QUERY = "citation_required_query"
     NEGATIVE_BANNED_SOURCE = "negative_banned_source"
-    PHASE6C_BAD_CASE_REGRESSION = "phase6c_bad_case_regression"
+    LEGACY_BAD_CASE = "legacy_bad_case"
     UNKNOWN = "unknown"
 
 
@@ -296,7 +296,7 @@ def decide_gated_retrieval_policy(
                 else "citation_required_query lacks strong citation signal, fallback to baseline"
             ),
         )
-    if query_type is QueryType.PHASE6C_BAD_CASE_REGRESSION:
+    if query_type is QueryType.LEGACY_BAD_CASE:
         if metadata_feature:
             policy = select_retrieval_policy(QueryType.EXACT_METADATA_LOOKUP)
             return GatedPolicyDecision(
@@ -304,7 +304,7 @@ def decide_gated_retrieval_policy(
                 policy=policy,
                 gated_policy_enabled=True,
                 fallback_to_baseline=False,
-                gated_reason="phase6c case has explicit metadata features",
+                gated_reason="legacy case has explicit metadata features",
             )
         if code_api_feature:
             policy = select_retrieval_policy(QueryType.CODE_API_CONFIG)
@@ -313,7 +313,7 @@ def decide_gated_retrieval_policy(
                 policy=policy,
                 gated_policy_enabled=True,
                 fallback_to_baseline=False,
-                gated_reason="phase6c case has explicit code/api features",
+                gated_reason="legacy case has explicit code/api features",
             )
         if citation_feature:
             policy = select_retrieval_policy(QueryType.CITATION_REQUIRED_QUERY)
@@ -322,14 +322,14 @@ def decide_gated_retrieval_policy(
                 policy=policy,
                 gated_policy_enabled=True,
                 fallback_to_baseline=False,
-                gated_reason="phase6c case has explicit citation features",
+                gated_reason="legacy case has explicit citation features",
             )
         return GatedPolicyDecision(
             query_type=query_type,
             policy=select_retrieval_policy(QueryType.ZH_KNOWLEDGE),
             gated_policy_enabled=False,
             fallback_to_baseline=True,
-            gated_reason="phase6c case has no explicit gated feature, fallback to baseline",
+            gated_reason="legacy case has no explicit gated feature, fallback to baseline",
         )
     if query_type is QueryType.AMBIGUOUS_QUERY:
         return GatedPolicyDecision(
