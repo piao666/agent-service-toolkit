@@ -1,0 +1,135 @@
+version: "1.0.0-draft-dry-run"
+generated_at: "2026-07-04T19:40:00+08:00"
+status: dry_run_plan
+
+samples:
+
+  - sample_id: S1
+    source_id: fastapi_official_middleware
+    domain: api_backend
+    origin_url: "https://fastapi.tiangolo.com/tutorial/middleware/"
+    url_status: verified
+    planned_text_capture:
+      method: http_get_then_html2text
+      target_url: "https://fastapi.tiangolo.com/tutorial/middleware/"
+      expected_format: markdown
+      expected_artifacts:
+        - raw.html
+        - normalized.md
+        - text_metadata.json
+    planned_visual_capture:
+      method: headless_browser_full_page_screenshot
+      target_url: "https://fastapi.tiangolo.com/tutorial/middleware/"
+      expected_format: png_tiles
+      expected_artifacts:
+        - full_page.png
+        - tiles/
+        - visual_metadata.json
+    planned_artifacts:
+      - experiments/phase3d_multimodal/text_dom/S1/raw.html
+      - experiments/phase3d_multimodal/text_dom/S1/normalized.md
+      - experiments/phase3d_multimodal/text_dom/S1/text_metadata.json
+      - experiments/phase3d_multimodal/visual/S1/full_page.png
+      - experiments/phase3d_multimodal/visual/S1/tiles/
+      - experiments/phase3d_multimodal/visual/S1/visual_metadata.json
+    estimated_storage_budget:
+      text_mb: 0.5
+      visual_mb: 5
+      total_mb: 5.5
+    quality_checks:
+      - middleware_app_middleware_http_code_block_intact
+      - request_response_call_next_context_preserved
+      - middleware_execution_order_list_intact
+      - heading_h1_h3_all_present
+      - screenshot_no_truncation
+    abort_conditions:
+      - code_truncation_over_30_percent
+      - screenshot_truncated
+      - visual_storage_over_20mb_per_page
+    requires_human_confirmation: true
+
+  - sample_id: S2
+    source_id: chroma_official_metadata_filter
+    domain: vector_database
+    origin_url: "https://docs.trychroma.com/docs/querying-collections/metadata-filtering"
+    url_status: verified
+    planned_text_capture:
+      method: http_get_then_html2text
+      target_url: "https://docs.trychroma.com/docs/querying-collections/metadata-filtering"
+      expected_format: markdown
+      expected_artifacts:
+        - raw.html
+        - normalized.md
+        - text_metadata.json
+    planned_visual_capture:
+      method: headless_browser_full_page_screenshot
+      target_url: "https://docs.trychroma.com/docs/querying-collections/metadata-filtering"
+      expected_format: png_tiles
+      expected_artifacts:
+        - full_page.png
+        - tiles/
+        - visual_metadata.json
+    planned_artifacts:
+      - experiments/phase3d_multimodal/text_dom/S2/raw.html
+      - experiments/phase3d_multimodal/text_dom/S2/normalized.md
+      - experiments/phase3d_multimodal/text_dom/S2/text_metadata.json
+      - experiments/phase3d_multimodal/visual/S2/full_page.png
+      - experiments/phase3d_multimodal/visual/S2/tiles/
+      - experiments/phase3d_multimodal/visual/S2/visual_metadata.json
+    estimated_storage_budget:
+      text_mb: 0.5
+      visual_mb: 5
+      total_mb: 5.5
+    quality_checks:
+      - operator_table_columns_aligned
+      - nested_json_indentation_readable
+      - code_syntax_visible_in_at_least_one_channel
+      - table_headers_preserved
+    abort_conditions:
+      - nested_json_unreadable_in_text
+      - operator_table_misaligned_beyond_recovery
+      - screenshot_missing_code_or_table_regions
+    requires_human_confirmation: true
+
+  - sample_id: S3
+    source_id: langgraph_official_stategraph
+    domain: agent_orchestration
+    origin_url: "https://docs.langchain.com/oss/python/langgraph/graph-api"
+    url_status: verified
+    planned_text_capture:
+      method: http_get_then_html2text
+      target_url: "https://docs.langchain.com/oss/python/langgraph/graph-api"
+      expected_format: markdown
+      expected_artifacts:
+        - raw.html
+        - normalized.md
+        - text_metadata.json
+    planned_visual_capture:
+      method: headless_browser_full_page_screenshot
+      target_url: "https://docs.langchain.com/oss/python/langgraph/graph-api"
+      expected_format: png_tiles
+      expected_artifacts:
+        - full_page.png
+        - tiles/
+        - visual_metadata.json
+    planned_artifacts:
+      - experiments/phase3d_multimodal/text_dom/S3/raw.html
+      - experiments/phase3d_multimodal/text_dom/S3/normalized.md
+      - experiments/phase3d_multimodal/text_dom/S3/text_metadata.json
+      - experiments/phase3d_multimodal/visual/S3/full_page.png
+      - experiments/phase3d_multimodal/visual/S3/tiles/
+      - experiments/phase3d_multimodal/visual/S3/visual_metadata.json
+    estimated_storage_budget:
+      text_mb: 1.0
+      visual_mb: 8
+      total_mb: 9.0
+    quality_checks:
+      - heading_h1_h4_all_present_no_skip
+      - state_nodes_edges_sections_fully_captured
+      - code_block_context_preserved
+      - long_page_tiles_no_fracture
+    abort_conditions:
+      - heading_loss_over_20_percent
+      - concept_section_boundaries_blurred
+      - long_page_screenshot_truncated
+    requires_human_confirmation: true
