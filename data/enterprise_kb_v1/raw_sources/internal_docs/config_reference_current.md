@@ -46,9 +46,9 @@ notes: >
 |------|--------|------|
 | `CHROMA_PERSIST_DIR` | `./storage/chroma_enterprise_kb_v1` | Chroma 持久化目录 |
 | `CHROMA_COLLECTION_NAME` | `enterprise_kb_v1` | 默认 collection 名称 |
-| `ENTERPRISE_CHROMA_COLLECTION` | null | 可选覆盖 collection 名称（优先级高于 `CHROMA_COLLECTION_NAME`） |
+| `ENTERPRISE_CHROMA_COLLECTION` | null | 后备 collection 名称。仅在 `CHROMA_COLLECTION_NAME` 为默认值 `enterprise_kb_v1` 时生效；若 `CHROMA_COLLECTION_NAME` 已显式设为其他值，则以 `CHROMA_COLLECTION_NAME` 为准 |
 
-`RagSettings.chroma_collection_name` property 优先使用 `CHROMA_COLLECTION_NAME`，如果为默认值则回退到 `ENTERPRISE_CHROMA_COLLECTION`。
+`RagSettings.chroma_collection_name` property：`CHROMA_COLLECTION_NAME` 非默认值时直接使用；否则回退到 `ENTERPRISE_CHROMA_COLLECTION` 或默认值。
 
 ## 三、RAG 检索配置
 

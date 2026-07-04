@@ -170,7 +170,7 @@ START → query_classifier ─┬─→ clarification_response ─┐
     "calls_real_llm": bool,              # 是否调用真实 LLM（非 fake）
     "writes_chroma": bool,               # 是否写入 Chroma（当前始终 False）
     "planner": {                         # planner 子 debug
-        "planner_type": "semantic_qa",
+        "planner_type": "simple",
         "requires_multi_hop": bool,
         "sub_queries": [...],
     },
@@ -181,7 +181,7 @@ START → query_classifier ─┬─→ clarification_response ─┐
     },
     "judge": {                           # judge 子 debug
         "judge_mode": "rule_based_fallback",
-        "verdict": "pass" | "flagged" | "skipped",
+        "verdict": "pass" | "fail" | "needs_review",
     },
 }
 ```

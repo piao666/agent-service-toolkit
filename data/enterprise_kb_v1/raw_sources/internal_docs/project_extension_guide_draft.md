@@ -26,7 +26,7 @@ notes: >
 
 ### 1.1 当前状态
 
-新知识源的唯一准入入口是 `source_registry.yaml`。当前 registry 中的 4 条 source 全部 `enabled=false`（草案阶段）。
+新知识源的唯一准入入口是 `source_registry.yaml`。当前 registry 中共 9 条 source（Phase 1 的 4 条示例 + Phase 2A 的 5 条 internal docs），全部 `enabled=false`（草案阶段）。
 
 ### 1.2 新增步骤（当前可用）
 

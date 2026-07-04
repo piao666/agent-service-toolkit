@@ -109,13 +109,14 @@ notes: >
 `src/rag/llm_judge.py` — `judge_answer_rule_based()`。
 - 当前仅 `rule_based_fallback` 模式
 - 检查：answer 是否为空、是否与 sources 内容有基础匹配、是否包含回退短语
-- 输出 verdict: "pass" | "flagged" | "skipped"
+- 输出 verdict: "pass" | "fail" | "needs_review"
 
 ## 七、Planner
 
 `src/rag/planner.py` — `plan_query()`。
 - `ENTERPRISE_PLANNER_MODE=debug_only`：只记录到 planner_debug，不改变路由
-- `planner_type`: "semantic_qa" | "multi_hop" | "ambiguous" | "unsupported"
+- `planner_type`: "simple" | "complex" | "multi_hop" | "ambiguous" | "unsupported"
+- 注：`infer_graph_query_type()` 返回 "semantic_qa" 等查询类型，但 `plan_query()` 的 planner_type 使用独立的命名空间（simple/complex），两者不共享枚举
 - 在 custom_graph 的 planner_node 中运行
 
 ## 八、检索的 fallback 路径

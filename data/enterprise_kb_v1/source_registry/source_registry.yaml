@@ -97,7 +97,7 @@ sources:
 
   # ===== 示例 4: 内部项目快照 =====
   - source_id: internal_project_runtime_snapshot
-    title: "Agent-Service-Toolkit 项目运行时快照 (内部文档)"
+    title: "Agent-Service-Toolkit 项目运行时快照 (内部文档) [DEPRECATED]"
     domain: internal_engineering
     source_type: internal_project
     doc_type: internal_markdown
@@ -105,7 +105,7 @@ sources:
     origin_url: null
     local_path: data/enterprise_kb_v1/raw_sources/internal_docs/project_runtime_snapshot/
     version_policy: continuous_track
-    doc_status: planned
+    doc_status: deprecated
     allowed_for_answer: false
     answer_scope: current_behavior
     chunk_policy:
@@ -116,10 +116,11 @@ sources:
     enabled: false
     last_verified: null
     notes: >
-      草案阶段。由代码事实自动生成后须经人工校正。
-      内容范围：settings.py 配置项说明、RAG pipeline 数据流、
-      Agent graph 节点职责、API endpoint 说明。
-      不允许直接抄录源码，必须写成"当前项目实际行为"的自然语言描述。
+      Phase 1 placeholder，已被 Phase 2A 的 5 个细化内部工程文档替代：
+      internal_current_system_snapshot, internal_rag_pipeline_current,
+      internal_config_reference_current, internal_agent_graph_current,
+      internal_project_extension_guide_draft。本条目保留作为历史记录，
+      不再作为独立 source 使用。不可入库，不可作为答案依据。
 
   # ===== 示例 5: 内部工程文档 — 系统快照 =====
   - source_id: internal_current_system_snapshot
