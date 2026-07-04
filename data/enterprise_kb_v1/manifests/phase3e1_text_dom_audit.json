@@ -1,0 +1,211 @@
+{
+  "audit_version": "1.0.0",
+  "audit_generated_at": "2026-07-04T21:00:00+08:00",
+  "audit_method": "python_stdlib_exact_token_boundary",
+  "operator_list": [
+    "$eq",
+    "$ne",
+    "$gt",
+    "$lt",
+    "$gte",
+    "$lte",
+    "$in",
+    "$nin",
+    "$and",
+    "$or",
+    "$contains",
+    "$not_contains"
+  ],
+  "samples": [
+    {
+      "sample_id": "S1",
+      "source_id": "fastapi_official_middleware",
+      "origin_url": "https://fastapi.tiangolo.com/tutorial/middleware/",
+      "raw_html_path": "data\\enterprise_kb_v1\\experiments\\phase3d_multimodal\\text_dom\\S1\\raw.html",
+      "normalized_md_path": "data\\enterprise_kb_v1\\experiments\\phase3d_multimodal\\text_dom\\S1\\normalized.md",
+      "html_size_bytes": 108171,
+      "markdown_size_bytes": 4860,
+      "front_matter_present": true,
+      "heading_count_by_level": {
+        "h1": 1,
+        "h2": 3,
+        "h3": 1,
+        "h4": 0,
+        "h5": 0,
+        "h6": 0
+      },
+      "heading_count_total": 5,
+      "empty_heading_count": 0,
+      "zero_width_empty_heading_count": 0,
+      "code_block_count": 3,
+      "legacy_code_tag_count": 0,
+      "raw_html_table_count": 0,
+      "markdown_table_block_count": 0,
+      "table_count": 0,
+      "link_count": 6,
+      "operator_check": null,
+      "format_checks": {
+        "front_matter_ok": true,
+        "no_legacy_code_tags": true,
+        "no_empty_headings": true,
+        "no_zero_width_headings": true
+      },
+      "quality_status": "pass",
+      "extraction_warnings": [],
+      "audit_pass": true,
+      "audit_fail_reasons": []
+    },
+    {
+      "sample_id": "S2",
+      "source_id": "chroma_official_metadata_filter",
+      "origin_url": "https://docs.trychroma.com/docs/querying-collections/metadata-filtering",
+      "raw_html_path": "data\\enterprise_kb_v1\\experiments\\phase3d_multimodal\\text_dom\\S2\\raw.html",
+      "normalized_md_path": "data\\enterprise_kb_v1\\experiments\\phase3d_multimodal\\text_dom\\S2\\normalized.md",
+      "html_size_bytes": 1464948,
+      "markdown_size_bytes": 6956,
+      "front_matter_present": true,
+      "heading_count_by_level": {
+        "h1": 0,
+        "h2": 4,
+        "h3": 3,
+        "h4": 0,
+        "h5": 0,
+        "h6": 0
+      },
+      "heading_count_total": 7,
+      "empty_heading_count": 0,
+      "zero_width_empty_heading_count": 0,
+      "code_block_count": 14,
+      "legacy_code_tag_count": 0,
+      "raw_html_table_count": 1,
+      "markdown_table_block_count": 1,
+      "table_count": 1,
+      "link_count": 4,
+      "operator_check": {
+        "$eq": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$ne": {
+          "raw_html_substring": false,
+          "raw_html_exact_token": false,
+          "normalized_md_substring": false,
+          "normalized_md_exact_token": false
+        },
+        "$gt": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$lt": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": false,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": false
+        },
+        "$gte": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$lte": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$in": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$nin": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$and": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$or": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$contains": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        },
+        "$not_contains": {
+          "raw_html_substring": true,
+          "raw_html_exact_token": true,
+          "normalized_md_substring": true,
+          "normalized_md_exact_token": true
+        }
+      },
+      "format_checks": {
+        "front_matter_ok": true,
+        "no_legacy_code_tags": true,
+        "no_empty_headings": true,
+        "no_zero_width_headings": true
+      },
+      "quality_status": "pass",
+      "extraction_warnings": [
+        "S2: $ne not present in captured page content (raw or md)",
+        "S2: $lt not present in captured page content (raw or md)"
+      ],
+      "audit_pass": true,
+      "audit_fail_reasons": []
+    },
+    {
+      "sample_id": "S3",
+      "source_id": "langgraph_official_stategraph",
+      "origin_url": "https://docs.langchain.com/oss/python/langgraph/graph-api",
+      "raw_html_path": "data\\enterprise_kb_v1\\experiments\\phase3d_multimodal\\text_dom\\S3\\raw.html",
+      "normalized_md_path": "data\\enterprise_kb_v1\\experiments\\phase3d_multimodal\\text_dom\\S3\\normalized.md",
+      "html_size_bytes": 2496954,
+      "markdown_size_bytes": 48295,
+      "front_matter_present": true,
+      "heading_count_by_level": {
+        "h1": 0,
+        "h2": 11,
+        "h3": 19,
+        "h4": 15,
+        "h5": 0,
+        "h6": 0
+      },
+      "heading_count_total": 45,
+      "empty_heading_count": 0,
+      "zero_width_empty_heading_count": 0,
+      "code_block_count": 37,
+      "legacy_code_tag_count": 0,
+      "raw_html_table_count": 1,
+      "markdown_table_block_count": 1,
+      "table_count": 1,
+      "link_count": 81,
+      "operator_check": null,
+      "format_checks": {
+        "front_matter_ok": true,
+        "no_legacy_code_tags": true,
+        "no_empty_headings": true,
+        "no_zero_width_headings": true
+      },
+      "quality_status": "pass",
+      "extraction_warnings": [],
+      "audit_pass": true,
+      "audit_fail_reasons": []
+    }
+  ]
+}

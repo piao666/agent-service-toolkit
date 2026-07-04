@@ -181,6 +181,9 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 .idea/
 
+# Enterprise KB experiments (raw_html/markdown/screenshots — not for git)
+data/enterprise_kb_v1/experiments/
+
 # Data
 *.docx
 *.pdf

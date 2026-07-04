@@ -1,0 +1,88 @@
+=== INPUT_ARTIFACTS_PRESENT ===
+S1/raw.html: OK
+S1/normalized.md: OK
+S2/raw.html: OK
+S2/normalized.md: OK
+S3/raw.html: OK
+S3/normalized.md: OK
+
+=== FORMAT_CHECKS ===
+S1: front_matter=True no_legacy=[code]=True no_empty_h=True no_zw_h=True
+S2: front_matter=True no_legacy=[code]=True no_empty_h=True no_zw_h=True
+S3: front_matter=True no_legacy=[code]=True no_empty_h=True no_zw_h=True
+
+=== S2_OPERATOR_LITERAL_CHECK ===
+$eq: raw_html_exact_token=True normalized_md_exact_token=True
+$ne: raw_html_exact_token=False normalized_md_exact_token=False
+$gt: raw_html_exact_token=True normalized_md_exact_token=True
+$lt: raw_html_exact_token=False normalized_md_exact_token=False
+$gte: raw_html_exact_token=True normalized_md_exact_token=True
+$lte: raw_html_exact_token=True normalized_md_exact_token=True
+$in: raw_html_exact_token=True normalized_md_exact_token=True
+$nin: raw_html_exact_token=True normalized_md_exact_token=True
+$and: raw_html_exact_token=True normalized_md_exact_token=True
+$or: raw_html_exact_token=True normalized_md_exact_token=True
+$contains: raw_html_exact_token=True normalized_md_exact_token=True
+$not_contains: raw_html_exact_token=True normalized_md_exact_token=True
+NO_EMPTY_OPERATOR_KEY: True
+NO_SHELL_EXPANSION_ARTIFACT: True
+NO_10_OF_10_CLAIM: True
+
+=== CONSISTENCY_CHECKS ===
+OK S1.code_block_count: 3
+OK S1.table_count: 0
+OK S1.link_count: 6
+OK S1.heading_count_total: 5
+OK S2.code_block_count: 14
+OK S2.table_count: 1
+OK S2.link_count: 4
+OK S2.heading_count_total: 7
+OK S3.code_block_count: 37
+OK S3.table_count: 1
+OK S3.link_count: 81
+OK S3.heading_count_total: 45
+
+=== SAFETY_CHECKS ===
+source_registry exists: True
+Screenshots/tiles created: 0 (none)
+.gitignore contains experiments/: True
+No Chroma/embedding created (verified)
+
+=== AUDIT_TO_EVIDENCE_CHECK ===
+audit.json exists: True
+audit.py exists: True
+S1: html_table audit=0 evidence=0 MATCH=True | md_table audit=0 evidence=0 MATCH=True | canonical=0 ok=True
+S2: html_table audit=1 evidence=1 MATCH=True | md_table audit=1 evidence=1 MATCH=True | canonical=1 ok=True
+S3: html_table audit=1 evidence=1 MATCH=True | md_table audit=1 evidence=1 MATCH=True | canonical=1 ok=True
+PASS: all table counts match evidence
+
+=== REPORT_CONSISTENCY_CHECK ===
+PASS: no forbidden over-generalization phrases
+PASS: $eq raw=True md=True
+PASS: $ne raw=False md=False
+PASS: $gt raw=True md=True
+PASS: $lt raw=False md=False
+PASS: $gte raw=True md=True
+PASS: $lte raw=True md=True
+PASS: $in raw=True md=True
+PASS: $nin raw=True md=True
+PASS: $and raw=True md=True
+PASS: $or raw=True md=True
+PASS: $contains raw=True md=True
+PASS: $not_contains raw=True md=True
+PASS: all operator claims match audit.json
+CHECK S1 heading_count_total=5: present in report
+CHECK S1 code_block_count=3: present in report
+CHECK S1 table_count=0: present in report
+CHECK S2 heading_count_total=7: present in report
+CHECK S2 code_block_count=14: present in report
+CHECK S2 table_count=1: present in report
+CHECK S3 heading_count_total=45: present in report
+CHECK S3 code_block_count=37: present in report
+CHECK S3 table_count=1: present in report
+
+=== SAFETY_CHECKS ===
+EXPERIMENT_ARTIFACTS_STAGED: False (verified via git status)
+
+ALL_CLEAN: True
+READY_FOR_SCREENSHOT_SIDECAR: True

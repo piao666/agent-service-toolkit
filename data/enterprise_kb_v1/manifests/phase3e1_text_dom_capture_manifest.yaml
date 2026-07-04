@@ -1,0 +1,99 @@
+version: 1.0.0-evidence-rebaseline
+generated_at: '2026-07-04T21:00:00+08:00'
+status: text_dom_evidence_rebaseline
+capture_method: requests_bs4_html2text
+audit_source: phase3e1_text_dom_audit.json
+samples:
+- sample_id: S1
+  source_id: fastapi_official_middleware
+  origin_url: https://fastapi.tiangolo.com/tutorial/middleware/
+  final_url: https://fastapi.tiangolo.com/tutorial/middleware/
+  http_status: 200
+  html_size_bytes: 108171
+  markdown_size_bytes: 4860
+  heading_count:
+    h1: 1
+    h2: 3
+    h3: 1
+    h4: 0
+    h5: 0
+    h6: 0
+  heading_count_total: 5
+  code_block_count: 3
+  table_count: 0
+  link_count: 6
+  extraction_warnings: []
+  quality_status: pass
+  audit_pass: true
+  key_content_verified:
+  - '@app.middleware(http) code block (3 fenced)'
+  - request/response/call_next intact
+  - middleware execution order section preserved
+  - heading hierarchy H1-H3 intact
+- sample_id: S2
+  source_id: chroma_official_metadata_filter
+  origin_url: https://docs.trychroma.com/docs/querying-collections/metadata-filtering
+  final_url: https://docs.trychroma.com/docs/querying-collections/metadata-filtering
+  http_status: 200
+  html_size_bytes: 1464948
+  markdown_size_bytes: 6956
+  heading_count:
+    h1: 0
+    h2: 4
+    h3: 3
+    h4: 0
+    h5: 0
+    h6: 0
+  heading_count_total: 7
+  code_block_count: 14
+  table_count: 1
+  link_count: 4
+  extraction_warnings:
+  - 'S2: $ne not present in captured page content (raw or md)'
+  - 'S2: $lt not present in captured page content (raw or md)'
+  quality_status: pass
+  audit_pass: true
+  key_content_verified:
+  - 14 fenced code blocks
+  - 1 tables
+  - heading hierarchy H2-H3 intact
+  - See audit.json operator_check for per-operator exact token results
+  operator_check_summary:
+    $eq: true
+    $ne: false
+    $gt: true
+    $lt: false
+    $gte: true
+    $lte: true
+    $in: true
+    $nin: true
+    $and: true
+    $or: true
+    $contains: true
+    $not_contains: true
+- sample_id: S3
+  source_id: langgraph_official_stategraph
+  origin_url: https://docs.langchain.com/oss/python/langgraph/graph-api
+  final_url: https://docs.langchain.com/oss/python/langgraph/graph-api
+  http_status: 200
+  html_size_bytes: 2496954
+  markdown_size_bytes: 48295
+  heading_count:
+    h1: 0
+    h2: 11
+    h3: 19
+    h4: 15
+    h5: 0
+    h6: 0
+  heading_count_total: 45
+  code_block_count: 37
+  table_count: 1
+  link_count: 81
+  extraction_warnings: []
+  quality_status: pass
+  audit_pass: true
+  key_content_verified:
+  - StateGraph/Nodes/Edges/Conditional edges present
+  - 37 fenced code blocks (Python+JS)
+  - 45 headings H2-H4 intact
+  - long page ~47KB fully captured
