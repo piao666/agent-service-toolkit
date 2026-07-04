@@ -120,3 +120,120 @@ sources:
       内容范围：settings.py 配置项说明、RAG pipeline 数据流、
       Agent graph 节点职责、API endpoint 说明。
       不允许直接抄录源码，必须写成"当前项目实际行为"的自然语言描述。
+
+  # ===== 示例 5: 内部工程文档 — 系统快照 =====
+  - source_id: internal_current_system_snapshot
+    title: "Agent-Service-Toolkit 当前系统模块与边界 (内部文档)"
+    domain: internal_engineering
+    source_type: internal_project
+    doc_type: internal_markdown
+    authority_level: internal_current_snapshot
+    origin_url: null
+    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/current_system_snapshot.md
+    version_policy: continuous_track
+    doc_status: draft
+    allowed_for_answer: false
+    answer_scope: current_behavior
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: kb-admin
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。基于 2026-07-04 代码快照生成。
+      内容：系统模块、目录职责、运行入口、已实现能力与未实现边界。
+
+  # ===== 示例 6: 内部工程文档 — RAG 链路 =====
+  - source_id: internal_rag_pipeline_current
+    title: "当前 RAG 查询链路与检索架构 (内部文档)"
+    domain: internal_engineering
+    source_type: internal_project
+    doc_type: internal_markdown
+    authority_level: internal_current_snapshot
+    origin_url: null
+    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/rag_pipeline_current.md
+    version_policy: continuous_track
+    doc_status: draft
+    allowed_for_answer: false
+    answer_scope: current_behavior
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: kb-admin
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。内容：retriever/graph/tools/evidence verifier 的职责与数据流。
+
+  # ===== 示例 7: 内部工程文档 — 配置参考 =====
+  - source_id: internal_config_reference_current
+    title: "当前系统关键配置参考 (内部文档)"
+    domain: internal_engineering
+    source_type: internal_project
+    doc_type: internal_markdown
+    authority_level: internal_current_snapshot
+    origin_url: null
+    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/config_reference_current.md
+    version_policy: continuous_track
+    doc_status: draft
+    allowed_for_answer: false
+    answer_scope: current_behavior
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: kb-admin
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。内容：.env.example 和 RagSettings 中关键配置项及默认值。
+
+  # ===== 示例 8: 内部工程文档 — Agent Graph =====
+  - source_id: internal_agent_graph_current
+    title: "当前 Agent Graph 节点与状态流转 (内部文档)"
+    domain: internal_engineering
+    source_type: internal_project
+    doc_type: internal_markdown
+    authority_level: internal_current_snapshot
+    origin_url: null
+    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/agent_graph_current.md
+    version_policy: continuous_track
+    doc_status: draft
+    allowed_for_answer: false
+    answer_scope: current_behavior
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: kb-admin
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。内容：legacy 和 custom_graph 的节点、状态字段、条件路由、graph_debug 输出。
+
+  # ===== 示例 9: 内部工程文档 — 扩展指南草案 =====
+  - source_id: internal_project_extension_guide_draft
+    title: "项目扩展指南草案 (内部文档)"
+    domain: internal_engineering
+    source_type: internal_project
+    doc_type: internal_markdown
+    authority_level: internal_current_snapshot
+    origin_url: null
+    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/project_extension_guide_draft.md
+    version_policy: continuous_track
+    doc_status: draft
+    allowed_for_answer: false
+    answer_scope: future_plan
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: kb-admin
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。内容：新增知识源/工具/Graph 节点/Agent 模式的扩展接口。
+      未实现内容已标注 planned/draft，不可作为当前系统行为依据。
