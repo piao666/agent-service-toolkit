@@ -1,240 +1,702 @@
-# ============================================================================
-# 企业知识库 v1 — Source Registry (蓝图草案)
-# 版本: v1-draft-20260704
-# 描述: 首期 4 类来源的注册清单。所有 source 默认 enabled=false，
-#        需经人工准入审核后方可改为 true。
-# ============================================================================
-
-version: "1.0.0-draft"
-generated_at: "2026-07-04T15:23:00+08:00"
+version: 1.0.0-draft
+generated_at: '2026-07-04T15:23:00+08:00'
 status: blueprint
-
-# ── 全局默认策略 ──
 defaults:
-  version_policy: latest_stable           # latest_stable | pinned_version | continuous_track
-  doc_status: planned                     # 新建 source 默认 planned
+  version_policy: latest_stable
+  doc_status: planned
   allowed_for_answer: false
   chunk_policy:
-    strategy: markdown_header             # markdown_header | fixed_size | semantic
+    strategy: markdown_header
     chunk_size: 1024
     chunk_overlap: 200
     min_chunk_size: 100
-
-# ── Source 清单 ──
 sources:
+- source_id: internal_project_runtime_snapshot
+  title: Agent-Service-Toolkit 项目运行时快照 (内部文档) [DEPRECATED]
+  domain: internal_engineering
+  source_type: internal_project
+  doc_type: internal_markdown
+  authority_level: internal_authoritative
+  origin_url: null
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/project_runtime_snapshot/
+  version_policy: continuous_track
+  doc_status: deprecated
+  allowed_for_answer: false
+  answer_scope: current_behavior
+  chunk_policy:
+    strategy: markdown_header
+    chunk_size: 1024
+    chunk_overlap: 200
+  owner: platform-team
+  enabled: false
+  last_verified: null
+  notes: 'Phase 1 placeholder，已被 Phase 2A 的 5 个细化内部工程文档替代： internal_current_system_snapshot, internal_rag_pipeline_current,
+    internal_config_reference_current, internal_agent_graph_current, internal_project_extension_guide_draft。本条目保留作为历史记录， 不再作为独立
+    source 使用。不可入库，不可作为答案依据。
 
-  # ===== 示例 1: 外部权威技术文档 =====
-  - source_id: fastapi_official_routing
-    title: "FastAPI — Routing / Request Body / Pydantic Models"
-    domain: api_backend
-    source_type: external_official
-    doc_type: web_markdown
-    authority_level: authoritative
-    origin_url: "https://fastapi.tiangolo.com/tutorial/"
-    local_path: data/enterprise_kb_v1/raw_sources/official_docs/fastapi_routing/
-    version_policy: latest_stable
-    doc_status: planned
-    allowed_for_answer: false
-    answer_scope: technical_reference
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: kb-admin
-    enabled: false
-    last_verified: null
-    notes: >
-      草案阶段。需人工确认 fastapi.tiangolo.com 的 robots.txt 和抓取策略。
-      建议优先抓取 tutorial/ 下的路由、请求体、Pydantic 模型三个子章节。
+    '
+- source_id: internal_current_system_snapshot
+  title: Agent-Service-Toolkit 当前系统模块与边界 (内部文档)
+  domain: internal_engineering
+  source_type: internal_project
+  doc_type: internal_markdown
+  authority_level: internal_current_snapshot
+  origin_url: null
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/current_system_snapshot.md
+  version_policy: continuous_track
+  doc_status: draft
+  allowed_for_answer: false
+  answer_scope: current_behavior
+  chunk_policy:
+    strategy: markdown_header
+    chunk_size: 1024
+    chunk_overlap: 200
+  owner: kb-admin
+  enabled: false
+  last_verified: null
+  notes: '草案阶段。基于 2026-07-04 代码快照生成。 内容：系统模块、目录职责、运行入口、已实现能力与未实现边界。
 
-  # ===== 示例 2: 外部权威技术文档 =====
-  - source_id: chroma_official_collection
-    title: "Chroma — Collection Management / Embeddings / Query"
-    domain: vector_database
-    source_type: external_official
-    doc_type: web_markdown
-    authority_level: authoritative
-    origin_url: "https://docs.trychroma.com/"
-    local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_collection/
-    version_policy: latest_stable
-    doc_status: planned
-    allowed_for_answer: false
-    answer_scope: technical_reference
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: kb-admin
-    enabled: false
-    last_verified: null
-    notes: >
-      草案阶段。Chroma 官方文档按 /docs、/api、/integrations 组织。
-      优先抓取 collection 管理和 embedding 函数两个章节。
+    '
+- source_id: internal_rag_pipeline_current
+  title: 当前 RAG 查询链路与检索架构 (内部文档)
+  domain: internal_engineering
+  source_type: internal_project
+  doc_type: internal_markdown
+  authority_level: internal_current_snapshot
+  origin_url: null
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/rag_pipeline_current.md
+  version_policy: continuous_track
+  doc_status: draft
+  allowed_for_answer: false
+  answer_scope: current_behavior
+  chunk_policy:
+    strategy: markdown_header
+    chunk_size: 1024
+    chunk_overlap: 200
+  owner: kb-admin
+  enabled: false
+  last_verified: null
+  notes: '草案阶段。内容：retriever/graph/tools/evidence verifier 的职责与数据流。
 
-  # ===== 示例 3: 外部权威技术文档 =====
-  - source_id: langgraph_official_stategraph
-    title: "LangGraph — StateGraph / Nodes / Edges / Checkpoint"
-    domain: agent_orchestration
-    source_type: external_official
-    doc_type: web_markdown
-    authority_level: authoritative
-    origin_url: "https://langchain-ai.github.io/langgraph/"
-    local_path: data/enterprise_kb_v1/raw_sources/official_docs/langgraph_stategraph/
-    version_policy: latest_stable
-    doc_status: planned
-    allowed_for_answer: false
-    answer_scope: technical_reference
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: kb-admin
-    enabled: false
-    last_verified: null
-    notes: >
-      草案阶段。重点关注 StateGraph API、checkpoint 机制和 streaming。
-      LangGraph 版本迭代快，version_policy 可能需改为 pinned_version。
+    '
+- source_id: internal_config_reference_current
+  title: 当前系统关键配置参考 (内部文档)
+  domain: internal_engineering
+  source_type: internal_project
+  doc_type: internal_markdown
+  authority_level: internal_current_snapshot
+  origin_url: null
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/config_reference_current.md
+  version_policy: continuous_track
+  doc_status: draft
+  allowed_for_answer: false
+  answer_scope: current_behavior
+  chunk_policy:
+    strategy: markdown_header
+    chunk_size: 1024
+    chunk_overlap: 200
+  owner: kb-admin
+  enabled: false
+  last_verified: null
+  notes: '草案阶段。内容：.env.example 和 RagSettings 中关键配置项及默认值。
 
-  # ===== 示例 4: 内部项目快照 =====
-  - source_id: internal_project_runtime_snapshot
-    title: "Agent-Service-Toolkit 项目运行时快照 (内部文档) [DEPRECATED]"
-    domain: internal_engineering
-    source_type: internal_project
-    doc_type: internal_markdown
-    authority_level: internal_authoritative
-    origin_url: null
-    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/project_runtime_snapshot/
-    version_policy: continuous_track
-    doc_status: deprecated
-    allowed_for_answer: false
-    answer_scope: current_behavior
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: platform-team
-    enabled: false
-    last_verified: null
-    notes: >
-      Phase 1 placeholder，已被 Phase 2A 的 5 个细化内部工程文档替代：
-      internal_current_system_snapshot, internal_rag_pipeline_current,
-      internal_config_reference_current, internal_agent_graph_current,
-      internal_project_extension_guide_draft。本条目保留作为历史记录，
-      不再作为独立 source 使用。不可入库，不可作为答案依据。
+    '
+- source_id: internal_agent_graph_current
+  title: 当前 Agent Graph 节点与状态流转 (内部文档)
+  domain: internal_engineering
+  source_type: internal_project
+  doc_type: internal_markdown
+  authority_level: internal_current_snapshot
+  origin_url: null
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/agent_graph_current.md
+  version_policy: continuous_track
+  doc_status: draft
+  allowed_for_answer: false
+  answer_scope: current_behavior
+  chunk_policy:
+    strategy: markdown_header
+    chunk_size: 1024
+    chunk_overlap: 200
+  owner: kb-admin
+  enabled: false
+  last_verified: null
+  notes: '草案阶段。内容：legacy 和 custom_graph 的节点、状态字段、条件路由、graph_debug 输出。
 
-  # ===== 示例 5: 内部工程文档 — 系统快照 =====
-  - source_id: internal_current_system_snapshot
-    title: "Agent-Service-Toolkit 当前系统模块与边界 (内部文档)"
-    domain: internal_engineering
-    source_type: internal_project
-    doc_type: internal_markdown
-    authority_level: internal_current_snapshot
-    origin_url: null
-    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/current_system_snapshot.md
-    version_policy: continuous_track
-    doc_status: draft
-    allowed_for_answer: false
-    answer_scope: current_behavior
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: kb-admin
-    enabled: false
-    last_verified: null
-    notes: >
-      草案阶段。基于 2026-07-04 代码快照生成。
-      内容：系统模块、目录职责、运行入口、已实现能力与未实现边界。
+    '
+- source_id: internal_project_extension_guide_draft
+  title: 项目扩展指南草案 (内部文档)
+  domain: internal_engineering
+  source_type: internal_project
+  doc_type: internal_markdown
+  authority_level: internal_current_snapshot
+  origin_url: null
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/project_extension_guide_draft.md
+  version_policy: continuous_track
+  doc_status: draft
+  allowed_for_answer: false
+  answer_scope: future_plan
+  chunk_policy:
+    strategy: markdown_header
+    chunk_size: 1024
+    chunk_overlap: 200
+  owner: kb-admin
+  enabled: false
+  last_verified: null
+  notes: '草案阶段。内容：新增知识源/工具/Graph 节点/Agent 模式的扩展接口。 未实现内容已标注 planned/draft，不可作为当前系统行为依据。
 
-  # ===== 示例 6: 内部工程文档 — RAG 链路 =====
-  - source_id: internal_rag_pipeline_current
-    title: "当前 RAG 查询链路与检索架构 (内部文档)"
-    domain: internal_engineering
-    source_type: internal_project
-    doc_type: internal_markdown
-    authority_level: internal_current_snapshot
-    origin_url: null
-    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/rag_pipeline_current.md
-    version_policy: continuous_track
-    doc_status: draft
-    allowed_for_answer: false
-    answer_scope: current_behavior
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: kb-admin
-    enabled: false
-    last_verified: null
-    notes: >
-      草案阶段。内容：retriever/graph/tools/evidence verifier 的职责与数据流。
+    '
+- source_id: fastapi_official_routing
+  title: FastAPI — Routing / Path Parameters / Query Parameters
+  domain: api_backend
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://fastapi.tiangolo.com/
+  candidate_url: https://fastapi.tiangolo.com/tutorial/path-params/
+  url_status: candidate_unverified
+  selection_reason: core_eval_30 中 8 条 FastAPI 类问题的基础路由和参数校验知识来源
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: '候选 URL 为 FastAPI Tutorial 入口。人工审核时需确认完整子章节列表， 可能需拆分为多个 source（path-params, query-params, body 等）。
 
-  # ===== 示例 7: 内部工程文档 — 配置参考 =====
-  - source_id: internal_config_reference_current
-    title: "当前系统关键配置参考 (内部文档)"
-    domain: internal_engineering
-    source_type: internal_project
-    doc_type: internal_markdown
-    authority_level: internal_current_snapshot
-    origin_url: null
-    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/config_reference_current.md
-    version_policy: continuous_track
-    doc_status: draft
-    allowed_for_answer: false
-    answer_scope: current_behavior
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: kb-admin
-    enabled: false
-    last_verified: null
-    notes: >
-      草案阶段。内容：.env.example 和 RagSettings 中关键配置项及默认值。
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/fastapi_official_routing/
+  origin_url: https://fastapi.tiangolo.com/tutorial/path-params/
+  answer_scope: technical_reference
+- source_id: fastapi_official_request_body
+  title: FastAPI — Request Body / Pydantic BaseModel
+  domain: api_backend
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://fastapi.tiangolo.com/
+  candidate_url: https://fastapi.tiangolo.com/tutorial/body/
+  url_status: candidate_unverified
+  selection_reason: 请求体解析和 Pydantic 模型校验是 core_eval_30 高频考察点
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: '候选 URL 为 FastAPI Request Body 教程页。
 
-  # ===== 示例 8: 内部工程文档 — Agent Graph =====
-  - source_id: internal_agent_graph_current
-    title: "当前 Agent Graph 节点与状态流转 (内部文档)"
-    domain: internal_engineering
-    source_type: internal_project
-    doc_type: internal_markdown
-    authority_level: internal_current_snapshot
-    origin_url: null
-    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/agent_graph_current.md
-    version_policy: continuous_track
-    doc_status: draft
-    allowed_for_answer: false
-    answer_scope: current_behavior
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: kb-admin
-    enabled: false
-    last_verified: null
-    notes: >
-      草案阶段。内容：legacy 和 custom_graph 的节点、状态字段、条件路由、graph_debug 输出。
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/fastapi_official_request_body/
+  origin_url: https://fastapi.tiangolo.com/tutorial/body/
+  answer_scope: technical_reference
+- source_id: fastapi_official_dependency_injection
+  title: FastAPI — Dependency Injection / Depends
+  domain: api_backend
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://fastapi.tiangolo.com/
+  candidate_url: https://fastapi.tiangolo.com/tutorial/dependencies/
+  url_status: candidate_unverified
+  selection_reason: core_004 考察 Depends 和嵌套依赖
+  expected_query_types:
+  - technical_reference
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: '候选 URL 为 FastAPI Dependencies 教程页。
 
-  # ===== 示例 9: 内部工程文档 — 扩展指南草案 =====
-  - source_id: internal_project_extension_guide_draft
-    title: "项目扩展指南草案 (内部文档)"
-    domain: internal_engineering
-    source_type: internal_project
-    doc_type: internal_markdown
-    authority_level: internal_current_snapshot
-    origin_url: null
-    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/project_extension_guide_draft.md
-    version_policy: continuous_track
-    doc_status: draft
-    allowed_for_answer: false
-    answer_scope: future_plan
-    chunk_policy:
-      strategy: markdown_header
-      chunk_size: 1024
-      chunk_overlap: 200
-    owner: kb-admin
-    enabled: false
-    last_verified: null
-    notes: >
-      草案阶段。内容：新增知识源/工具/Graph 节点/Agent 模式的扩展接口。
-      未实现内容已标注 planned/draft，不可作为当前系统行为依据。
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/fastapi_official_dependency_injection/
+  origin_url: https://fastapi.tiangolo.com/tutorial/dependencies/
+  answer_scope: technical_reference
+- source_id: fastapi_official_middleware
+  title: FastAPI — Middleware / CORS / Custom Middleware
+  domain: api_backend
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://fastapi.tiangolo.com/
+  candidate_url: https://fastapi.tiangolo.com/tutorial/middleware/
+  url_status: candidate_unverified
+  selection_reason: core_007 考察中间件的使用场景和注册方式
+  expected_query_types:
+  - technical_reference
+  - troubleshooting
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: '候选 URL 为 FastAPI Middleware 教程页。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/fastapi_official_middleware/
+  origin_url: https://fastapi.tiangolo.com/tutorial/middleware/
+  answer_scope: technical_reference
+- source_id: fastapi_official_error_handling
+  title: FastAPI — Error Handling / HTTPException / Custom Exception Handlers
+  domain: api_backend
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://fastapi.tiangolo.com/
+  candidate_url: https://fastapi.tiangolo.com/tutorial/handling-errors/
+  url_status: candidate_unverified
+  selection_reason: Pydantic 校验失败 422 / 自定义错误响应是 API 开发必备知识
+  expected_query_types:
+  - technical_reference
+  - troubleshooting
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: '候选 URL 为 FastAPI Handling Errors 页面。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/fastapi_official_error_handling/
+  origin_url: https://fastapi.tiangolo.com/tutorial/handling-errors/
+  answer_scope: technical_reference
+- source_id: pydantic_official_models_validation
+  title: Pydantic v2 — Models / Field / Validators
+  domain: api_backend
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://docs.pydantic.dev/latest/
+  candidate_url: https://docs.pydantic.dev/latest/concepts/models/
+  url_status: candidate_unverified
+  selection_reason: core_003/core_008 考察 Pydantic Field 校验和 v1→v2 迁移
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'Pydantic 官方文档 v2 版本。需确认 concepts/models/ 页面覆盖 Field、Validators、 model_validate 等子主题。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/pydantic_official_models_validation/
+  origin_url: https://docs.pydantic.dev/latest/concepts/models/
+  answer_scope: technical_reference
+- source_id: chroma_official_collections
+  title: Chroma — Collections / Create / Get / Delete
+  domain: vector_database
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://docs.trychroma.com/
+  candidate_url: https://docs.trychroma.com/usage-guide/collections
+  url_status: candidate_unverified
+  selection_reason: core_009 考察 collection 创建和管理
+  expected_query_types:
+  - technical_reference
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'Chroma 官方 Usage Guide 中 Collections 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_collections/
+  origin_url: https://docs.trychroma.com/usage-guide/collections
+  answer_scope: technical_reference
+- source_id: chroma_official_add_query
+  title: Chroma — Add Documents / Query / Similarity Search
+  domain: vector_database
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://docs.trychroma.com/
+  candidate_url: https://docs.trychroma.com/usage-guide/documents
+  url_status: candidate_unverified
+  selection_reason: core_013/core_015 考察文档添加和相似度查询
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'Chroma 官方 Usage Guide 中 Documents 章节（add/query/update/delete）。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_add_query/
+  origin_url: https://docs.trychroma.com/usage-guide/documents
+  answer_scope: technical_reference
+- source_id: chroma_official_persistence
+  title: Chroma — Persistent Client / Storage Backend
+  domain: vector_database
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://docs.trychroma.com/
+  candidate_url: https://docs.trychroma.com/deployment/persistence
+  url_status: candidate_unverified
+  selection_reason: core_014 考察 Chroma 持久化配置
+  expected_query_types:
+  - technical_reference
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'Chroma 官方 Deployment 指南中 Persistence 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_persistence/
+  origin_url: https://docs.trychroma.com/deployment/persistence
+  answer_scope: technical_reference
+- source_id: chroma_official_metadata_filter
+  title: Chroma — Metadata / Filtering / Where Clauses
+  domain: vector_database
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://docs.trychroma.com/
+  candidate_url: https://docs.trychroma.com/usage-guide/filtering
+  url_status: candidate_unverified
+  selection_reason: core_011 考察 metadata 过滤查询
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'Chroma 官方 Usage Guide 中 Filtering 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_metadata_filter/
+  origin_url: https://docs.trychroma.com/usage-guide/filtering
+  answer_scope: technical_reference
+- source_id: chroma_official_embedding_functions
+  title: Chroma — Embedding Functions / Default / Custom
+  domain: vector_database
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://docs.trychroma.com/
+  candidate_url: https://docs.trychroma.com/guides/embeddings
+  url_status: candidate_unverified
+  selection_reason: core_010/core_012 考察 embedding function 类型和相似度度量
+  expected_query_types:
+  - technical_reference
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'Chroma 官方 Guides 中 Embeddings 章节。含 embedding function 类型 和 distance metric 配置。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_embedding_functions/
+  origin_url: https://docs.trychroma.com/guides/embeddings
+  answer_scope: technical_reference
+- source_id: langgraph_official_stategraph
+  title: LangGraph — StateGraph / State Schema / Compilation
+  domain: agent_orchestration
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://langchain-ai.github.io/langgraph/
+  candidate_url: https://langchain-ai.github.io/langgraph/how-tos/
+  url_status: candidate_unverified
+  selection_reason: core_016 考察 StateGraph 定义和编译
+  expected_query_types:
+  - technical_reference
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'LangGraph 官方 How-to Guides 入口。人工审核时需确认具体覆盖 StateGraph 定义的章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/langgraph_official_stategraph/
+  origin_url: https://langchain-ai.github.io/langgraph/how-tos/
+  answer_scope: technical_reference
+- source_id: langgraph_official_nodes_edges
+  title: LangGraph — Nodes / Edges / START / END
+  domain: agent_orchestration
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://langchain-ai.github.io/langgraph/
+  candidate_url: https://langchain-ai.github.io/langgraph/concepts/low_level/
+  url_status: candidate_unverified
+  selection_reason: core_017 考察节点和边的类型
+  expected_query_types:
+  - technical_reference
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'LangGraph 官方 Concepts 中 Low Level 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/langgraph_official_nodes_edges/
+  origin_url: https://langchain-ai.github.io/langgraph/concepts/low_level/
+  answer_scope: technical_reference
+- source_id: langgraph_official_conditional_edges
+  title: LangGraph — Conditional Edges / Dynamic Routing
+  domain: agent_orchestration
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://langchain-ai.github.io/langgraph/
+  candidate_url: https://langchain-ai.github.io/langgraph/how-tos/branching/
+  url_status: candidate_unverified
+  selection_reason: core_021 考察 conditional edge 的动态路由
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'LangGraph 官方 How-to 中 Branching 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/langgraph_official_conditional_edges/
+  origin_url: https://langchain-ai.github.io/langgraph/how-tos/branching/
+  answer_scope: technical_reference
+- source_id: langgraph_official_checkpoint_memory
+  title: LangGraph — Checkpointing / Memory / Persistence
+  domain: agent_orchestration
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://langchain-ai.github.io/langgraph/
+  candidate_url: https://langchain-ai.github.io/langgraph/concepts/persistence/
+  url_status: candidate_unverified
+  selection_reason: core_018/core_019 考察 checkpoint 和会话记忆
+  expected_query_types:
+  - technical_reference
+  - troubleshooting
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'LangGraph 官方 Concepts 中 Persistence 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/langgraph_official_checkpoint_memory/
+  origin_url: https://langchain-ai.github.io/langgraph/concepts/persistence/
+  answer_scope: technical_reference
+- source_id: langgraph_official_tool_calling
+  title: LangGraph — Tool Calling / ToolNode / Streaming Tools
+  domain: agent_orchestration
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://langchain-ai.github.io/langgraph/
+  candidate_url: https://langchain-ai.github.io/langgraph/how-tos/tool-calling/
+  url_status: candidate_unverified
+  selection_reason: Agent 工具调用是 LangGraph 的核心功能
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'LangGraph 官方 How-to 中 Tool Calling 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/langgraph_official_tool_calling/
+  origin_url: https://langchain-ai.github.io/langgraph/how-tos/tool-calling/
+  answer_scope: technical_reference
+- source_id: openai_official_chat_completions
+  title: OpenAI — Chat Completions API / Messages / Parameters
+  domain: llm_provider
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://platform.openai.com/docs/
+  candidate_url: https://platform.openai.com/docs/api-reference/chat/create
+  url_status: candidate_unverified
+  selection_reason: LLM API 调用的标准参考实现，OpenAI-compatible API 的基础规范
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'OpenAI 官方 API Reference 中 Chat Completions 端点。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/openai_official_chat_completions/
+  origin_url: https://platform.openai.com/docs/api-reference/chat/create
+  answer_scope: technical_reference
+- source_id: openai_official_structured_outputs
+  title: OpenAI — Structured Outputs / JSON Mode / Function Calling
+  domain: llm_provider
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://platform.openai.com/docs/
+  candidate_url: https://platform.openai.com/docs/guides/structured-outputs
+  url_status: candidate_unverified
+  selection_reason: 结构化输出是 Agent 工具调用和 RAG 答案格式化的关键技术
+  expected_query_types:
+  - technical_reference
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'OpenAI 官方 Guides 中 Structured Outputs 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/openai_official_structured_outputs/
+  origin_url: https://platform.openai.com/docs/guides/structured-outputs
+  answer_scope: technical_reference
+- source_id: openai_official_streaming
+  title: OpenAI — Streaming / Server-Sent Events / Chunked Responses
+  domain: llm_provider
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://platform.openai.com/docs/
+  candidate_url: https://platform.openai.com/docs/api-reference/streaming
+  url_status: candidate_unverified
+  selection_reason: 流式响应是 Agent 交互体验的关键技术
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 'OpenAI 官方 API Reference 中 Streaming 章节。
+
+    '
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/openai_official_streaming/
+  origin_url: https://platform.openai.com/docs/api-reference/streaming
+  answer_scope: technical_reference
+- source_id: qwen_official_openai_compatible_api
+  title: Qwen — OpenAI-Compatible API / Model List / Rate Limits
+  domain: llm_provider
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://help.aliyun.com/zh/model-studio/
+  candidate_url: https://help.aliyun.com/zh/model-studio/
+  url_status: candidate_unverified
+  selection_reason: Qwen 通过 OpenAI-compatible 协议接入，需确认官方 API 文档位置
+  expected_query_types:
+  - technical_reference
+  - code_api_config
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 阿里云百炼平台文档入口。具体 OpenAI 兼容 API 接口页面待 Phase 3B 人工验证确认。
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/qwen_official_openai_compatible_api/
+  origin_url: TODO
+  answer_scope: technical_reference
+- source_id: qwen_official_model_parameters
+  title: Qwen — Model Parameters / Max Tokens / Supported Features
+  domain: llm_provider
+  source_type: external_official
+  doc_type: web_markdown
+  authority_level: official
+  official_site: https://help.aliyun.com/zh/model-studio/
+  candidate_url: https://help.aliyun.com/zh/model-studio/
+  url_status: candidate_unverified
+  selection_reason: 模型参数和功能限制是 LLM Provider 配置的关键知识
+  expected_query_types:
+  - technical_reference
+  chunk_policy: heading_aware
+  enabled: false
+  allowed_for_answer: false
+  fetch_status: not_fetched
+  notes: 阿里云百炼平台文档入口。模型参数和 Token 限制的具体页面待 Phase 3B 人工验证确认。
+  doc_status: planned
+  version_policy: latest_stable
+  owner: kb-admin
+  last_verified: null
+  local_path: data/enterprise_kb_v1/raw_sources/official_docs/qwen_official_model_parameters/
+  origin_url: TODO
+  answer_scope: technical_reference
