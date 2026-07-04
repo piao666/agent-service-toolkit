@@ -1,0 +1,122 @@
+# ============================================================================
+# 企业知识库 v1 — Source Registry (蓝图草案)
+# 版本: v1-draft-20260704
+# 描述: 首期 4 类来源的注册清单。所有 source 默认 enabled=false，
+#        需经人工准入审核后方可改为 true。
+# ============================================================================
+
+version: "1.0.0-draft"
+generated_at: "2026-07-04T15:23:00+08:00"
+status: blueprint
+
+# ── 全局默认策略 ──
+defaults:
+  version_policy: latest_stable           # latest_stable | pinned_version | continuous_track
+  doc_status: planned                     # 新建 source 默认 planned
+  allowed_for_answer: false
+  chunk_policy:
+    strategy: markdown_header             # markdown_header | fixed_size | semantic
+    chunk_size: 1024
+    chunk_overlap: 200
+    min_chunk_size: 100
+
+# ── Source 清单 ──
+sources:
+
+  # ===== 示例 1: 外部权威技术文档 =====
+  - source_id: fastapi_official_routing
+    title: "FastAPI — Routing / Request Body / Pydantic Models"
+    domain: api_backend
+    source_type: external_official
+    doc_type: web_markdown
+    authority_level: authoritative
+    origin_url: "https://fastapi.tiangolo.com/tutorial/"
+    local_path: data/enterprise_kb_v1/raw_sources/official_docs/fastapi_routing/
+    version_policy: latest_stable
+    doc_status: planned
+    allowed_for_answer: false
+    answer_scope: technical_reference
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: kb-admin
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。需人工确认 fastapi.tiangolo.com 的 robots.txt 和抓取策略。
+      建议优先抓取 tutorial/ 下的路由、请求体、Pydantic 模型三个子章节。
+
+  # ===== 示例 2: 外部权威技术文档 =====
+  - source_id: chroma_official_collection
+    title: "Chroma — Collection Management / Embeddings / Query"
+    domain: vector_database
+    source_type: external_official
+    doc_type: web_markdown
+    authority_level: authoritative
+    origin_url: "https://docs.trychroma.com/"
+    local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_collection/
+    version_policy: latest_stable
+    doc_status: planned
+    allowed_for_answer: false
+    answer_scope: technical_reference
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: kb-admin
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。Chroma 官方文档按 /docs、/api、/integrations 组织。
+      优先抓取 collection 管理和 embedding 函数两个章节。
+
+  # ===== 示例 3: 外部权威技术文档 =====
+  - source_id: langgraph_official_stategraph
+    title: "LangGraph — StateGraph / Nodes / Edges / Checkpoint"
+    domain: agent_orchestration
+    source_type: external_official
+    doc_type: web_markdown
+    authority_level: authoritative
+    origin_url: "https://langchain-ai.github.io/langgraph/"
+    local_path: data/enterprise_kb_v1/raw_sources/official_docs/langgraph_stategraph/
+    version_policy: latest_stable
+    doc_status: planned
+    allowed_for_answer: false
+    answer_scope: technical_reference
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: kb-admin
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。重点关注 StateGraph API、checkpoint 机制和 streaming。
+      LangGraph 版本迭代快，version_policy 可能需改为 pinned_version。
+
+  # ===== 示例 4: 内部项目快照 =====
+  - source_id: internal_project_runtime_snapshot
+    title: "Agent-Service-Toolkit 项目运行时快照 (内部文档)"
+    domain: internal_engineering
+    source_type: internal_project
+    doc_type: internal_markdown
+    authority_level: internal_authoritative
+    origin_url: null
+    local_path: data/enterprise_kb_v1/raw_sources/internal_docs/project_runtime_snapshot/
+    version_policy: continuous_track
+    doc_status: planned
+    allowed_for_answer: false
+    answer_scope: current_behavior
+    chunk_policy:
+      strategy: markdown_header
+      chunk_size: 1024
+      chunk_overlap: 200
+    owner: platform-team
+    enabled: false
+    last_verified: null
+    notes: >
+      草案阶段。由代码事实自动生成后须经人工校正。
+      内容范围：settings.py 配置项说明、RAG pipeline 数据流、
+      Agent graph 节点职责、API endpoint 说明。
+      不允许直接抄录源码，必须写成"当前项目实际行为"的自然语言描述。
