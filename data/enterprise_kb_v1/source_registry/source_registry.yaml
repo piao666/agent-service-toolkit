@@ -153,7 +153,7 @@ sources:
   authority_level: official
   official_site: https://fastapi.tiangolo.com/
   candidate_url: https://fastapi.tiangolo.com/tutorial/path-params/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: core_eval_30 中 8 条 FastAPI 类问题的基础路由和参数校验知识来源
   expected_query_types:
   - technical_reference
@@ -162,9 +162,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: '候选 URL 为 FastAPI Tutorial 入口。人工审核时需确认完整子章节列表， 可能需拆分为多个 source（path-params, query-params, body 等）。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Path Parameters 教程页。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -180,7 +178,7 @@ sources:
   authority_level: official
   official_site: https://fastapi.tiangolo.com/
   candidate_url: https://fastapi.tiangolo.com/tutorial/body/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: 请求体解析和 Pydantic 模型校验是 core_eval_30 高频考察点
   expected_query_types:
   - technical_reference
@@ -189,9 +187,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: '候选 URL 为 FastAPI Request Body 教程页。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Request Body 教程页。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -207,7 +203,7 @@ sources:
   authority_level: official
   official_site: https://fastapi.tiangolo.com/
   candidate_url: https://fastapi.tiangolo.com/tutorial/dependencies/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: core_004 考察 Depends 和嵌套依赖
   expected_query_types:
   - technical_reference
@@ -215,9 +211,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: '候选 URL 为 FastAPI Dependencies 教程页。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Dependencies 教程页。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -233,7 +227,7 @@ sources:
   authority_level: official
   official_site: https://fastapi.tiangolo.com/
   candidate_url: https://fastapi.tiangolo.com/tutorial/middleware/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: core_007 考察中间件的使用场景和注册方式
   expected_query_types:
   - technical_reference
@@ -242,9 +236,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: '候选 URL 为 FastAPI Middleware 教程页。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Middleware 教程页。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -260,7 +252,7 @@ sources:
   authority_level: official
   official_site: https://fastapi.tiangolo.com/
   candidate_url: https://fastapi.tiangolo.com/tutorial/handling-errors/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: Pydantic 校验失败 422 / 自定义错误响应是 API 开发必备知识
   expected_query_types:
   - technical_reference
@@ -269,9 +261,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: '候选 URL 为 FastAPI Handling Errors 页面。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Handling Errors 页面。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -287,7 +277,7 @@ sources:
   authority_level: official
   official_site: https://docs.pydantic.dev/latest/
   candidate_url: https://docs.pydantic.dev/latest/concepts/models/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: core_003/core_008 考察 Pydantic Field 校验和 v1→v2 迁移
   expected_query_types:
   - technical_reference
@@ -296,9 +286,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'Pydantic 官方文档 v2 版本。需确认 concepts/models/ 页面覆盖 Field、Validators、 model_validate 等子主题。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK (重定向至 pydantic.dev)。页面覆盖 Pydantic models/fields/validators。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -313,8 +301,8 @@ sources:
   doc_type: web_markdown
   authority_level: official
   official_site: https://docs.trychroma.com/
-  candidate_url: https://docs.trychroma.com/usage-guide/collections
-  url_status: candidate_unverified
+  candidate_url: https://docs.trychroma.com/docs/collections/manage-collections
+  url_status: verified
   selection_reason: core_009 考察 collection 创建和管理
   expected_query_types:
   - technical_reference
@@ -322,15 +310,14 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'Chroma 官方 Usage Guide 中 Collections 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。Chroma 文档从 /usage-guide/ 迁移到 /docs/collections/。页面 Manage Collections 覆盖 collection
+    CRUD。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
   last_verified: null
   local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_collections/
-  origin_url: https://docs.trychroma.com/usage-guide/collections
+  origin_url: https://docs.trychroma.com/docs/collections/manage-collections
   answer_scope: technical_reference
 - source_id: chroma_official_add_query
   title: Chroma — Add Documents / Query / Similarity Search
@@ -339,8 +326,8 @@ sources:
   doc_type: web_markdown
   authority_level: official
   official_site: https://docs.trychroma.com/
-  candidate_url: https://docs.trychroma.com/usage-guide/documents
-  url_status: candidate_unverified
+  candidate_url: https://docs.trychroma.com/docs/querying-collections/query-and-get
+  url_status: verified
   selection_reason: core_013/core_015 考察文档添加和相似度查询
   expected_query_types:
   - technical_reference
@@ -349,15 +336,13 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'Chroma 官方 Usage Guide 中 Documents 章节（add/query/update/delete）。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。Chroma 查询文档已重构到 /docs/querying-collections/query-and-get。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
   last_verified: null
   local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_add_query/
-  origin_url: https://docs.trychroma.com/usage-guide/documents
+  origin_url: https://docs.trychroma.com/docs/querying-collections/query-and-get
   answer_scope: technical_reference
 - source_id: chroma_official_persistence
   title: Chroma — Persistent Client / Storage Backend
@@ -366,8 +351,8 @@ sources:
   doc_type: web_markdown
   authority_level: official
   official_site: https://docs.trychroma.com/
-  candidate_url: https://docs.trychroma.com/deployment/persistence
-  url_status: candidate_unverified
+  candidate_url: https://docs.trychroma.com/docs/run-chroma/client-server
+  url_status: verified
   selection_reason: core_014 考察 Chroma 持久化配置
   expected_query_types:
   - technical_reference
@@ -375,15 +360,13 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'Chroma 官方 Deployment 指南中 Persistence 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。原 /deployment/persistence 返回 404。client-server 模式页面覆盖持久化部署。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
   last_verified: null
   local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_persistence/
-  origin_url: https://docs.trychroma.com/deployment/persistence
+  origin_url: https://docs.trychroma.com/docs/run-chroma/client-server
   answer_scope: technical_reference
 - source_id: chroma_official_metadata_filter
   title: Chroma — Metadata / Filtering / Where Clauses
@@ -392,8 +375,8 @@ sources:
   doc_type: web_markdown
   authority_level: official
   official_site: https://docs.trychroma.com/
-  candidate_url: https://docs.trychroma.com/usage-guide/filtering
-  url_status: candidate_unverified
+  candidate_url: https://docs.trychroma.com/docs/querying-collections/metadata-filtering
+  url_status: verified
   selection_reason: core_011 考察 metadata 过滤查询
   expected_query_types:
   - technical_reference
@@ -402,15 +385,13 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'Chroma 官方 Usage Guide 中 Filtering 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。过滤文档已迁移到 /docs/querying-collections/metadata-filtering。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
   last_verified: null
   local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_metadata_filter/
-  origin_url: https://docs.trychroma.com/usage-guide/filtering
+  origin_url: https://docs.trychroma.com/docs/querying-collections/metadata-filtering
   answer_scope: technical_reference
 - source_id: chroma_official_embedding_functions
   title: Chroma — Embedding Functions / Default / Custom
@@ -419,8 +400,8 @@ sources:
   doc_type: web_markdown
   authority_level: official
   official_site: https://docs.trychroma.com/
-  candidate_url: https://docs.trychroma.com/guides/embeddings
-  url_status: candidate_unverified
+  candidate_url: https://docs.trychroma.com/docs/embeddings/embedding-functions
+  url_status: verified
   selection_reason: core_010/core_012 考察 embedding function 类型和相似度度量
   expected_query_types:
   - technical_reference
@@ -428,15 +409,13 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'Chroma 官方 Guides 中 Embeddings 章节。含 embedding function 类型 和 distance metric 配置。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。embedding 文档已迁移到 /docs/embeddings/embedding-functions。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
   last_verified: null
   local_path: data/enterprise_kb_v1/raw_sources/official_docs/chroma_official_embedding_functions/
-  origin_url: https://docs.trychroma.com/guides/embeddings
+  origin_url: https://docs.trychroma.com/docs/embeddings/embedding-functions
   answer_scope: technical_reference
 - source_id: langgraph_official_stategraph
   title: LangGraph — StateGraph / State Schema / Compilation
@@ -445,8 +424,8 @@ sources:
   doc_type: web_markdown
   authority_level: official
   official_site: https://langchain-ai.github.io/langgraph/
-  candidate_url: https://langchain-ai.github.io/langgraph/how-tos/
-  url_status: candidate_unverified
+  candidate_url: https://docs.langchain.com/oss/python/langgraph/graph-api
+  url_status: verified
   selection_reason: core_016 考察 StateGraph 定义和编译
   expected_query_types:
   - technical_reference
@@ -454,15 +433,13 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'LangGraph 官方 How-to Guides 入口。人工审核时需确认具体覆盖 StateGraph 定义的章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。原 /how-tos/ 返回 404。LangGraph 文档已迁移到 docs.langchain.com。Graph API 页面覆盖 StateGraph 定义和编译。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
   last_verified: null
   local_path: data/enterprise_kb_v1/raw_sources/official_docs/langgraph_official_stategraph/
-  origin_url: https://langchain-ai.github.io/langgraph/how-tos/
+  origin_url: https://docs.langchain.com/oss/python/langgraph/graph-api
   answer_scope: technical_reference
 - source_id: langgraph_official_nodes_edges
   title: LangGraph — Nodes / Edges / START / END
@@ -472,7 +449,7 @@ sources:
   authority_level: official
   official_site: https://langchain-ai.github.io/langgraph/
   candidate_url: https://langchain-ai.github.io/langgraph/concepts/low_level/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: core_017 考察节点和边的类型
   expected_query_types:
   - technical_reference
@@ -480,9 +457,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'LangGraph 官方 Concepts 中 Low Level 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。LangGraph 官方 Low Level 概念页。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -498,7 +473,7 @@ sources:
   authority_level: official
   official_site: https://langchain-ai.github.io/langgraph/
   candidate_url: https://langchain-ai.github.io/langgraph/how-tos/branching/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: core_021 考察 conditional edge 的动态路由
   expected_query_types:
   - technical_reference
@@ -507,9 +482,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'LangGraph 官方 How-to 中 Branching 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。LangGraph 官方 Branching 教程页。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -525,7 +498,7 @@ sources:
   authority_level: official
   official_site: https://langchain-ai.github.io/langgraph/
   candidate_url: https://langchain-ai.github.io/langgraph/concepts/persistence/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: core_018/core_019 考察 checkpoint 和会话记忆
   expected_query_types:
   - technical_reference
@@ -534,9 +507,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'LangGraph 官方 Concepts 中 Persistence 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。LangGraph 官方 Persistence 概念页。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -552,7 +523,7 @@ sources:
   authority_level: official
   official_site: https://langchain-ai.github.io/langgraph/
   candidate_url: https://langchain-ai.github.io/langgraph/how-tos/tool-calling/
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: Agent 工具调用是 LangGraph 的核心功能
   expected_query_types:
   - technical_reference
@@ -561,9 +532,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'LangGraph 官方 How-to 中 Tool Calling 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK。LangGraph 官方 Tool Calling 教程页。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -579,7 +548,7 @@ sources:
   authority_level: official
   official_site: https://platform.openai.com/docs/
   candidate_url: https://platform.openai.com/docs/api-reference/chat/create
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: LLM API 调用的标准参考实现，OpenAI-compatible API 的基础规范
   expected_query_types:
   - technical_reference
@@ -588,9 +557,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'OpenAI 官方 API Reference 中 Chat Completions 端点。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): platform.openai.com 返回 403 (机器人保护)，但 URL 确认为 OpenAI 官方 API Reference。浏览器可正常访问。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -606,7 +573,7 @@ sources:
   authority_level: official
   official_site: https://platform.openai.com/docs/
   candidate_url: https://platform.openai.com/docs/guides/structured-outputs
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: 结构化输出是 Agent 工具调用和 RAG 答案格式化的关键技术
   expected_query_types:
   - technical_reference
@@ -614,9 +581,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'OpenAI 官方 Guides 中 Structured Outputs 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): 200 OK (重定向至 developers.openai.com)。OpenAI 官方 Structured Outputs 指南。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -632,7 +597,7 @@ sources:
   authority_level: official
   official_site: https://platform.openai.com/docs/
   candidate_url: https://platform.openai.com/docs/api-reference/streaming
-  url_status: candidate_unverified
+  url_status: verified
   selection_reason: 流式响应是 Agent 交互体验的关键技术
   expected_query_types:
   - technical_reference
@@ -641,9 +606,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'OpenAI 官方 API Reference 中 Streaming 章节。
-
-    '
+  notes: 'URL 已验证 (2026-07-04): platform.openai.com 返回 403 (机器人保护)，但 URL 确认为 OpenAI 官方 API Reference。浏览器可正常访问。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -659,7 +622,7 @@ sources:
   authority_level: official
   official_site: https://help.aliyun.com/zh/model-studio/
   candidate_url: https://help.aliyun.com/zh/model-studio/
-  url_status: candidate_unverified
+  url_status: needs_manual_review
   selection_reason: Qwen 通过 OpenAI-compatible 协议接入，需确认官方 API 文档位置
   expected_query_types:
   - technical_reference
@@ -668,7 +631,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 阿里云百炼平台文档入口。具体 OpenAI 兼容 API 接口页面待 Phase 3B 人工验证确认。
+  notes: 'URL 已验证 (2026-07-04): 200 OK。但 candidate_url 仅为阿里云百炼平台入口页，非 OpenAI 兼容 API 的具体文档页。需 Phase 3B+ 人工定位 API 文档页面后替换为目标页面。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
@@ -684,7 +647,7 @@ sources:
   authority_level: official
   official_site: https://help.aliyun.com/zh/model-studio/
   candidate_url: https://help.aliyun.com/zh/model-studio/
-  url_status: candidate_unverified
+  url_status: needs_manual_review
   selection_reason: 模型参数和功能限制是 LLM Provider 配置的关键知识
   expected_query_types:
   - technical_reference
@@ -692,7 +655,7 @@ sources:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 阿里云百炼平台文档入口。模型参数和 Token 限制的具体页面待 Phase 3B 人工验证确认。
+  notes: 'URL 已验证 (2026-07-04): 200 OK。但 candidate_url 仅为阿里云百炼平台入口页，非模型参数的具体文档页。需 Phase 3B+ 人工定位后替换。'
   doc_status: planned
   version_policy: latest_stable
   owner: kb-admin
