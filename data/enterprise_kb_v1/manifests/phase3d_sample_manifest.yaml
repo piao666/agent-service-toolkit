@@ -1,0 +1,127 @@
+# Phase 3D 小样本采集实验 — Sample Manifest
+# 版本: v1-draft-20260704 | 状态: experiment_plan
+
+samples:
+
+  - sample_id: S1
+    source_id: fastapi_official_middleware
+    domain: api_backend
+    candidate_url: "https://fastapi.tiangolo.com/tutorial/middleware/"
+    origin_url: "https://fastapi.tiangolo.com/tutorial/middleware/"
+    url_status: verified
+    fetch_status: not_fetched
+    text_capture_enabled: true
+    visual_capture_enabled: false
+    visual_capture_status: not_rendered
+    sample_reason: >
+      API backend 代表。FastAPI middleware 文档以 @app.middleware("http") 为核心，
+      覆盖 request/response/call_next 处理链路、middleware 注册方式、
+      多个 middleware 的执行顺序。验证 Text/DOM 对代码块上下文和
+      请求-响应处理顺序的保真度。CORS 仅作为跨页链接/提示上下文出现。
+    expected_structure_risk:
+      - code_block_adjacency_loss
+      - request_response_flow_context_loss
+      - middleware_execution_order_list_loss
+      - cross_page_link_context_loss
+    text_channel_checks:
+      - heading_hierarchy_preservation
+      - code_block_completeness
+      - ordered_list_preservation
+      - request_response_code_context
+      - page_noise_control
+    visual_channel_checks:
+      - full_page_coverage
+      - tile_numbering_stability
+      - code_annotation_layout_visible
+      - no_cookie_banner_occlusion
+    acceptance_criteria:
+      - heading_preservation_over_90_percent
+      - middleware_request_response_code_intact
+      - execution_order_list_preserved
+      - screenshot_no_truncation
+    rejection_criteria:
+      - heading_loss_over_20_percent
+      - code_truncation_over_30_percent
+      - screenshot_truncated
+      - visual_storage_over_5mb_per_page
+
+  - sample_id: S2
+    source_id: chroma_official_metadata_filter
+    domain: vector_database
+    candidate_url: "https://docs.trychroma.com/docs/querying-collections/metadata-filtering"
+    origin_url: "https://docs.trychroma.com/docs/querying-collections/metadata-filtering"
+    url_status: verified
+    fetch_status: not_fetched
+    text_capture_enabled: true
+    visual_capture_enabled: false
+    visual_capture_status: not_rendered
+    sample_reason: >
+      Vector database 代表。Chroma metadata filtering 文档包含操作符语法、
+      嵌套过滤 JSON、代码示例和参数结构表格。
+      验证纯 Markdown 是否保留嵌套语法层级与操作符矩阵对齐。
+      作为主要结构化样本承担 table/code/syntax 验证。
+    expected_structure_risk:
+      - nested_json_indentation_loss
+      - operator_matrix_table_deformation
+      - code_syntax_highlight_loss
+    text_channel_checks:
+      - nested_json_readability
+      - operator_table_column_alignment
+      - code_block_completeness
+      - heading_hierarchy_preservation
+      - page_noise_control
+    visual_channel_checks:
+      - full_page_coverage
+      - table_structure_visible_in_screenshot
+      - code_syntax_visible
+      - tile_numbering_stability
+    acceptance_criteria:
+      - nested_json_hierarchy_readable
+      - operator_table_columns_aligned
+      - code_syntax_in_screenshot_visible
+    rejection_criteria:
+      - nested_json_unreadable_after_text_extraction
+      - operator_table_misaligned_beyond_recovery
+      - screenshot_missing_code_or_table_regions
+
+  - sample_id: S3
+    source_id: langgraph_official_stategraph
+    domain: agent_orchestration
+    candidate_url: "https://docs.langchain.com/oss/python/langgraph/graph-api"
+    origin_url: "https://docs.langchain.com/oss/python/langgraph/graph-api"
+    url_status: verified
+    fetch_status: not_fetched
+    text_capture_enabled: true
+    visual_capture_enabled: false
+    visual_capture_status: not_rendered
+    sample_reason: >
+      Agent orchestration 代表。LangGraph Graph API 文档覆盖 StateGraph 概念、
+      State Schema、Nodes、Edges、Conditional edges、代码示例和
+      Visualization 链接。页面为长文档，标题层级密集。
+      验证 visual sidecar 对长页面层级结构和代码上下文布局的补充价值。
+      不假设页面一定包含流程图/概念图。
+    expected_structure_risk:
+      - long_page_heading_hierarchy_loss
+      - state_nodes_edges_context_loss
+      - state_schema_code_context_loss
+      - conditional_edges_section_context_loss
+    text_channel_checks:
+      - heading_hierarchy_preservation
+      - code_block_completeness
+      - state_nodes_edges_section_completeness
+      - page_noise_control
+    visual_channel_checks:
+      - full_page_coverage
+      - long_page_layout_section_boundaries_visible
+      - code_block_position_preserved
+      - tile_numbering_stability
+    acceptance_criteria:
+      - heading_hierarchy_fully_preserved
+      - state_nodes_edges_sections_fully_captured
+      - code_blocks_intact_in_text_channel
+      - page_section_layout_visible_in_screenshot
+    rejection_criteria:
+      - heading_hierarchy_misordered_in_text
+      - state_nodes_edges_context_severed
+      - screenshot_truncated
+      - visual_overhead_exceeds_acceptable_threshold
