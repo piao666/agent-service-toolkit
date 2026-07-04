@@ -28,6 +28,19 @@ domain_api_backend:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Path Parameters 教程页。'
+  text_capture: &id001
+    enabled: true
+    method: firecrawl_or_dom
+    status: not_fetched
+  visual_capture: &id002
+    enabled: false
+    method: pixelshot_candidate
+    status: not_rendered
+    tile_policy: viewport_tiles
+    allowed_for_answer: false
+  retrieval_channels: &id003
+  - text
+  - visual_optional
 - source_id: fastapi_official_request_body
   title: FastAPI — Request Body / Pydantic BaseModel
   domain: api_backend
@@ -46,6 +59,9 @@ domain_api_backend:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Request Body 教程页。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: fastapi_official_dependency_injection
   title: FastAPI — Dependency Injection / Depends
   domain: api_backend
@@ -63,6 +79,9 @@ domain_api_backend:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Dependencies 教程页。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: fastapi_official_middleware
   title: FastAPI — Middleware / CORS / Custom Middleware
   domain: api_backend
@@ -81,6 +100,9 @@ domain_api_backend:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Middleware 教程页。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: fastapi_official_error_handling
   title: FastAPI — Error Handling / HTTPException / Custom Exception Handlers
   domain: api_backend
@@ -99,6 +121,9 @@ domain_api_backend:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。FastAPI 官方 Handling Errors 页面。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: pydantic_official_models_validation
   title: Pydantic v2 — Models / Field / Validators
   domain: api_backend
@@ -117,6 +142,9 @@ domain_api_backend:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK (重定向至 pydantic.dev)。页面覆盖 Pydantic models/fields/validators。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 domain_vector_database:
 - source_id: chroma_official_collections
   title: Chroma — Collections / Create / Get / Delete
@@ -136,6 +164,9 @@ domain_vector_database:
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。Chroma 文档从 /usage-guide/ 迁移到 /docs/collections/。页面 Manage Collections 覆盖 collection
     CRUD。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: chroma_official_add_query
   title: Chroma — Add Documents / Query / Similarity Search
   domain: vector_database
@@ -154,6 +185,9 @@ domain_vector_database:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。Chroma 查询文档已重构到 /docs/querying-collections/query-and-get。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: chroma_official_persistence
   title: Chroma — Persistent Client / Storage Backend
   domain: vector_database
@@ -171,6 +205,9 @@ domain_vector_database:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。原 /deployment/persistence 返回 404。client-server 模式页面覆盖持久化部署。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: chroma_official_metadata_filter
   title: Chroma — Metadata / Filtering / Where Clauses
   domain: vector_database
@@ -189,6 +226,9 @@ domain_vector_database:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。过滤文档已迁移到 /docs/querying-collections/metadata-filtering。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: chroma_official_embedding_functions
   title: Chroma — Embedding Functions / Default / Custom
   domain: vector_database
@@ -206,6 +246,9 @@ domain_vector_database:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。embedding 文档已迁移到 /docs/embeddings/embedding-functions。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 domain_agent_orchestration:
 - source_id: langgraph_official_stategraph
   title: LangGraph — StateGraph / State Schema / Compilation
@@ -224,6 +267,9 @@ domain_agent_orchestration:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。原 /how-tos/ 返回 404。LangGraph 文档已迁移到 docs.langchain.com。Graph API 页面覆盖 StateGraph 定义和编译。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: langgraph_official_nodes_edges
   title: LangGraph — Nodes / Edges / START / END
   domain: agent_orchestration
@@ -241,6 +287,9 @@ domain_agent_orchestration:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。LangGraph 官方 Low Level 概念页。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: langgraph_official_conditional_edges
   title: LangGraph — Conditional Edges / Dynamic Routing
   domain: agent_orchestration
@@ -259,6 +308,9 @@ domain_agent_orchestration:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。LangGraph 官方 Branching 教程页。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: langgraph_official_checkpoint_memory
   title: LangGraph — Checkpointing / Memory / Persistence
   domain: agent_orchestration
@@ -277,6 +329,9 @@ domain_agent_orchestration:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。LangGraph 官方 Persistence 概念页。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: langgraph_official_tool_calling
   title: LangGraph — Tool Calling / ToolNode / Streaming Tools
   domain: agent_orchestration
@@ -295,6 +350,9 @@ domain_agent_orchestration:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK。LangGraph 官方 Tool Calling 教程页。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 domain_llm_provider:
 - source_id: openai_official_chat_completions
   title: OpenAI — Chat Completions API / Messages / Parameters
@@ -314,6 +372,9 @@ domain_llm_provider:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): platform.openai.com 返回 403 (机器人保护)，但 URL 确认为 OpenAI 官方 API Reference。浏览器可正常访问。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: openai_official_structured_outputs
   title: OpenAI — Structured Outputs / JSON Mode / Function Calling
   domain: llm_provider
@@ -331,6 +392,9 @@ domain_llm_provider:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): 200 OK (重定向至 developers.openai.com)。OpenAI 官方 Structured Outputs 指南。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: openai_official_streaming
   title: OpenAI — Streaming / Server-Sent Events / Chunked Responses
   domain: llm_provider
@@ -349,6 +413,9 @@ domain_llm_provider:
   allowed_for_answer: false
   fetch_status: not_fetched
   notes: 'URL 已验证 (2026-07-04): platform.openai.com 返回 403 (机器人保护)，但 URL 确认为 OpenAI 官方 API Reference。浏览器可正常访问。'
+  text_capture: *id001
+  visual_capture: *id002
+  retrieval_channels: *id003
 - source_id: qwen_official_openai_compatible_api
   title: Qwen — OpenAI-Compatible API / Model List / Rate Limits
   domain: llm_provider
@@ -366,7 +433,18 @@ domain_llm_provider:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'URL 已验证 (2026-07-04): 200 OK。但 candidate_url 仅为阿里云百炼平台入口页，非 OpenAI 兼容 API 的具体文档页。需 Phase 3B+ 人工定位 API 文档页面后替换为目标页面。'
+  notes: URL待人工确认具体官方页面。text_capture/visual_capture 已禁用。等待人工确认API文档页面后才能开启抓取流程。
+  text_capture:
+    enabled: false
+    method: firecrawl_or_dom
+    status: not_fetched
+  visual_capture:
+    enabled: false
+    method: pixelshot_candidate
+    status: not_rendered
+    tile_policy: viewport_tiles
+    allowed_for_answer: false
+  retrieval_channels: []
 - source_id: qwen_official_model_parameters
   title: Qwen — Model Parameters / Max Tokens / Supported Features
   domain: llm_provider
@@ -383,4 +461,15 @@ domain_llm_provider:
   enabled: false
   allowed_for_answer: false
   fetch_status: not_fetched
-  notes: 'URL 已验证 (2026-07-04): 200 OK。但 candidate_url 仅为阿里云百炼平台入口页，非模型参数的具体文档页。需 Phase 3B+ 人工定位后替换。'
+  notes: URL待人工确认具体官方页面。text_capture/visual_capture 已禁用。等待人工确认API文档页面后才能开启抓取流程。
+  text_capture:
+    enabled: false
+    method: firecrawl_or_dom
+    status: not_fetched
+  visual_capture:
+    enabled: false
+    method: pixelshot_candidate
+    status: not_rendered
+    tile_policy: viewport_tiles
+    allowed_for_answer: false
+  retrieval_channels: []

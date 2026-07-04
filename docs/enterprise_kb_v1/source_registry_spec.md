@@ -48,7 +48,7 @@
 | `domain` | string | ✅ | 知识领域，用于检索路由 |
 | `source_type` | enum | ✅ | 来源类型: `external_official` / `internal_project` / `policy` / `runbook` |
 | `doc_type` | enum | ✅ | 文档格式: `web_markdown` / `internal_markdown` / `policy_markdown` / `runbook_markdown` / `openapi_json` / `config_template` / `code_markdown` |
-| `authority_level` | enum | ✅ | 权威级别: `authoritative` / `internal_authoritative` / `derived` |
+| `authority_level` | enum | ✅ | 权威级别: `official` / `internal_current_snapshot` / `internal_authoritative` / `internal_policy` / `legacy_derived`。旧称 `authoritative`/`derived` 已弃用，分别对应 `official`/`legacy_derived` |
 
 ### 控制字段
 
@@ -63,7 +63,7 @@
 
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| `origin_url` | string | — | 外部文档原始 URL（内部文档可为 null） |
+| `origin_url` | string | — | 外部文档原始 URL。`url_status=verified` 时写入已验证的最终官方页面 URL；`url_status=needs_manual_review` 时为 null，candidate_url 作为候选入口页保留。内部文档可为 null。**禁止写入 TODO 占位符** |
 | `local_path` | string | ✅ | raw/normalized/chunks 的根路径 |
 | `version_policy` | enum | ✅ | `latest_stable` / `pinned_version` / `continuous_track` |
 | `chunk_policy` | object | ✅ | 分块策略配置 |
@@ -75,6 +75,26 @@
 | `owner` | string | ✅ | 负责人/团队 |
 | `last_verified` | date | — | 最后人工审核日期 |
 | `notes` | string | — | 审核备注、待办事项 |
+
+### 采集通道字段（Phase 3C0 新增，external_official 必填）
+
+**适用范围**：以下字段对 `source_type=external_official` **必填**。对 `internal_project` / `policy` / `runbook` 可选（不适用 visual_capture）。
+
+**安全约束**：`url_status=needs_manual_review` 的 source 必须设置 `text_capture.enabled=false`、`retrieval_channels=[]`。只有 `url_status=verified` 且 `enabled=true` 的 source 才允许进入 text/visual 抓取流程。
+
+| 字段 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `text_capture` | object | ext_official ✅ | Text/DOM 主通道配置 |
+| `text_capture.enabled` | bool | ext_official ✅ | 默认 true（needs_manual_review 时强制 false） |
+| `text_capture.method` | string | ext_official ✅ | 抓取方式：`firecrawl_or_dom` |
+| `text_capture.status` | string | ext_official ✅ | `not_fetched` / `fetched` / `normalized` / `chunked` / `indexed` |
+| `visual_capture` | object | ext_official ✅ | Visual screenshot sidecar 配置 |
+| `visual_capture.enabled` | bool | ext_official ✅ | 默认 false |
+| `visual_capture.method` | string | ext_official ✅ | 渲染方式：`pixelshot_candidate` |
+| `visual_capture.status` | string | ext_official ✅ | `not_rendered` / `rendered` / `tiled` / `embedded` / `indexed` |
+| `visual_capture.tile_policy` | string | ext_official ✅ | 切分策略：`viewport_tiles` |
+| `visual_capture.allowed_for_answer` | bool | ext_official ✅ | 视觉资产是否可作为回答依据（默认 false） |
+| `retrieval_channels` | list | ext_official ✅ | 可用检索通道：`text` + 可选 `visual_optional`。needs_manual_review 时为空列表 `[]` |
 
 ### 字段区分说明
 

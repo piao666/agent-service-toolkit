@@ -7,27 +7,46 @@
 ## 一、流水线概览
 
 ```
-source_registry.yaml (enabled=true)
+source_registry.yaml (enabled=true, url_status=verified)
         │
-        ▼
-  [fetch] ──→ raw_sources/{source_id}/{version}/
+        ├──→ [text_capture] ──→ raw_sources/{source_id}/{version}/text/
+        │         │                                (Firecrawl DOM/markdown)
+        │         ▼
+        │   [normalize] ──→ normalized/{source_id}/*.md
+        │         │
+        │         ▼
+        │   [chunk] ──→ chunks/{source_id}/chunks.jsonl
+        │         │
+        │         ▼
+        │   [embed + index] ──→ Chroma text collection
         │
-        ▼
-  [normalize] ──→ normalized/{source_id}/*.md
-        │
-        ▼
-  [chunk] ──→ chunks/{source_id}/chunks.jsonl
-        │
-        ▼
-  [embed + index] ──→ Chroma (storage/chroma_enterprise_kb_v1)
-        │
-        ▼
-  [manifest] ──→ manifests/{build_id}/*.jsonl
+        └──→ [visual_capture] ──→ raw_sources/{source_id}/{version}/screenshots/
+                  │              (optional sidecar, disabled by default, Phase 3D experiment only)
+                  ▼
+            [tile] ──→ raw_sources/{source_id}/{version}/tiles/
+                  │
+                  ▼
+            [visual embed] ──→ Chroma visual collection (separate index)
+                  │
+                  ▼
+            [manifest] ──→ manifests/{build_id}/*.jsonl
 ```
+
+**注意**：
+- Text/DOM capture 是**主通道**，visual capture 是**可选 sidecar**
+- Visual capture 默认 disabled（`visual_capture.enabled=false`）
+- Qwen `needs_manual_review` source 不允许进入任何抓取流程
+- Firecrawl 仍只用于 verified allowlist URL 的文本/DOM 抓取
 
 ---
 
 ## 二、外部文档抓取流程
+
+### Step 0: URL 前置验证
+
+- URL 必须通过 Phase 3B verified（`url_status=verified`）
+- `needs_manual_review` 的 source 不允许进入抓取
+- Firecrawl 仅用于 verified allowlist URL
 
 ### Step 1: 候选发现
 
