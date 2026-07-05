@@ -225,3 +225,15 @@ tmp_write_check/
 # Private Credentials, ignore everything in the folder but the .gitkeep file
 privatecredentials/*
 !privatecredentials/.gitkeep
+
+# Enterprise KB v1 runtime artifacts
+data/enterprise_kb_v1/raw_sources/official_docs/**
+!data/enterprise_kb_v1/raw_sources/official_docs/.gitkeep
+
+data/enterprise_kb_v1/chunks/official_docs/**
+!data/enterprise_kb_v1/chunks/official_docs/.gitkeep
+
+storage/**
+models/**
+phase4c_hpc/**
+*.zip
