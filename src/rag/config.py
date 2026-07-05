@@ -6,9 +6,15 @@ from pathlib import Path
 from dotenv import find_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-DEFAULT_LOCAL_EMBEDDING_MODEL_PATH = "./models/bge-small-zh-v1.5"
-DEFAULT_CHROMA_COLLECTION_NAME = "enterprise_kb_v1"
-DEFAULT_LOCAL_EMBEDDING_MODEL_NAME = "bge-small-zh-v1.5"
+# Phase 4D: default embedding switched to bge-m3 (HPC-verified, k=3=0.9545)
+DEFAULT_LOCAL_EMBEDDING_MODEL_PATH = "./models/bge-m3"
+DEFAULT_CHROMA_COLLECTION_NAME = "enterprise_kb_v1_official_docs_bge_m3"
+DEFAULT_LOCAL_EMBEDDING_MODEL_NAME = "bge-m3"
+
+# Embedding candidates (Phase 4C HPC A/B verified)
+# - default: bge-m3 (1024-dim, k=5=0.9091, GPU=2.99GB)
+# - high_precision: qwen3-embedding-0.6b (1024-dim, k=5=0.9091, GPU=5.57GB)
+# - lightweight_fallback: bge-small-zh-v1.5 (512-dim, k=5=0.8182, GPU=0.47GB)
 
 
 class RagSettings(BaseSettings):
@@ -23,9 +29,11 @@ class RagSettings(BaseSettings):
     EMBEDDING_PROVIDER: str = "local"
     LOCAL_EMBEDDING_MODEL_PATH: str = DEFAULT_LOCAL_EMBEDDING_MODEL_PATH
     LOCAL_EMBEDDING_MODEL_ROOT: str | None = None
-    CHROMA_PERSIST_DIR: str = "./storage/chroma_enterprise_kb_v1"
+    CHROMA_PERSIST_DIR: str = "./storage/chroma_enterprise_kb_v1_bge_m3"
     CHROMA_COLLECTION_NAME: str = DEFAULT_CHROMA_COLLECTION_NAME
     ENTERPRISE_CHROMA_COLLECTION: str | None = None
+    # Phase 4D: reranker NOT enabled (deferred to next phase)
+    RERANKER_ENABLED: bool = False
     ENTERPRISE_RAG_POLICY_MODE: str = "baseline"
     ENTERPRISE_STRUCTURED_RETRIEVAL_MODE: str = "off"  # structured retrieval: "off" | "metadata_symbol"
     ENTERPRISE_MEMORY_MODE: str = "off"
