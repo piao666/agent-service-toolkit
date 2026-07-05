@@ -251,3 +251,38 @@ class ChatHistoryInput(BaseModel):
 
 class ChatHistory(BaseModel):
     messages: list[ChatMessage]
+
+
+# ── Phase 4E: Runtime Retrieval Verification ─────────────────────────────
+
+
+class EnterpriseKBRetrievalRequest(BaseModel):
+    """Phase 4E: 检索请求 — 仅 official_docs bge-m3 索引，不进入 RAG answer 生成。"""
+
+    query: str = Field(
+        description="检索查询文本，用于 official_docs 知识库检索。",
+        examples=["How to create a Chroma collection?"],
+        min_length=1,
+    )
+    top_k: int = Field(
+        description="返回结果数量。",
+        default=5,
+        ge=1,
+        le=20,
+    )
+
+
+class EnterpriseKBRetrievalResponse(BaseModel):
+    """Phase 4E: 检索响应 — 含格式化结果 + trace 诊断。"""
+
+    results: list[dict[str, Any]] = Field(
+        description="检索到的 chunk 列表，每项含 chunk_id / source_id / score 等。",
+        default_factory=list,
+    )
+    trace: dict[str, Any] = Field(
+        description="检索 trace：query / top_k / embedding_model / collection_name / latency_ms 等。",
+        default_factory=dict,
+    )
+    latency_ms: float = Field(
+        description="端点处理总延迟（毫秒）。",
+    )

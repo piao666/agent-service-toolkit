@@ -33,6 +33,8 @@ from schema import (
     ChatMessage,
     EnterpriseAgentQueryInput,
     EnterpriseAgentQueryResponse,
+    EnterpriseKBRetrievalRequest,
+    EnterpriseKBRetrievalResponse,
     Feedback,
     FeedbackResponse,
     ServiceMetadata,
@@ -565,6 +567,55 @@ async def health_check():
             health_status["langfuse"] = "disconnected"
 
     return health_status
+
+
+# ── Phase 4E: Runtime Retrieval Verification ─────────────────────────────
+
+
+@app.get("/api/enterprise-kb/retrieval/health")
+async def enterprise_kb_retrieval_health():
+    """Phase 4E: official_docs bge-m3 检索索引健康检查（无认证）。"""
+    try:
+        from rag.vector_store import get_collection_count
+
+        count = get_collection_count()
+        status_flag = "ok" if count is not None and count > 0 else "degraded"
+        return {
+            "status": status_flag,
+            "collection_name": rag_settings.chroma_collection_name,
+            "persist_dir": rag_settings.CHROMA_PERSIST_DIR,
+            "chunk_count": count,
+            "embedding_model": "bge-m3",
+            "embedding_path": str(rag_settings.local_embedding_model_path),
+            "reranker_enabled": rag_settings.RERANKER_ENABLED,
+        }
+    except Exception as e:
+        logger.error(f"Retrieval health check failed: {e}")
+        return {"status": "error", "detail": str(e)}
+
+
+@router.post("/api/enterprise-kb/retrieval/search")
+async def enterprise_kb_retrieval_search(
+    request: EnterpriseKBRetrievalRequest,
+) -> EnterpriseKBRetrievalResponse:
+    """Phase 4E: official_docs bge-m3 检索（不进入 RAG answer，不做 reranker）。"""
+    try:
+        from rag.official_docs_retriever import official_docs_retrieve
+
+        t0 = perf_counter()
+        output = official_docs_retrieve(request.query, top_k=request.top_k)
+        latency_ms = round((perf_counter() - t0) * 1000, 2)
+
+        return EnterpriseKBRetrievalResponse(
+            results=output["results"],
+            trace=output["trace"],
+            latency_ms=latency_ms,
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Retrieval search failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 app.include_router(router)
