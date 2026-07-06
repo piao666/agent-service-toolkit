@@ -1,0 +1,48 @@
+{
+  "smoke": "phase6f_eval_config",
+  "timestamp": "2026-07-06T16:56:18.454297+00:00",
+  "cases_readable": {
+    "pass": true,
+    "case_count": 25,
+    "format_errors": [],
+    "case_type_distribution": {
+      "official_only": 8,
+      "internal_only": 8,
+      "dual": 5,
+      "keyword_exact": 1,
+      "metadata_filter": 1,
+      "history_aware": 1,
+      "no_hit": 1
+    },
+    "route_mode_distribution": {
+      "official_only": 11,
+      "internal_only": 8,
+      "dual": 6
+    },
+    "has_official_only": true,
+    "has_internal_only": true,
+    "has_dual": true,
+    "has_no_hit": true,
+    "has_keyword_exact": true,
+    "has_metadata_filter": true,
+    "has_history_aware": true
+  },
+  "script_syntax": {
+    "pass": true,
+    "script": "run_phase6f_multichannel_retrieval_eval.py",
+    "logic_checks": {
+      "index_either_missing_fatal": true,
+      "citation_empty_not_default_valid": true,
+      "route_metric_semantic_clear": true,
+      "overall_pass_has_gates": true
+    }
+  },
+  "output_paths": {
+    "pass": true
+  },
+  "no_heavy_imports": {
+    "pass": true,
+    "imported_heavy_modules": []
+  },
+  "overall_pass": true
+}
