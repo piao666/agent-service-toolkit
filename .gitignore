@@ -237,3 +237,8 @@ storage/**
 models/**
 phase4c_hpc/**
 *.zip
+
+# Enterprise KB v1 internal corpus runtime artifacts
+data/enterprise_kb_v1/chunks/internal_engineering_docs/**
+data/enterprise_kb_v1/internal_engineering_corpus/**
+data/enterprise_kb_v1/manifests/phase4fh_internal_chunk_manifest.json
