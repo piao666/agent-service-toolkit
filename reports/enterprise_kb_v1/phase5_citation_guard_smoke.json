@@ -1,0 +1,48 @@
+{
+  "smoke": "phase5_citation_guard",
+  "timestamp": "2026-07-06T13:28:32.090542+00:00",
+  "tests": [
+    {
+      "test": "positive_all_valid",
+      "citations_count": 3,
+      "all_citations_from_retrieved": true,
+      "citation_validity": true,
+      "citation_status": "valid",
+      "hallucination_risk": "none",
+      "test_pass": true,
+      "expected_citation_validity": true,
+      "actual_citation_validity": true
+    },
+    {
+      "test": "negative_invalid_chunk_id",
+      "citations_count": 1,
+      "all_citations_from_retrieved": false,
+      "citation_validity": false,
+      "citation_status": "invalid_citation",
+      "hallucination_risk": "high",
+      "violations": [
+        {
+          "citation_id": "cite_fake",
+          "chunk_id": "NOT_IN_RETRIEVED_SET",
+          "source_id": "fake_source",
+          "in_retrieved": false
+        }
+      ],
+      "test_pass": true,
+      "expected_citation_validity": false,
+      "actual_citation_validity": false
+    },
+    {
+      "test": "empty_citations",
+      "citations_count": 0,
+      "all_citations_from_retrieved": false,
+      "citation_validity": false,
+      "citation_status": "no_citations",
+      "hallucination_risk": "high",
+      "test_pass": true,
+      "expected_citation_validity": false,
+      "actual_citation_validity": false
+    }
+  ],
+  "all_pass": true
+}

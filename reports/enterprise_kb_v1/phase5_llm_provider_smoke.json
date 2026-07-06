@@ -1,0 +1,55 @@
+{
+  "smoke": "phase5_llm_provider",
+  "timestamp": "2026-07-06T13:28:14.441449+00:00",
+  "tests": [
+    {
+      "provider": "mock",
+      "created": true,
+      "provider_name": "mock",
+      "is_mock": true,
+      "json_parsed": true,
+      "parsed_intent": "technical_reference",
+      "parsed_confidence": 0.5,
+      "parsed_reasoning": "mock provider — no LLM available",
+      "required_fields_present": true,
+      "response_content_len": 101,
+      "latency_ms": 0.0,
+      "fallback_used": false,
+      "fallback_reason": "native_mock",
+      "status": "pass"
+    },
+    {
+      "provider": "qwen",
+      "created": true,
+      "provider_name": "mock",
+      "is_mock": true,
+      "json_parsed": true,
+      "parsed_intent": "technical_reference",
+      "parsed_confidence": 0.5,
+      "parsed_reasoning": "mock provider — no LLM available",
+      "required_fields_present": true,
+      "response_content_len": 101,
+      "latency_ms": 0.0,
+      "fallback_used": true,
+      "fallback_reason": "missing_api_key",
+      "status": "pass"
+    },
+    {
+      "provider": "deepseek",
+      "created": true,
+      "provider_name": "mock",
+      "is_mock": true,
+      "json_parsed": true,
+      "parsed_intent": "technical_reference",
+      "parsed_confidence": 0.5,
+      "parsed_reasoning": "mock provider — no LLM available",
+      "required_fields_present": true,
+      "response_content_len": 101,
+      "latency_ms": 0.0,
+      "fallback_used": true,
+      "fallback_reason": "missing_api_key",
+      "status": "pass"
+    }
+  ],
+  "all_mock_fallback_works": true
+}

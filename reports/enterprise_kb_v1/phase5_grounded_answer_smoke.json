@@ -1,0 +1,22 @@
+{
+  "smoke": "phase5_grounded_answer",
+  "timestamp": "2026-07-06T13:28:32.164694+00:00",
+  "no_key_fallback": {
+    "no_key_fallback_to_mock": true,
+    "provider": "mock"
+  },
+  "mock_extractive_fixture_test": {
+    "answer_preview": "基于检索结果（mock_extractive 模式）：\n\n[来源1: fastapi_official_request_body | Request Body]\nImport BaseModel from pydantic and create data model class.\n\n[来源2: phase4d_bge_m3_decision | Phase 4D > Decision]\nbge-m",
+    "citations_count": 2,
+    "all_citations_from_retrieved": true,
+    "citation_validity": true,
+    "citation_status": "valid",
+    "hallucination_risk": "none",
+    "used_sources": [
+      "fastapi_official_request_body",
+      "phase4d_bge_m3_decision"
+    ],
+    "pass": true
+  },
+  "overall_pass": true
+}

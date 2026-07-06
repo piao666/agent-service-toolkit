@@ -1,0 +1,84 @@
+{
+  "smoke": "phase5_custom_graph",
+  "timestamp": "2026-07-06T13:28:14.595621+00:00",
+  "imports": {
+    "all_importable": true,
+    "modules": [
+      {
+        "module": "custom_graph.state",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.graph",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.nodes.query_classifier",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.nodes.memory_rewriter",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.nodes.planner",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.nodes.retriever",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.nodes.ranker",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.nodes.answer_generator",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.nodes.evidence_verifier",
+        "importable": true
+      },
+      {
+        "module": "custom_graph.nodes.final_response",
+        "importable": true
+      }
+    ]
+  },
+  "pipeline": {
+    "all_keys_present": true,
+    "latency_ms": 961.66,
+    "llm_mode": "mock_extractive"
+  },
+  "mixed_routing": {
+    "query": "本项目 FastAPI 和 phase 评测如何结合？",
+    "intent": "mixed",
+    "recommended_corpus": "dual",
+    "routing_source": "recommended_corpus",
+    "route_mode": "dual",
+    "target_corpora": [
+      "official_docs",
+      "internal_engineering_docs"
+    ],
+    "planner_used": true,
+    "selected_query": "本项目 FastAPI 和 phase 评测如何结合？",
+    "is_dual": true,
+    "pass": true
+  },
+  "explicit_corpus_tests": [
+    {
+      "corpus": "official_docs",
+      "route_mode": "official_only",
+      "routing_source": "state.corpus",
+      "pass": true
+    },
+    {
+      "corpus": "internal_engineering_docs",
+      "route_mode": "internal_only",
+      "routing_source": "state.corpus",
+      "pass": true
+    }
+  ],
+  "overall_pass": true
+}
