@@ -33,6 +33,8 @@ from schema import (
     ChatMessage,
     EnterpriseAgentQueryInput,
     EnterpriseAgentQueryResponse,
+    EnterpriseKBRagAnswerRequest,
+    EnterpriseKBRagAnswerResponse,
     EnterpriseKBRetrievalRequest,
     EnterpriseKBRetrievalResponse,
     Feedback,
@@ -569,24 +571,36 @@ async def health_check():
     return health_status
 
 
-# ── Phase 4E: Runtime Retrieval Verification ─────────────────────────────
+# ── Phase 4E/4F: Retrieval (dual-corpus) ────────────────────────────────
 
 
 @app.get("/api/enterprise-kb/retrieval/health")
 async def enterprise_kb_retrieval_health():
-    """Phase 4E: official_docs bge-m3 检索索引健康检查（无认证）。"""
+    """Phase 4F: 双语料库检索索引健康检查（无认证）。"""
     try:
         from rag.vector_store import get_collection_count
 
-        count = get_collection_count()
-        status_flag = "ok" if count is not None and count > 0 else "degraded"
+        official_count = get_collection_count()
+        internal_count = get_collection_count(
+            persist_dir=rag_settings.CHROMA_INTERNAL_PERSIST_DIR,
+            collection_name=rag_settings.CHROMA_INTERNAL_COLLECTION_NAME,
+        )
+
         return {
-            "status": status_flag,
-            "collection_name": rag_settings.chroma_collection_name,
-            "persist_dir": rag_settings.CHROMA_PERSIST_DIR,
-            "chunk_count": count,
+            "status": "ok" if (official_count and official_count > 0) else "degraded",
+            "corpora": {
+                "official_docs": {
+                    "collection_name": rag_settings.chroma_collection_name,
+                    "persist_dir": rag_settings.CHROMA_PERSIST_DIR,
+                    "chunk_count": official_count,
+                },
+                "internal_engineering_docs": {
+                    "collection_name": rag_settings.CHROMA_INTERNAL_COLLECTION_NAME,
+                    "persist_dir": rag_settings.CHROMA_INTERNAL_PERSIST_DIR,
+                    "chunk_count": internal_count,
+                },
+            },
             "embedding_model": "bge-m3",
-            "embedding_path": str(rag_settings.local_embedding_model_path),
             "reranker_enabled": rag_settings.RERANKER_ENABLED,
         }
     except Exception as e:
@@ -598,23 +612,78 @@ async def enterprise_kb_retrieval_health():
 async def enterprise_kb_retrieval_search(
     request: EnterpriseKBRetrievalRequest,
 ) -> EnterpriseKBRetrievalResponse:
-    """Phase 4E: official_docs bge-m3 检索（不进入 RAG answer，不做 reranker）。"""
+    """Phase 4F: 双语料检索（支持 corpus=official_docs/internal_engineering_docs/auto）。"""
     try:
+        from rag.corpus_router import route_corpus
         from rag.official_docs_retriever import official_docs_retrieve
 
         t0 = perf_counter()
-        output = official_docs_retrieve(request.query, top_k=request.top_k)
+
+        corpus_used = request.corpus
+        route_reason = "user_specified"
+        if corpus_used == "auto":
+            corpus_used = route_corpus(request.query, "auto")
+            route_reason = "auto_routed_by_keywords"
+
+        if corpus_used == "internal_engineering_docs":
+            from rag.internal_engineering_retriever import internal_engineering_retrieve
+            output = internal_engineering_retrieve(request.query, top_k=request.top_k)
+        else:
+            output = official_docs_retrieve(request.query, top_k=request.top_k)
+
         latency_ms = round((perf_counter() - t0) * 1000, 2)
+        # 注入路由信息到 trace
+        output["trace"]["requested_corpus"] = request.corpus
+        output["trace"]["corpus_used"] = corpus_used
+        output["trace"]["route_reason"] = route_reason
 
         return EnterpriseKBRetrievalResponse(
             results=output["results"],
             trace=output["trace"],
             latency_ms=latency_ms,
+            corpus_used=corpus_used,
         )
     except HTTPException:
         raise
     except Exception as e:
         logger.error(f"Retrieval search failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Phase 4H: Traceable RAG Answer ─────────────────────────────────────
+
+
+@router.post("/api/enterprise-kb/rag/answer")
+async def enterprise_kb_rag_answer(
+    request: EnterpriseKBRagAnswerRequest,
+) -> EnterpriseKBRagAnswerResponse:
+    """Phase 4H: Traceable RAG answer with citations (mock/extractive mode)。
+
+    无 LLM key 时使用 mock extractive answer — 基于检索结果拼接。
+    """
+    try:
+        from rag.traceable_rag_answer import generate_traceable_rag_answer
+
+        t0 = perf_counter()
+        output = generate_traceable_rag_answer(
+            query=request.query,
+            top_k=request.top_k,
+            corpus=request.corpus,
+        )
+        latency_ms = round((perf_counter() - t0) * 1000, 2)
+
+        return EnterpriseKBRagAnswerResponse(
+            answer=output["answer"],
+            citations=output["citations"],
+            trace=output["trace"],
+            latency_ms=latency_ms,
+            corpus_used=output["corpus_used"],
+            llm_mode=output.get("llm_mode", "mock_extractive"),
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"RAG answer failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

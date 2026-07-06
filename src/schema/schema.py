@@ -257,10 +257,10 @@ class ChatHistory(BaseModel):
 
 
 class EnterpriseKBRetrievalRequest(BaseModel):
-    """Phase 4E: 检索请求 — 仅 official_docs bge-m3 索引，不进入 RAG answer 生成。"""
+    """Phase 4E/4F: 检索请求 — 支持 official_docs / internal_engineering_docs / auto。"""
 
     query: str = Field(
-        description="检索查询文本，用于 official_docs 知识库检索。",
+        description="检索查询文本。",
         examples=["How to create a Chroma collection?"],
         min_length=1,
     )
@@ -269,6 +269,11 @@ class EnterpriseKBRetrievalRequest(BaseModel):
         default=5,
         ge=1,
         le=20,
+    )
+    corpus: Literal["official_docs", "internal_engineering_docs", "auto"] = Field(
+        default="official_docs",
+        description="检索目标语料库。'auto' 由 corpus_router 自动路由。",
+        examples=["official_docs", "internal_engineering_docs", "auto"],
     )
 
 
@@ -285,4 +290,57 @@ class EnterpriseKBRetrievalResponse(BaseModel):
     )
     latency_ms: float = Field(
         description="端点处理总延迟（毫秒）。",
+    )
+    corpus_used: str = Field(
+        default="official_docs",
+        description="实际使用的语料库。",
+    )
+
+
+# ── Phase 4H: Traceable RAG Answer ──────────────────────────────────────
+
+
+class EnterpriseKBRagAnswerRequest(BaseModel):
+    """Phase 4H: RAG 回答请求 — 带 citation 的受控 demo 端点。"""
+
+    query: str = Field(
+        description="问题文本。",
+        examples=["本项目为什么选择 bge-m3 作为默认 embedding？"],
+        min_length=1,
+    )
+    top_k: int = Field(
+        description="检索结果数量。",
+        default=5,
+        ge=1,
+        le=20,
+    )
+    corpus: Literal["official_docs", "internal_engineering_docs", "auto"] = Field(
+        default="auto",
+        description="检索目标语料库。默认 auto 自动路由。",
+    )
+
+
+class EnterpriseKBRagAnswerResponse(BaseModel):
+    """Phase 4H: RAG 回答响应 — mock/extractive 模式，带 citation。"""
+
+    answer: str = Field(
+        description="带 citation 标记的回答文本（mock extractive mode）。",
+    )
+    citations: list[dict[str, Any]] = Field(
+        description="引用列表，每项含 source_id / heading_path / score / text_preview。",
+        default_factory=list,
+    )
+    trace: dict[str, Any] = Field(
+        description="检索 + routing trace。",
+        default_factory=dict,
+    )
+    latency_ms: float = Field(
+        description="端点处理总延迟（毫秒）。",
+    )
+    corpus_used: str = Field(
+        description="实际使用的语料库。",
+    )
+    llm_mode: str = Field(
+        default="mock_extractive",
+        description="回答生成模式。mock_extractive = 无 LLM，基于检索结果拼接。",
     )

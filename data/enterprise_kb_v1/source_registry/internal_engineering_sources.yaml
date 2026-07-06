@@ -1,0 +1,529 @@
+version: 1.0.0-draft
+generated_at: '2026-07-06T00:00:00+08:00'
+status: draft
+corpus: internal_engineering_docs
+note: |
+  Internal engineering sources — enabled=false, allowed_for_answer=false.
+  Built for Phase 4F-H eval and demo. NOT for production RAG answer pipeline.
+
+sources:
+
+# ═══ A. 项目治理文档 (8) ═══
+
+- source_id: internal_kb_positioning
+  source_type: internal_engineering_docs
+  domain: project_positioning
+  title: 企业知识库 v1 定位
+  local_path: docs/enterprise_kb_v1/kb_positioning.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_kb_admission_policy
+  source_type: internal_engineering_docs
+  domain: source_governance
+  title: 知识库准入策略
+  local_path: docs/enterprise_kb_v1/kb_admission_policy.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_source_registry_spec
+  source_type: internal_engineering_docs
+  domain: source_governance
+  title: Source Registry 规范
+  local_path: docs/enterprise_kb_v1/source_registry_spec.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_document_status_policy
+  source_type: internal_engineering_docs
+  domain: source_governance
+  title: 文档状态策略
+  local_path: docs/enterprise_kb_v1/document_status_policy.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_evaluation_standard
+  source_type: internal_engineering_docs
+  domain: ingestion_audit
+  title: 评测标准
+  local_path: docs/enterprise_kb_v1/evaluation_standard.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_ingestion_pipeline
+  source_type: internal_engineering_docs
+  domain: ingestion_audit
+  title: Ingestion Pipeline 设计
+  local_path: docs/enterprise_kb_v1/ingestion_pipeline.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_legacy_usage_policy
+  source_type: internal_engineering_docs
+  domain: source_governance
+  title: 旧工作区使用策略
+  local_path: docs/enterprise_kb_v1/legacy_usage_policy.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_demo_scenarios
+  source_type: internal_engineering_docs
+  domain: project_positioning
+  title: Demo 场景设计
+  local_path: docs/enterprise_kb_v1/demo_scenarios.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+# ═══ B. 系统架构文档 (5) ═══
+
+- source_id: internal_current_system_snapshot
+  source_type: internal_engineering_docs
+  domain: project_positioning
+  title: Agent-Service-Toolkit 当前系统模块与边界 (内部文档)
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/current_system_snapshot.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_rag_pipeline_current
+  source_type: internal_engineering_docs
+  domain: runtime_retrieval
+  title: 当前 RAG 查询链路与检索架构 (内部文档)
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/rag_pipeline_current.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_config_reference_current
+  source_type: internal_engineering_docs
+  domain: runtime_retrieval
+  title: 当前系统关键配置参考 (内部文档)
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/config_reference_current.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_agent_graph_current
+  source_type: internal_engineering_docs
+  domain: runtime_retrieval
+  title: 当前 Agent Graph 节点与状态流转 (内部文档)
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/agent_graph_current.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_project_extension_guide_draft
+  source_type: internal_engineering_docs
+  domain: project_positioning
+  title: 项目扩展指南草案 (内部文档)
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/project_extension_guide_draft.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+# ═══ C. Phase 3/4 阶段文档 (8) ═══
+
+- source_id: phase3f_strategy_decision
+  source_type: internal_engineering_docs
+  domain: ingestion_audit
+  title: Phase 3F 正式采集策略决策
+  local_path: docs/enterprise_kb_v1/phase3f_formal_ingestion_strategy_decision.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: phase3g_capture_plan
+  source_type: internal_engineering_docs
+  domain: ingestion_audit
+  title: Phase 3G Verified Sources Text/DOM Capture Plan
+  local_path: docs/enterprise_kb_v1/phase3g_verified_sources_text_dom_capture_plan.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: phase3h_batch1_report
+  source_type: internal_engineering_docs
+  domain: ingestion_audit
+  title: Phase 3H Batch 1 Text/DOM Capture Report
+  local_path: docs/enterprise_kb_v1/phase3h_batch1_text_dom_capture_report.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: phase3i_evidence_audit
+  source_type: internal_engineering_docs
+  domain: ingestion_audit
+  title: Phase 3I Batch 1 Evidence Audit / Promotion Review
+  local_path: docs/enterprise_kb_v1/phase3i_batch1_evidence_audit_promotion_review.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: phase3j_promotion
+  source_type: internal_engineering_docs
+  domain: ingestion_audit
+  title: Phase 3J Batch 1 Controlled Promotion
+  local_path: docs/enterprise_kb_v1/phase3j_batch1_controlled_promotion.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: phase4c_hpc_runbook
+  source_type: internal_engineering_docs
+  domain: hpc_workflow
+  title: Phase 4C HPC Runbook
+  local_path: docs/enterprise_kb_v1/phase4c_hpc_runbook.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: phase4d_bge_m3_decision
+  source_type: internal_engineering_docs
+  domain: embedding_evaluation
+  title: Phase 4D bge-m3 Default Embedding Decision
+  local_path: docs/enterprise_kb_v1/phase4d_bge_m3_default_embedding.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: phase4e_runtime_verification
+  source_type: internal_engineering_docs
+  domain: runtime_retrieval
+  title: Phase 4E Runtime Retrieval Verification
+  local_path: docs/enterprise_kb_v1/phase4e_runtime_retrieval_verification.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+# ═══ E. 失败案例/经验文档 (4) ═══
+
+- source_id: internal_failure_patterns
+  source_type: internal_engineering_docs
+  domain: failure_pattern
+  title: 失败案例模式与根因分析
+  local_path: docs/enterprise_kb_v1/failure_patterns.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_hpc_lessons
+  source_type: internal_engineering_docs
+  domain: hpc_workflow
+  title: HPC 评测经验教训
+  local_path: docs/enterprise_kb_v1/hpc_evaluation_lessons.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_retrieval_debug_cases
+  source_type: internal_engineering_docs
+  domain: failure_pattern
+  title: 检索 Debug 案例集
+  local_path: docs/enterprise_kb_v1/retrieval_debug_cases.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_repo_hygiene_policy
+  source_type: internal_engineering_docs
+  domain: repo_hygiene
+  title: 仓库卫生策略
+  local_path: docs/enterprise_kb_v1/repo_hygiene_policy.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_corpus_overview
+  source_type: internal_engineering_docs
+  domain: project_positioning
+  title: "Internal Engineering Corpus 概览与源文件分类"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/internal_corpus_overview.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_corpus_routing_design
+  source_type: internal_engineering_docs
+  domain: runtime_retrieval
+  title: "Dual-Corpus Auto Routing 规则与实现方式"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/corpus_routing_design.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+# ═══ D. 代码摘要 (7) ═══
+
+- source_id: internal_code_summary_config_py
+  source_type: internal_engineering_docs
+  domain: code_summary
+  title: "src/rag/config.py 代码摘要"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/code_summaries/config_py.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_code_summary_official_docs_retriever_py
+  source_type: internal_engineering_docs
+  domain: code_summary
+  title: "src/rag/official_docs_retriever.py 代码摘要"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/code_summaries/official_docs_retriever_py.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_code_summary_service_py
+  source_type: internal_engineering_docs
+  domain: code_summary
+  title: "src/service/service.py 代码摘要"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/code_summaries/service_py.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_code_summary_schema_py
+  source_type: internal_engineering_docs
+  domain: code_summary
+  title: "src/schema/schema.py 代码摘要"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/code_summaries/schema_py.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_code_summary_hpc_embedding_ab
+  source_type: internal_engineering_docs
+  domain: code_summary
+  title: "scripts/enterprise_kb_v1/hpc_phase4c_run_embedding_ab.py 代码摘要"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/code_summaries/hpc_phase4c_embedding_ab_py.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_code_summary_runtime_smoke
+  source_type: internal_engineering_docs
+  domain: code_summary
+  title: "scripts/enterprise_kb_v1/runtime_retrieval_smoke.py 代码摘要"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/code_summaries/runtime_retrieval_smoke_py.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh
+
+- source_id: internal_code_summary_api_smoke
+  source_type: internal_engineering_docs
+  domain: code_summary
+  title: "scripts/enterprise_kb_v1/api_retrieval_smoke.py 代码摘要"
+  local_path: data/enterprise_kb_v1/raw_sources/internal_docs/code_summaries/api_retrieval_smoke_py.md
+  doc_status: active
+  enabled: false
+  allowed_for_answer: false
+  index_status: planned
+  retrieval_channels: [text]
+  answer_scope: project_engineering_reference
+  corpus: internal_engineering_docs
+  version: v1
+  owner_phase: phase4fh

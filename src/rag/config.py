@@ -16,6 +16,11 @@ DEFAULT_LOCAL_EMBEDDING_MODEL_NAME = "bge-m3"
 # - high_precision: qwen3-embedding-0.6b (1024-dim, k=5=0.9091, GPU=5.57GB)
 # - lightweight_fallback: bge-small-zh-v1.5 (512-dim, k=5=0.8182, GPU=0.47GB)
 
+# Phase 4F: Internal engineering corpus (bge-m3)
+# - enabled=false, allowed_for_answer=false (eval/demo only)
+# - built on HPC, same bge-m3 embedding as official_docs
+DEFAULT_INTERNAL_CHROMA_COLLECTION_NAME = "enterprise_kb_v1_internal_engineering_bge_m3"
+
 
 class RagSettings(BaseSettings):
     model_config = SettingsConfigDict(
@@ -31,6 +36,9 @@ class RagSettings(BaseSettings):
     LOCAL_EMBEDDING_MODEL_ROOT: str | None = None
     CHROMA_PERSIST_DIR: str = "./storage/chroma_enterprise_kb_v1_bge_m3"
     CHROMA_COLLECTION_NAME: str = DEFAULT_CHROMA_COLLECTION_NAME
+    # Phase 4F: Internal engineering corpus
+    CHROMA_INTERNAL_PERSIST_DIR: str = "./storage/chroma_enterprise_kb_v1_internal_bge_m3"
+    CHROMA_INTERNAL_COLLECTION_NAME: str = DEFAULT_INTERNAL_CHROMA_COLLECTION_NAME
     ENTERPRISE_CHROMA_COLLECTION: str | None = None
     # Phase 4D: reranker NOT enabled (deferred to next phase)
     RERANKER_ENABLED: bool = False
