@@ -10,8 +10,6 @@ import time
 from pathlib import Path
 from typing import Any
 
-import chromadb
-
 from rag.config import rag_settings
 
 TEXT_PREVIEW_LEN = 200
@@ -27,6 +25,7 @@ def _get_collection_count_direct(
     if not resolved_dir.exists():
         return None
     try:
+        import chromadb  # noqa: PLC0415  -- lazy import, chromadb 不是 adapter 层必需依赖
         client = chromadb.PersistentClient(path=str(resolved_dir))
         col = client.get_collection(resolved_name)
         return col.count()

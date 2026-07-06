@@ -1,0 +1,138 @@
+{
+  "smoke": "phase6e_real_runtime_retrieval",
+  "timestamp": "2026-07-06T16:36:42.284467+00:00",
+  "official_query": {
+    "route_mode": "official_only",
+    "merged_hits_count": 2,
+    "citation_candidates_count": 2,
+    "official_channel": {
+      "channel_found": true,
+      "retriever_imported": true,
+      "retrieved_count": 0,
+      "has_retriever_module_not_found": false,
+      "has_dependency_not_found": false,
+      "errors": [],
+      "hits_count": 0,
+      "trace_keys": [
+        "query",
+        "top_k",
+        "embedding",
+        "retriever_imported",
+        "retriever_module",
+        "retrieved_count",
+        "collection"
+      ],
+      "pass": true
+    },
+    "errors": [],
+    "total_latency_ms": 5435.81,
+    "pass": true
+  },
+  "internal_query": {
+    "route_mode": "internal_only",
+    "merged_hits_count": 1,
+    "citation_candidates_count": 1,
+    "internal_channel": {
+      "channel_found": true,
+      "retriever_imported": true,
+      "retrieved_count": 0,
+      "has_retriever_module_not_found": false,
+      "has_dependency_not_found": false,
+      "errors": [],
+      "hits_count": 0,
+      "trace_keys": [
+        "query",
+        "top_k",
+        "embedding",
+        "retriever_imported",
+        "retriever_module",
+        "retrieved_count",
+        "collection"
+      ],
+      "pass": true
+    },
+    "errors": [],
+    "total_latency_ms": 0.79,
+    "pass": true
+  },
+  "dual_query": {
+    "route_mode": "dual",
+    "merged_hits_count": 2,
+    "citation_candidates_count": 2,
+    "both_channels_ok": true,
+    "citations_from_merged": true,
+    "official_channel": {
+      "channel_found": true,
+      "retriever_imported": true,
+      "retrieved_count": 0,
+      "has_retriever_module_not_found": false,
+      "has_dependency_not_found": false,
+      "errors": [],
+      "hits_count": 0,
+      "trace_keys": [
+        "query",
+        "top_k",
+        "embedding",
+        "retriever_imported",
+        "retriever_module",
+        "retrieved_count",
+        "collection"
+      ],
+      "pass": true
+    },
+    "internal_channel": {
+      "channel_found": true,
+      "retriever_imported": true,
+      "retrieved_count": 0,
+      "has_retriever_module_not_found": false,
+      "has_dependency_not_found": false,
+      "errors": [],
+      "hits_count": 0,
+      "trace_keys": [
+        "query",
+        "top_k",
+        "embedding",
+        "retriever_imported",
+        "retriever_module",
+        "retrieved_count",
+        "collection"
+      ],
+      "pass": true
+    },
+    "errors": [],
+    "total_latency_ms": 0.21,
+    "pass": true
+  },
+  "graph_api": {
+    "has_answer": true,
+    "trace_engine": "phase6_orchestrator",
+    "uses_phase6_orchestrator": true,
+    "channels_in_trace": 3,
+    "channel_retriever_imported": true,
+    "trace_has_citation_candidates": true,
+    "llm_mode": "mock_extractive",
+    "pass": true
+  },
+  "dependency_trace": {
+    "hits_count": 0,
+    "retriever_imported": true,
+    "has_retriever_module_not_found": false,
+    "errors": [],
+    "has_clear_status": true,
+    "pass": true
+  },
+  "overall_pass": true,
+  "official_channel_checked": true,
+  "internal_channel_checked": true,
+  "dual_route_checked": true,
+  "custom_graph_uses_phase6_orchestrator": true,
+  "graph_api_regression_pass": true,
+  "dependency_errors_traced": true,
+  "no_silent_pass": true,
+  "official_retriever_import_pass": true,
+  "internal_retriever_import_pass": true,
+  "official_runtime_hits_count": 0,
+  "internal_runtime_hits_count": 0,
+  "real_runtime_retrieval_verified": true,
+  "dependency_trace_pass": true
+}
