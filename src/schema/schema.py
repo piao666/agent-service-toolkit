@@ -344,3 +344,44 @@ class EnterpriseKBRagAnswerResponse(BaseModel):
         default="mock_extractive",
         description="回答生成模式。mock_extractive = 无 LLM，基于检索结果拼接。",
     )
+
+
+# ── Phase 5B: Custom Graph Answer ──────────────────────────────────────
+
+
+class EnterpriseKBGraphAnswerRequest(BaseModel):
+    """Phase 5B: custom_graph 知识库问答请求。"""
+
+    query: str = Field(
+        description="用户问题。",
+        examples=["What is FastAPI middleware?"],
+        min_length=1,
+    )
+    corpus: Literal["official_docs", "internal_engineering_docs", "auto"] = Field(
+        default="auto",
+        description="检索目标语料库。",
+    )
+    session_id: str = Field(
+        default="",
+        description="会话 ID，用于多轮对话追踪。",
+    )
+
+
+class EnterpriseKBGraphAnswerResponse(BaseModel):
+    """Phase 5B: custom_graph 知识库问答响应 — 完整 trace。"""
+
+    answer_markdown: str = Field(description="回答文本（markdown 格式）。")
+    citations: list[dict[str, Any]] = Field(default_factory=list, description="引用列表。")
+    used_sources: list[str] = Field(default_factory=list, description="使用的 source ID 列表。")
+    unsupported_claims: list[str] = Field(default_factory=list, description="无证据支持的声明。")
+    hallucination_risk: str = Field(default="none", description="幻觉风险评估。")
+    intent_trace: dict[str, Any] = Field(default_factory=dict, description="query_classifier trace。")
+    rewrite_trace: dict[str, Any] = Field(default_factory=dict, description="memory_rewriter trace。")
+    plan_trace: dict[str, Any] = Field(default_factory=dict, description="planner trace。")
+    retrieval_trace: dict[str, Any] = Field(default_factory=dict, description="retriever trace。")
+    rank_trace: dict[str, Any] = Field(default_factory=dict, description="ranker trace。")
+    llm_trace: dict[str, Any] = Field(default_factory=dict, description="answer_generator trace。")
+    citation_trace: dict[str, Any] = Field(default_factory=dict, description="evidence_verifier trace。")
+    graph_debug: dict[str, Any] = Field(default_factory=dict, description="graph 执行诊断。")
+    llm_mode: str = Field(default="mock_extractive", description="LLM 模式。")
+    total_latency_ms: float = Field(default=0.0, description="总延迟（毫秒）。")

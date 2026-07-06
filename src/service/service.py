@@ -33,6 +33,8 @@ from schema import (
     ChatMessage,
     EnterpriseAgentQueryInput,
     EnterpriseAgentQueryResponse,
+    EnterpriseKBGraphAnswerRequest,
+    EnterpriseKBGraphAnswerResponse,
     EnterpriseKBRagAnswerRequest,
     EnterpriseKBRagAnswerResponse,
     EnterpriseKBRetrievalRequest,
@@ -684,6 +686,55 @@ async def enterprise_kb_rag_answer(
         raise
     except Exception as e:
         logger.error(f"RAG answer failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Phase 5B: Custom Graph Answer ─────────────────────────────────────
+
+
+@router.post("/api/enterprise-kb/graph/answer")
+async def enterprise_kb_graph_answer(
+    request: EnterpriseKBGraphAnswerRequest,
+) -> EnterpriseKBGraphAnswerResponse:
+    """Phase 5B: custom_graph 知识库问答 — 8 节点完整链路。
+
+    无 LLM key 时自动 fallback 到 mock_extractive 模式。
+    """
+    try:
+        from custom_graph.graph import run_custom_graph
+        from llm.client import LLMClient
+
+        t0 = perf_counter()
+        llm = LLMClient()
+        output = run_custom_graph(
+            query=request.query,
+            corpus=request.corpus,
+            session_id=request.session_id,
+            llm=llm,
+        )
+        latency_ms = round((perf_counter() - t0) * 1000, 2)
+
+        return EnterpriseKBGraphAnswerResponse(
+            answer_markdown=output.get("answer_markdown", ""),
+            citations=output.get("citations", []),
+            used_sources=output.get("used_sources", []),
+            unsupported_claims=output.get("unsupported_claims", []),
+            hallucination_risk=output.get("hallucination_risk", "none"),
+            intent_trace=output.get("intent_trace", {}),
+            rewrite_trace=output.get("rewrite_trace", {}),
+            plan_trace=output.get("plan_trace", {}),
+            retrieval_trace=output.get("retrieval_trace", {}),
+            rank_trace=output.get("rank_trace", {}),
+            llm_trace=output.get("llm_trace", {}),
+            citation_trace=output.get("citation_trace", {}),
+            graph_debug=output.get("graph_debug", {}),
+            llm_mode=output.get("llm_mode", "mock_extractive"),
+            total_latency_ms=latency_ms,
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Graph answer failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 5 v1.2 Smoke: Citation Guard �?positive + negative fixture-based tests.
+"""Phase 5 v1.2 Smoke: Citation Guard -- positive + negative fixture-based tests.
 
 Does NOT require Chroma or langchain. Injects mock retrieved chunks directly.
 """
@@ -14,7 +14,8 @@ REPORTS.mkdir(parents=True, exist_ok=True)
 
 from custom_graph.state import GraphState
 
-# ── Mock retrieved chunks (simulating real retrieval) ─────────────────
+# -- Mock retrieved chunks (simulating real retrieval) --
+
 MOCK_CHUNKS = [
     {
         "chunk_id": "mock_chunk_001",
@@ -49,7 +50,7 @@ MOCK_RETRIEVED_IDS = {"mock_chunk_001", "mock_chunk_002", "mock_chunk_003"}
 
 
 def test_positive():
-    """Positive test: all citations from retrieved chunks �?should pass."""
+    """Positive test: all citations from retrieved chunks -- should pass."""
     from custom_graph.nodes.answer_generator import _mock_extractive_answer
     from custom_graph.nodes.evidence_verifier import verify_evidence
 
@@ -75,7 +76,7 @@ def test_positive():
 
 
 def test_negative_invalid_citation():
-    """Negative test: inject a citation with chunk_id NOT in retrieved �?must FAIL."""
+    """Negative test: inject a citation with chunk_id NOT in retrieved -- must FAIL."""
     from custom_graph.nodes.evidence_verifier import verify_evidence
 
     state = GraphState(
@@ -107,7 +108,7 @@ def test_negative_invalid_citation():
 
 
 def test_empty_citations():
-    """Empty citations test �?must return citation_validity=false, risk=high."""
+    """Empty citations test -- must return citation_validity=false, risk=high."""
     from custom_graph.nodes.evidence_verifier import verify_evidence
 
     state = GraphState(query="test", citations=[], ranked_results=MOCK_CHUNKS)
@@ -133,7 +134,7 @@ def main():
     for test_func in [test_positive, test_negative_invalid_citation, test_empty_citations]:
         r = test_func()
         status = "PASS" if r["test_pass"] else "FAIL"
-        print(f"  {r['test']}: citations={r['citations_count']} validity={r['citation_validity']} risk={r['hallucination_risk']} �?{status}")
+        print(f"  {r['test']}: citations={r['citations_count']} validity={r['citation_validity']} risk={r['hallucination_risk']} -> {status}")
         results["tests"].append(r)
 
     results["all_pass"] = all(t["test_pass"] for t in results["tests"])
@@ -142,6 +143,9 @@ def main():
         json.dump(results, f, ensure_ascii=False, indent=2)
     print(f"\nSaved: {path}")
     print(f"All pass: {results['all_pass']}")
+
+    if not results["all_pass"]:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

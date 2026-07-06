@@ -1,6 +1,6 @@
 {
   "smoke": "phase5_grounded_answer",
-  "timestamp": "2026-07-06T13:28:32.164694+00:00",
+  "timestamp": "2026-07-06T14:38:40.993466+00:00",
   "no_key_fallback": {
     "no_key_fallback_to_mock": true,
     "provider": "mock"

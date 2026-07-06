@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Phase 5 v1.2 Smoke 3: Grounded Answer â€?mock_extractive with fixture chunks + no-key fallback."""
+"""Phase 5 v1.2 Smoke: Grounded Answer -- mock_extractive with fixture chunks + no-key fallback."""
 
 import json, os, sys, time
 from pathlib import Path
@@ -72,6 +72,9 @@ def main():
         json.dump(results, f, ensure_ascii=False, indent=2)
     print(f"\nSaved: {path}")
     print(f"Overall: {'PASS' if results['overall_pass'] else 'FAIL'}")
+
+    if not results["overall_pass"]:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

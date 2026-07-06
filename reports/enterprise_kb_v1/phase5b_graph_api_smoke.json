@@ -1,0 +1,109 @@
+{
+  "smoke": "phase5b_graph_api",
+  "timestamp": "2026-07-06T14:37:58.666838+00:00",
+  "schema": {
+    "importable": true,
+    "request_fields": [
+      "query",
+      "corpus",
+      "session_id"
+    ],
+    "response_fields": [
+      "answer_markdown",
+      "citations",
+      "used_sources",
+      "unsupported_claims",
+      "hallucination_risk",
+      "intent_trace",
+      "rewrite_trace",
+      "plan_trace",
+      "retrieval_trace",
+      "rank_trace",
+      "llm_trace",
+      "citation_trace",
+      "graph_debug",
+      "llm_mode",
+      "total_latency_ms"
+    ],
+    "request_has_query": true,
+    "request_has_corpus": true,
+    "request_has_session_id": true,
+    "response_has_answer_markdown": true,
+    "response_has_citations": true,
+    "response_has_all_traces": true
+  },
+  "direct_call": {
+    "all_fields_present": true,
+    "field_checks": {
+      "answer_markdown": true,
+      "citations": true,
+      "used_sources": true,
+      "unsupported_claims": true,
+      "hallucination_risk": true,
+      "intent_trace": true,
+      "rewrite_trace": true,
+      "plan_trace": true,
+      "retrieval_trace": true,
+      "rank_trace": true,
+      "llm_trace": true,
+      "citation_trace": true,
+      "graph_debug": true,
+      "llm_mode": true
+    },
+    "llm_mode": "mock_extractive"
+  },
+  "mock_fallback": {
+    "is_mock": true,
+    "provider": "mock",
+    "pass": true
+  },
+  "endpoint_check": {
+    "endpoint_static_check_pass": true,
+    "static_check": {
+      "route_decorator_found": true,
+      "async_def_found": true,
+      "import_request_model": true,
+      "import_response_model": true,
+      "import_run_custom_graph": true,
+      "import_llm_client": true,
+      "all_static_checks_pass": true
+    },
+    "endpoint_runtime_registered": true,
+    "runtime_route_check": {
+      "route_found_in_router": true,
+      "route_methods": [
+        "POST"
+      ],
+      "has_post_method": true,
+      "app_type": "FastAPI",
+      "router_type": "APIRouter"
+    },
+    "testclient_call_ok": true,
+    "testclient_response_fields": [
+      "answer_markdown",
+      "citation_trace",
+      "citations",
+      "graph_debug",
+      "hallucination_risk",
+      "intent_trace",
+      "llm_mode",
+      "llm_trace",
+      "plan_trace",
+      "rank_trace",
+      "retrieval_trace",
+      "rewrite_trace",
+      "total_latency_ms",
+      "unsupported_claims",
+      "used_sources"
+    ],
+    "runtime_check_skipped": false,
+    "runtime_skip_reason": null,
+    "testclient_status_code": 200,
+    "testclient_has_answer_markdown": true,
+    "testclient_has_citations": true,
+    "testclient_has_total_latency_ms": true,
+    "testclient_llm_mode": "mock_extractive",
+    "testclient_field_count": 15
+  },
+  "overall_pass": true
+}
