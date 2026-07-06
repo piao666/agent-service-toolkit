@@ -1,0 +1,23 @@
+{
+  "check": "import_smoke",
+  "modules": [
+    {
+      "module": "rag.config",
+      "status": "pass"
+    },
+    {
+      "module": "schema.models",
+      "status": "pass"
+    },
+    {
+      "module": "rag.corpus_router",
+      "status": "pass"
+    },
+    {
+      "module": "rag.official_docs_retriever.validate_runtime_config",
+      "status": "pass_validate_only",
+      "local_config_pass": true
+    }
+  ],
+  "all_importable": true
+}

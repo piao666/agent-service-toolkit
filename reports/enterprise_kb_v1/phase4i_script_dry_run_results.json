@@ -1,0 +1,247 @@
+{
+  "check": "script_dry_run",
+  "scripts": [
+    {
+      "script": "api_retrieval_smoke.py",
+      "exists": true,
+      "size_bytes": 10164,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "capture_text_dom_batch.py",
+      "exists": true,
+      "size_bytes": 18231,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "chunk_internal_engineering_docs.py",
+      "exists": true,
+      "size_bytes": 10970,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "compare_text_visual_evidence.py",
+      "exists": true,
+      "size_bytes": 18663,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4c_collect_results.py",
+      "exists": true,
+      "size_bytes": 2932,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4c_preflight.py",
+      "exists": true,
+      "size_bytes": 3960,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4c_run_embedding_ab.py",
+      "exists": true,
+      "size_bytes": 8524,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4c_run_retrieval_context_eval.py",
+      "exists": true,
+      "size_bytes": 4538,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4d_build_bge_m3_index.py",
+      "exists": true,
+      "size_bytes": 8313,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4fh_build_internal_index.py",
+      "exists": true,
+      "size_bytes": 5643,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4fh_rag_routing_fix.py",
+      "exists": true,
+      "size_bytes": 15654,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4fh_run_internal_eval.py",
+      "exists": true,
+      "size_bytes": 11063,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4fh_strict_eval.py",
+      "exists": true,
+      "size_bytes": 16399,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "hpc_phase4fh_strict_patch.py",
+      "exists": true,
+      "size_bytes": 18762,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase3e1_text_dom_audit.py",
+      "exists": true,
+      "size_bytes": 11731,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase3e1_text_dom_rebaseline_generator.py",
+      "exists": true,
+      "size_bytes": 19969,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase3f_generate_package.py",
+      "exists": true,
+      "size_bytes": 7013,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase4a_diag_root_cause.py",
+      "exists": true,
+      "size_bytes": 21948,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase4a_full_corpus_build.py",
+      "exists": true,
+      "size_bytes": 29396,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase4b_corpus_repair.py",
+      "exists": true,
+      "size_bytes": 30218,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase4b_finish_rag_and_zip.py",
+      "exists": true,
+      "size_bytes": 7124,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase4c_local_repair_and_hpc_package.py",
+      "exists": true,
+      "size_bytes": 29288,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase4fh_strict_eval_analyze.py",
+      "exists": true,
+      "size_bytes": 15537,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase4fh_strict_eval_patch.py",
+      "exists": true,
+      "size_bytes": 12414,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "phase4i_verification.py",
+      "exists": true,
+      "size_bytes": 7333,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "plan_verified_text_dom_capture.py",
+      "exists": true,
+      "size_bytes": 11031,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "precheck_screenshot_sidecar.py",
+      "exists": true,
+      "size_bytes": 12639,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "promote_batch1_text_dom_metadata.py",
+      "exists": true,
+      "size_bytes": 14953,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "review_batch1_evidence.py",
+      "exists": true,
+      "size_bytes": 17074,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    },
+    {
+      "script": "runtime_retrieval_smoke.py",
+      "exists": true,
+      "size_bytes": 11842,
+      "syntax_ok": true,
+      "dry_run_supported": false,
+      "reason": "HPC script, dry-run not applicable"
+    }
+  ],
+  "all_exist": true,
+  "all_syntax_ok": true
+}

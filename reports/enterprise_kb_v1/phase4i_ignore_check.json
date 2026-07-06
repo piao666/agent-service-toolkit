@@ -1,0 +1,39 @@
+{
+  "check": "gitignore",
+  "gitignore_exists": true,
+  "patterns": [
+    {
+      "pattern": "storage/",
+      "covered": true
+    },
+    {
+      "pattern": "models/",
+      "covered": true
+    },
+    {
+      "pattern": "*.zip",
+      "covered": true
+    },
+    {
+      "pattern": "data/enterprise_kb_v1/raw_sources/official_docs/",
+      "covered": true
+    },
+    {
+      "pattern": "data/enterprise_kb_v1/chunks/official_docs/",
+      "covered": true
+    },
+    {
+      "pattern": "data/enterprise_kb_v1/chunks/internal_engineering_docs/",
+      "covered": true
+    },
+    {
+      "pattern": "data/enterprise_kb_v1/internal_engineering_corpus/",
+      "covered": true
+    },
+    {
+      "pattern": "data/enterprise_kb_v1/manifests/phase4fh_internal_chunk_manifest.json",
+      "covered": true
+    }
+  ],
+  "all_covered": true
+}

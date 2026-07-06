@@ -1,0 +1,38 @@
+{
+  "check": "registry_path",
+  "registries": [
+    {
+      "registry": "data/enterprise_kb_v1/source_registry/source_registry.yaml",
+      "exists": true,
+      "total_sources": 27,
+      "found": 24,
+      "missing": 3,
+      "missing_details": [
+        {
+          "source_id": "internal_project_runtime_snapshot",
+          "local_path": "data/enterprise_kb_v1/raw_sources/internal_docs/project_runtime_snapshot/",
+          "resolved": "E:\\RAG\\agent-service-toolkit-clean\\data\\enterprise_kb_v1\\raw_sources\\internal_docs\\project_runtime_snapshot"
+        },
+        {
+          "source_id": "qwen_official_openai_compatible_api",
+          "local_path": "data/enterprise_kb_v1/raw_sources/official_docs/qwen_official_openai_compatible_api/",
+          "resolved": "E:\\RAG\\agent-service-toolkit-clean\\data\\enterprise_kb_v1\\raw_sources\\official_docs\\qwen_official_openai_compatible_api"
+        },
+        {
+          "source_id": "qwen_official_model_parameters",
+          "local_path": "data/enterprise_kb_v1/raw_sources/official_docs/qwen_official_model_parameters/",
+          "resolved": "E:\\RAG\\agent-service-toolkit-clean\\data\\enterprise_kb_v1\\raw_sources\\official_docs\\qwen_official_model_parameters"
+        }
+      ]
+    },
+    {
+      "registry": "data/enterprise_kb_v1/source_registry/internal_engineering_sources.yaml",
+      "exists": true,
+      "total_sources": 34,
+      "found": 34,
+      "missing": 0,
+      "missing_details": []
+    }
+  ],
+  "all_paths_exist": false
+}

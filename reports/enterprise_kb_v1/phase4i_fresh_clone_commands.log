@@ -1,0 +1,16 @@
+# Phase 4I v2 Fresh Clone Commands Log
+# Timestamp: 2026-07-06T08:07:13.784182+00:00
+# Workspace: E:\RAG\A\phase4i_fresh_clone_tmp\repo
+
+git clone E:/RAG/agent-service-toolkit-clean E:/RAG/A/phase4i_fresh_clone_tmp/repo
+cd E:/RAG/A/phase4i_fresh_clone_tmp/repo
+git rev-parse HEAD  => e8ccd6d1c0895247868d4bed3d936f6ddc5a4228
+git branch --show-current  => feature/enterprise-kb-v1-clean
+git status --short
+
+
+python scripts/enterprise_kb_v1/phase4i_verification_v2.py E:\RAG\A\phase4i_fresh_clone_tmp\repo
+
+# Verification script executed from EXTERNAL tools dir:
+# python E:/RAG/A/phase4i_tools/phase4i_verification_v2.py E:/RAG/A/phase4i_fresh_clone_tmp/repo
+# Fresh clone verified clean: git status --short returned empty
