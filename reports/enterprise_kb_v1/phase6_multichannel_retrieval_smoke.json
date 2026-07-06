@@ -1,0 +1,112 @@
+{
+  "smoke": "phase6_multichannel_retrieval",
+  "timestamp": "2026-07-06T15:18:54.465418+00:00",
+  "imports": {
+    "rag.search_channels": "ok",
+    "rag.search_channels.base": "ok",
+    "rag.search_channels.official_vector": "ok",
+    "rag.search_channels.internal_vector": "ok",
+    "rag.search_channels.keyword_bm25": "ok",
+    "rag.search_channels.metadata_filter": "ok",
+    "rag.search_channels.history_aware": "ok",
+    "rag.retrieval_orchestrator": "ok",
+    "rag.postprocess": "ok"
+  },
+  "keyword_bm25": {
+    "channel": "keyword_bm25",
+    "corpus": "dual",
+    "hits_count": 1,
+    "has_errors": false,
+    "errors": [],
+    "fixture_mode": true,
+    "hit_chunk_ids": [
+      "kw_fixture_fastapi_001"
+    ],
+    "hit_corpora": [
+      "official_docs"
+    ],
+    "latency_ms": 1.39
+  },
+  "metadata_filter": {
+    "filter_corpus_hits": 2,
+    "filter_corpus_match": true,
+    "filter_heading_hits": 1,
+    "filter_heading_match": true,
+    "empty_candidates_hits": 0,
+    "empty_candidates_no_error": true
+  },
+  "history_aware": {
+    "trace_only_mode": true,
+    "history_used_true": true,
+    "history_used_false": true,
+    "hits_zero": true,
+    "session_id_in_trace": true
+  },
+  "vector_channels": {
+    "official_channel": "official_vector",
+    "official_hits": 0,
+    "official_errors": [],
+    "official_errors_count": 0,
+    "official_trace_dependency_missing": null,
+    "official_dep_available": true,
+    "internal_channel": "internal_vector",
+    "internal_hits": 0,
+    "internal_errors": [],
+    "internal_errors_count": 0,
+    "internal_trace_dependency_missing": null,
+    "internal_dep_available": true,
+    "channels_no_crash": true,
+    "dependency_missing_written": true,
+    "no_silent_pass": true
+  },
+  "orchestrator": {
+    "route_mode": "dual",
+    "target_corpora": [
+      "official_docs",
+      "internal_engineering_docs"
+    ],
+    "channel_count": 4,
+    "channel_names": [
+      "keyword_bm25",
+      "official_vector",
+      "internal_vector",
+      "history_aware"
+    ],
+    "dual_channels_present": true,
+    "keyword_present": true,
+    "history_present": true,
+    "channel_structure_ok": true,
+    "merged_hits_count": 3,
+    "citation_candidates_count": 3,
+    "citations_from_merged": true,
+    "has_postprocess_stats": true,
+    "errors": [],
+    "total_latency_ms": 0.24
+  },
+  "postprocess": {
+    "chunk_dedup_ok": true,
+    "source_dedup_ok": true,
+    "normalize_ok": true,
+    "balance_has_both_corpora": true,
+    "citation_count_ok": true,
+    "pipeline_ok": true,
+    "pipeline_stats": {
+      "raw_count": 6,
+      "after_chunk_dedup": 5,
+      "after_source_dedup": 5,
+      "after_balance": 5
+    }
+  },
+  "custom_graph_retriever": {
+    "importable": true,
+    "has_results": true,
+    "results_count": 1,
+    "trace_has_engine": true,
+    "trace_engine": "phase6_orchestrator",
+    "trace_has_route_mode": true,
+    "trace_has_channel_count": true,
+    "has_citation_candidates": true,
+    "latency_ms": 0.17
+  },
+  "overall_pass": true
+}
