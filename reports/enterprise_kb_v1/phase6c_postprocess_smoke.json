@@ -1,0 +1,87 @@
+{
+  "smoke": "phase6c_postprocess",
+  "timestamp": "2026-07-06T16:01:02.823606+00:00",
+  "chunk_dedup": {
+    "deduped_count": 2,
+    "expected_after_dedup": 2,
+    "c1_kept_once": true,
+    "c1_keeps_highest": true,
+    "removed_duplicates_count": 1,
+    "trace_has_policy": true,
+    "pass": true
+  },
+  "source_dedup": {
+    "deduped_count": 3,
+    "expected_after_dedup": 3,
+    "s1_kept_count": 2,
+    "s1_max_2": true,
+    "trace_has_policy": true,
+    "pass": true
+  },
+  "score_normalize": {
+    "normalized_count": 3,
+    "original_preserved": true,
+    "all_in_0_1": true,
+    "score_range_after": [
+      0.0,
+      1.0
+    ],
+    "normalize_method": "min_max",
+    "pass": true
+  },
+  "corpus_balance": {
+    "balanced_count": 4,
+    "max_4": true,
+    "has_both_corpora": true,
+    "dist_before": {
+      "official_docs": 3,
+      "internal_engineering_docs": 2
+    },
+    "dist_after": {
+      "official_docs": 2,
+      "internal_engineering_docs": 2
+    },
+    "pass": true
+  },
+  "citation_candidates": {
+    "candidate_count": 2,
+    "max_2": true,
+    "all_from_merged_hits": true,
+    "required_fields_present": true,
+    "trace_citation_count": 2,
+    "pass": true
+  },
+  "empty_hits": {
+    "merged_hits_empty": true,
+    "citation_candidates_empty": true,
+    "no_crash": true,
+    "trace_present": true,
+    "input_count_zero": true,
+    "pass": true
+  },
+  "malformed_hits": {
+    "no_crash": true,
+    "good_hit_kept": true,
+    "empty_chunk_filtered": true,
+    "merged_count": 1,
+    "pass": true
+  },
+  "full_pipeline": {
+    "merged_count": 5,
+    "citation_count": 5,
+    "trace_steps_count": 5,
+    "trace_complete": true,
+    "errors_empty": true,
+    "all_scores_in_range": true,
+    "pass": true
+  },
+  "overall_pass": true,
+  "chunk_dedup_pass": true,
+  "source_dedup_pass": true,
+  "score_normalize_pass": true,
+  "corpus_balance_pass": true,
+  "citation_candidates_from_merged_hits": true,
+  "empty_hits_handled": true,
+  "malformed_hits_handled": true,
+  "trace_complete": true
+}

@@ -1,0 +1,147 @@
+{
+  "smoke": "phase6d_retrieval_eval",
+  "timestamp": "2026-07-06T16:01:05.256549+00:00",
+  "cases": [
+    {
+      "case_id": "eval_001",
+      "query": "How to use FastAPI middleware?",
+      "expected_route_mode": "official_only",
+      "expected_target_corpora": [
+        "official_docs"
+      ],
+      "executed_channels": [
+        "keyword_bm25",
+        "official_vector",
+        "history_aware"
+      ],
+      "merged_hits_count": 2,
+      "citation_candidates_count": 2,
+      "route_ok": true,
+      "dual_ok": true,
+      "citations_valid": true,
+      "has_trace": true,
+      "pass": true,
+      "failure_reason": null,
+      "latency_ms": 4994.56
+    },
+    {
+      "case_id": "eval_002",
+      "query": "What is the internal corpus routing design?",
+      "expected_route_mode": "internal_only",
+      "expected_target_corpora": [
+        "internal_engineering_docs"
+      ],
+      "executed_channels": [
+        "keyword_bm25",
+        "internal_vector",
+        "history_aware"
+      ],
+      "merged_hits_count": 1,
+      "citation_candidates_count": 1,
+      "route_ok": true,
+      "dual_ok": true,
+      "citations_valid": true,
+      "has_trace": true,
+      "pass": true,
+      "failure_reason": null,
+      "latency_ms": 0.64
+    },
+    {
+      "case_id": "eval_003",
+      "query": "Compare FastAPI middleware implementation with the project's internal routing architecture",
+      "expected_route_mode": "dual",
+      "expected_target_corpora": [
+        "official_docs",
+        "internal_engineering_docs"
+      ],
+      "executed_channels": [
+        "keyword_bm25",
+        "official_vector",
+        "internal_vector",
+        "history_aware"
+      ],
+      "merged_hits_count": 3,
+      "citation_candidates_count": 3,
+      "route_ok": true,
+      "dual_ok": true,
+      "citations_valid": true,
+      "has_trace": true,
+      "pass": true,
+      "failure_reason": null,
+      "latency_ms": 0.19
+    },
+    {
+      "case_id": "eval_004",
+      "query": "Chroma metadata filtering",
+      "expected_route_mode": "official_only",
+      "expected_target_corpora": [
+        "official_docs"
+      ],
+      "executed_channels": [
+        "keyword_bm25",
+        "official_vector",
+        "history_aware"
+      ],
+      "merged_hits_count": 1,
+      "citation_candidates_count": 1,
+      "route_ok": true,
+      "dual_ok": true,
+      "citations_valid": true,
+      "has_trace": true,
+      "pass": true,
+      "failure_reason": null,
+      "latency_ms": 0.11
+    },
+    {
+      "case_id": "eval_005",
+      "query": "bge-m3 embedding decision",
+      "expected_route_mode": "internal_only",
+      "expected_target_corpora": [
+        "internal_engineering_docs"
+      ],
+      "executed_channels": [
+        "keyword_bm25",
+        "internal_vector",
+        "history_aware"
+      ],
+      "merged_hits_count": 0,
+      "citation_candidates_count": 0,
+      "route_ok": true,
+      "dual_ok": true,
+      "citations_valid": true,
+      "has_trace": true,
+      "pass": true,
+      "failure_reason": null,
+      "latency_ms": 0.09
+    },
+    {
+      "case_id": "eval_006",
+      "query": "How does query rewriting work with session memory?",
+      "expected_route_mode": "official_only",
+      "expected_target_corpora": [
+        "official_docs"
+      ],
+      "executed_channels": [
+        "keyword_bm25",
+        "official_vector",
+        "history_aware"
+      ],
+      "merged_hits_count": 2,
+      "citation_candidates_count": 2,
+      "route_ok": true,
+      "dual_ok": true,
+      "citations_valid": true,
+      "has_trace": true,
+      "pass": true,
+      "failure_reason": null,
+      "latency_ms": 0.13
+    }
+  ],
+  "overall_pass": true,
+  "total_cases": 6,
+  "passed_cases": 6,
+  "route_mode_accuracy": 1.0,
+  "dual_cases_pass": true,
+  "citation_candidates_valid": true,
+  "all_cases_have_trace": true
+}
