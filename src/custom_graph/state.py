@@ -56,6 +56,11 @@ class GraphState:
     memory_trace: dict[str, Any] = field(default_factory=dict)
     memory_candidates: list[dict[str, Any]] = field(default_factory=list)
 
+    # Phase 8: Long-term memory
+    long_term_memory_context: str = ""
+    long_term_memory_trace: dict[str, Any] = field(default_factory=dict)
+    approved_memories: list[str] = field(default_factory=list)
+
     # Error tracking
     errors: list[str] = field(default_factory=list)
     final_response: dict[str, Any] = field(default_factory=dict)

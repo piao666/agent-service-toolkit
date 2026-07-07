@@ -729,6 +729,7 @@ async def enterprise_kb_graph_answer(
             citation_trace=output.get("citation_trace", {}),
             graph_debug=output.get("graph_debug", {}),
             memory_trace=output.get("memory_trace", {}),
+            long_term_memory_trace=output.get("long_term_memory_trace", {}),
             llm_mode=output.get("llm_mode", "mock_extractive"),
             total_latency_ms=latency_ms,
         )
@@ -736,6 +737,91 @@ async def enterprise_kb_graph_answer(
         raise
     except Exception as e:
         logger.error(f"Graph answer failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ── Phase 8: Memory Admin API ────────────────────────────────────────
+
+
+@router.get("/api/enterprise-kb/memory/candidates")
+async def list_memory_candidates(status: str = "pending"):
+    """列出 memory candidates (默认 pending)。"""
+    try:
+        from long_term_memory.service import get_ltm_service
+        svc = get_ltm_service()
+        if status == "all":
+            candidates = []
+            for s in ["pending", "approved", "rejected"]:
+                for c in svc.store.list_candidates(status=s):
+                    candidates.append(c)
+        else:
+            candidates = svc.store.list_candidates(status=status)
+        return {"candidates": candidates, "count": len(candidates)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/api/enterprise-kb/memory/candidates/{candidate_id}/approve")
+async def approve_memory_candidate(candidate_id: str):
+    """批准 candidate → 生成 memory_item。"""
+    try:
+        from long_term_memory.service import get_ltm_service
+        svc = get_ltm_service()
+        item = svc.approve(candidate_id)
+        if item is None:
+            raise HTTPException(status_code=404, detail=f"Candidate {candidate_id} not found or not pending")
+        return {"status": "approved", "memory_item": item}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/api/enterprise-kb/memory/candidates/{candidate_id}/reject")
+async def reject_memory_candidate(candidate_id: str):
+    """拒绝 candidate。"""
+    try:
+        from long_term_memory.service import get_ltm_service
+        svc = get_ltm_service()
+        svc.reject(candidate_id)
+        return {"status": "rejected", "candidate_id": candidate_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/api/enterprise-kb/memory/items")
+async def list_memory_items(status: str = "active"):
+    """列出 approved memory items。"""
+    try:
+        from long_term_memory.service import get_ltm_service
+        svc = get_ltm_service()
+        items = svc.list_all_items(status=status if status != "all" else None)
+        return {"items": items, "count": len(items)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/api/enterprise-kb/memory/items/{memory_id}/disable")
+async def disable_memory_item(memory_id: str):
+    """禁用 memory item。"""
+    try:
+        from long_term_memory.service import get_ltm_service
+        svc = get_ltm_service()
+        svc.disable(memory_id)
+        return {"status": "disabled", "memory_id": memory_id}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/api/enterprise-kb/memory/events")
+async def list_memory_events(target_type: str = ""):
+    """查看 memory events。"""
+    try:
+        from long_term_memory.service import get_ltm_service
+        svc = get_ltm_service()
+        events = svc.list_events(target_type=target_type if target_type else None)
+        return {"events": events, "count": len(events)}
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 

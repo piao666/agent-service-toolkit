@@ -1,0 +1,49 @@
+{
+  "smoke": "phase8_memory_api_v1.1",
+  "timestamp": "2026-07-07T14:26:24.612901+00:00",
+  "admin_api": {
+    "endpoint_registered": true,
+    "testclient_available": true,
+    "graph_create_candidate_ok": true,
+    "has_pending": true,
+    "approve_ok": true,
+    "active_item_ok": true,
+    "graph_reads_approved_memory": true,
+    "disable_ok": true,
+    "graph_excludes_disabled_memory": true,
+    "events_ok": true,
+    "skipped": false,
+    "skipped_reason": "",
+    "pending_candidate_not_in_memory_context": true,
+    "pending_not_used_for_rewrite": true,
+    "graph_trace_A": {
+      "write_status": "pending_candidate_created",
+      "pending_count": 1,
+      "approved_count": 0
+    },
+    "pending_candidate_id": "cand_48e0310cf863",
+    "approved_memory_id": "mem_e01e52bdf727",
+    "approved_memory_context_attached": true,
+    "graph_uses_approved_memory_for_rewrite": true,
+    "graph_trace_E": {
+      "ltm_used": true,
+      "approved_count": 1,
+      "approved_ids": [
+        "mem_e01e52bdf727"
+      ],
+      "ltm_used_for_rewrite": true,
+      "rewrite_ltm_ids": [
+        "mem_e01e52bdf727"
+      ]
+    },
+    "disabled_memory_not_in_memory_context": true,
+    "disabled_memory_not_used_for_rewrite": true,
+    "graph_trace_G": {
+      "approved_count": 0,
+      "approved_ids": []
+    },
+    "event_count": 5,
+    "pass": true
+  },
+  "overall_pass": true
+}

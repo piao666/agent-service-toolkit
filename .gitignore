@@ -242,3 +242,5 @@ phase4c_hpc/**
 data/enterprise_kb_v1/chunks/internal_engineering_docs/**
 data/enterprise_kb_v1/internal_engineering_corpus/**
 data/enterprise_kb_v1/manifests/phase4fh_internal_chunk_manifest.json
+workspace/*.sqlite
+workspace/*.db

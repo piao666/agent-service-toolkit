@@ -1,0 +1,29 @@
+{
+  "smoke": "phase8_long_term_memory",
+  "timestamp": "2026-07-07T14:28:36.050386+00:00",
+  "init_store": {
+    "pass": true
+  },
+  "create_pending": {
+    "pass": true
+  },
+  "pending_not_approved": {
+    "pass": true
+  },
+  "approve_creates_item": {
+    "pass": true
+  },
+  "approved_readable": {
+    "pass": true
+  },
+  "reject_no_item": {
+    "pass": true
+  },
+  "disable_removes": {
+    "pass": true
+  },
+  "events_recorded": {
+    "pass": true
+  },
+  "overall_pass": true
+}
