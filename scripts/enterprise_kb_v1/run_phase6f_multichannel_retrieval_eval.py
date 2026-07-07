@@ -95,31 +95,104 @@ def verify_indices() -> dict[str, Any]:
     return status
 
 
+# ── 模型缓存 (避免每 case 重载 SentenceTransformer) ──────────────────
+
+_model_cache: dict = {}
+
+def _cached_get_embedding_model():
+    """返回缓存的 bge-m3 模型，避免重复加载。"""
+    if "model" not in _model_cache:
+        from sentence_transformers import SentenceTransformer
+        from pathlib import Path
+        from rag.config import rag_settings
+
+        model_path = rag_settings.LOCAL_EMBEDDING_MODEL_PATH
+        resolved = Path(model_path).resolve()
+        if not resolved.exists():
+            raise FileNotFoundError(f"Embedding model not found: {resolved}")
+        print(f"[MODEL] Loading bge-m3 from {resolved} (cached)")
+        _model_cache["model"] = SentenceTransformer(str(resolved), device="cuda")
+    return _model_cache["model"]
+
+
+# ── 模型预加载 (绕过 retriever 封装, 直接用 Chroma) ────────────────
+# 由于 rag.retriever.retrieve() 在 import 时绑定 get_embedding_model 引用，
+# monkey-patch 无法穿透已完成的 import。直接使用 Chroma + 缓存模型。
+
+_MODEL = None
+
+def _get_model():
+    global _MODEL
+    if _MODEL is None:
+        from sentence_transformers import SentenceTransformer
+        from pathlib import Path
+        from rag.config import rag_settings
+        model_path = Path(rag_settings.LOCAL_EMBEDDING_MODEL_PATH).resolve()
+        if not model_path.exists():
+            raise FileNotFoundError(f"Embedding model not found: {model_path}")
+        print(f"[MODEL] Loading bge-m3 from {model_path}")
+        _MODEL = SentenceTransformer(str(model_path), device="cuda")
+        print("[MODEL] Cached.")
+    return _MODEL
+
+# Pre-load
+_get_model()
+del _get_model  # 后续通过 _MODEL 直接访问
+
+
 # ── Baseline: single vector retrieval ─────────────────────────────────
 
+def _chroma_query(collection_name: str, persist_dir: str, query: str, top_k: int) -> list[dict]:
+    """Direct Chroma query with cached bge-m3 model."""
+    import chromadb
+    emb = _MODEL.encode([query], show_progress_bar=False).tolist()
+    client = chromadb.PersistentClient(path=persist_dir)
+    col = client.get_collection(collection_name)
+    res = col.query(query_embeddings=emb, n_results=top_k, include=["metadatas", "documents", "distances"])
+    results = []
+    if res["ids"] and res["ids"][0]:
+        for i, cid in enumerate(res["ids"][0]):
+            meta = res["metadatas"][0][i] if res["metadatas"] else {}
+            dist = res["distances"][0][i] if res.get("distances") else 0.0
+            results.append({
+                "chunk_id": cid,
+                "source_id": meta.get("source_id", ""),
+                "heading_path": meta.get("heading_path", ""),
+                "text_preview": (res["documents"][0][i] or "")[:200] if res.get("documents") else "",
+                "score": round(1.0 - float(dist), 4),
+                "corpus": "",
+                "origin_url": meta.get("source_url", meta.get("origin_url", "")),
+            })
+    return results
+
+
 def run_baseline_retrieval(query: str, route_mode: str, top_k: int = 5) -> dict[str, Any]:
-    """单路 dense retrieval — 复用现有 retriever。"""
-    from rag.official_docs_retriever import official_docs_retrieve
-    from rag.internal_engineering_retriever import internal_engineering_retrieve
+    """单路 dense retrieval — 直接 Chroma，不经 rag.retriever 封装。"""
+    from rag.config import rag_settings
+    from pathlib import Path
 
     results: list[dict[str, Any]] = []
     errors: list[str] = []
 
     if route_mode in ("official_only", "dual"):
         try:
-            off = official_docs_retrieve(query, top_k=top_k)
-            for r in off.get("results", []):
+            off_dir = str(Path(rag_settings.CHROMA_PERSIST_DIR))
+            off_coll = rag_settings.chroma_collection_name
+            off = _chroma_query(off_coll, off_dir, query, top_k)
+            for r in off:
                 r["corpus"] = "official_docs"
-                results.append(r)
+            results.extend(off)
         except Exception as e:
             errors.append(f"official: {e}")
 
     if route_mode in ("internal_only", "dual"):
         try:
-            intr = internal_engineering_retrieve(query, top_k=top_k)
-            for r in intr.get("results", []):
+            int_dir = str(Path(rag_settings.CHROMA_INTERNAL_PERSIST_DIR))
+            int_coll = rag_settings.CHROMA_INTERNAL_COLLECTION_NAME
+            intr = _chroma_query(int_coll, int_dir, query, top_k)
+            for r in intr:
                 r["corpus"] = "internal_engineering_docs"
-                results.append(r)
+            results.extend(intr)
         except Exception as e:
             errors.append(f"internal: {e}")
 

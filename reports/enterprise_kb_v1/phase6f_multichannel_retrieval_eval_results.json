@@ -1,0 +1,53 @@
+{
+  "phase": "6F",
+  "timestamp": "2026-07-07T09:13:02.410467+00:00",
+  "environment": "HPC",
+  "total_cases": 25,
+  "cases_with_expected_sids": 24,
+  "indices_ready": true,
+  "index_status": {
+    "official_available": true,
+    "internal_available": true,
+    "index_missing": false,
+    "missing_indices": [],
+    "errors": [],
+    "official_chunk_count": 1117,
+    "internal_chunk_count": 508
+  },
+  "route_metric_note": "route_execution_accuracy_given_gold_route = 24/25 = 0.96 (保守口径: no-hit case p6f_021 含 route_execution_ok=true 但不计入 numerator。如计入应为 25/25=1.0)。No-hit case 不计入 hit@k (expected_source_ids=[] 無法判斷命中)，原意正確。route 比例 25/25=1.0，當前 0.96 為保守分母統計。Phase 6F 不評估 classifier route correctness。",
+  "baseline": {
+    "hit_at_3": 0.875,
+    "hit_at_5": 0.9583,
+    "hit_at_10": 0.9583,
+    "mrr": 0.7778,
+    "route_execution_accuracy_given_gold_route": 0.96,
+    "duplicate_rate": 0.0
+  },
+  "multichannel": {
+    "hit_at_3": 0.9167,
+    "hit_at_5": 0.9583,
+    "hit_at_10": 1.0,
+    "mrr": 0.7951,
+    "route_execution_accuracy_given_gold_route": 0.96,
+    "duplicate_rate": 0.0,
+    "dual_accuracy": 1.0,
+    "citation_validity": 1.0,
+    "citation_na_cases": 0
+  },
+  "delta": {
+    "hit_at_3_delta": 0.0417,
+    "hit_at_5_delta": 0.0,
+    "hit_at_10_delta": 0.0417,
+    "mrr_delta": 0.0173,
+    "duplicate_rate_delta": 0.0
+  },
+  "failed_case_count": 0,
+  "warnings": [],
+  "overall_pass": true,
+  "pass_gates": {
+    "indices_ready": true,
+    "citation_validity": true,
+    "dual_accuracy": true,
+    "failed_case_threshold": true
+  }
+}
