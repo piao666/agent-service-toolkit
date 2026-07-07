@@ -51,6 +51,11 @@ class GraphState:
     citation_trace: dict[str, Any] = field(default_factory=dict)
     graph_debug: dict[str, Any] = field(default_factory=dict)
 
+    # Phase 7: Memory
+    memory_context: str = ""
+    memory_trace: dict[str, Any] = field(default_factory=dict)
+    memory_candidates: list[dict[str, Any]] = field(default_factory=list)
+
     # Error tracking
     errors: list[str] = field(default_factory=list)
     final_response: dict[str, Any] = field(default_factory=dict)

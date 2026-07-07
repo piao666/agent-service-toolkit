@@ -1,0 +1,60 @@
+{
+  "smoke": "phase7_memory_v1.3",
+  "timestamp": "2026-07-07T13:20:59.937156+00:00",
+  "session_create": {
+    "pass": true
+  },
+  "recent_turns": {
+    "pass": true
+  },
+  "coreference_rewrite": {
+    "original": "它的实现原理是什么？",
+    "rewritten": "FastAPI middleware 怎么用？的实现原理是什么？",
+    "rewrite_used_memory": true,
+    "pass": true
+  },
+  "entity_rewrite": {
+    "original": "它和 official_docs 有什么区别？",
+    "rewritten": "internal_engineering_docs 是什么？和 official_docs 有什么区别？",
+    "rewrite_used": true,
+    "has_internal": true,
+    "has_official": true,
+    "pass": true
+  },
+  "active_topic": {
+    "pass": true
+  },
+  "no_write_for_qa": {
+    "pass": true
+  },
+  "write_for_constraint": {
+    "pass": true
+  },
+  "candidate_only_not_committed": {
+    "candidates_count": 1,
+    "has_pending": true,
+    "not_in_project_constraints": true,
+    "candidate_not_in_memory_context": true,
+    "pass": true
+  },
+  "policy_hpc_constraint": {
+    "pass": true
+  },
+  "policy_no_rebuild": {
+    "pass": true
+  },
+  "policy_qa_no_write": {
+    "pass": true
+  },
+  "policy_strong_override": {
+    "pass": true
+  },
+  "auto_session_id": {
+    "session_id": "auto_fdc33706",
+    "is_auto": true,
+    "has_session": true,
+    "is_auto_generated": true,
+    "pass": true
+  },
+  "overall_pass": true
+}

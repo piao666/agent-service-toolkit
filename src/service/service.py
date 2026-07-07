@@ -728,6 +728,7 @@ async def enterprise_kb_graph_answer(
             llm_trace=output.get("llm_trace", {}),
             citation_trace=output.get("citation_trace", {}),
             graph_debug=output.get("graph_debug", {}),
+            memory_trace=output.get("memory_trace", {}),
             llm_mode=output.get("llm_mode", "mock_extractive"),
             total_latency_ms=latency_ms,
         )

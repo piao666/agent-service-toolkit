@@ -383,5 +383,6 @@ class EnterpriseKBGraphAnswerResponse(BaseModel):
     llm_trace: dict[str, Any] = Field(default_factory=dict, description="answer_generator trace。")
     citation_trace: dict[str, Any] = Field(default_factory=dict, description="evidence_verifier trace。")
     graph_debug: dict[str, Any] = Field(default_factory=dict, description="graph 执行诊断。")
+    memory_trace: dict[str, Any] = Field(default_factory=dict, description="Phase 7: session memory trace。")
     llm_mode: str = Field(default="mock_extractive", description="LLM 模式。")
     total_latency_ms: float = Field(default=0.0, description="总延迟（毫秒）。")
