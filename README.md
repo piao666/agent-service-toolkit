@@ -1,299 +1,200 @@
-# 企业知识库 Agent + RAG 后端系统
+# 企业 AI 应用工程知识库助手 (enterprise_kb_v1)
 
-面向企业内部 AI / LLM / Python / 机器学习 / 深度学习等学习资料的智能问答系统。从多格式文档解析、知识库构建、向量检索、结构化检索、多轮会话记忆、证据校验，到自定义 Agent 图编排、系统化评测与可观测性、Streamlit 演示界面——覆盖 RAG 全链路工程实践。
+面向企业 AI 研发团队的知识库问答平台，解决技术文档分散、检索召回率低、多轮对话上下文丢失、答案不可溯源等工程痛点。覆盖语料治理、双语料检索、Agent 图编排、证据校验、双层记忆与可审计后台的完整 RAG 链路。
 
-## 项目亮点
+> **项目定位**：小型企业 AI 工程知识库平台 MVP，支持 official_docs（官方技术文档）与 internal_engineering_docs（内部工程经验）双语料统一检索与问答。
 
-1. **完整的数据→检索→回答链路**：文档解析 → chunk → embedding → Chroma 写入 → source tracing → 评测。
-2. **结构化检索（Structured Retrieval）**：在密集向量检索基础上引入 metadata/symbol/code 索引，实现对 `source_id`、`doc_type`、API 路径、配置项等精确字段的定向召回。
-3. **统一业务接口**：`POST /enterprise/agent/query`，支持 session、top_k、return_sources 等参数。
-4. **自定义 Agent 图编排**：`custom_graph` 链路将问答拆分为 query_classifier、memory_rewriter、planner、retriever、ranker、answer_generator、evidence_verifier、judge、final_response 等节点，可独立调试和替换。
-5. **可观测性**：graph_debug、nodes_executed、planner_debug、judge_debug、answer_synthesis_profile 全量输出。
-6. **多轮会话记忆**：基于 session_id 的 buffer memory，支持上下文改写，无跨 session 泄漏。
-7. **系统化评测**：240-case 回归评测、delta-case 差分诊断、bad-case 分类、消融实验、answer/source 对齐分析。
-8. **Streamlit 演示界面**：展示 answer、sources、retrieval_debug、memory_debug、verifier_debug、graph_debug。
+---
 
-## 系统架构
+## 项目成效
 
-```mermaid
-graph TD
-    A[User Query] --> B[FastAPI /enterprise/agent/query]
-    B --> C{Graph Mode}
-    C -->|legacy| D[Enterprise RAG Agent]
-    C -->|custom_graph| E[Query Classifier]
-    E --> F[Memory Rewriter]
-    F --> G[Planner - debug_only]
-    G --> H[Retriever + Structured Retrieval]
-    H --> I[Ranker]
-    I --> J[Answer Generator]
-    J --> K[Evidence Verifier]
-    K --> L[Judge - rule_based_fallback]
-    L --> M[Final Response]
-    M --> N[Streamlit Demo]
-    D --> N
+- **语料规模**：完成 1117 条 official_docs chunks（18 sources，覆盖 FastAPI/Pydantic/Chroma/LangGraph 官方文档）与 508 条 internal_engineering_docs chunks（32 sources，覆盖系统架构、代码摘要、失败案例、工程经验）的结构化入库。
+- **检索效果**：在 25 个真实业务 query 的 HPC 评测集上，5 路多通道检索相比单路向量基线，**hit@3 从 87.5% 提升至 91.7%**，MRR 从 0.7778 提升至 0.7951，dual query 路由准确率 100%，citation validity 1.0。
+- **可审计性**：每次问答保留 retrieval_trace / memory_trace / long_term_memory_trace / citation_trace 完整审计链路，支持通过 Admin Console 查看记忆事件与来源治理状态。
+- **记忆治理**：长期记忆采用 pending → approved → disabled 三级状态机，管理员审核后生效，避免 LLM 自动写入不可靠记忆污染后续对话。
+
+---
+
+## 技术架构
+
+```
+Python 3.10 + FastAPI + LangGraph + ChromaDB + bge-m3 + SQLite + DeepSeek/Qwen + Streamlit
 ```
 
-- **legacy**：稳定 baseline，使用 LangGraph message-style agent 调用。
-- **custom_graph**：typed-state graph 编排，用于节点级可观测和可插拔实验。不声称全面替代 legacy。
+| 层级 | 技术选型 | 职责 |
+|------|---------|------|
+| 嵌入层 | bge-m3 (1024 dim) | 官方与内部文档统一 embedding，经 Embedding A/B（对比 bge-small/e5/qwen3-embedding）验证选型 |
+| 向量存储 | ChromaDB PersistentClient | 双语料独立 collection，支持 metadata filtering 与 similarity search |
+| 检索层 | 5 路异步检索 + 4 阶段后处理 | official_vector / internal_vector / keyword_bm25 / metadata_filter / history_aware |
+| 编排层 | LangGraph StateGraph | 8 节点确定性流水线（query_classifier → memory_rewriter → planner → retriever → ranker → answer_generator → evidence_verifier → final_response） |
+| 记忆层 | Session Memory (内存) + Long-term Memory (SQLite) | 短期多轮上下文 + 长期项目约束审核生效 |
+| 服务层 | FastAPI | 检索 API、Graph 问答 API、Memory Admin API |
+| 前端层 | Streamlit | 用户问答端 + Memory Admin Console + Source/Eval/Trace Viewer |
 
-## 核心功能
+---
 
-### 知识库构建
+## 核心能力
 
-- 支持 DOCX、PDF、HTML、Markdown、JSON、YAML 等格式。
-- 文档解析为 normalized manifest，再切分为 chunk manifest。
-- 每个 chunk 保留 `source_id`、`doc_type`、`section_path`、`title`、`chunk_id`、`hash`、`metadata`。
-- 原始正文、模型权重和 Chroma 持久化数据不提交 Git。
-- 评测结果只保留短 preview，避免泄露完整知识库内容。
+### 1. 语料治理与双语料库
 
-### 检索策略
+- **Source Registry 准入机制**：每个 source 需登记 source_id、title、source_type、origin_url、document_status、enabled、allowed_for_answer 等字段，通过审核后才进入检索或回答链路。
+- **Official Docs**：外部官方技术文档（FastAPI、Pydantic、Chroma、LangGraph、OpenAI 等），经 URL 验证、Text/DOM 采集、evidence audit 后入库。
+- **Internal Engineering Docs**：内部工程知识（系统架构、RAG pipeline、代码摘要、失败案例、HPC 经验、repo hygiene），经 gold label 语义 review 后纳入。
 
-| 策略 | 描述 |
-|------|------|
-| Dense Retrieval | SentenceTransformers 嵌入 → Chroma 向量检索 |
-| Metadata Retrieval | 按 `source_id`、`doc_type`、`title`、`section_path` 等字段结构化召回 |
-| Symbol Retrieval | 提取 API 路径、函数名、配置项、文件名等代码/配置符号索引 |
-| Candidate Materialization | 将 dense + structured 候选汇总为统一候选集，按源去重 |
-| Ranking | 综合 relevance_score、metadata 命中、keyword 覆盖、source 匹配排序 |
-| Source Tracing | 每个回答附带 source cards（source_id、chunk_id、doc_type、score、preview）|
+### 2. 多路检索与融合排序
 
-**结构化检索效果**（240-case 固定评测集，DeepSeek）：
+5 路异步检索通道并行执行，经 4 阶段后处理输出 citation candidates：
 
-| 指标 | baseline (dense only) | 引入结构化检索后 |
-|------|----------------------|-----------------|
-| calibrated bad_case | 59 | 49 |
-| source_hit_rate | 0.694 | 0.751 |
-| error | 0 | 0 |
-
-> 说明：结构化检索在固定评测集上有效，但仍有 49 个 calibrated bad cases，检索问题未全部解决。
-
-### Agent 编排
-
-系统保留 `legacy` 作为稳定 baseline，同时实现 `custom_graph` 编排链路：
-
-- **query_classifier**：区分正常、模糊、不支持问题
-- **memory_rewriter**：结合 session memory 改写追问
-- **planner**：debug-only 计划生成，不改变路由
-- **retriever**：执行知识库检索（含 structured retrieval）
-- **multi_hop_retriever**：保留能力但默认关闭（实测未证明收益）
-- **ranker**：排序候选证据
-- **answer_generator**：基于 sources 生成回答
-- **evidence_verifier**：检查回答与证据覆盖
-- **judge**：rule-based fallback 诊断节点
-- **final_response**：统一输出 answer、sources、debug
-
-**custom_graph 不替代 legacy**：两者调用协议不同（message-style vs typed-state），通过 `ENTERPRISE_AGENT_GRAPH_MODE=legacy|custom_graph` 在 endpoint 层切换。
-
-**custom_graph 真实模型 240-case 稳定性**：
-
-| 指标 | legacy | custom_graph |
-|------|--------|-------------|
-| bad_case_count | 49 | 49 |
-| source_hit_rate | 0.751 | 0.746 |
-| keyword_hit_rate | 0.981 | 0.986 |
-| error | 0 | 0 |
-| graph_debug/planner/judge present | — | 240/240 |
-
-> 该结果验证了 custom_graph 在评测集上的稳定性和可观测能力，但不能声称质量全面优于 legacy。
-
-**图编排消融结论**：
-
-| 配置 | multi_hop | judge | planner | calibrated bad | vs legacy |
-|------|-----------|-------|---------|---------------|-----------|
-| 全开 | on | on | active | 105 | +5 |
-| 关 multi-hop | off | on | active | 101 | +4 |
-| 全关 | off | off | active | 107 | +7 |
-| **当前推荐** | off | on | **debug_only** | 103 | **+1** |
-
-### 多轮记忆
-
-- 基于 `session_id` 的 buffer memory，服务重启后清空。
-- 对 follow-up query 做上下文改写。
-- 离线 memory eval：24 cases / 47 turns，follow-up context hit rate=1.0，cross-session leak=0。
-
-### 证据校验
-
-- rule-based evidence verifier，不调用真实 LLM。
-- 输出 `grounding_score`、`grounding_status`、`citation_coverage`、`matched_terms`、`unsupported_terms`。
-- 24 cases 中 expected status match rate=1.0，citation-required cases 3/3 checked。
-
-### 评测与 Bad Case 分析
-
-评测体系包括：
-
-- 240-case 回归评测（legacy vs custom_graph）
-- top_k delta matrix（5/8/10）
-- answer/source persistence & alignment 诊断
-- keyword coverage delta 诊断
-- bad-case taxonomy（retrieval_source_miss / doc_type_miss / keyword_miss）
-
-**Bad case 根因分布**（103 个坏例）：
-
-| 类别 | 数量 | 占比 |
+| 阶段 | 策略 | 目的 |
 |------|------|------|
-| doc_type_miss | 72 | ~70% |
-| source_miss | 52 | ~50% |
-| keyword_miss | 43 | ~42% |
+| Chunk 去重 | 按 chunk_id 保留最高分 | 消除多路重复召回 |
+| 分数归一化 | Min-Max 到 [0,1] | 统一向量相似度与 BM25 分数尺度 |
+| Source 截断 | 每个 source_id 最多保留 3 条 | 避免单一 source 占满 top_k |
+| 语料平衡 | Round-robin 分配 official / internal | 防止 dual query 时某一语料库垄断结果 |
 
-> 主要瓶颈在检索层和数据层（文档类型识别、source 召回、关键词覆盖），而非 Agent prompt 或图编排。因此项目最终未继续扩大 prompt 调优，而是将优化方向收敛到 metadata schema、hybrid retrieval、query-doc_type routing 等检索基础设施。
+### 3. LangGraph 节点化问答与证据校验
 
-### Streamlit 演示
+- **8 节点确定性流水线**：每个节点独立执行、独立 trace，错误定位从"全链路排查"降至"单节点 trace"。
+- **Citation Guard**：校验引用 chunk_id 是否属于 retrieved_chunks 集合，拦截空引用与非法引用。
+- **幻觉风险标记**：输出 unsupported_claims 与 hallucination_risk，抑制大模型无依据生成。
 
-- `src/streamlit_app.py`
-- 支持输入 query、session_id、top_k
-- 展示 answer、source cards、retrieval_debug、memory_debug、verifier_debug、graph_debug、raw response
+### 4. 双层记忆与可审计设计
 
-## 接口示例
+- **Session Memory**：基于 session_id 的短期记忆，支持多轮指代消解（"它"、"这个"、"继续"）与 query 改写。
+- **Long-term Memory**：SQLite 持久化，三级状态流转：
+  - `pending`：候选记忆，不参与回答
+  - `approved`：管理员审核通过，参与后续 query rewrite
+  - `disabled`：失效记忆，不再进入上下文
+- **Memory Events**：记录 candidate_created / candidate_approved / memory_disabled 等完整生命周期事件。
 
-**POST /enterprise/agent/query**
+---
 
-```json
-{
-  "query": "RAG 是什么？",
-  "session_id": "demo-session-1",
-  "top_k": 5,
-  "return_sources": true
-}
-```
+## 评测数据
 
-**Response**：
+### Phase 6F：多路检索 HPC 真实评测
 
-```json
-{
-  "answer": "RAG (Retrieval-Augmented Generation) 是...",
-  "sources": [{
-    "source_id": "local_ai_agent_course_pdf",
-    "chunk_id": "chunk_norm_pdf_003_0012",
-    "doc_type": "pdf",
-    "score": 0.85,
-    "content_preview": "RAG 的核心理念是..."
-  }],
-  "retrieval_debug": { "hit_count": 5, "policy_mode": "baseline" },
-  "graph_debug": { "graph_mode": "custom_graph", "nodes_executed": ["query_classifier", "retriever"] },
-  "latency_ms": 1847,
-  "fallback": { "triggered": false, "reason": null },
-  "session_id": "demo-session-1"
-}
-```
+| 指标 | 单路 Dense Baseline | 5 路 Multi-channel | Delta |
+|------|--------------------|--------------------|-------|
+| hit@3 | 87.50% | 91.67% | +4.17% |
+| hit@5 | 95.83% | 95.83% | — |
+| hit@10 | 95.83% | 100.00% | +4.17% |
+| MRR | 0.7778 | 0.7951 | +0.0173 |
+| dual_accuracy | — | 100.00% | — |
+| citation_validity | — | 100.00% | — |
+
+> 评测环境：HPC (NVIDIA L40, CUDA 12.4)，25 个真实业务 case，覆盖 official_only / internal_only / dual / keyword / metadata / history-aware 六类场景。
+
+### Phase 4FH：内部语料严格评测
+
+| 指标 | 初版 | 修复后 |
+|------|------|--------|
+| hit@3 | 60.00% | 93.33% |
+| hit@5 | 73.33% | 96.67% |
+| hit@10 | 86.67% | 100.00% |
+
+> 修复内容：gold label 语义 review（17 条 correction）、D 组代码摘要补录、per-case debug 根因分析。
+
+---
 
 ## 快速开始
 
-```powershell
-# 1. 创建 .env（不要提交）
-# USE_FAKE_MODEL=true
-# DEFAULT_MODEL=fake
+### 1. 环境配置
 
-# 2. 启动 legacy 服务
-$env:PYTHONPATH = "$PWD\src"
-$env:USE_FAKE_MODEL = "true"
-$env:ENTERPRISE_AGENT_GRAPH_MODE = "legacy"
-python -m uvicorn service.service:app --host 127.0.0.1 --port 8000
+```bash
+# 克隆仓库
+git clone https://github.com/piao666/agent-service-toolkit.git
+cd agent-service-toolkit
+git checkout feature/enterprise-kb-v1-clean
 
-# 3. 启动 custom_graph 服务（另一终端）
-$env:PYTHONPATH = "$PWD\src"
-$env:USE_FAKE_MODEL = "true"
-$env:ENTERPRISE_AGENT_GRAPH_MODE = "custom_graph"
-$env:ENTERPRISE_MULTI_HOP_MODE = "off"
-$env:ENTERPRISE_PLANNER_MODE = "debug_only"
-python -m uvicorn service.service:app --host 127.0.0.1 --port 8001
+# 安装依赖
+pip install -r requirements.txt
 
-# 4. 健康检查
-curl http://127.0.0.1:8000/health
-
-# 5. 运行 smoke 验证
-python scripts\smoke_phase7a_default_custom_graph_endpoint.py
-python scripts\smoke_phase6j_langgraph.py
-
-# 6. 启动 Streamlit
-streamlit run src\streamlit_app.py
+# 配置环境变量（复制模板后填入真实 API Key）
+cp .env.example .env
+# 配置 Qwen / DeepSeek API Key 与本地 bge-m3 模型路径
 ```
 
-> 默认使用 fake model，不调用真实 LLM。如需真实模型，配置 `.env` 中的 `DEEPSEEK_API_KEY` 等环境变量并将 `USE_FAKE_MODEL=false`。
+### 2. 启动服务
 
-## 关键环境变量
+```bash
+# 启动 FastAPI 后端
+python -m uvicorn src.service.service:app --host 127.0.0.1 --port 8000
 
-| 变量 | 推荐值 | 说明 |
-|------|--------|------|
-| `USE_FAKE_MODEL` | `true` (demo) | 使用 FakeListChatModel |
-| `ENTERPRISE_AGENT_GRAPH_MODE` | `custom_graph` | legacy / custom_graph |
-| `ENTERPRISE_MULTI_HOP_MODE` | `off` | 关闭 multi-hop（未证明收益）|
-| `ENTERPRISE_PLANNER_MODE` | `debug_only` | 仅记录不改变路由 |
-| `ENTERPRISE_JUDGE_MODE` | `rule_based_fallback` | rule-based judge |
-| `ENTERPRISE_EVIDENCE_VERIFIER_MODE` | `rule_based` | rule-based evidence check |
-| `ENTERPRISE_STRUCTURED_RETRIEVAL_MODE` | `metadata_symbol` | metadata + symbol 索引 |
-| `ENTERPRISE_MEMORY_MODE` | `buffer` | session buffer memory |
-| `RAG_DEFAULT_TOP_K` | `5` (default) | top_k=10 在 delta 诊断中略优，不声明为生产默认 |
-| `CHROMA_PERSIST_DIR` | `./chroma_enterprise` | Chroma 持久化路径 |
-| `CHROMA_COLLECTION_NAME` | `enterprise_ai_learning_kb_reviewed` | Chroma collection 名称 |
+# 启动 Streamlit 前端（含 Memory Admin Console）
+streamlit run frontend/streamlit_app.py
+```
 
-## 工程验证数据
+### 3. 调用示例
 
-**结构化检索对比**（DeepSeek 240-case）：
+**POST /api/enterprise-kb/graph/answer**
 
-| 指标 | baseline | structured |
-|------|----------|-----------|
-| calibrated bad_case | 59 | 49 |
-| source_hit_rate | 0.694 | 0.751 |
-| error | 0 | 0 |
+```json
+{
+  "query": "FastAPI 中如何配置 CORS 中间件？",
+  "corpus": "dual",
+  "session_id": "auto_xxxxxxxx"
+}
+```
 
-**top_k delta matrix**（20 delta cases）：
+**Response：**
 
-| top_k | legacy bad | custom bad | gap | only_custom |
-|-------|-----------|-----------|-----|-------------|
-| 5 | 12 | 16 | +4 | 5 |
-| 8 | 10 | 15 | +5 | 6 |
-| 10 | 11 | 12 | +1 | 3 |
+```json
+{
+  "answer_markdown": "在 FastAPI 中配置 CORS 中间件...",
+  "citations": [
+    {
+      "chunk_id": "chunk_xxx",
+      "source_id": "fastapi_cors",
+      "corpus": "official_docs",
+      "quoted_evidence": "from fastapi.middleware.cors import CORSMiddleware..."
+    }
+  ],
+  "unsupported_claims": [],
+  "hallucination_risk": "low",
+  "memory_trace": { "session_memory_used": true, "rewritten_query": "..." },
+  "long_term_memory_trace": { "approved_memory_count": 2, "approved_memory_ids": ["mem_xxx"] },
+  "retrieval_trace": { "route_mode": "dual", "channels": ["official_vector", "internal_vector", "keyword_bm25"], ... }
+}
+```
 
-**answer/source alignment**（20 delta cases）：
+---
 
-| 发现 | 数量 |
-|------|------|
-| same_sources_answer_diff | 4 |
-| source_order_diff | 0 |
-| source_serialization_diff | 0 |
-| prompt_profile_diff | 0 |
-
-> 剩余差异更可能来自 answer synthesis / keyword coverage 或 LLM 输出波动，非 source ordering 或 serialization 问题。
-
-## 项目目录结构
+## 项目目录
 
 ```
+├── data/enterprise_kb_v1/
+│   ├── source_registry/          # 语料准入注册表
+│   ├── raw_sources/              # 原始文档
+│   ├── chunks/                   # 切分后的结构化 chunk
+│   └── eval/                     # 评测数据集
 ├── src/
-│   ├── service/          # FastAPI 服务入口
-│   ├── schema/           # Pydantic 请求/响应模型
-│   ├── agents/           # Agent 定义（legacy + custom_graph）
-│   ├── rag/              # 检索、配置、planner、judge、verifier、memory
-│   └── streamlit_app.py  # Streamlit 演示界面
-├── scripts/              # 评测、诊断、构建脚本
-├── data/knowledge_base/
-│   └── evaluation/       # 评测 cases、results、summaries（sanitized）
-├── docs/enterprise_rag_backend/  # 项目技术文档
-├── tests/                # pytest (agents + service)
-├── .env.example          # 环境变量模板
-├── pyproject.toml
-├── task.txt              # 开发追踪文档
-└── README.md
+│   ├── rag/                      # 检索核心（embedding、Chroma、5路检索、后处理）
+│   ├── custom_graph/             # LangGraph 8节点编排
+│   ├── llm/                      # Qwen / DeepSeek 模型抽象
+│   ├── session_memory/           # 短期会话记忆
+│   ├── long_term_memory/         # 长期记忆持久化（SQLite）
+│   ├── schema/                   # API 请求/响应模型
+│   └── service/                  # FastAPI 服务入口
+├── frontend/
+│   └── streamlit_app.py          # 用户问答 + Admin Console
+├── scripts/enterprise_kb_v1/     # 各阶段 Smoke 测试与评测脚本
+├── reports/enterprise_kb_v1/     # 阶段评测报告
+└── storage/                      # Chroma 向量索引（不提交 Git）
 ```
 
-## 项目边界与限制
+---
 
-1. 本项目是**工程原型**，并非生产部署完成品。
-2. evidence verifier 是 rule-based baseline，不是事实核查系统。
-3. memory 是进程内 buffer，服务重启后清空。
-4. Streamlit 是 demo UI，不含认证、权限、审计。
-5. custom_graph 主要价值是可观测和可插拔，**不代表全面优于 legacy**。
-6. 当前 bad case 主要来自 `doc_type_miss`、`source_miss`、`keyword_miss`——检索和数据层的改进空间大于 prompt 调参。
+## 当前状态与扩展性
 
-## 后续规划
+- **当前状态**：MVP-ready，支持 controlled demo 与 evaluation-ready 运行。reranker=false，LLM 使用 mock_extractive / grounded answer 模式。
+- **可扩展方向**：
+  - Vectorized Memory Retrieval：长期记忆语义召回
+  - Cross-project Memory：多项目记忆隔离
+  - RBAC 权限体系：corpus / source / memory 级权限控制
+  - Production Deployment：PostgreSQL + Redis + Docker + 监控
 
-1. **Demo Query Set**：整理可用于演示的稳定查询集。
-2. **query-doc_type routing**：根据查询类型选择最佳检索策略。
-3. **hybrid retrieval**：dense + sparse + metadata 融合。
-4. **alias dictionary**：建立术语别名映射提升 keyword 覆盖。
-5. **source rerank**：基于 source 级别特征的重排序。
-6. **persistent memory**：跨会话持久化记忆。
-7. **claim-level verifier**：更细粒度的声明级证据校验。
+---
 
-## 贡献边界
+## 贡献说明
 
-本项目基于开源 [agent-service-toolkit](https://github.com/piao666/agent-service-toolkit) 扩展。上游提供 FastAPI、LangGraph service skeleton、多 Agent 接口、streaming 等基础能力。本项目在基础框架之上新增并验证了：企业知识库 RAG pipeline、多格式 corpus 处理、chunk/source tracing、结构化检索（metadata + symbol）、系统化评测体系、多轮 memory、evidence verifier、custom graph endpoint routing、graph_debug 可观测性以及 Streamlit demo。
+本项目基于 [agent-service-toolkit](https://github.com/piao666/agent-service-toolkit) 开源框架扩展，在上游提供的 FastAPI + LangGraph 骨架之上，新增并验证了：企业知识库语料治理、双语料检索、5 路多通道检索、系统化评测体系、双层记忆与审核机制、可审计 Agent 图编排。
