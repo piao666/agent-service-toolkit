@@ -1,12 +1,16 @@
 {
   "smoke": "phase5b_graph_api",
-  "timestamp": "2026-07-06T14:37:58.666838+00:00",
+  "timestamp": "2026-07-11T19:29:44.592121+00:00",
   "schema": {
     "importable": true,
     "request_fields": [
       "query",
       "corpus",
-      "session_id"
+      "corpus_mode",
+      "session_id",
+      "project_id",
+      "llm_provider",
+      "model"
     ],
     "response_fields": [
       "answer_markdown",
@@ -22,8 +26,12 @@
       "llm_trace",
       "citation_trace",
       "graph_debug",
+      "memory_trace",
+      "long_term_memory_trace",
       "llm_mode",
-      "total_latency_ms"
+      "total_latency_ms",
+      "project_id",
+      "trace_id"
     ],
     "request_has_query": true,
     "request_has_corpus": true,
@@ -88,11 +96,15 @@
       "intent_trace",
       "llm_mode",
       "llm_trace",
+      "long_term_memory_trace",
+      "memory_trace",
       "plan_trace",
+      "project_id",
       "rank_trace",
       "retrieval_trace",
       "rewrite_trace",
       "total_latency_ms",
+      "trace_id",
       "unsupported_claims",
       "used_sources"
     ],
@@ -103,7 +115,7 @@
     "testclient_has_citations": true,
     "testclient_has_total_latency_ms": true,
     "testclient_llm_mode": "mock_extractive",
-    "testclient_field_count": 15
+    "testclient_field_count": 19
   },
   "overall_pass": true
 }

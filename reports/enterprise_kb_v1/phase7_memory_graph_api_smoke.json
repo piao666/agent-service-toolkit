@@ -1,6 +1,6 @@
 {
   "smoke": "phase7_memory_graph_api_v1.3",
-  "timestamp": "2026-07-07T13:21:00.249018+00:00",
+  "timestamp": "2026-07-11T19:30:08.787694+00:00",
   "endpoint_api": {
     "endpoint_registered": true,
     "testclient_available": true,
@@ -12,7 +12,7 @@
     "turn1_status": 200,
     "turn2_status": 200,
     "graph_debug_memory_read": true,
-    "graph_debug_memory_write": true,
+    "graph_debug_memory_write": false,
     "turn2_rewrite_used": true,
     "turn2_recent_turns": 1,
     "has_candidate_not_committed": true,
@@ -21,13 +21,13 @@
   "no_session_auto_id": {
     "no_session_auto_id_multiturn_pass": true,
     "auto_session_id_propagated_to_state": true,
-    "turn1_auto_id": "auto_def989ca",
+    "turn1_auto_id": "auto_581fd79e",
     "skipped": false,
     "skipped_reason": "",
     "turn1_status": 200,
     "turn1_auto_generated": true,
     "turn2_status": 200,
-    "turn2_session_id": "auto_def989ca",
+    "turn2_session_id": "auto_581fd79e",
     "turn2_recent_turns": 1,
     "turn2_rewrite_used": true,
     "turn2_rewrite_has_internal": true,
@@ -42,7 +42,7 @@
     "pass": true
   },
   "no_session_id": {
-    "session_id": "auto_c176dff3",
+    "session_id": "auto_91c1667a",
     "is_auto": true,
     "auto_generated_session_id": true,
     "pass": true

@@ -2,56 +2,68 @@
 
 from __future__ import annotations
 
-from long_term_memory.sqlite_store import get_ltm_store
 from long_term_memory.policy import LongTermMemoryPolicy
+from long_term_memory.sqlite_store import get_ltm_store
 
 
 class LongTermMemoryService:
     """长期记忆服务层。"""
 
-    def __init__(self):
-        self.store = get_ltm_store()
+    def __init__(self, store=None):
+        self.store = store or get_ltm_store()
 
     # ── Candidate ─────────────────────────────────────────────────────
 
-    def create_candidate(self, query: str, rewritten_query: str = "",
-                          session_id: str = "") -> dict | None:
+    def create_candidate(
+        self,
+        query: str,
+        rewritten_query: str = "",
+        session_id: str = "",
+        project_id: str = "enterprise_kb_v1",
+    ) -> dict | None:
         if not LongTermMemoryPolicy.should_create_candidate(query, rewritten_query):
             return None
-        spec = LongTermMemoryPolicy.candidate_from_query(query, rewritten_query, session_id)
+        spec = LongTermMemoryPolicy.candidate_from_query(
+            query, rewritten_query, session_id, project_id
+        )
         return self.store.create_candidate(**spec)
 
-    def list_pending_candidates(self) -> list[dict]:
-        return self.store.list_candidates(status="pending")
+    def list_pending_candidates(self, scope_id: str | None = None) -> list[dict]:
+        return self.store.list_candidates(status="pending", scope_id=scope_id)
 
     def approve(self, candidate_id: str) -> dict | None:
         return self.store.approve_candidate(candidate_id)
 
-    def reject(self, candidate_id: str) -> None:
-        self.store.reject_candidate(candidate_id)
+    def reject(self, candidate_id: str) -> bool:
+        return self.store.reject_candidate(candidate_id)
 
     # ── Items ─────────────────────────────────────────────────────────
 
-    def list_approved_items(self, scope_type: str = "project",
-                             scope_id: str = "enterprise_kb_v1") -> list[dict]:
+    def list_approved_items(
+        self, scope_type: str = "project", scope_id: str = "enterprise_kb_v1"
+    ) -> list[dict]:
         return self.store.read_approved_memories(scope_type, scope_id)
 
-    def list_all_items(self, status: str | None = None) -> list[dict]:
-        return self.store.list_items(status=status)
+    def list_all_items(
+        self,
+        status: str | None = None,
+        scope_id: str | None = None,
+    ) -> list[dict]:
+        return self.store.list_items(status=status, scope_id=scope_id)
 
-    def disable(self, memory_id: str) -> None:
-        self.store.disable_memory(memory_id)
+    def disable(self, memory_id: str) -> bool:
+        return self.store.disable_memory(memory_id)
 
     # ── Events ────────────────────────────────────────────────────────
 
-    def list_events(self, target_type: str | None = None,
-                     limit: int = 50) -> list[dict]:
+    def list_events(self, target_type: str | None = None, limit: int = 50) -> list[dict]:
         return self.store.list_events(target_type=target_type, limit=limit)
 
     # ── Read context for custom_graph ─────────────────────────────────
 
-    def read_context(self, scope_type: str = "project",
-                      scope_id: str = "enterprise_kb_v1") -> tuple[str, list[str]]:
+    def read_context(
+        self, scope_type: str = "project", scope_id: str = "enterprise_kb_v1"
+    ) -> tuple[str, list[str]]:
         """返回 (context_str, memory_ids)。"""
         items = self.list_approved_items(scope_type, scope_id)
         if not items:

@@ -13,8 +13,10 @@ class GraphState:
     Nodes: query_classifier → memory_rewriter → planner → retriever →
            ranker → answer_generator → evidence_verifier → final_response
     """
+
     # Input
     query: str = ""
+    project_id: str = "enterprise_kb_v1"
     session_id: str = ""
     corpus: str = "auto"  # official_docs | internal_engineering_docs | auto
 

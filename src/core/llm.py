@@ -24,6 +24,7 @@ from schema.models import (
     OpenAICompatibleName,
     OpenAIModelName,
     OpenRouterModelName,
+    QwenModelName,
     VertexAIModelName,
 )
 
@@ -31,6 +32,7 @@ _MODEL_TABLE = (
     {m: m.value for m in OpenAIModelName}
     | {m: m.value for m in OpenAICompatibleName}
     | {m: m.value for m in AzureOpenAIModelName}
+    | {m: m.value for m in QwenModelName}
     | {m: m.value for m in DeepseekModelName}
     | {m: m.value for m in AnthropicModelName}
     | {m: m.value for m in GoogleModelName}
@@ -98,13 +100,21 @@ def get_model(model_name: AllModelEnum, /) -> ModelT:
             timeout=60,
             max_retries=3,
         )
+    if model_name in QwenModelName:
+        return ChatOpenAI(
+            model=api_model_name,
+            temperature=0.5,
+            streaming=True,
+            base_url=settings.QWEN_BASE_URL,
+            api_key=settings.QWEN_API_KEY,
+        )
     if model_name in DeepseekModelName:
         return ChatOpenAI(
             model=api_model_name,
             temperature=0.5,
             streaming=True,
-            openai_api_base="https://api.deepseek.com",
-            openai_api_key=settings.DEEPSEEK_API_KEY,
+            base_url=settings.DEEPSEEK_BASE_URL,
+            api_key=settings.DEEPSEEK_API_KEY,
         )
     if model_name in AnthropicModelName:
         return ChatAnthropic(model=api_model_name, temperature=0.5, streaming=True)

@@ -9,12 +9,14 @@ from typing import Any
 
 from custom_graph.state import GraphState
 from llm.client import LLMClient
+from llm.errors import LLMError
 
 
 def run_custom_graph(
     query: str,
     corpus: str = "auto",
     session_id: str = "",
+    project_id: str = "enterprise_kb_v1",
     llm: LLMClient | None = None,
 ) -> dict[str, Any]:
     """Execute the full custom_graph pipeline and return the final response.
@@ -29,7 +31,12 @@ def run_custom_graph(
         Complete response dict with answer + citations + all traces.
     """
     llm = llm or LLMClient()
-    state = GraphState(query=query, corpus=corpus, session_id=session_id)
+    state = GraphState(
+        query=query,
+        corpus=corpus,
+        session_id=session_id,
+        project_id=project_id,
+    )
     t_start = time.perf_counter()
 
     # Node 1: Query Classifier
@@ -82,6 +89,8 @@ def _run_node(name: str, func, state: GraphState, llm: LLMClient) -> dict[str, A
     """Run a node with error handling."""
     try:
         return func(state, llm)
+    except LLMError:
+        raise
     except Exception as e:
         state.errors.append(f"{name}: {e}")
         return {}
@@ -89,41 +98,50 @@ def _run_node(name: str, func, state: GraphState, llm: LLMClient) -> dict[str, A
 
 # ── Node implementations (thin wrappers for lazy imports) ──────────────
 
+
 def _classify(state: GraphState, llm: LLMClient) -> dict[str, Any]:
     from custom_graph.nodes.query_classifier import classify_query
+
     return classify_query(state, llm)
 
 
 def _rewrite(state: GraphState, llm: LLMClient) -> dict[str, Any]:
     from custom_graph.nodes.memory_rewriter import rewrite_query
+
     return rewrite_query(state, llm)
 
 
 def _plan(state: GraphState, llm: LLMClient) -> dict[str, Any]:
     from custom_graph.nodes.planner import plan_retrieval
+
     return plan_retrieval(state, llm)
 
 
 def _retrieve(state: GraphState, llm: LLMClient) -> dict[str, Any]:
     from custom_graph.nodes.retriever import retrieve_chunks
+
     return retrieve_chunks(state)
 
 
 def _rank(state: GraphState, llm: LLMClient) -> dict[str, Any]:
     from custom_graph.nodes.ranker import rank_results
+
     return rank_results(state)
 
 
 def _answer(state: GraphState, llm: LLMClient) -> dict[str, Any]:
     from custom_graph.nodes.answer_generator import generate_answer
+
     return generate_answer(state, llm)
 
 
 def _verify(state: GraphState, llm: LLMClient) -> dict[str, Any]:
     from custom_graph.nodes.evidence_verifier import verify_evidence
+
     return verify_evidence(state)
 
 
 def _finalize(state: GraphState, llm: LLMClient) -> dict[str, Any]:
     from custom_graph.nodes.final_response import build_final_response
+
     return build_final_response(state)

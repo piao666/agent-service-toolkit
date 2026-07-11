@@ -253,137 +253,130 @@ class ChatHistory(BaseModel):
     messages: list[ChatMessage]
 
 
-# ── Phase 4E: Runtime Retrieval Verification ─────────────────────────────
+# Enterprise KB retrieval, RAG answer, and graph answer schemas.
 
 
 class EnterpriseKBRetrievalRequest(BaseModel):
-    """Phase 4E/4F: 检索请求 — 支持 official_docs / internal_engineering_docs / auto。"""
+    """Phase 4E/4F retrieval request."""
 
     query: str = Field(
-        description="检索查询文本。",
+        description="Retrieval query text.",
         examples=["How to create a Chroma collection?"],
         min_length=1,
     )
-    top_k: int = Field(
-        description="返回结果数量。",
-        default=5,
-        ge=1,
-        le=20,
-    )
+    top_k: int = Field(description="Maximum result count.", default=5, ge=1, le=20)
     corpus: Literal["official_docs", "internal_engineering_docs", "auto"] = Field(
         default="official_docs",
-        description="检索目标语料库。'auto' 由 corpus_router 自动路由。",
+        description="Retrieval target corpus. auto uses the corpus router.",
         examples=["official_docs", "internal_engineering_docs", "auto"],
     )
 
 
 class EnterpriseKBRetrievalResponse(BaseModel):
-    """Phase 4E: 检索响应 — 含格式化结果 + trace 诊断。"""
+    """Phase 4E retrieval response with trace diagnostics."""
 
-    results: list[dict[str, Any]] = Field(
-        description="检索到的 chunk 列表，每项含 chunk_id / source_id / score 等。",
-        default_factory=list,
-    )
-    trace: dict[str, Any] = Field(
-        description="检索 trace：query / top_k / embedding_model / collection_name / latency_ms 等。",
-        default_factory=dict,
-    )
-    latency_ms: float = Field(
-        description="端点处理总延迟（毫秒）。",
-    )
-    corpus_used: str = Field(
-        default="official_docs",
-        description="实际使用的语料库。",
-    )
-
-
-# ── Phase 4H: Traceable RAG Answer ──────────────────────────────────────
+    results: list[dict[str, Any]] = Field(default_factory=list, description="Retrieved chunks.")
+    trace: dict[str, Any] = Field(default_factory=dict, description="Retrieval trace.")
+    latency_ms: float = Field(description="Endpoint latency in milliseconds.")
+    corpus_used: str = Field(default="official_docs", description="Actual corpus used.")
 
 
 class EnterpriseKBRagAnswerRequest(BaseModel):
-    """Phase 4H: RAG 回答请求 — 带 citation 的受控 demo 端点。"""
+    """Phase 4H RAG answer request."""
 
-    query: str = Field(
-        description="问题文本。",
-        examples=["本项目为什么选择 bge-m3 作为默认 embedding？"],
-        min_length=1,
-    )
-    top_k: int = Field(
-        description="检索结果数量。",
-        default=5,
-        ge=1,
-        le=20,
-    )
+    query: str = Field(description="Question text.", examples=["Why use bge-m3?"], min_length=1)
+    top_k: int = Field(description="Retrieval result count.", default=5, ge=1, le=20)
     corpus: Literal["official_docs", "internal_engineering_docs", "auto"] = Field(
         default="auto",
-        description="检索目标语料库。默认 auto 自动路由。",
+        description="Retrieval target corpus. auto uses routing.",
     )
 
 
 class EnterpriseKBRagAnswerResponse(BaseModel):
-    """Phase 4H: RAG 回答响应 — mock/extractive 模式，带 citation。"""
+    """Phase 4H traceable RAG answer response."""
 
-    answer: str = Field(
-        description="带 citation 标记的回答文本（mock extractive mode）。",
-    )
-    citations: list[dict[str, Any]] = Field(
-        description="引用列表，每项含 source_id / heading_path / score / text_preview。",
-        default_factory=list,
-    )
-    trace: dict[str, Any] = Field(
-        description="检索 + routing trace。",
-        default_factory=dict,
-    )
-    latency_ms: float = Field(
-        description="端点处理总延迟（毫秒）。",
-    )
-    corpus_used: str = Field(
-        description="实际使用的语料库。",
-    )
-    llm_mode: str = Field(
-        default="mock_extractive",
-        description="回答生成模式。mock_extractive = 无 LLM，基于检索结果拼接。",
-    )
-
-
-# ── Phase 5B: Custom Graph Answer ──────────────────────────────────────
+    answer: str = Field(description="Answer text with citation markers.")
+    citations: list[dict[str, Any]] = Field(default_factory=list, description="Citation list.")
+    trace: dict[str, Any] = Field(default_factory=dict, description="Retrieval and routing trace.")
+    latency_ms: float = Field(description="Endpoint latency in milliseconds.")
+    corpus_used: str = Field(description="Actual corpus used.")
+    llm_mode: str = Field(default="mock_extractive", description="Answer generation mode.")
 
 
 class EnterpriseKBGraphAnswerRequest(BaseModel):
-    """Phase 5B: custom_graph 知识库问答请求。"""
+    """Phase 5B/9 custom graph answer request."""
 
     query: str = Field(
-        description="用户问题。",
+        description="User question.",
         examples=["What is FastAPI middleware?"],
         min_length=1,
+        max_length=4000,
     )
-    corpus: Literal["official_docs", "internal_engineering_docs", "auto"] = Field(
-        default="auto",
-        description="检索目标语料库。",
+    corpus: Literal[
+        "official_docs",
+        "internal_engineering_docs",
+        "auto",
+        "official_only",
+        "internal_only",
+        "dual",
+    ] = Field(default="auto", description="Retrieval corpus or Phase 9 corpus alias.")
+    corpus_mode: Literal["auto", "official_only", "internal_only", "dual"] | None = Field(
+        default=None,
+        description="Phase 9 frontend corpus routing mode alias.",
     )
     session_id: str = Field(
         default="",
-        description="会话 ID，用于多轮对话追踪。",
+        max_length=128,
+        pattern=r"^$|^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+        description="Validated session ID for project-scoped memory tracing.",
+    )
+    project_id: str = Field(
+        default="enterprise_kb_v1",
+        min_length=1,
+        max_length=80,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$",
+        description="Project scope for session and long-term memory isolation.",
+    )
+    llm_provider: Literal["qwen", "deepseek", "mock"] | None = Field(
+        default=None,
+        description="Phase 9 runtime LLM provider selection.",
+    )
+    model: str | None = Field(
+        max_length=80,
+        default=None,
+        description="Phase 9 runtime model name, e.g. qwen-plus or deepseek-chat.",
     )
 
 
 class EnterpriseKBGraphAnswerResponse(BaseModel):
-    """Phase 5B: custom_graph 知识库问答响应 — 完整 trace。"""
+    """Phase 5B graph answer response with complete traces."""
 
-    answer_markdown: str = Field(description="回答文本（markdown 格式）。")
-    citations: list[dict[str, Any]] = Field(default_factory=list, description="引用列表。")
-    used_sources: list[str] = Field(default_factory=list, description="使用的 source ID 列表。")
-    unsupported_claims: list[str] = Field(default_factory=list, description="无证据支持的声明。")
-    hallucination_risk: str = Field(default="none", description="幻觉风险评估。")
-    intent_trace: dict[str, Any] = Field(default_factory=dict, description="query_classifier trace。")
-    rewrite_trace: dict[str, Any] = Field(default_factory=dict, description="memory_rewriter trace。")
-    plan_trace: dict[str, Any] = Field(default_factory=dict, description="planner trace。")
-    retrieval_trace: dict[str, Any] = Field(default_factory=dict, description="retriever trace。")
-    rank_trace: dict[str, Any] = Field(default_factory=dict, description="ranker trace。")
-    llm_trace: dict[str, Any] = Field(default_factory=dict, description="answer_generator trace。")
-    citation_trace: dict[str, Any] = Field(default_factory=dict, description="evidence_verifier trace。")
-    graph_debug: dict[str, Any] = Field(default_factory=dict, description="graph 执行诊断。")
-    memory_trace: dict[str, Any] = Field(default_factory=dict, description="Phase 7: session memory trace。")
-    long_term_memory_trace: dict[str, Any] = Field(default_factory=dict, description="Phase 8: long-term memory trace。")
-    llm_mode: str = Field(default="mock_extractive", description="LLM 模式。")
-    total_latency_ms: float = Field(default=0.0, description="总延迟（毫秒）。")
+    answer_markdown: str = Field(description="Markdown answer text.")
+    citations: list[dict[str, Any]] = Field(default_factory=list, description="Citation list.")
+    used_sources: list[str] = Field(default_factory=list, description="Used source IDs.")
+    unsupported_claims: list[str] = Field(default_factory=list, description="Unsupported claims.")
+    hallucination_risk: str = Field(default="none", description="Hallucination risk estimate.")
+    intent_trace: dict[str, Any] = Field(
+        default_factory=dict, description="Query classifier trace."
+    )
+    rewrite_trace: dict[str, Any] = Field(
+        default_factory=dict, description="Memory rewriter trace."
+    )
+    plan_trace: dict[str, Any] = Field(default_factory=dict, description="Planner trace.")
+    retrieval_trace: dict[str, Any] = Field(default_factory=dict, description="Retriever trace.")
+    rank_trace: dict[str, Any] = Field(default_factory=dict, description="Ranker trace.")
+    llm_trace: dict[str, Any] = Field(default_factory=dict, description="LLM provider/model trace.")
+    citation_trace: dict[str, Any] = Field(
+        default_factory=dict, description="Evidence verifier trace."
+    )
+    graph_debug: dict[str, Any] = Field(
+        default_factory=dict, description="Graph execution diagnostics."
+    )
+    memory_trace: dict[str, Any] = Field(default_factory=dict, description="Session memory trace.")
+    long_term_memory_trace: dict[str, Any] = Field(
+        default_factory=dict, description="Long-term memory trace."
+    )
+    llm_mode: str = Field(default="mock_extractive", description="LLM mode.")
+    total_latency_ms: float = Field(default=0.0, description="Total latency in milliseconds.")
+    project_id: str = Field(default="enterprise_kb_v1", description="Effective project scope.")
+    trace_id: str = Field(default="", description="Request trace identifier.")

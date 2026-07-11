@@ -9,6 +9,7 @@ from typing import Any
 @dataclass
 class MemoryTurn:
     """单轮对话记录。"""
+
     query: str
     response: str = ""
     rewritten_query: str = ""
@@ -22,10 +23,12 @@ class MemoryTurn:
 @dataclass
 class SessionMemory:
     """会话级记忆。"""
+
     session_id: str = ""
     turns: list[MemoryTurn] = field(default_factory=list)
     active_topic: str = ""
     last_entities: list[str] = field(default_factory=list)
+    last_focus: str = ""
     project_constraints: list[str] = field(default_factory=list)
     pending_memory_candidates: list[dict[str, Any]] = field(default_factory=list)
     created_at: float = 0.0
@@ -41,11 +44,14 @@ class SessionMemory:
 @dataclass
 class MemoryTrace:
     """memory 操作 trace。"""
+
     session_id: str = ""
+    project_id: str = "enterprise_kb_v1"
     memory_read_used: bool = False
     auto_generated_session_id: bool = False
     recent_turns_count: int = 0
     active_topic: str = ""
+    last_focus: str = ""
     rewrite_used_memory: bool = False
     memory_context: str = ""
     memory_write_candidate: list[dict[str, Any]] = field(default_factory=list)
@@ -55,10 +61,12 @@ class MemoryTrace:
     def to_dict(self) -> dict[str, Any]:
         return {
             "session_id": self.session_id,
+            "project_id": self.project_id,
             "memory_read_used": self.memory_read_used,
             "auto_generated_session_id": self.auto_generated_session_id,
             "recent_turns_count": self.recent_turns_count,
             "active_topic": self.active_topic,
+            "last_focus": self.last_focus,
             "rewrite_used_memory": self.rewrite_used_memory,
             "memory_context": self.memory_context,
             "memory_write_candidate": self.memory_write_candidate,

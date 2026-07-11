@@ -1,0 +1,172 @@
+{
+  "phase": "phase10_backend_closure",
+  "generated_at": "2026-07-11T19:30:53.528875+00:00",
+  "scope": "local_lightweight_backend_validation_no_embeddings_no_index_rebuild",
+  "local_overall_pass": true,
+  "local_results": [
+    {
+      "name": "backend_security",
+      "passed": true,
+      "pass_field": "passed",
+      "timestamp": "2026-07-11T19:29:33.057160+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase10_backend_security_smoke.json",
+        "sha256": "ba2aee1948484addc9c6c958556d3b636b7427fe11de3d61708e2a5496994f84",
+        "size_bytes": 1855
+      }
+    },
+    {
+      "name": "custom_graph",
+      "passed": true,
+      "pass_field": "overall_pass",
+      "timestamp": "2026-07-11T19:29:37.938142+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase5_custom_graph_smoke.json",
+        "sha256": "ca801d84f476264c8d79a957b962e1e2e0c473edba4135f0dbabd397c0a7f7cb",
+        "size_bytes": 2099
+      }
+    },
+    {
+      "name": "graph_api",
+      "passed": true,
+      "pass_field": "overall_pass",
+      "timestamp": "2026-07-11T19:29:44.592121+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase5b_graph_api_smoke.json",
+        "sha256": "06fc81630d6ae50fbcdef402218fe79a9904e7032b487ddae90171a61d9c4aa5",
+        "size_bytes": 3129
+      }
+    },
+    {
+      "name": "citation_guard",
+      "passed": true,
+      "pass_field": "all_pass",
+      "timestamp": "2026-07-11T19:30:01.611955+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase5_citation_guard_smoke.json",
+        "sha256": "b80f94b84e94d31a454dbb40a75f64cf2b954e4d25ddedd2806e6444a445c6f1",
+        "size_bytes": 1466
+      }
+    },
+    {
+      "name": "session_memory",
+      "passed": true,
+      "pass_field": "overall_pass",
+      "timestamp": "2026-07-11T19:30:04.929306+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase7_memory_smoke.json",
+        "sha256": "e52f9316a6c6c1052cd0209167c7dd5d9718e900ae6b4c28480d294163642a01",
+        "size_bytes": 1429
+      }
+    },
+    {
+      "name": "session_memory_api",
+      "passed": true,
+      "pass_field": "overall_pass",
+      "timestamp": "2026-07-11T19:30:08.787694+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase7_memory_graph_api_smoke.json",
+        "sha256": "a20b3db17f249613b2a46777dc864b4398e0dbe9b5b323d9ea8989dde3564af1",
+        "size_bytes": 1465
+      }
+    },
+    {
+      "name": "long_term_memory",
+      "passed": true,
+      "pass_field": "overall_pass",
+      "timestamp": "2026-07-11T19:30:24.757193+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase8_long_term_memory_smoke.json",
+        "sha256": "2fd49c6076505db6835b0b4d1f03b0bd09274fc346758148b4402a1e7cfa224c",
+        "size_bytes": 508
+      }
+    },
+    {
+      "name": "long_term_memory_api",
+      "passed": true,
+      "pass_field": "overall_pass",
+      "timestamp": "2026-07-11T19:30:33.683328+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase8_memory_api_smoke.json",
+        "sha256": "db506bc4e842b2f40aea182f1133e81528c33dea6ecab83c24147cb96736961e",
+        "size_bytes": 1488
+      }
+    },
+    {
+      "name": "grounding_memory",
+      "passed": true,
+      "pass_field": "passed",
+      "timestamp": "2026-07-11T19:30:50.107011+00:00",
+      "artifact": {
+        "path": "reports/enterprise_kb_v1/phase10_p1_grounding_memory_smoke.json",
+        "sha256": "4ca6b890b76d35df7bc984338dcf67bd740d230f521b3fc87aca2be861daa96e",
+        "size_bytes": 4874
+      }
+    }
+  ],
+  "historical_hpc_evidence": {
+    "evidence_status": "historical_not_rerun_in_this_closure",
+    "artifact": {
+      "path": "reports/enterprise_kb_v1/phase6f_multichannel_retrieval_eval_results.json",
+      "sha256": "0e259f059351cb9d273de6b5588c38fb8a840f1e0e88f2f49f9403d48e9b7935",
+      "size_bytes": 1648
+    },
+    "environment": "HPC",
+    "timestamp": "2026-07-07T09:13:02.410467+00:00",
+    "total_cases": 25,
+    "cases_with_expected_source_ids": 24,
+    "index_status": {
+      "official_available": true,
+      "internal_available": true,
+      "index_missing": false,
+      "missing_indices": [],
+      "errors": [],
+      "official_chunk_count": 1117,
+      "internal_chunk_count": 508
+    },
+    "baseline": {
+      "hit_at_3": 0.875,
+      "hit_at_5": 0.9583,
+      "hit_at_10": 0.9583,
+      "mrr": 0.7778,
+      "route_execution_accuracy_given_gold_route": 0.96,
+      "duplicate_rate": 0.0
+    },
+    "multichannel": {
+      "hit_at_3": 0.9167,
+      "hit_at_5": 0.9583,
+      "hit_at_10": 1.0,
+      "mrr": 0.7951,
+      "route_execution_accuracy_given_gold_route": 0.96,
+      "duplicate_rate": 0.0,
+      "dual_accuracy": 1.0,
+      "citation_validity": 1.0,
+      "citation_na_cases": 0
+    },
+    "delta": {
+      "hit_at_3_delta": 0.0417,
+      "hit_at_5_delta": 0.0,
+      "hit_at_10_delta": 0.0417,
+      "mrr_delta": 0.0173,
+      "duplicate_rate_delta": 0.0
+    },
+    "failed_case_count": 0,
+    "overall_pass": true,
+    "route_metric_note": "route_execution_accuracy_given_gold_route = 24/25 = 0.96 (保守口径: no-hit case p6f_021 含 route_execution_ok=true 但不计入 numerator。如计入应为 25/25=1.0)。No-hit case 不计入 hit@k (expected_source_ids=[] 無法判斷命中)，原意正確。route 比例 25/25=1.0，當前 0.96 為保守分母統計。Phase 6F 不評估 classifier route correctness。"
+  },
+  "known_blockers": [
+    {
+      "name": "real_qwen_max_flow",
+      "status": "blocked",
+      "observed_error": "provider_http_error:403",
+      "meaning": "Fail-closed behavior is correct; credentials, account access, or quota must be repaired before rerun."
+    }
+  ],
+  "claim_boundaries": [
+    "The local closure uses explicit mock mode and does not measure real LLM answer quality.",
+    "The Phase 6F snapshot is historical HPC evidence and was not rerun by this collector.",
+    "Historical Phase 6F citation_validity does not prove semantic support; P1 checks semantic support only on controlled fixtures.",
+    "Registry source counts must be deduplicated by source identity and must not be added across overlapping registries.",
+    "No production user count, traffic, hallucination rate, revenue, or business savings claim is supported."
+  ]
+}

@@ -6,6 +6,7 @@ class Provider(StrEnum):
     OPENAI = auto()
     OPENAI_COMPATIBLE = auto()
     AZURE_OPENAI = auto()
+    QWEN = auto()
     DEEPSEEK = auto()
     ANTHROPIC = auto()
     GOOGLE = auto()
@@ -18,7 +19,7 @@ class Provider(StrEnum):
 
 
 class OpenAIModelName(StrEnum):
-    """https://platform.openai.com/docs/models/gpt-4o"""
+    """OpenAI model names."""
 
     GPT_5_NANO = "gpt-5-nano"
     GPT_5_MINI = "gpt-5-mini"
@@ -26,27 +27,34 @@ class OpenAIModelName(StrEnum):
 
 
 class AzureOpenAIModelName(StrEnum):
-    """Azure OpenAI model names"""
+    """Azure OpenAI model names."""
 
     AZURE_GPT_4O = "azure-gpt-4o"
     AZURE_GPT_4O_MINI = "azure-gpt-4o-mini"
 
 
+class QwenModelName(StrEnum):
+    """Qwen OpenAI-compatible model names for Phase 9."""
+
+    QWEN_PLUS = "qwen-plus"
+    QWEN_MAX = "qwen-max"
+
+
 class DeepseekModelName(StrEnum):
-    """https://api-docs.deepseek.com/quick_start/pricing"""
+    """DeepSeek model names."""
 
     DEEPSEEK_CHAT = "deepseek-chat"
 
 
 class AnthropicModelName(StrEnum):
-    """https://docs.anthropic.com/en/docs/about-claude/models#model-names"""
+    """Anthropic model names."""
 
     HAIKU_45 = "claude-haiku-4-5"
     SONNET_45 = "claude-sonnet-4-5"
 
 
 class GoogleModelName(StrEnum):
-    """https://ai.google.dev/gemini-api/docs/models/gemini"""
+    """Google Gemini model names."""
 
     GEMINI_15_PRO = "gemini-1.5-pro"
     GEMINI_20_FLASH = "gemini-2.0-flash"
@@ -57,7 +65,7 @@ class GoogleModelName(StrEnum):
 
 
 class VertexAIModelName(StrEnum):
-    """https://cloud.google.com/vertex-ai/generative-ai/docs/models"""
+    """Vertex AI Gemini model names."""
 
     GEMINI_15_PRO = "gemini-1.5-pro"
     GEMINI_20_FLASH = "gemini-2.0-flash"
@@ -68,35 +76,34 @@ class VertexAIModelName(StrEnum):
 
 
 class GroqModelName(StrEnum):
-    """https://console.groq.com/docs/models"""
+    """Groq model names."""
 
     LLAMA_31_8B = "llama-3.1-8b"
     LLAMA_33_70B = "llama-3.3-70b"
-
     GPT_OSS_SAFEGUARD_20B = "openai/gpt-oss-safeguard-20b"
 
 
 class AWSModelName(StrEnum):
-    """https://docs.aws.amazon.com/bedrock/latest/userguide/models-supported.html"""
+    """AWS Bedrock model names."""
 
     BEDROCK_HAIKU = "bedrock-3.5-haiku"
     BEDROCK_SONNET = "bedrock-3.5-sonnet"
 
 
 class OllamaModelName(StrEnum):
-    """https://ollama.com/search"""
+    """Ollama model names."""
 
     OLLAMA_GENERIC = "ollama"
 
 
 class OpenRouterModelName(StrEnum):
-    """https://openrouter.ai/models"""
+    """OpenRouter model names."""
 
     GEMINI_25_FLASH = "google/gemini-2.5-flash"
 
 
 class OpenAICompatibleName(StrEnum):
-    """https://platform.openai.com/docs/guides/text-generation"""
+    """Generic OpenAI-compatible provider model name."""
 
     OPENAI_COMPATIBLE = "openai-compatible"
 
@@ -111,6 +118,7 @@ AllModelEnum: TypeAlias = (
     OpenAIModelName
     | OpenAICompatibleName
     | AzureOpenAIModelName
+    | QwenModelName
     | DeepseekModelName
     | AnthropicModelName
     | GoogleModelName

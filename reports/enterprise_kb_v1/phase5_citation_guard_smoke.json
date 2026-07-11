@@ -1,10 +1,10 @@
 {
   "smoke": "phase5_citation_guard",
-  "timestamp": "2026-07-06T14:38:39.242153+00:00",
+  "timestamp": "2026-07-11T19:30:01.611955+00:00",
   "tests": [
     {
       "test": "positive_all_valid",
-      "citations_count": 3,
+      "citations_count": 2,
       "all_citations_from_retrieved": true,
       "citation_validity": true,
       "citation_status": "valid",
@@ -25,7 +25,9 @@
           "citation_id": "cite_fake",
           "chunk_id": "NOT_IN_RETRIEVED_SET",
           "source_id": "fake_source",
-          "in_retrieved": false
+          "reasons": [
+            "citation_not_in_retrieved_set_or_source_mismatch"
+          ]
         }
       ],
       "test_pass": true,

@@ -3,8 +3,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Any
 from enum import StrEnum
+from typing import Any
 
 
 class CandidateStatus(StrEnum):
@@ -67,9 +67,9 @@ class MemoryItem:
 @dataclass
 class MemoryEvent:
     event_id: str = ""
-    target_type: str = ""   # candidate / memory_item
+    target_type: str = ""  # candidate / memory_item
     target_id: str = ""
-    event_type: str = ""    # created / approved / rejected / disabled
+    event_type: str = ""  # created / approved / rejected / disabled
     event_detail: str = ""
     created_at: str = ""
     metadata_json: str = "{}"
@@ -83,6 +83,10 @@ class LongTermMemoryTrace:
     memory_write_status: str = "none"
     long_term_memory_scope: str = ""
     approved_memory_ids: list[str] = field(default_factory=list)
+    available_approved_memory_count: int = 0
+    applied_memory_ids: list[str] = field(default_factory=list)
+    used_for_rewrite: bool = False
+    used_for_answer: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -92,4 +96,8 @@ class LongTermMemoryTrace:
             "memory_write_status": self.memory_write_status,
             "long_term_memory_scope": self.long_term_memory_scope,
             "approved_memory_ids": self.approved_memory_ids,
+            "available_approved_memory_count": self.available_approved_memory_count,
+            "applied_memory_ids": self.applied_memory_ids,
+            "used_for_rewrite": self.used_for_rewrite,
+            "used_for_answer": self.used_for_answer,
         }

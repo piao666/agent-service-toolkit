@@ -1,0 +1,77 @@
+{
+  "phase": "phase10_backend_security",
+  "timestamp": "2026-07-11T19:29:33.057160+00:00",
+  "passed": true,
+  "checks": [
+    {
+      "name": "provider_failure_is_fail_closed",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "fallback_requires_explicit_opt_in",
+      "passed": true,
+      "detail": "provider_http_error:403"
+    },
+    {
+      "name": "use_fake_model_overrides_configured_providers",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "request_schema_rejects_invalid_boundaries",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "memory_lifecycle_rejects_invalid_transitions",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "session_memory_is_bounded",
+      "passed": true,
+      "detail": {
+        "session_count": 2,
+        "max_sessions": 2,
+        "max_turns_per_session": 2
+      }
+    },
+    {
+      "name": "runtime_config_is_redacted_and_fake_mode_is_explicit",
+      "passed": true,
+      "detail": {
+        "default_provider": "mock",
+        "default_model": "mock",
+        "providers": [
+          {
+            "provider": "qwen",
+            "model": "qwen-max",
+            "configured": true
+          },
+          {
+            "provider": "deepseek",
+            "model": "deepseek-chat",
+            "configured": true
+          },
+          {
+            "provider": "mock",
+            "model": "mock",
+            "configured": true
+          }
+        ],
+        "allow_llm_fallback": false,
+        "auth_enabled": false,
+        "limits": {
+          "query_max_chars": 4000,
+          "session_id_max_chars": 128
+        }
+      }
+    },
+    {
+      "name": "provider_model_mismatch_is_rejected",
+      "passed": true,
+      "detail": 422
+    }
+  ]
+}

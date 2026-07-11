@@ -9,9 +9,10 @@ Verifies:
   5. Runtime: TestClient POST returns 200 with all 15 response fields
 """
 
-import json, sys
+import json
+import sys
+from datetime import UTC, datetime
 from pathlib import Path
-from datetime import datetime, timezone
 from unittest.mock import MagicMock
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent.parent / "src"))
@@ -23,10 +24,12 @@ ENDPOINT_PATH = "/api/enterprise-kb/graph/answer"
 
 # -- Test 1: Schema import -------------------------------------------------
 
+
 def test_schema_import():
     """Verify new graph schema models importable."""
     try:
         from schema import EnterpriseKBGraphAnswerRequest, EnterpriseKBGraphAnswerResponse
+
         req_fields = list(EnterpriseKBGraphAnswerRequest.model_fields.keys())
         resp_fields = list(EnterpriseKBGraphAnswerResponse.model_fields.keys())
         return {
@@ -39,10 +42,16 @@ def test_schema_import():
             "response_has_answer_markdown": "answer_markdown" in resp_fields,
             "response_has_citations": "citations" in resp_fields,
             "response_has_all_traces": all(
-                t in resp_fields for t in [
-                    "intent_trace", "rewrite_trace", "plan_trace",
-                    "retrieval_trace", "rank_trace", "llm_trace",
-                    "citation_trace", "graph_debug",
+                t in resp_fields
+                for t in [
+                    "intent_trace",
+                    "rewrite_trace",
+                    "plan_trace",
+                    "retrieval_trace",
+                    "rank_trace",
+                    "llm_trace",
+                    "citation_trace",
+                    "graph_debug",
                 ]
             ),
         }
@@ -51,6 +60,7 @@ def test_schema_import():
 
 
 # -- Test 2: Direct call ---------------------------------------------------
+
 
 def test_direct_call():
     """Call run_custom_graph directly (no HTTP server)."""
@@ -77,19 +87,26 @@ def test_direct_call():
         "llm_mode": resp.get("llm_mode") == "mock_extractive",
     }
     all_ok = all(field_checks.values())
-    return {"all_fields_present": all_ok, "field_checks": field_checks, "llm_mode": resp.get("llm_mode")}
+    return {
+        "all_fields_present": all_ok,
+        "field_checks": field_checks,
+        "llm_mode": resp.get("llm_mode"),
+    }
 
 
 # -- Test 3: Mock fallback -------------------------------------------------
 
+
 def test_mock_fallback():
     """Verify no-key fallback works."""
     import os
+
     saved = {}
     for key in ["QWEN_API_KEY", "DEEPSEEK_API_KEY"]:
         saved[key] = os.environ.pop(key, None)
     try:
         from llm.client import LLMClient
+
         llm = LLMClient()
         return {"is_mock": llm.is_mock, "provider": llm.provider_name, "pass": llm.is_mock}
     except Exception as e:
@@ -101,6 +118,7 @@ def test_mock_fallback():
 
 
 # -- Test 4: Endpoint verification -----------------------------------------
+
 
 def _static_check_service_py():
     """Read service.py source and statically verify the endpoint code exists.
@@ -161,7 +179,10 @@ def test_endpoint_registered():
         # Mock agent modules that are irrelevant to the graph answer endpoint
         _mock_heavy_deps()
 
+        from core.settings import settings
         from service.service import app, router
+
+        settings.AUTH_SECRET = None
 
         found = False
         route_methods = []
@@ -186,10 +207,13 @@ def test_endpoint_registered():
                 from fastapi.testclient import TestClient
 
                 client = TestClient(app)
-                resp = client.post(ENDPOINT_PATH, json={
-                    "query": "What is FastAPI middleware?",
-                    "corpus": "auto",
-                })
+                resp = client.post(
+                    ENDPOINT_PATH,
+                    json={
+                        "query": "What is FastAPI middleware?",
+                        "corpus": "auto",
+                    },
+                )
 
                 if resp.status_code == 200:
                     data = resp.json()
@@ -231,6 +255,7 @@ def _mock_heavy_deps():
     it only needs custom_graph + llm modules which are imported at call time.
     """
     import sys
+
     _saved = {}
     _modules_to_mock = [
         "agents",
@@ -255,6 +280,7 @@ def _mock_heavy_deps():
 def _unmock_heavy_deps():
     """Remove mock modules to avoid polluting other tests."""
     import sys
+
     saved = getattr(_mock_heavy_deps, "_saved", {})
     for mod in getattr(_mock_heavy_deps, "_modules", []):
         if saved.get(mod):
@@ -263,13 +289,16 @@ def _unmock_heavy_deps():
 
 # -- Main ------------------------------------------------------------------
 
+
 def main():
     print("=== Phase 5B Smoke: Graph API ===")
-    results = {"smoke": "phase5b_graph_api", "timestamp": datetime.now(timezone.utc).isoformat()}
+    results = {"smoke": "phase5b_graph_api", "timestamp": datetime.now(UTC).isoformat()}
 
     # 1. Schema
     schema = test_schema_import()
-    print(f"  Schema: importable={schema['importable']} all_traces={schema.get('response_has_all_traces','?')}")
+    print(
+        f"  Schema: importable={schema['importable']} all_traces={schema.get('response_has_all_traces', '?')}"
+    )
     results["schema"] = schema
 
     # 2. Direct call
@@ -279,16 +308,20 @@ def main():
 
     # 3. Mock fallback
     fb = test_mock_fallback()
-    print(f"  Mock fallback: is_mock={fb.get('is_mock','?')}")
+    print(f"  Mock fallback: is_mock={fb.get('is_mock', '?')}")
     results["mock_fallback"] = fb
 
     # 4. Endpoint (static + runtime + TestClient)
     ep = test_endpoint_registered()
     print(f"  Endpoint static: {ep['endpoint_static_check_pass']}")
-    print(f"  Endpoint runtime: registered={ep['endpoint_runtime_registered']} methods={ep['runtime_route_check'].get('route_methods',[])}")
-    print(f"  TestClient: ok={ep['testclient_call_ok']} fields={len(ep.get('testclient_response_fields',[]))}")
+    print(
+        f"  Endpoint runtime: registered={ep['endpoint_runtime_registered']} methods={ep['runtime_route_check'].get('route_methods', [])}"
+    )
+    print(
+        f"  TestClient: ok={ep['testclient_call_ok']} fields={len(ep.get('testclient_response_fields', []))}"
+    )
     if ep.get("runtime_check_skipped"):
-        print(f"  WARNING: runtime check skipped: {ep.get('runtime_skip_reason','?')[:120]}")
+        print(f"  WARNING: runtime check skipped: {ep.get('runtime_skip_reason', '?')[:120]}")
     results["endpoint_check"] = ep
 
     # Overall pass -- requires RUNTIME route registration + TestClient

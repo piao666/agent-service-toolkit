@@ -54,7 +54,9 @@ Generate 1-3 focused retrieval queries that will find the needed information."""
 def build_planner_prompt(query: str, intent: str) -> list[LLMMessage]:
     return [
         LLMMessage(role="system", content=PLANNER_SYSTEM),
-        LLMMessage(role="user", content=f"Intent: {intent}\nQuery: {query}\n\nPlan retrieval steps:"),
+        LLMMessage(
+            role="user", content=f"Intent: {intent}\nQuery: {query}\n\nPlan retrieval steps:"
+        ),
     ]
 
 
@@ -79,12 +81,24 @@ CRITICAL RULES:
 """
 
 
-def build_answer_prompt(query: str, context_chunks: list[dict]) -> list[LLMMessage]:
+def build_answer_prompt(
+    query: str,
+    context_chunks: list[dict],
+    memory_context: str = "",
+) -> list[LLMMessage]:
     ctx_text = "\n\n---\n\n".join(
-        f"[CHUNK:{c.get('chunk_id','?')} | SOURCE:{c.get('source_id','?')} | {c.get('heading_path','')}]\n{c.get('text_preview','')}"
+        f"[CHUNK:{c.get('chunk_id', '?')} | SOURCE:{c.get('source_id', '?')} | {c.get('heading_path', '')}]\n{c.get('text_preview', '')}"
         for c in context_chunks[:5]
     )
+    memory_text = ""
+    if memory_context:
+        memory_text = (
+            "\n\nApproved operating constraints (not citation evidence):\n" + memory_context
+        )
     return [
         LLMMessage(role="system", content=GROUNDED_ANSWER_SYSTEM),
-        LLMMessage(role="user", content=f"Query: {query}\n\nContext:\n{ctx_text}\n\nGenerate grounded answer:"),
+        LLMMessage(
+            role="user",
+            content=f"Query: {query}\n\nContext:\n{ctx_text}{memory_text}\n\nGenerate grounded answer:",
+        ),
     ]

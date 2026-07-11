@@ -5,7 +5,7 @@ import warnings
 from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
 from time import perf_counter
-from typing import Annotated, Any
+from typing import Annotated, Any, Literal
 from uuid import UUID, uuid4
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, status
@@ -235,8 +235,8 @@ def _enterprise_retrieval_debug(
     retrieval_debug.setdefault("top_k", request.top_k)
     retrieval_debug.setdefault("hit_count", len(sources))
 
-    # 如果 query_classifier 已经判定为非知识库问题并短路，则不要补充 Chroma/Embedding 字段，
-    # 避免前端误以为本轮仍然执行了向量检索。
+    # 濡傛灉 query_classifier 宸茬粡鍒ゅ畾涓洪潪鐭ヨ瘑搴撻棶棰樺苟鐭矾锛屽垯涓嶈琛ュ厖 Chroma/Embedding 瀛楁锛?
+    # 閬垮厤鍓嶇璇互涓烘湰杞粛鐒舵墽琛屼簡鍚戦噺妫€绱€?
     if retrieval_debug.get("retrieval_skipped") or retrieval_debug.get("skipped_reason"):
         retrieval_debug["hit_count"] = 0
         return retrieval_debug
@@ -254,7 +254,9 @@ def _enterprise_model_debug(
 ) -> dict[str, Any]:
     model_debug = dict(metadata.get("model_debug") or {})
     model_debug.setdefault("model", str(request.model or settings.DEFAULT_MODEL))
-    model_debug.setdefault("provider", "configured" if request.model or settings.DEFAULT_MODEL else "unknown")
+    model_debug.setdefault(
+        "provider", "configured" if request.model or settings.DEFAULT_MODEL else "unknown"
+    )
     model_debug.setdefault("agent_graph_mode", rag_settings.agent_graph_mode)
     return model_debug
 
@@ -296,9 +298,7 @@ async def enterprise_agent_query(
             model_debug["answer_synthesis_profile"] = graph_model_debug.get(
                 "answer_synthesis_profile"
             )
-            model_debug["answer_synthesis_mode"] = graph_model_debug.get(
-                "answer_synthesis_mode"
-            )
+            model_debug["answer_synthesis_mode"] = graph_model_debug.get("answer_synthesis_mode")
         graph_debug = dict(result.get("graph_debug") or {})
         if graph_debug:
             graph_debug["nodes_executed"] = list(graph_debug.get("nodes_executed") or [])
@@ -573,12 +573,12 @@ async def health_check():
     return health_status
 
 
-# ── Phase 4E/4F: Retrieval (dual-corpus) ────────────────────────────────
+# 鈹€鈹€ Phase 4E/4F: Retrieval (dual-corpus) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
 
 
 @app.get("/api/enterprise-kb/retrieval/health")
 async def enterprise_kb_retrieval_health():
-    """Phase 4F: 双语料库检索索引健康检查（无认证）。"""
+    """Phase 4F retrieval index health check."""
     try:
         from rag.vector_store import get_collection_count
 
@@ -614,7 +614,7 @@ async def enterprise_kb_retrieval_health():
 async def enterprise_kb_retrieval_search(
     request: EnterpriseKBRetrievalRequest,
 ) -> EnterpriseKBRetrievalResponse:
-    """Phase 4F: 双语料检索（支持 corpus=official_docs/internal_engineering_docs/auto）。"""
+    """Phase 4F: dual-corpus retrieval."""
     try:
         from rag.corpus_router import route_corpus
         from rag.official_docs_retriever import official_docs_retrieve
@@ -629,12 +629,12 @@ async def enterprise_kb_retrieval_search(
 
         if corpus_used == "internal_engineering_docs":
             from rag.internal_engineering_retriever import internal_engineering_retrieve
+
             output = internal_engineering_retrieve(request.query, top_k=request.top_k)
         else:
             output = official_docs_retrieve(request.query, top_k=request.top_k)
 
         latency_ms = round((perf_counter() - t0) * 1000, 2)
-        # 注入路由信息到 trace
         output["trace"]["requested_corpus"] = request.corpus
         output["trace"]["corpus_used"] = corpus_used
         output["trace"]["route_reason"] = route_reason
@@ -652,17 +652,11 @@ async def enterprise_kb_retrieval_search(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ── Phase 4H: Traceable RAG Answer ─────────────────────────────────────
-
-
 @router.post("/api/enterprise-kb/rag/answer")
 async def enterprise_kb_rag_answer(
     request: EnterpriseKBRagAnswerRequest,
 ) -> EnterpriseKBRagAnswerResponse:
-    """Phase 4H: Traceable RAG answer with citations (mock/extractive mode)。
-
-    无 LLM key 时使用 mock extractive answer — 基于检索结果拼接。
-    """
+    """Phase 4H: traceable RAG answer with citations."""
     try:
         from rag.traceable_rag_answer import generate_traceable_rag_answer
 
@@ -689,30 +683,107 @@ async def enterprise_kb_rag_answer(
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ── Phase 5B: Custom Graph Answer ─────────────────────────────────────
+def _enterprise_kb_runtime_settings() -> dict[str, Any]:
+    default_provider = "mock"
+    if not settings.USE_FAKE_MODEL:
+        default_provider = (
+            "qwen"
+            if settings.QWEN_API_KEY
+            else ("deepseek" if settings.DEEPSEEK_API_KEY else "mock")
+        )
+    models = {
+        "qwen": settings.QWEN_MODEL,
+        "deepseek": settings.DEEPSEEK_MODEL,
+        "mock": "mock",
+    }
+    configured = {
+        "qwen": bool(settings.QWEN_API_KEY),
+        "deepseek": bool(settings.DEEPSEEK_API_KEY),
+        "mock": True,
+    }
+    return {
+        "default_provider": default_provider,
+        "default_model": models[default_provider],
+        "models": models,
+        "configured": configured,
+    }
+
+
+@router.get("/api/enterprise-kb/runtime/config")
+async def enterprise_kb_runtime_config() -> dict[str, Any]:
+    """Return redacted runtime choices for the frontend."""
+    runtime = _enterprise_kb_runtime_settings()
+    return {
+        "default_provider": runtime["default_provider"],
+        "default_model": runtime["default_model"],
+        "providers": [
+            {
+                "provider": provider,
+                "model": runtime["models"][provider],
+                "configured": runtime["configured"][provider],
+            }
+            for provider in ("qwen", "deepseek", "mock")
+        ],
+        "allow_llm_fallback": settings.ALLOW_LLM_FALLBACK,
+        "auth_enabled": bool(settings.AUTH_SECRET),
+        "limits": {"query_max_chars": 4000, "session_id_max_chars": 128},
+    }
 
 
 @router.post("/api/enterprise-kb/graph/answer")
 async def enterprise_kb_graph_answer(
     request: EnterpriseKBGraphAnswerRequest,
 ) -> EnterpriseKBGraphAnswerResponse:
-    """Phase 5B: custom_graph 知识库问答 — 8 节点完整链路。
-
-    无 LLM key 时自动 fallback 到 mock_extractive 模式。
-    """
+    """Phase 5B/9: custom graph answer with Phase 9 provider/model controls."""
     try:
         from custom_graph.graph import run_custom_graph
         from llm.client import LLMClient
+        from llm.errors import LLMConfigurationError, LLMProviderError
 
         t0 = perf_counter()
-        llm = LLMClient()
+        runtime = _enterprise_kb_runtime_settings()
+        provider = request.llm_provider or runtime["default_provider"]
+        expected_model = runtime["models"][provider]
+        model = request.model or expected_model
+        if model != expected_model:
+            raise HTTPException(
+                status_code=422,
+                detail=f"Model {model!r} is not configured for provider {provider!r}",
+            )
+        corpus_mode = request.corpus_mode or request.corpus
+        corpus_map = {
+            "official_only": "official_docs",
+            "internal_only": "internal_engineering_docs",
+            "dual": "auto",
+            "official_docs": "official_docs",
+            "internal_engineering_docs": "internal_engineering_docs",
+            "auto": "auto",
+        }
+        normalized_corpus = corpus_map.get(corpus_mode, "auto")
+        llm = LLMClient(
+            provider=provider,
+            model=model,
+            allow_fallback=settings.ALLOW_LLM_FALLBACK,
+        )
         output = run_custom_graph(
             query=request.query,
-            corpus=request.corpus,
+            corpus=normalized_corpus,
             session_id=request.session_id,
+            project_id=request.project_id,
             llm=llm,
         )
         latency_ms = round((perf_counter() - t0) * 1000, 2)
+        llm_trace = dict(output.get("llm_trace", {}))
+        llm_trace.setdefault("provider", request.llm_provider or llm.requested_provider_name)
+        llm_trace.setdefault("model", request.model or llm.requested_model_name)
+        llm_trace.setdefault("actual_provider", llm.provider_name)
+        llm_trace.setdefault("actual_model", llm.model_name)
+        llm_trace.setdefault("fallback_used", llm.last_fallback_used)
+        llm_trace.setdefault("fallback_reason", llm.last_fallback_reason)
+        graph_debug = dict(output.get("graph_debug", {}))
+        graph_debug["requested_corpus"] = request.corpus
+        graph_debug["requested_corpus_mode"] = corpus_mode
+        graph_debug["normalized_corpus"] = normalized_corpus
 
         return EnterpriseKBGraphAnswerResponse(
             answer_markdown=output.get("answer_markdown", ""),
@@ -725,51 +796,74 @@ async def enterprise_kb_graph_answer(
             plan_trace=output.get("plan_trace", {}),
             retrieval_trace=output.get("retrieval_trace", {}),
             rank_trace=output.get("rank_trace", {}),
-            llm_trace=output.get("llm_trace", {}),
+            llm_trace=llm_trace,
             citation_trace=output.get("citation_trace", {}),
-            graph_debug=output.get("graph_debug", {}),
+            graph_debug=graph_debug,
             memory_trace=output.get("memory_trace", {}),
             long_term_memory_trace=output.get("long_term_memory_trace", {}),
             llm_mode=output.get("llm_mode", "mock_extractive"),
             total_latency_ms=latency_ms,
+            project_id=request.project_id,
+            trace_id=str(uuid4()),
         )
     except HTTPException:
         raise
+    except LLMConfigurationError as exc:
+        raise HTTPException(
+            status_code=503, detail={"code": "llm_not_configured", "message": str(exc)}
+        )
+    except LLMProviderError as exc:
+        raise HTTPException(status_code=502, detail=exc.public_detail())
     except Exception as e:
         logger.error(f"Graph answer failed: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
 
-# ── Phase 8: Memory Admin API ────────────────────────────────────────
+# 鈹€鈹€ Phase 8: Memory Admin API 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
 
 
 @router.get("/api/enterprise-kb/memory/candidates")
-async def list_memory_candidates(status: str = "pending"):
-    """列出 memory candidates (默认 pending)。"""
+async def list_memory_candidates(
+    status: Literal["pending", "approved", "rejected", "all"] = "pending",
+    project_id: str = "enterprise_kb_v1",
+):
+    """List memory candidates."""
     try:
         from long_term_memory.service import get_ltm_service
+
         svc = get_ltm_service()
         if status == "all":
             candidates = []
             for s in ["pending", "approved", "rejected"]:
-                for c in svc.store.list_candidates(status=s):
+                for c in svc.store.list_candidates(status=s, scope_id=project_id):
                     candidates.append(c)
         else:
-            candidates = svc.store.list_candidates(status=status)
+            candidates = svc.store.list_candidates(status=status, scope_id=project_id)
         return {"candidates": candidates, "count": len(candidates)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/api/enterprise-kb/memory/candidates/{candidate_id}/approve")
-async def approve_memory_candidate(candidate_id: str):
-    """批准 candidate → 生成 memory_item。"""
+async def approve_memory_candidate(
+    candidate_id: str,
+    project_id: str = "enterprise_kb_v1",
+):
+    """Approve a memory candidate and create a memory item."""
     try:
         from long_term_memory.service import get_ltm_service
+
         svc = get_ltm_service()
+        candidate = svc.store.get_candidate(candidate_id)
+        if not candidate or candidate.get("scope_id") != project_id:
+            raise HTTPException(
+                status_code=404, detail=f"Candidate {candidate_id} not found in project"
+            )
         item = svc.approve(candidate_id)
         if item is None:
-            raise HTTPException(status_code=404, detail=f"Candidate {candidate_id} not found or not pending")
+            raise HTTPException(
+                status_code=404, detail=f"Candidate {candidate_id} not found or not pending"
+            )
         return {"status": "approved", "memory_item": item}
     except HTTPException:
         raise
@@ -778,46 +872,80 @@ async def approve_memory_candidate(candidate_id: str):
 
 
 @router.post("/api/enterprise-kb/memory/candidates/{candidate_id}/reject")
-async def reject_memory_candidate(candidate_id: str):
-    """拒绝 candidate。"""
+async def reject_memory_candidate(
+    candidate_id: str,
+    project_id: str = "enterprise_kb_v1",
+):
+    """Reject a memory candidate."""
     try:
         from long_term_memory.service import get_ltm_service
+
         svc = get_ltm_service()
-        svc.reject(candidate_id)
+        candidate = svc.store.get_candidate(candidate_id)
+        if not candidate or candidate.get("scope_id") != project_id:
+            raise HTTPException(
+                status_code=404, detail=f"Candidate {candidate_id} not found in project"
+            )
+        if not svc.reject(candidate_id):
+            raise HTTPException(
+                status_code=404, detail=f"Candidate {candidate_id} not found or not pending"
+            )
         return {"status": "rejected", "candidate_id": candidate_id}
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/api/enterprise-kb/memory/items")
-async def list_memory_items(status: str = "active"):
-    """列出 approved memory items。"""
+async def list_memory_items(
+    status: Literal["active", "disabled", "all"] = "active",
+    project_id: str = "enterprise_kb_v1",
+):
+    """List approved memory items."""
     try:
         from long_term_memory.service import get_ltm_service
+
         svc = get_ltm_service()
-        items = svc.list_all_items(status=status if status != "all" else None)
+        items = svc.list_all_items(
+            status=status if status != "all" else None,
+            scope_id=project_id,
+        )
         return {"items": items, "count": len(items)}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.post("/api/enterprise-kb/memory/items/{memory_id}/disable")
-async def disable_memory_item(memory_id: str):
-    """禁用 memory item。"""
+async def disable_memory_item(
+    memory_id: str,
+    project_id: str = "enterprise_kb_v1",
+):
+    """Disable a memory item."""
     try:
         from long_term_memory.service import get_ltm_service
+
         svc = get_ltm_service()
-        svc.disable(memory_id)
+        memory = svc.store.get_item(memory_id)
+        if not memory or memory.get("scope_id") != project_id:
+            raise HTTPException(status_code=404, detail=f"Memory {memory_id} not found in project")
+        if not svc.disable(memory_id):
+            raise HTTPException(
+                status_code=404, detail=f"Memory {memory_id} not found or not active"
+            )
         return {"status": "disabled", "memory_id": memory_id}
+    except HTTPException:
+        raise
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
 
 @router.get("/api/enterprise-kb/memory/events")
 async def list_memory_events(target_type: str = ""):
-    """查看 memory events。"""
+    """List memory events."""
     try:
         from long_term_memory.service import get_ltm_service
+
         svc = get_ltm_service()
         events = svc.list_events(target_type=target_type if target_type else None)
         return {"events": events, "count": len(events)}

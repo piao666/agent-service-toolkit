@@ -6,6 +6,7 @@ import time
 from abc import ABC, abstractmethod
 from typing import Any
 
+from llm.errors import LLMConfigurationError
 from llm.schema import LLMMessage, LLMResponse
 
 
@@ -22,22 +23,21 @@ class BaseLLMProvider(ABC):
 
     def chat(self, system_prompt: str, user_prompt: str, **kwargs: Any) -> LLMResponse:
         """Convenience: single-turn chat."""
-        return self.generate([
-            LLMMessage(role="system", content=system_prompt),
-            LLMMessage(role="user", content=user_prompt),
-        ], **kwargs)
+        return self.generate(
+            [
+                LLMMessage(role="system", content=system_prompt),
+                LLMMessage(role="user", content=user_prompt),
+            ],
+            **kwargs,
+        )
 
     @property
     @abstractmethod
-    def provider_name(self) -> str:
-        ...
+    def provider_name(self) -> str: ...
 
 
 class MockProvider(BaseLLMProvider):
-    """Mock provider — always returns structured empty/default responses.
-
-    Used when no real LLM key is configured. Never throws, never makes network calls.
-    """
+    """Mock provider that never calls the network."""
 
     def __init__(self):
         super().__init__(model="mock")
@@ -48,8 +48,7 @@ class MockProvider(BaseLLMProvider):
 
     def generate(self, messages: list[LLMMessage], **kwargs: Any) -> LLMResponse:
         t0 = time.perf_counter()
-        # Return a safe default response
-        content = '{"intent": "technical_reference", "confidence": 0.5, "reasoning": "mock provider — no LLM available"}'
+        content = '{"intent": "technical_reference", "confidence": 0.5, "reasoning": "mock provider - no LLM available"}'
         return LLMResponse(
             content=content,
             provider="mock",
@@ -70,23 +69,40 @@ class ProviderFactory:
             return ProviderFactory._create_qwen(**kwargs)
         if provider == "deepseek":
             return ProviderFactory._create_deepseek(**kwargs)
-        # Unknown provider → fall back to mock
-        return MockProvider()
+        raise LLMConfigurationError(f"Unsupported LLM provider: {provider}")
 
     @staticmethod
     def _create_qwen(**kwargs: Any) -> BaseLLMProvider:
         import os
+
+        from dotenv import load_dotenv
+
+        load_dotenv()
         api_key = os.environ.get("QWEN_API_KEY", "")
         if not api_key:
-            return MockProvider()  # no key → mock
+            raise LLMConfigurationError("QWEN_API_KEY is required for provider 'qwen'")
         from llm.providers import QwenProvider
-        return QwenProvider(api_key=api_key, model=kwargs.get("model", "qwen-turbo"))
+
+        return QwenProvider(
+            api_key=api_key,
+            model=kwargs.get("model") or os.environ.get("QWEN_MODEL", "qwen-max"),
+            base_url=os.environ.get("QWEN_BASE_URL"),
+        )
 
     @staticmethod
     def _create_deepseek(**kwargs: Any) -> BaseLLMProvider:
         import os
+
+        from dotenv import load_dotenv
+
+        load_dotenv()
         api_key = os.environ.get("DEEPSEEK_API_KEY", "")
         if not api_key:
-            return MockProvider()  # no key → mock
+            raise LLMConfigurationError("DEEPSEEK_API_KEY is required for provider 'deepseek'")
         from llm.providers import DeepSeekProvider
-        return DeepSeekProvider(api_key=api_key, model=kwargs.get("model", "deepseek-chat"))
+
+        return DeepSeekProvider(
+            api_key=api_key,
+            model=kwargs.get("model") or os.environ.get("DEEPSEEK_MODEL", "deepseek-chat"),
+            base_url=os.environ.get("DEEPSEEK_BASE_URL"),
+        )

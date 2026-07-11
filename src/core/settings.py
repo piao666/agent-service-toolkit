@@ -27,6 +27,7 @@ from schema.models import (
     OpenAIModelName,
     OpenRouterModelName,
     Provider,
+    QwenModelName,
     VertexAIModelName,
 )
 
@@ -81,7 +82,12 @@ class Settings(BaseSettings):
     AUTH_SECRET: SecretStr | None = None
 
     OPENAI_API_KEY: SecretStr | None = None
+    QWEN_API_KEY: SecretStr | None = None
+    QWEN_MODEL: str = "qwen-max"
+    QWEN_BASE_URL: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     DEEPSEEK_API_KEY: SecretStr | None = None
+    DEEPSEEK_MODEL: str = "deepseek-chat"
+    DEEPSEEK_BASE_URL: str = "https://api.deepseek.com/v1"
     ANTHROPIC_API_KEY: SecretStr | None = None
     GOOGLE_API_KEY: SecretStr | None = None
     GOOGLE_APPLICATION_CREDENTIALS: SecretStr | None = None
@@ -90,6 +96,7 @@ class Settings(BaseSettings):
     OLLAMA_MODEL: str | None = None
     OLLAMA_BASE_URL: str | None = None
     USE_FAKE_MODEL: bool = False
+    ALLOW_LLM_FALLBACK: bool = False
     OPENROUTER_API_KEY: str | None = None
 
     # If DEFAULT_MODEL is None, it will be set in model_post_init
@@ -155,6 +162,7 @@ class Settings(BaseSettings):
         api_keys = {
             Provider.OPENAI: self.OPENAI_API_KEY,
             Provider.OPENAI_COMPATIBLE: self.COMPATIBLE_BASE_URL and self.COMPATIBLE_MODEL,
+            Provider.QWEN: self.QWEN_API_KEY,
             Provider.DEEPSEEK: self.DEEPSEEK_API_KEY,
             Provider.ANTHROPIC: self.ANTHROPIC_API_KEY,
             Provider.GOOGLE: self.GOOGLE_API_KEY,
@@ -180,6 +188,10 @@ class Settings(BaseSettings):
                     if self.DEFAULT_MODEL is None:
                         self.DEFAULT_MODEL = OpenAICompatibleName.OPENAI_COMPATIBLE
                     self.AVAILABLE_MODELS.update(set(OpenAICompatibleName))
+                case Provider.QWEN:
+                    if self.DEFAULT_MODEL is None:
+                        self.DEFAULT_MODEL = QwenModelName.QWEN_MAX
+                    self.AVAILABLE_MODELS.update(set(QwenModelName))
                 case Provider.DEEPSEEK:
                     if self.DEFAULT_MODEL is None:
                         self.DEFAULT_MODEL = DeepseekModelName.DEEPSEEK_CHAT

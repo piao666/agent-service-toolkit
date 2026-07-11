@@ -5,8 +5,9 @@ from typing import Any
 
 from custom_graph.state import GraphState
 from llm.client import LLMClient
-from llm.prompt_registry import build_planner_prompt
+from llm.errors import LLMError
 from llm.json_output_parser import parse_plan
+from llm.prompt_registry import build_planner_prompt
 
 
 def plan_retrieval(state: GraphState, llm: LLMClient | None = None) -> dict[str, Any]:
@@ -26,6 +27,8 @@ def plan_retrieval(state: GraphState, llm: LLMClient | None = None) -> dict[str,
             steps = parsed.get("steps", ["dense_retrieval"])
             queries = parsed.get("retrieval_queries", [query])
             reasoning = parsed.get("reasoning", "LLM planned")
+        except LLMError:
+            raise
         except Exception:
             steps = ["dense_retrieval"]
             queries = [query]
@@ -35,5 +38,12 @@ def plan_retrieval(state: GraphState, llm: LLMClient | None = None) -> dict[str,
     return {
         "plan_steps": steps,
         "plan_retrieval_queries": queries,
-        "plan_trace": {"intent": state.intent, "steps": steps, "queries": queries, "reasoning": reasoning, "latency_ms": latency, "llm_mode": "mock" if llm.is_mock else "grounded_llm"},
+        "plan_trace": {
+            "intent": state.intent,
+            "steps": steps,
+            "queries": queries,
+            "reasoning": reasoning,
+            "latency_ms": latency,
+            "llm_mode": "mock" if llm.is_mock else "grounded_llm",
+        },
     }

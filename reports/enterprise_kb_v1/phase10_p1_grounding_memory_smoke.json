@@ -1,0 +1,160 @@
+{
+  "phase": "P1",
+  "timestamp": "2026-07-11T19:30:50.107011+00:00",
+  "passed": true,
+  "checks": [
+    {
+      "name": "mock_answer_excludes_semantically_unrelated_chunks",
+      "passed": true,
+      "detail": {
+        "citation_status": "valid",
+        "total_citations": 1,
+        "valid_citations": 1,
+        "invalid_citations": 0,
+        "citation_id_validity": true,
+        "citation_quote_validity": true,
+        "citation_semantic_support": true,
+        "semantic_support_rate": 1.0,
+        "violations": [],
+        "per_citation": [
+          {
+            "citation_id": "cite_1",
+            "chunk_id": "fastapi_middleware_1",
+            "source_id": "fastapi_official_middleware",
+            "id_valid": true,
+            "quote_valid": true,
+            "quote_integrity_score": 1.0,
+            "semantic_supported": true,
+            "semantic_score": 0.75,
+            "shared_query_tokens": [
+              "fastapi",
+              "middleware",
+              "response"
+            ],
+            "fully_valid": true
+          }
+        ],
+        "all_citations_from_retrieved": true,
+        "citation_validity": true
+      }
+    },
+    {
+      "name": "valid_chunk_id_does_not_imply_semantic_validity",
+      "passed": true,
+      "detail": {
+        "citation_status": "semantic_mismatch",
+        "total_citations": 1,
+        "valid_citations": 0,
+        "invalid_citations": 1,
+        "citation_id_validity": true,
+        "citation_quote_validity": true,
+        "citation_semantic_support": false,
+        "semantic_support_rate": 0.0,
+        "violations": [
+          {
+            "citation_id": "cite_wrong_topic",
+            "chunk_id": "bge_eval_1",
+            "source_id": "phase6f_bge_eval",
+            "reasons": [
+              "citation_not_semantically_related_to_query"
+            ]
+          }
+        ],
+        "per_citation": [
+          {
+            "citation_id": "cite_wrong_topic",
+            "chunk_id": "bge_eval_1",
+            "source_id": "phase6f_bge_eval",
+            "id_valid": true,
+            "quote_valid": true,
+            "quote_integrity_score": 1.0,
+            "semantic_supported": false,
+            "semantic_score": 0.0,
+            "shared_query_tokens": [],
+            "fully_valid": false
+          }
+        ],
+        "all_citations_from_retrieved": true,
+        "citation_validity": false
+      }
+    },
+    {
+      "name": "quoted_evidence_must_match_source_text",
+      "passed": true,
+      "detail": {
+        "citation_status": "partial_support",
+        "total_citations": 1,
+        "valid_citations": 0,
+        "invalid_citations": 1,
+        "citation_id_validity": true,
+        "citation_quote_validity": false,
+        "citation_semantic_support": true,
+        "semantic_support_rate": 1.0,
+        "violations": [
+          {
+            "citation_id": "cite_1",
+            "chunk_id": "fastapi_middleware_1",
+            "source_id": "fastapi_official_middleware",
+            "reasons": [
+              "quoted_evidence_not_verbatim"
+            ]
+          }
+        ],
+        "per_citation": [
+          {
+            "citation_id": "cite_1",
+            "chunk_id": "fastapi_middleware_1",
+            "source_id": "fastapi_official_middleware",
+            "id_valid": true,
+            "quote_valid": false,
+            "quote_integrity_score": 0.2938,
+            "semantic_supported": true,
+            "semantic_score": 0.75,
+            "shared_query_tokens": [
+              "fastapi",
+              "middleware",
+              "response"
+            ],
+            "fully_valid": false
+          }
+        ],
+        "all_citations_from_retrieved": true,
+        "citation_validity": false
+      }
+    },
+    {
+      "name": "multi_turn_focus_is_project_scoped",
+      "passed": true,
+      "detail": {
+        "project_a": "How does FastAPI middleware modify a response?",
+        "project_b": "How does it modify a response?"
+      }
+    },
+    {
+      "name": "ltm_distinguishes_available_from_applied",
+      "passed": true,
+      "detail": {
+        "long_term_memory_used": true,
+        "approved_memory_count": 2,
+        "pending_candidate_count": 0,
+        "memory_write_status": "none",
+        "long_term_memory_scope": "project:project_a",
+        "approved_memory_ids": [
+          "mem_8220ca3fc8cc",
+          "mem_dc26689b092a"
+        ],
+        "available_approved_memory_count": 2,
+        "applied_memory_ids": [
+          "mem_8220ca3fc8cc"
+        ],
+        "used_for_rewrite": false,
+        "used_for_answer": true
+      }
+    },
+    {
+      "name": "disabled_memory_is_excluded_from_active_context",
+      "passed": true,
+      "detail": ""
+    }
+  ]
+}

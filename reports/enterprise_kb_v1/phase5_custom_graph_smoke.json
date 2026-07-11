@@ -1,6 +1,6 @@
 {
   "smoke": "phase5_custom_graph",
-  "timestamp": "2026-07-06T13:28:14.595621+00:00",
+  "timestamp": "2026-07-11T19:29:37.938142+00:00",
   "imports": {
     "all_importable": true,
     "modules": [
@@ -48,7 +48,7 @@
   },
   "pipeline": {
     "all_keys_present": true,
-    "latency_ms": 961.66,
+    "latency_ms": 2471.82,
     "llm_mode": "mock_extractive"
   },
   "mixed_routing": {

@@ -9,11 +9,12 @@ Approved long-term memory:
 
 from __future__ import annotations
 
-import time, re
+import time
 from typing import Any
 
 from custom_graph.state import GraphState
 from llm.client import LLMClient
+from llm.errors import LLMError
 
 
 def _ltm_keywords_influence(approved_items: list[dict], query: str) -> tuple[str, list[str], bool]:
@@ -24,9 +25,22 @@ def _ltm_keywords_influence(approved_items: list[dict], query: str) -> tuple[str
     if not approved_items:
         return "", [], False
 
-    keywords = ["HPC", "本地", "禁止", "必须", "只能", "不允许",
-                "bge-m3", "embedding", "Chroma", "retrieval eval",
-                "检索", "评测", "策略", "配置"]
+    keywords = [
+        "HPC",
+        "本地",
+        "禁止",
+        "必须",
+        "只能",
+        "不允许",
+        "bge-m3",
+        "embedding",
+        "Chroma",
+        "retrieval eval",
+        "检索",
+        "评测",
+        "策略",
+        "配置",
+    ]
     relevant: list[dict] = []
     for item in approved_items:
         content = item.get("content", "")
@@ -41,21 +55,25 @@ def _ltm_keywords_influence(approved_items: list[dict], query: str) -> tuple[str
     return "LTM constraints: " + "; ".join(parts), used_ids, True
 
 
-def rewrite_query(state: GraphState, llm: LLMClient | None = None) -> dict[str, Any]:
+def _rewrite_query_legacy(state: GraphState, llm: LLMClient | None = None) -> dict[str, Any]:
     llm = llm or LLMClient()
     t0 = time.perf_counter()
 
     from session_memory.session_memory import SessionMemoryManager
+
     mgr = SessionMemoryManager(session_id=state.session_id)
     mgr.get_or_create()
 
     # ── Step 0: Long-term memory (APPROVED ONLY, before rewrite) ──────
-    from long_term_memory.service import get_ltm_service
     from long_term_memory.schema import LongTermMemoryTrace
+    from long_term_memory.service import get_ltm_service
+
     ltm_svc = get_ltm_service()
     approved_items = ltm_svc.list_approved_items()
     ltm_context_str, approved_ids = ltm_svc.read_context()
-    ltm_influence, ltm_used_ids, ltm_used_for_rewrite = _ltm_keywords_influence(approved_items, state.query)
+    ltm_influence, ltm_used_ids, ltm_used_for_rewrite = _ltm_keywords_influence(
+        approved_items, state.query
+    )
 
     pending_count = len(ltm_svc.list_pending_candidates())
     ltm_trace = LongTermMemoryTrace(
@@ -80,13 +98,16 @@ def rewrite_query(state: GraphState, llm: LLMClient | None = None) -> dict[str, 
         llm_changes = "mock: coreference rewrite only"
     else:
         try:
-            from llm.prompt_registry import build_rewriter_prompt
             from llm.json_output_parser import parse_json_output
+            from llm.prompt_registry import build_rewriter_prompt
+
             messages = build_rewriter_prompt(state.query)
             response = llm.generate(messages)
             parsed = parse_json_output(response)
             rewritten = parsed.get("rewritten_query", rewritten)
             llm_changes = parsed.get("changes", "LLM rewritten")
+        except LLMError:
+            raise
         except Exception:
             llm_changes = "rewriter failed, using original"
 
@@ -103,17 +124,19 @@ def rewrite_query(state: GraphState, llm: LLMClient | None = None) -> dict[str, 
 
     # ── Step 5: Memory write candidates ──────────────────────────────
     memory_candidates = mgr.maybe_write_candidates(
-        query=state.query, rewritten_query=rewritten, intent=state.intent)
+        query=state.query, rewritten_query=rewritten, intent=state.intent
+    )
 
     # ── Step 6: Build trace ──────────────────────────────────────────
     memory_trace = mgr.build_trace(
-        query=state.query, rewritten_query=rewritten,
+        query=state.query,
+        rewritten_query=rewritten,
         rewrite_used_memory=rewrite_debug.get("rewrite_used_memory", False),
         memory_candidates=memory_candidates,
     )
 
     latency = round((time.perf_counter() - t0) * 1000, 2)
-    rewrite_has_ltm = bool(ltm_influence)
+    bool(ltm_influence)
 
     return {
         "session_id": mgr.session_id,
@@ -127,7 +150,7 @@ def rewrite_query(state: GraphState, llm: LLMClient | None = None) -> dict[str, 
         "rewrite_trace": {
             "original_query": state.query,
             "rewritten_query": rewritten,
-            "changes": llm_changes if 'llm_changes' in dir() else "rewrite applied",
+            "changes": llm_changes if "llm_changes" in dir() else "rewrite applied",
             "rewrite_used_memory": rewrite_debug.get("rewrite_used_memory", False),
             "memory_sources": rewrite_debug.get("memory_sources", []),
             "introduced_new_facts": rewrite_debug.get("introduced_new_facts", False),
@@ -138,3 +161,10 @@ def rewrite_query(state: GraphState, llm: LLMClient | None = None) -> dict[str, 
             "llm_mode": "mock" if llm.is_mock else "grounded_llm",
         },
     }
+
+
+def rewrite_query(state: GraphState, llm: LLMClient | None = None) -> dict[str, Any]:
+    """Run project-scoped session and governed-memory rewriting."""
+    from custom_graph.memory_runtime import rewrite_query_v2
+
+    return rewrite_query_v2(state, llm)

@@ -1,6 +1,6 @@
 {
   "smoke": "phase8_memory_api_v1.1",
-  "timestamp": "2026-07-07T14:26:24.612901+00:00",
+  "timestamp": "2026-07-11T19:30:33.683328+00:00",
   "admin_api": {
     "endpoint_registered": true,
     "testclient_available": true,
@@ -21,20 +21,20 @@
       "pending_count": 1,
       "approved_count": 0
     },
-    "pending_candidate_id": "cand_48e0310cf863",
-    "approved_memory_id": "mem_e01e52bdf727",
+    "pending_candidate_id": "cand_4e45f1dbaa0e",
+    "approved_memory_id": "mem_cea44baa544e",
+    "unrelated_approved_memory_not_applied": false,
     "approved_memory_context_attached": true,
-    "graph_uses_approved_memory_for_rewrite": true,
+    "graph_uses_approved_memory_for_answer": true,
+    "mock_does_not_claim_rewrite": true,
     "graph_trace_E": {
       "ltm_used": true,
       "approved_count": 1,
       "approved_ids": [
-        "mem_e01e52bdf727"
+        "mem_cea44baa544e"
       ],
-      "ltm_used_for_rewrite": true,
-      "rewrite_ltm_ids": [
-        "mem_e01e52bdf727"
-      ]
+      "ltm_used_for_rewrite": false,
+      "rewrite_ltm_ids": []
     },
     "disabled_memory_not_in_memory_context": true,
     "disabled_memory_not_used_for_rewrite": true,
